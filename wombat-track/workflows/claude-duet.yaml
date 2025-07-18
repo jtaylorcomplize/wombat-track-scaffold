@@ -67,7 +67,7 @@ jobs:
             Working directory: Change to /wombat-track subdirectory before starting implementation.
           
           allowed_tools: "Bash(git:*),View,GlobTool,GrepTool,BatchTool,Write"
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          anthropic_api_key: ${{ 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 }}
           max_turns: "15"
           timeout_minutes: "10"
       
