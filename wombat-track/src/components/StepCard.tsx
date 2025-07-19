@@ -1,6 +1,6 @@
 // wombat-track/src/components/StepCard.tsx
 import React, { useState } from 'react';
-import { PhaseStep, StepProgress } from '../types/models';
+import type { PhaseStep, StepProgress } from '../types/models';
 import './StepCard.css';
 
 interface StepCardProps {

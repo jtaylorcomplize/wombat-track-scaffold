@@ -1,3 +1,4 @@
+// const unused = [projectId, stepId, checkpointId, meetingId];
 export async function generateStepInstruction(projectId: string, stepId: string): Promise<string> {
   return Promise.resolve("AI-generated step instruction placeholder.");
 }

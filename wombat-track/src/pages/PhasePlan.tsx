@@ -1,7 +1,7 @@
 // wombat-track/src/pages/PhasePlan.tsx
 import React, { useState } from 'react';
 import { StepCard } from '../components/StepCard';
-import { PhaseStep } from '../types/models';
+import type { PhaseStep } from '../types/models';
 import './PhasePlan.css';
 
 // Dummy data for testing the Side Quest toggle feature
