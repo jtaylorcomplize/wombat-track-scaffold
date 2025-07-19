@@ -1,3 +1,5 @@
+// wombat-track/src/types/models.ts
+
 export type Project = {
   id: string;
   title: string;
@@ -54,3 +56,17 @@ export type Template = {
   usageType: "PhasePlan" | "Governance" | "Review" | "Generic";
   status: "Active" | "Archived";
 };
+
+// Additional helper type for UI components
+export type PhaseStepStatus = StepProgress["status"];
+
+// Phase interface for organizing multiple steps
+export interface Phase {
+  id: string;
+  name: string;
+  description?: string;
+  steps: PhaseStep[];
+  startDate?: Date;
+  endDate?: Date;
+  status?: 'planning' | 'active' | 'completed' | 'on-hold';
+}

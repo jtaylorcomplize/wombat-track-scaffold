@@ -1,0 +1,163 @@
+/* wombat-track/src/components/StepCard.css */
+
+.step-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  background: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.step-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.step-card.side-quest {
+  border-left: 4px solid #dc2626;
+  background: linear-gradient(to right, #fef2f2, white);
+}
+
+.step-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.step-instruction {
+  flex: 1;
+  font-weight: 600;
+  font-size: 16px;
+  color: #1f2937;
+  line-height: 1.5;
+  margin-right: 12px;
+}
+
+.side-quest-indicator {
+  font-size: 18px;
+  line-height: 1;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.step-card-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.assigned-to {
+  padding: 4px 8px;
+  background: #f0f9ff;
+  color: #0369a1;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.step-number {
+  padding: 4px 8px;
+  background: #f3f4f6;
+  color: #6b7280;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.step-card-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.status-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.status-select {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.side-quest-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  gap: 8px;
+}
+
+.toggle-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #dc2626;
+  cursor: pointer;
+}
+
+.toggle-label {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.side-quest-toggle:hover .toggle-label {
+  color: #dc2626;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .step-card {
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .step-card-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .step-instruction {
+    margin-right: 0;
+  }
+  
+  .step-card-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .status-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
