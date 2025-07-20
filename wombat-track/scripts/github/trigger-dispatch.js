@@ -84,7 +84,7 @@ const options = {
 
 // Request body
 const data = JSON.stringify({
-  ref: 'feature/claude-scaffold',
+  ref: 'main',
   inputs: {
     phase_id: phase_id
   }

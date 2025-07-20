@@ -1,0 +1,49 @@
+name: Reusable Deploy Workflow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: string
+      phase_id:
+        description: 'Phase ID for tracking'
+        required: false
+        type: string
+    secrets:
+      DEPLOY_TOKEN:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup deployment
+        run: |
+          echo "Deploying to ${{ inputs.environment }}"
+          echo "Phase ID: ${{ inputs.phase_id || 'N/A' }}"
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: ./dist
+      
+      - name: Deploy to environment
+        run: |
+          # Add your deployment logic here
+          echo "Deploy using token: ${{ secrets.DEPLOY_TOKEN }}"
+      
+      - name: Update deployment status
+        uses: peter-evans/create-or-update-comment@v3
+        if: github.event_name == 'pull_request'
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ✅ Deployed to **${{ inputs.environment }}** environment
+            Phase: `${{ inputs.phase_id || 'manual' }}`
+            Time: ${{ github.event.head_commit.timestamp }}
