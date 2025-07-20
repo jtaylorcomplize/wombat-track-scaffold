@@ -1,17 +1,21 @@
 import React from 'react';
 import type { Integration } from '../../types/integration';
-import { IntegrationStatus } from '../../types/integration';
+import { IntegrationStatus, DispatchStatus } from '../../types/integration';
 
 interface IntegrationCardProps {
   integration: Integration;
   onHealthCheck?: (integrationId: string) => void;
   onLogClick?: (logURL: string) => void;
+  onDispatch?: (integrationId: string) => void;
+  dispatchStatus?: DispatchStatus;
 }
 
 export const IntegrationCard: React.FC<IntegrationCardProps> = ({ 
   integration, 
   onHealthCheck,
-  onLogClick 
+  onLogClick,
+  onDispatch,
+  dispatchStatus = DispatchStatus.Idle
 }) => {
   const formatLastChecked = (date: Date) => {
     const now = new Date();
@@ -61,6 +65,28 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({
     };
   };
 
+  const getDispatchStatusBadgeStyle = (status: DispatchStatus) => {
+    const baseStyle = {
+      padding: '2px 6px',
+      borderRadius: '8px',
+      fontSize: '10px',
+      fontWeight: '600',
+      textTransform: 'uppercase' as const,
+      letterSpacing: '0.5px',
+      marginLeft: '4px'
+    };
+
+    switch (status) {
+      case DispatchStatus.Queued:
+        return { ...baseStyle, backgroundColor: '#fef3c7', color: '#d97706' };
+      case DispatchStatus.Done:
+        return { ...baseStyle, backgroundColor: '#dcfce7', color: '#15803d' };
+      case DispatchStatus.Idle:
+      default:
+        return { ...baseStyle, backgroundColor: '#f3f4f6', color: '#6b7280' };
+    }
+  };
+
   const handleLogClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (integration.logURL) {
@@ -75,6 +101,12 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({
   const handleHealthCheck = () => {
     if (onHealthCheck) {
       onHealthCheck(integration.name);
+    }
+  };
+
+  const handleDispatch = () => {
+    if (onDispatch && integration.isActive) {
+      onDispatch(integration.name);
     }
   };
 
@@ -126,6 +158,36 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({
           </div>
           <div style={getCategoryChipStyle()}>
             {integration.category}
+          </div>
+          <div 
+            data-testid={`template-label-${integration.name}`}
+            style={{ 
+              fontSize: '12px', 
+              color: '#6b7280', 
+              marginTop: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+          >
+            📦 Template: {integration.templateName}
+            {integration.templateId && (
+              <button
+                data-testid={`template-view-${integration.name}`}
+                onClick={() => console.log(`View template: ${integration.templateId}`)}
+                style={{
+                  fontSize: '10px',
+                  color: '#3b82f6',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  marginLeft: '4px'
+                }}
+              >
+                🔍 View
+              </button>
+            )}
           </div>
         </div>
 
@@ -201,6 +263,44 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({
         >
           Check
         </button>
+
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <button
+            data-testid={`dispatch-button-${integration.name}`}
+            onClick={handleDispatch}
+            disabled={!integration.isActive}
+            style={{
+              padding: '4px 8px',
+              fontSize: '12px',
+              backgroundColor: integration.isActive ? '#3b82f6' : '#f3f4f6',
+              border: `1px solid ${integration.isActive ? '#3b82f6' : '#d1d5db'}`,
+              borderRadius: '4px',
+              cursor: integration.isActive ? 'pointer' : 'not-allowed',
+              color: integration.isActive ? 'white' : '#9ca3af',
+              transition: 'all 0.2s',
+              opacity: integration.isActive ? 1 : 0.6
+            }}
+            onMouseOver={(e) => {
+              if (integration.isActive) {
+                e.currentTarget.style.backgroundColor = '#2563eb';
+              }
+            }}
+            onMouseOut={(e) => {
+              if (integration.isActive) {
+                e.currentTarget.style.backgroundColor = '#3b82f6';
+              }
+            }}
+          >
+            Dispatch
+          </button>
+          
+          <span 
+            data-testid={`dispatch-status-${integration.name}`}
+            style={getDispatchStatusBadgeStyle(dispatchStatus)}
+          >
+            {dispatchStatus}
+          </span>
+        </div>
       </div>
     </div>
   );
