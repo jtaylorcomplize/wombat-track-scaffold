@@ -47,7 +47,7 @@ describe('MetaPlatform Dashboard Tests', () => {
       
       // Verify dashboard title
       const title = await page.$eval('[data-testid="dashboard-title"]', el => el.textContent);
-      expect(title).toContain('MetaPlatform');
+      expect(title).toContain('Wombat Track');
       
       await takeScreenshot(page, 'dashboard-loaded');
     });
@@ -200,8 +200,8 @@ describe('MetaPlatform Dashboard Tests', () => {
     beforeEach(async () => {
       await safeNavigate(page, BASE_URL);
       
-      // Navigate to Orbis dashboard tab
-      await waitAndClick(page, 'button:has-text("Orbis Dashboard")');
+      // Navigate to Orbis dashboard tab using CSS selector
+      await waitAndClick(page, 'button.nav-link:nth-child(2)');
       
       // Wait for Orbis dashboard to load
       await page.waitForSelector('[data-testid="status-rollup"]', { timeout: 10000 });
@@ -403,6 +403,138 @@ describe('MetaPlatform Dashboard Tests', () => {
         expect(workingCount).toBeLessThanOrEqual(totalCount);
         
         console.log(`Rollup shows ${workingCount}/${totalCount}, actual items: ${actualTotal}`);
+      });
+
+      it('should display template labels for all integrations', async () => {
+        const integrationItems = await page.$$('[data-testid^="integration-item-"]');
+        
+        for (const item of integrationItems) {
+          const itemId = await item.getAttribute('data-testid');
+          const integrationName = itemId.replace('integration-item-', '');
+          
+          // Check template label exists
+          const templateLabel = await page.$(`[data-testid="template-label-${integrationName}"]`);
+          expect(templateLabel).toBeTruthy();
+          
+          // Verify template label content
+          const labelText = await templateLabel.textContent();
+          expect(labelText).toContain('📦 Template:');
+          expect(labelText).toMatch(/Health Check Scaffold|GitHub Workflow Deploy|CI Pipeline Repair|Sync Service Recovery|Memory Plugin Optimization|Bubble Integration Setup/);
+        }
+        
+        console.log(`Verified template labels for ${integrationItems.length} integrations`);
+      });
+
+      it('should trigger real template dispatch with detailed logging', async () => {
+        // Mock console logs to track template triggers
+        const consoleLogs = [];
+        page.on('console', msg => {
+          if (msg.type() === 'log') {
+            consoleLogs.push(msg.text());
+          }
+        });
+        
+        // Click dispatch button for claude-api (first active integration)
+        await waitAndClick(page, '[data-testid="dispatch-button-claude-api"]');
+        
+        // Wait for status to change to Queued
+        await page.waitForSelector('[data-testid="dispatch-status-claude-api"]:has-text("queued")', { timeout: 3000 });
+        
+        // Wait for status to change to Done
+        await page.waitForSelector('[data-testid="dispatch-status-claude-api"]:has-text("done")', { timeout: 5000 });
+        
+        // Verify console logs contain real template dispatch messages
+        const triggerLogs = consoleLogs.filter(log => log.includes('🚀 Triggering template:'));
+        const dispatchLogs = consoleLogs.filter(log => log.includes('📨 [Claude] Dispatching template'));
+        const completeLogs = consoleLogs.filter(log => log.includes('✅ [Claude] Template claude-health-001 dispatch completed'));
+        const finalLogs = consoleLogs.filter(log => log.includes('✅ Template "claude-health-001" dispatch completed'));
+        
+        expect(triggerLogs.length).toBeGreaterThan(0);
+        expect(dispatchLogs.length).toBeGreaterThan(0);
+        expect(completeLogs.length).toBeGreaterThan(0);
+        expect(finalLogs.length).toBeGreaterThan(0);
+        
+        console.log('✅ Real template dispatch test completed successfully');
+      });
+
+      it('should verify GitHub workflow dispatch', async () => {
+        // Mock console logs to track GitHub workflow triggers
+        const consoleLogs = [];
+        page.on('console', msg => {
+          if (msg.type() === 'log') {
+            consoleLogs.push(msg.text());
+          }
+        });
+        
+        // Click dispatch button for github-webhooks
+        await waitAndClick(page, '[data-testid="dispatch-button-github-webhooks"]');
+        
+        // Wait for status transitions
+        await page.waitForSelector('[data-testid="dispatch-status-github-webhooks"]:has-text("queued")', { timeout: 3000 });
+        await page.waitForSelector('[data-testid="dispatch-status-github-webhooks"]:has-text("done")', { timeout: 5000 });
+        
+        // Verify GitHub-specific logs
+        const githubLogs = consoleLogs.filter(log => log.includes('📨 [GitHub] Dispatching workflow'));
+        const completeLogs = consoleLogs.filter(log => log.includes('✅ [GitHub] Template github-deploy-002 dispatch completed'));
+        
+        expect(githubLogs.length).toBeGreaterThan(0);
+        expect(completeLogs.length).toBeGreaterThan(0);
+        
+        console.log('✅ GitHub workflow dispatch test completed successfully');
+      });
+
+      it('should verify template view links are clickable', async () => {
+        // Find integrations with template IDs
+        const integrationItems = await page.$$('[data-testid^="integration-item-"]');
+        
+        let viewLinksFound = 0;
+        for (const item of integrationItems) {
+          const itemId = await item.getAttribute('data-testid');
+          const integrationName = itemId.replace('integration-item-', '');
+          
+          // Check if template view link exists
+          const viewLink = await page.$(`[data-testid="template-view-${integrationName}"]`);
+          if (viewLink) {
+            expect(viewLink).toBeTruthy();
+            viewLinksFound++;
+          }
+        }
+        
+        expect(viewLinksFound).toBeGreaterThan(0);
+        console.log(`Found ${viewLinksFound} template view links`);
+      });
+
+      it('should verify dispatch button is disabled for inactive integrations', async () => {
+        // Find an inactive integration (sync-service should be inactive)
+        const inactiveButton = await page.$('[data-testid="dispatch-button-sync-service"]');
+        
+        if (inactiveButton) {
+          const isDisabled = await page.evaluate(button => button.disabled, inactiveButton);
+          expect(isDisabled).toBe(true);
+          
+          console.log('✅ Dispatch button correctly disabled for inactive integrations');
+        } else {
+          console.log('ℹ️  No inactive integrations found to test disabled state');
+        }
+      });
+
+      it('should verify dispatch status badges exist for all integrations', async () => {
+        const integrationItems = await page.$$('[data-testid^="integration-item-"]');
+        
+        for (const item of integrationItems) {
+          const itemId = await item.getAttribute('data-testid');
+          const integrationName = itemId.replace('integration-item-', '');
+          
+          // Check dispatch button exists
+          const dispatchButton = await page.$(`[data-testid="dispatch-button-${integrationName}"]`);
+          expect(dispatchButton).toBeTruthy();
+          
+          // Check dispatch status badge exists
+          const statusBadge = await page.$(`[data-testid="dispatch-status-${integrationName}"]`);
+          expect(statusBadge).toBeTruthy();
+        }
+        
+        console.log(`Verified dispatch components for ${integrationItems.length} integrations`);
       });
     });
   });
