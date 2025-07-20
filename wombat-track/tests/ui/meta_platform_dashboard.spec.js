@@ -47,7 +47,7 @@ describe('MetaPlatform Dashboard Tests', () => {
       
       // Verify dashboard title
       const title = await page.$eval('[data-testid="dashboard-title"]', el => el.textContent);
-      expect(title).toContain('MetaPlatform');
+      expect(title).toContain('Wombat Track');
       
       await takeScreenshot(page, 'dashboard-loaded');
     });
@@ -200,8 +200,8 @@ describe('MetaPlatform Dashboard Tests', () => {
     beforeEach(async () => {
       await safeNavigate(page, BASE_URL);
       
-      // Navigate to Orbis dashboard tab
-      await waitAndClick(page, 'button:has-text("Orbis Dashboard")');
+      // Navigate to Orbis dashboard tab using CSS selector
+      await waitAndClick(page, 'button.nav-link:nth-child(2)');
       
       // Wait for Orbis dashboard to load
       await page.waitForSelector('[data-testid="status-rollup"]', { timeout: 10000 });
@@ -403,6 +403,55 @@ describe('MetaPlatform Dashboard Tests', () => {
         expect(workingCount).toBeLessThanOrEqual(totalCount);
         
         console.log(`Rollup shows ${workingCount}/${totalCount}, actual items: ${actualTotal}`);
+      });
+
+      it('should dispatch integration and show status transition', async () => {
+        // Click dispatch button for claude-api (first active integration)
+        await waitAndClick(page, '[data-testid="dispatch-button-claude-api"]');
+        
+        // Wait for status to change to Queued
+        await page.waitForSelector('[data-testid="dispatch-status-claude-api"]:has-text("queued")', { timeout: 3000 });
+        
+        // Wait for status to change to Done
+        await page.waitForSelector('[data-testid="dispatch-status-claude-api"]:has-text("done")', { timeout: 3000 });
+        
+        // Take screenshot after dispatch is complete
+        await takeScreenshot(page, 'orbis-dispatch-confirmed');
+        
+        console.log('✅ Dispatch test completed successfully');
+      });
+
+      it('should verify dispatch button is disabled for inactive integrations', async () => {
+        // Find an inactive integration (sync-service should be inactive)
+        const inactiveButton = await page.$('[data-testid="dispatch-button-sync-service"]');
+        
+        if (inactiveButton) {
+          const isDisabled = await page.evaluate(button => button.disabled, inactiveButton);
+          expect(isDisabled).toBe(true);
+          
+          console.log('✅ Dispatch button correctly disabled for inactive integrations');
+        } else {
+          console.log('ℹ️  No inactive integrations found to test disabled state');
+        }
+      });
+
+      it('should verify dispatch status badges exist for all integrations', async () => {
+        const integrationItems = await page.$$('[data-testid^="integration-item-"]');
+        
+        for (const item of integrationItems) {
+          const itemId = await item.getAttribute('data-testid');
+          const integrationName = itemId.replace('integration-item-', '');
+          
+          // Check dispatch button exists
+          const dispatchButton = await page.$(`[data-testid="dispatch-button-${integrationName}"]`);
+          expect(dispatchButton).toBeTruthy();
+          
+          // Check dispatch status badge exists
+          const statusBadge = await page.$(`[data-testid="dispatch-status-${integrationName}"]`);
+          expect(statusBadge).toBeTruthy();
+        }
+        
+        console.log(`Verified dispatch components for ${integrationItems.length} integrations`);
       });
     });
   });
