@@ -1,3 +1,5 @@
+import type { TemplateExecution } from '../types/template';
+
 export interface TemplateDispatchResult {
   success: boolean;
   message: string;
@@ -9,6 +11,7 @@ export interface TemplateDispatchResult {
   duration?: number;
   response?: any;
   error?: string;
+  executionLogId?: string;
 }
 
 export interface TemplateDispatcher {
@@ -181,38 +184,130 @@ const dispatcherMap: Record<string, TemplateDispatcher> = {
   'ci-repair-003': ciDispatcher,
 };
 
+// In-memory execution log store (will be replaced with proper state management)
+let executionLog: TemplateExecution[] = [];
+
+function createExecutionId(): string {
+  return crypto.randomUUID ? crypto.randomUUID() : `exec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
+function getPlatformFromTemplateId(templateId: string): 'claude' | 'github' | 'ci' | 'generic' {
+  if (templateId.includes('claude')) return 'claude';
+  if (templateId.includes('github')) return 'github';
+  if (templateId.includes('ci')) return 'ci';
+  return 'generic';
+}
+
+function getTemplateNameFromId(templateId: string): string {
+  const templateMap: Record<string, string> = {
+    'claude-health-001': 'Claude Health Check',
+    'github-deploy-002': 'GitHub Deploy Pipeline',
+    'ci-repair-003': 'CI Repair Workflow',
+    'sync-recover-004': 'Sync Recovery Script',
+    'memory-optimize-005': 'Memory Optimization',
+    'bubble-sync-006': 'Bubble Sync Repair'
+  };
+  return templateMap[templateId] || 'Unknown Template';
+}
+
+export function getExecutionLog(): TemplateExecution[] {
+  return [...executionLog].sort((a, b) => b.startTime.getTime() - a.startTime.getTime());
+}
+
+export function addExecutionLog(execution: TemplateExecution): void {
+  executionLog.push(execution);
+}
+
+export function updateExecutionLog(id: string, updates: Partial<TemplateExecution>): void {
+  const index = executionLog.findIndex(exec => exec.id === id);
+  if (index !== -1) {
+    executionLog[index] = { ...executionLog[index], ...updates };
+  }
+}
+
 export async function triggerTemplate(
   templateId: string, 
   integrationName: string
 ): Promise<TemplateDispatchResult> {
   console.log(`🚀 Triggering template ${templateId} for integration ${integrationName}`);
   
+  // Create initial execution log entry
+  const executionLogId = createExecutionId();
+  const execution: TemplateExecution = {
+    id: executionLogId,
+    templateId,
+    templateName: getTemplateNameFromId(templateId),
+    integrationId: integrationName,
+    integrationName,
+    status: 'queued',
+    startTime: new Date(),
+    executionId: '',
+    platform: getPlatformFromTemplateId(templateId)
+  };
+  
+  addExecutionLog(execution);
+  
   const dispatcher = dispatcherMap[templateId] || defaultDispatcher;
   
   try {
+    // Update status to in_progress
+    updateExecutionLog(executionLogId, { status: 'in_progress' });
+    
     const result = await dispatcher.execute(templateId, integrationName);
+    
+    // Update execution log with results
+    const endTime = new Date();
+    if (result.success) {
+      updateExecutionLog(executionLogId, {
+        status: 'done',
+        endTime,
+        executionId: result.executionId || 'unknown'
+      });
+    } else {
+      updateExecutionLog(executionLogId, {
+        status: 'error',
+        endTime,
+        executionId: result.executionId || 'unknown',
+        error: result.error || result.message
+      });
+    }
     
     console.log(`✅ Template execution ${result.success ? 'completed' : 'failed'}:`, {
       templateId,
       integrationName,
       executionId: result.executionId,
       duration: result.duration,
-      platform: result.platform
+      platform: result.platform,
+      executionLogId
     });
     
-    return result;
+    return {
+      ...result,
+      executionLogId
+    };
   } catch (error) {
     console.error(`❌ Template execution failed:`, error);
     
+    // Update execution log with error
+    const endTime = new Date();
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    
+    updateExecutionLog(executionLogId, {
+      status: 'error',
+      endTime,
+      error: errorMessage
+    });
+    
     return {
       success: false,
-      message: `Unexpected error during template execution: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      message: `Unexpected error during template execution: ${errorMessage}`,
       executionId: `err_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date(),
       templateId,
       integrationName,
       platform: 'Unknown',
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: errorMessage,
+      executionLogId
     };
   }
 }

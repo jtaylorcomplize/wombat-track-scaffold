@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Integration } from '../types/integration';
 import { IntegrationCategory, IntegrationStatus, DispatchStatus } from '../types/integration';
+import type { TemplateExecution } from '../types/template';
 import { IntegrationCard } from '../components/integration/IntegrationCard';
-import { triggerTemplate } from '../lib/templateDispatcher';
+import { triggerTemplate, getExecutionLog } from '../lib/templateDispatcher';
 
 const mockIntegrations: Integration[] = [
   {
@@ -75,6 +76,23 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [dispatchStatus, setDispatchStatus] = useState<Record<string, DispatchStatus>>({});
+  const [executionHistory, setExecutionHistory] = useState<TemplateExecution[]>([]);
+  const [showExecutionHistory, setShowExecutionHistory] = useState(false);
+
+  // Update execution history from the global log
+  const refreshExecutionHistory = () => {
+    setExecutionHistory(getExecutionLog());
+  };
+
+  useEffect(() => {
+    // Initial load of execution history
+    refreshExecutionHistory();
+    
+    // Set up a polling interval to refresh execution history
+    const interval = setInterval(refreshExecutionHistory, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const filteredIntegrations = integrations.filter(integration => {
     const statusMatch = statusFilter === 'all' || integration.status === statusFilter;
@@ -139,9 +157,15 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
         console.error(`Template dispatch failed: ${result.message}`);
         setDispatchStatus(prev => ({ ...prev, [integrationId]: DispatchStatus.Idle }));
       }
+      
+      // Refresh execution history after dispatch
+      refreshExecutionHistory();
     } catch (error) {
       console.error(`Dispatch error for ${integrationId}:`, error);
       setDispatchStatus(prev => ({ ...prev, [integrationId]: DispatchStatus.Idle }));
+      
+      // Refresh execution history even on error
+      refreshExecutionHistory();
     }
   };
 
@@ -339,6 +363,158 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
           <div style={{ fontSize: '14px' }}>Try adjusting your filters to see more results.</div>
         </div>
       )}
+
+      {/* Execution History Section */}
+      <div style={{ marginTop: '32px' }}>
+        <div 
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            marginBottom: '16px',
+            padding: '16px',
+            backgroundColor: '#f8fafc',
+            border: '1px solid #e2e8f0',
+            borderRadius: '8px',
+            cursor: 'pointer'
+          }}
+          onClick={() => setShowExecutionHistory(!showExecutionHistory)}
+          data-testid="execution-history-toggle"
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#1f2937', margin: 0 }}>
+              📋 Execution History
+            </h2>
+            <span style={{ 
+              backgroundColor: '#3b82f6', 
+              color: 'white', 
+              padding: '2px 8px', 
+              borderRadius: '12px', 
+              fontSize: '12px',
+              fontWeight: '600'
+            }}>
+              {executionHistory.length}
+            </span>
+          </div>
+          <div style={{ 
+            fontSize: '18px', 
+            transform: showExecutionHistory ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'transform 0.2s'
+          }}>
+            ⌄
+          </div>
+        </div>
+
+        {showExecutionHistory && (
+          <div 
+            data-testid="execution-history-list"
+            style={{ 
+              backgroundColor: 'white',
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px',
+              maxHeight: '400px',
+              overflowY: 'auto'
+            }}
+          >
+            {executionHistory.length === 0 ? (
+              <div style={{ 
+                padding: '32px', 
+                textAlign: 'center', 
+                color: '#6b7280',
+                fontSize: '14px'
+              }}>
+                No execution history yet. Try dispatching a template to see logs here.
+              </div>
+            ) : (
+              executionHistory.map((execution, index) => (
+                <div 
+                  key={execution.id}
+                  data-testid={`execution-entry-${execution.id}`}
+                  style={{ 
+                    padding: '12px 16px',
+                    borderBottom: index < executionHistory.length - 1 ? '1px solid #f3f4f6' : 'none',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <div style={{ 
+                      fontSize: '14px', 
+                      fontWeight: '500', 
+                      color: '#1f2937',
+                      marginBottom: '4px'
+                    }}>
+                      [{execution.integrationName}] — {execution.templateName}
+                    </div>
+                    <div style={{ 
+                      fontSize: '12px', 
+                      color: '#6b7280',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}>
+                      <span>{execution.platform}</span>
+                      <span>•</span>
+                      <span>ID: {execution.executionId}</span>
+                      {execution.endTime && (
+                        <>
+                          <span>•</span>
+                          <span>
+                            {Math.round((execution.endTime.getTime() - execution.startTime.getTime()) / 1000)}s
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ 
+                      fontSize: '24px',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}>
+                      {execution.status === 'done' && '✅'}
+                      {execution.status === 'error' && '❌'}
+                      {execution.status === 'in_progress' && '⏳'}
+                      {execution.status === 'queued' && '⏸️'}
+                    </div>
+                    
+                    <div style={{ 
+                      fontSize: '12px', 
+                      color: '#6b7280',
+                      textAlign: 'right',
+                      minWidth: '80px'
+                    }}>
+                      {execution.status} @ {execution.startTime.toLocaleTimeString()}
+                    </div>
+                  </div>
+                  
+                  {execution.error && (
+                    <div 
+                      style={{ 
+                        marginLeft: '12px',
+                        padding: '4px 8px',
+                        backgroundColor: '#fee2e2',
+                        color: '#dc2626',
+                        borderRadius: '4px',
+                        fontSize: '11px',
+                        maxWidth: '200px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                      }}
+                      title={execution.error}
+                    >
+                      {execution.error}
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

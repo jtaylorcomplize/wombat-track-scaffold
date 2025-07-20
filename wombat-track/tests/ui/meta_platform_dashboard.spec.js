@@ -504,5 +504,146 @@ describe('MetaPlatform Dashboard Tests', () => {
         console.log('Dispatch test completed successfully');
       });
     });
+
+    describe('Execution History Tests (ORB-2.5)', () => {
+      it('should verify execution history toggle is present', async () => {
+        const historyToggle = await page.$('[data-testid="execution-history-toggle"]');
+        expect(historyToggle).toBeTruthy();
+        
+        // Verify toggle shows execution count
+        const toggleText = await historyToggle.textContent();
+        expect(toggleText).toContain('Execution History');
+        expect(toggleText).toMatch(/\d+/); // Should contain a number
+      });
+
+      it('should expand and collapse execution history', async () => {
+        // Initially history should not be visible
+        let historyList = await page.$('[data-testid="execution-history-list"]');
+        expect(historyList).toBeFalsy();
+        
+        // Click to expand
+        await page.click('[data-testid="execution-history-toggle"]');
+        
+        // Wait for history to appear
+        await page.waitForSelector('[data-testid="execution-history-list"]', { timeout: 5000 });
+        
+        historyList = await page.$('[data-testid="execution-history-list"]');
+        expect(historyList).toBeTruthy();
+        
+        // Click to collapse
+        await page.click('[data-testid="execution-history-toggle"]');
+        
+        // Wait for history to disappear
+        await page.waitForFunction(
+          () => !document.querySelector('[data-testid="execution-history-list"]'),
+          { timeout: 5000 }
+        );
+      });
+
+      it('should log execution history when dispatch is triggered', async () => {
+        // First expand the execution history
+        await page.click('[data-testid="execution-history-toggle"]');
+        await page.waitForSelector('[data-testid="execution-history-list"]');
+        
+        // Get initial execution count
+        const initialHistoryEntries = await page.$$('[data-testid^="execution-entry-"]');
+        const initialCount = initialHistoryEntries.length;
+        
+        // Trigger a dispatch
+        const claudeDispatchButton = await page.$('[data-testid="dispatch-button-claude-api"]');
+        expect(claudeDispatchButton).toBeTruthy();
+        
+        await claudeDispatchButton.click();
+        
+        // Wait for new execution entry to appear
+        await page.waitForFunction(
+          (prevCount) => {
+            const entries = document.querySelectorAll('[data-testid^="execution-entry-"]');
+            return entries.length > prevCount;
+          },
+          {},
+          initialCount
+        );
+        
+        // Verify new execution entry exists
+        const newHistoryEntries = await page.$$('[data-testid^="execution-entry-"]');
+        expect(newHistoryEntries.length).toBe(initialCount + 1);
+        
+        // Verify the new entry contains expected information
+        const latestEntry = newHistoryEntries[0]; // Should be first due to sorting
+        const entryText = await latestEntry.textContent();
+        
+        expect(entryText).toContain('claude-api');
+        expect(entryText).toContain('Claude Health Check');
+        expect(entryText).toContain('claude');
+        
+        console.log(`Execution history test completed: ${initialCount} -> ${newHistoryEntries.length} entries`);
+      });
+
+      it('should display execution status correctly', async () => {
+        // Expand execution history
+        await page.click('[data-testid="execution-history-toggle"]');
+        await page.waitForSelector('[data-testid="execution-history-list"]');
+        
+        // If there are execution entries, verify their status display
+        const historyEntries = await page.$$('[data-testid^="execution-entry-"]');
+        
+        if (historyEntries.length > 0) {
+          for (const entry of historyEntries) {
+            const entryText = await entry.textContent();
+            
+            // Should contain status indicators
+            const hasStatusIcon = entryText.includes('✅') || 
+                                  entryText.includes('❌') || 
+                                  entryText.includes('⏳') || 
+                                  entryText.includes('⏸️');
+            
+            expect(hasStatusIcon).toBe(true);
+            
+            // Should contain status text
+            const hasStatusText = entryText.includes('done') || 
+                                  entryText.includes('error') || 
+                                  entryText.includes('in_progress') || 
+                                  entryText.includes('queued');
+            
+            expect(hasStatusText).toBe(true);
+          }
+          
+          console.log(`Verified status display for ${historyEntries.length} execution entries`);
+        } else {
+          console.log('No execution entries found for status verification');
+        }
+      });
+
+      it('should show execution timing information', async () => {
+        // Trigger a dispatch to create an execution
+        const claudeDispatchButton = await page.$('[data-testid="dispatch-button-claude-api"]');
+        if (claudeDispatchButton) {
+          await claudeDispatchButton.click();
+          
+          // Wait for execution to complete
+          await page.waitForTimeout(3000);
+          
+          // Expand execution history
+          await page.click('[data-testid="execution-history-toggle"]');
+          await page.waitForSelector('[data-testid="execution-history-list"]');
+          
+          // Check for timing information in the latest entry
+          const historyEntries = await page.$$('[data-testid^="execution-entry-"]');
+          
+          if (historyEntries.length > 0) {
+            const latestEntry = historyEntries[0];
+            const entryText = await latestEntry.textContent();
+            
+            // Should contain timestamp
+            expect(entryText).toMatch(/\d+:\d+:\d+/); // Time format
+            
+            // May contain duration for completed executions
+            const maybeDuration = entryText.includes('s'); // Duration in seconds
+            console.log(`Timing information ${maybeDuration ? 'found' : 'not found'} in execution entry`);
+          }
+        }
+      });
+    });
   });
 });
