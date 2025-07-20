@@ -47,7 +47,7 @@ describe('MetaPlatform Dashboard Tests', () => {
       
       // Verify dashboard title
       const title = await page.$eval('[data-testid="dashboard-title"]', el => el.textContent);
-      expect(title).toContain('MetaPlatform');
+      expect(title).toContain('Wombat Track');
       
       await takeScreenshot(page, 'dashboard-loaded');
     });
@@ -200,8 +200,8 @@ describe('MetaPlatform Dashboard Tests', () => {
     beforeEach(async () => {
       await safeNavigate(page, BASE_URL);
       
-      // Navigate to Orbis dashboard tab
-      await waitAndClick(page, 'button:has-text("Orbis Dashboard")');
+      // Navigate to Orbis dashboard tab using CSS selector
+      await waitAndClick(page, 'button.nav-link:nth-child(2)');
       
       // Wait for Orbis dashboard to load
       await page.waitForSelector('[data-testid="status-rollup"]', { timeout: 10000 });
