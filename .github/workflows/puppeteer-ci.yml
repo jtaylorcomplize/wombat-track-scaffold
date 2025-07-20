@@ -73,7 +73,7 @@ jobs:
       
       - name: Upload screenshots on failure
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: puppeteer-screenshots
           path: wombat-track/screenshots/
@@ -81,7 +81,7 @@ jobs:
       
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: wombat-track/test-results/
@@ -137,7 +137,7 @@ jobs:
       
       - name: Upload visual diff results
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: visual-regression-results
           path: wombat-track/visual-regression/
