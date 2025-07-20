@@ -24,6 +24,12 @@ describe('MetaPlatform Dashboard Tests', () => {
 
   afterEach(async () => {
     if (page) {
+      // Clean up request interception if it was enabled
+      try {
+        await page.setRequestInterception(false);
+      } catch (error) {
+        // Ignore errors if request interception wasn't enabled
+      }
       await page.close();
     }
   });
@@ -94,9 +100,11 @@ describe('MetaPlatform Dashboard Tests', () => {
       // Navigate to phase
       await waitAndClick(page, '[data-testid="phase-card"]:first-child');
       
-      // Mock the API response
+      // Setup request interception for this specific test
       await page.setRequestInterception(true);
-      page.on('request', request => {
+      
+      // Create a one-time request handler
+      const requestHandler = (request) => {
         if (request.url().includes('/api/trigger-github')) {
           request.respond({
             status: 200,
@@ -106,7 +114,9 @@ describe('MetaPlatform Dashboard Tests', () => {
         } else {
           request.continue();
         }
-      });
+      };
+      
+      page.on('request', requestHandler);
       
       // Click GitHub button
       await waitAndClick(page, '[data-testid="send-to-github-button"]');
@@ -116,6 +126,9 @@ describe('MetaPlatform Dashboard Tests', () => {
       
       const successText = await page.$eval('[data-testid="success-message"]', el => el.textContent);
       expect(successText).toContain('successfully');
+      
+      // Clean up the specific request handler
+      page.off('request', requestHandler);
     });
   });
 
