@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { Integration } from '../types/integration';
-import { IntegrationCategory, IntegrationStatus } from '../types/integration';
+import { IntegrationCategory, IntegrationStatus, DispatchStatus } from '../types/integration';
+import { IntegrationCard } from '../components/integration/IntegrationCard';
 
 const mockIntegrations: Integration[] = [
   {
@@ -60,6 +61,7 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [dispatchStatus, setDispatchStatus] = useState<Record<string, DispatchStatus>>({});
 
   const filteredIntegrations = integrations.filter(integration => {
     const statusMatch = statusFilter === 'all' || integration.status === statusFilter;
@@ -109,53 +111,19 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
     ));
   };
 
-  const formatLastChecked = (date: Date) => {
-    const now = new Date();
-    const diffMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
+  const handleDispatch = (integrationId: string) => {
+    console.log(`Dispatch triggered for integration: ${integrationId}`);
     
-    if (diffMinutes < 1) return 'Just now';
-    if (diffMinutes === 1) return '1 minute ago';
-    if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
+    // Set status to queued
+    setDispatchStatus(prev => ({ ...prev, [integrationId]: DispatchStatus.Queued }));
     
-    const diffHours = Math.floor(diffMinutes / 60);
-    if (diffHours === 1) return '1 hour ago';
-    if (diffHours < 24) return `${diffHours} hours ago`;
-    
-    return date.toLocaleDateString();
+    // Simulate delay then set to done
+    setTimeout(() => {
+      console.log(`✅ Dispatch complete for ${integrationId}`);
+      setDispatchStatus(prev => ({ ...prev, [integrationId]: DispatchStatus.Done }));
+    }, 1000);
   };
 
-  const getStatusBadgeStyle = (status: IntegrationStatus) => {
-    const baseStyle = {
-      padding: '4px 8px',
-      borderRadius: '12px',
-      fontSize: '12px',
-      fontWeight: '600',
-      textTransform: 'uppercase' as const,
-      letterSpacing: '0.5px'
-    };
-
-    switch (status) {
-      case IntegrationStatus.Working:
-        return { ...baseStyle, backgroundColor: '#dcfce7', color: '#15803d' };
-      case IntegrationStatus.Degraded:
-        return { ...baseStyle, backgroundColor: '#fef3c7', color: '#d97706' };
-      case IntegrationStatus.Broken:
-        return { ...baseStyle, backgroundColor: '#fee2e2', color: '#dc2626' };
-      default:
-        return { ...baseStyle, backgroundColor: '#f3f4f6', color: '#6b7280' };
-    }
-  };
-
-  const getCategoryChipStyle = () => {
-    return {
-      padding: '2px 6px',
-      borderRadius: '4px',
-      fontSize: '11px',
-      backgroundColor: '#f8fafc',
-      color: '#64748b',
-      border: '1px solid #e2e8f0'
-    };
-  };
 
   const stats = getOperationalStats();
 
@@ -268,98 +236,13 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
       {/* Integration List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {filteredIntegrations.map((integration) => (
-          <div 
+          <IntegrationCard
             key={integration.name}
-            data-testid={`integration-item-${integration.name}`}
-            style={{ 
-              backgroundColor: 'white',
-              border: '1px solid #e5e7eb', 
-              borderRadius: '8px',
-              padding: '20px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1 }}>
-              {/* Name and Category */}
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '4px' }}>
-                  {integration.name}
-                </div>
-                <div style={getCategoryChipStyle()}>
-                  {integration.category}
-                </div>
-              </div>
-
-              {/* Status Badge */}
-              <div 
-                data-testid={`status-badge-${integration.name}`}
-                style={getStatusBadgeStyle(integration.status)}
-              >
-                {integration.status}
-              </div>
-
-              {/* Last Checked */}
-              <div 
-                data-testid={`last-checked-${integration.name}`}
-                style={{ 
-                  fontSize: '14px', 
-                  color: '#6b7280',
-                  minWidth: '120px',
-                  textAlign: 'right' as const
-                }}
-              >
-                {formatLastChecked(integration.lastChecked)}
-              </div>
-            </div>
-            
-            {/* Actions */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '16px' }}>
-              {integration.logURL && (
-                <a 
-                  data-testid={`log-link-${integration.name}`}
-                  href={integration.logURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ 
-                    color: '#3b82f6', 
-                    textDecoration: 'none',
-                    fontSize: '14px',
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    border: '1px solid #3b82f6',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.backgroundColor = '#3b82f6';
-                    e.currentTarget.style.color = 'white';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = '#3b82f6';
-                  }}
-                >
-                  📋 Logs
-                </a>
-              )}
-              
-              <button
-                onClick={() => runHealthCheck(integration.name)}
-                style={{
-                  padding: '4px 8px',
-                  fontSize: '12px',
-                  backgroundColor: '#f3f4f6',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  color: '#374151'
-                }}
-              >
-                Check
-              </button>
-            </div>
-          </div>
+            integration={integration}
+            onHealthCheck={runHealthCheck}
+            onDispatch={handleDispatch}
+            dispatchStatus={dispatchStatus[integration.name] || DispatchStatus.Idle}
+          />
         ))}
       </div>
 

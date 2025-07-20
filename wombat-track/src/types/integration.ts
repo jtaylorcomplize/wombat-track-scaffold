@@ -13,6 +13,12 @@ export enum IntegrationStatus {
   Broken = "broken"
 }
 
+export enum DispatchStatus {
+  Idle = "idle",
+  Queued = "queued",
+  Done = "done"
+}
+
 export interface Integration {
   name: string;
   status: IntegrationStatus;
@@ -20,6 +26,8 @@ export interface Integration {
   isActive: boolean;
   category: IntegrationCategory;
   logURL?: string;
+  lastDispatchTime?: Date;
+  dispatchStatus?: DispatchStatus;
 }
 
 export interface HealthCheckResponse {
