@@ -104,11 +104,15 @@ export const SendToGitHubButton: React.FC<SendToGitHubButtonProps> = ({
         disabled={status === 'loading'}
         className={`${getButtonClasses()} ${className}`}
         aria-label={`Send phase ${phaseId} to GitHub`}
+        data-testid="send-to-github-button"
       >
         {getButtonContent()}
       </button>
       {status === 'error' && errorMessage && (
-        <span className="text-sm text-red-600 mt-1">{errorMessage}</span>
+        <span className="text-sm text-red-600 mt-1" data-testid="error-message">{errorMessage}</span>
+      )}
+      {status === 'success' && (
+        <span className="text-sm text-green-600 mt-1" data-testid="success-message">Workflow triggered successfully</span>
       )}
     </div>
   );
