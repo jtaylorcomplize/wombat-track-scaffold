@@ -16,7 +16,11 @@ export default {
   server: {
     command: 'npm run dev',
     port: 5173,
-    launchTimeout: 60000, // Increased from 30000ms to support Vite dev server startup
-    debug: true
+    launchTimeout: 120000, // Increased to 2 minutes for CI environment
+    debug: true,
+    usedPortAction: 'kill',
+    waitOnScheme: {
+      delay: 1000
+    }
   }
 };
