@@ -1,0 +1,22 @@
+name: Claude Scaffold
+
+on:
+  workflow_dispatch:
+    inputs:
+      phase_id:
+        description: 'Phase ID'
+        required: true
+        type: string
+
+jobs:
+  scaffold:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Run scaffold script
+        run: |
+          chmod +x scripts/claude/scaffold.sh
+          ./scripts/claude/scaffold.sh "${{ github.event.inputs.phase_id }}"
