@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import type { Integration } from '../types/integration';
-import { IntegrationCategory, IntegrationStatus } from '../types/integration';
+import { IntegrationCategory, IntegrationStatus, DispatchStatus } from '../types/integration';
+import { IntegrationCard } from '../components/integration/IntegrationCard';
+import { triggerTemplate } from '../lib/templateDispatcher';
 
 const mockIntegrations: Integration[] = [
   {
@@ -9,7 +11,9 @@ const mockIntegrations: Integration[] = [
     lastChecked: new Date(Date.now() - 2 * 60 * 1000),
     isActive: true,
     category: IntegrationCategory.Claude,
-    logURL: 'https://logs.example.com/claude-api'
+    logURL: 'https://logs.example.com/claude-api',
+    templateName: 'Claude Health Check',
+    templateId: 'claude-health-001'
   },
   {
     name: 'github-webhooks',
@@ -17,14 +21,18 @@ const mockIntegrations: Integration[] = [
     lastChecked: new Date(Date.now() - 5 * 60 * 1000),
     isActive: true,
     category: IntegrationCategory.GitHub,
-    logURL: 'https://logs.example.com/github-webhooks'
+    logURL: 'https://logs.example.com/github-webhooks',
+    templateName: 'GitHub Deploy Pipeline',
+    templateId: 'github-deploy-002'
   },
   {
     name: 'ci-pipeline',
     status: IntegrationStatus.Degraded,
     lastChecked: new Date(Date.now() - 10 * 60 * 1000),
     isActive: true,
-    category: IntegrationCategory.CI
+    category: IntegrationCategory.CI,
+    templateName: 'CI Repair Workflow',
+    templateId: 'ci-repair-003'
   },
   {
     name: 'sync-service',
@@ -32,14 +40,18 @@ const mockIntegrations: Integration[] = [
     lastChecked: new Date(Date.now() - 30 * 60 * 1000),
     isActive: false,
     category: IntegrationCategory.Sync,
-    logURL: 'https://logs.example.com/sync-service'
+    logURL: 'https://logs.example.com/sync-service',
+    templateName: 'Sync Recovery Script',
+    templateId: 'sync-recover-004'
   },
   {
     name: 'memory-plugin',
     status: IntegrationStatus.Working,
     lastChecked: new Date(Date.now() - 1 * 60 * 1000),
     isActive: true,
-    category: IntegrationCategory.MemoryPlugin
+    category: IntegrationCategory.MemoryPlugin,
+    templateName: 'Memory Optimization',
+    templateId: 'memory-optimize-005'
   },
   {
     name: 'bubble-connector',
@@ -47,7 +59,9 @@ const mockIntegrations: Integration[] = [
     lastChecked: new Date(Date.now() - 15 * 60 * 1000),
     isActive: true,
     category: IntegrationCategory.Bubble,
-    logURL: 'https://logs.example.com/bubble-connector'
+    logURL: 'https://logs.example.com/bubble-connector',
+    templateName: 'Bubble Sync Repair',
+    templateId: 'bubble-sync-006'
   }
 ];
 
@@ -60,6 +74,7 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [dispatchStatus, setDispatchStatus] = useState<Record<string, DispatchStatus>>({});
 
   const filteredIntegrations = integrations.filter(integration => {
     const statusMatch = statusFilter === 'all' || integration.status === statusFilter;
@@ -94,6 +109,39 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
       })));
     } finally {
       setIsRefreshing(false);
+    }
+  };
+
+  const handleDispatch = async (integrationId: string) => {
+    const integration = integrations.find(i => i.name === integrationId);
+    if (!integration || !integration.templateId) {
+      console.warn(`No template ID found for integration: ${integrationId}`);
+      return;
+    }
+
+    setDispatchStatus(prev => ({ ...prev, [integrationId]: DispatchStatus.Queued }));
+
+    try {
+      const result = await triggerTemplate(integration.templateId, integration.name);
+      
+      if (result.success) {
+        setDispatchStatus(prev => ({ ...prev, [integrationId]: DispatchStatus.Done }));
+        setIntegrations(prev => prev.map(int => 
+          int.name === integrationId 
+            ? { ...int, lastDispatchTime: new Date() }
+            : int
+        ));
+        
+        setTimeout(() => {
+          setDispatchStatus(prev => ({ ...prev, [integrationId]: DispatchStatus.Idle }));
+        }, 3000);
+      } else {
+        console.error(`Template dispatch failed: ${result.message}`);
+        setDispatchStatus(prev => ({ ...prev, [integrationId]: DispatchStatus.Idle }));
+      }
+    } catch (error) {
+      console.error(`Dispatch error for ${integrationId}:`, error);
+      setDispatchStatus(prev => ({ ...prev, [integrationId]: DispatchStatus.Idle }));
     }
   };
 
@@ -268,98 +316,13 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
       {/* Integration List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {filteredIntegrations.map((integration) => (
-          <div 
+          <IntegrationCard
             key={integration.name}
-            data-testid={`integration-item-${integration.name}`}
-            style={{ 
-              backgroundColor: 'white',
-              border: '1px solid #e5e7eb', 
-              borderRadius: '8px',
-              padding: '20px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1 }}>
-              {/* Name and Category */}
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '4px' }}>
-                  {integration.name}
-                </div>
-                <div style={getCategoryChipStyle()}>
-                  {integration.category}
-                </div>
-              </div>
-
-              {/* Status Badge */}
-              <div 
-                data-testid={`status-badge-${integration.name}`}
-                style={getStatusBadgeStyle(integration.status)}
-              >
-                {integration.status}
-              </div>
-
-              {/* Last Checked */}
-              <div 
-                data-testid={`last-checked-${integration.name}`}
-                style={{ 
-                  fontSize: '14px', 
-                  color: '#6b7280',
-                  minWidth: '120px',
-                  textAlign: 'right' as const
-                }}
-              >
-                {formatLastChecked(integration.lastChecked)}
-              </div>
-            </div>
-            
-            {/* Actions */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '16px' }}>
-              {integration.logURL && (
-                <a 
-                  data-testid={`log-link-${integration.name}`}
-                  href={integration.logURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ 
-                    color: '#3b82f6', 
-                    textDecoration: 'none',
-                    fontSize: '14px',
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    border: '1px solid #3b82f6',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.backgroundColor = '#3b82f6';
-                    e.currentTarget.style.color = 'white';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = '#3b82f6';
-                  }}
-                >
-                  📋 Logs
-                </a>
-              )}
-              
-              <button
-                onClick={() => runHealthCheck(integration.name)}
-                style={{
-                  padding: '4px 8px',
-                  fontSize: '12px',
-                  backgroundColor: '#f3f4f6',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  color: '#374151'
-                }}
-              >
-                Check
-              </button>
-            </div>
-          </div>
+            integration={integration}
+            onHealthCheck={runHealthCheck}
+            onDispatch={handleDispatch}
+            dispatchStatus={dispatchStatus[integration.name] || DispatchStatus.Idle}
+          />
         ))}
       </div>
 

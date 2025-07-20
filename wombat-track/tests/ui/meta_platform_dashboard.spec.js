@@ -378,6 +378,14 @@ describe('MetaPlatform Dashboard Tests', () => {
           // Check last checked
           const lastChecked = await page.$(`[data-testid="last-checked-${integrationName}"]`);
           expect(lastChecked).toBeTruthy();
+          
+          // Check dispatch button (new in ORB-2.4)
+          const dispatchButton = await page.$(`[data-testid="dispatch-button-${integrationName}"]`);
+          expect(dispatchButton).toBeTruthy();
+          
+          // Check dispatch status badge (new in ORB-2.4)
+          const dispatchStatus = await page.$(`[data-testid="dispatch-status-${integrationName}"]`);
+          expect(dispatchStatus).toBeTruthy();
         }
         
         console.log(`Verified data-testid attributes for ${integrationItems.length} integrations`);
@@ -403,6 +411,97 @@ describe('MetaPlatform Dashboard Tests', () => {
         expect(workingCount).toBeLessThanOrEqual(totalCount);
         
         console.log(`Rollup shows ${workingCount}/${totalCount}, actual items: ${actualTotal}`);
+      });
+    });
+
+    describe('Template Dispatch Tests (ORB-2.4)', () => {
+      it('should verify dispatch buttons are present and functional', async () => {
+        const integrationItems = await page.$$('[data-testid^="integration-item-"]');
+        expect(integrationItems.length).toBeGreaterThan(0);
+        
+        // Check that dispatch buttons exist for all integrations
+        for (const item of integrationItems) {
+          const itemId = await item.getAttribute('data-testid');
+          const integrationName = itemId.replace('integration-item-', '');
+          
+          const dispatchButton = await page.$(`[data-testid="dispatch-button-${integrationName}"]`);
+          expect(dispatchButton).toBeTruthy();
+          
+          // Verify button text
+          const buttonText = await dispatchButton.textContent();
+          expect(buttonText).toContain('Dispatch');
+        }
+      });
+
+      it('should verify dispatch status badges display correctly', async () => {
+        const integrationItems = await page.$$('[data-testid^="integration-item-"]');
+        
+        for (const item of integrationItems) {
+          const itemId = await item.getAttribute('data-testid');
+          const integrationName = itemId.replace('integration-item-', '');
+          
+          const dispatchStatus = await page.$(`[data-testid="dispatch-status-${integrationName}"]`);
+          expect(dispatchStatus).toBeTruthy();
+          
+          // Initial status should be 'idle'
+          const statusText = await dispatchStatus.textContent();
+          expect(statusText.toLowerCase()).toBe('idle');
+        }
+      });
+
+      it('should verify template names are displayed', async () => {
+        const integrationItems = await page.$$('[data-testid^="integration-item-"]');
+        
+        for (const item of integrationItems) {
+          const itemText = await item.textContent();
+          
+          // Should contain template indicators
+          const hasTemplateInfo = itemText.includes('🔧') || 
+                                  itemText.includes('Health Check') || 
+                                  itemText.includes('Deploy') || 
+                                  itemText.includes('Repair') || 
+                                  itemText.includes('Recovery') || 
+                                  itemText.includes('Optimization');
+          
+          expect(hasTemplateInfo).toBe(true);
+        }
+      });
+
+      it('should simulate dispatch button click and verify status changes', async () => {
+        // Setup console log monitoring for dispatch events
+        const consoleLogs = [];
+        page.on('console', msg => {
+          if (msg.type() === 'log' && msg.text().includes('🚀 Triggering template')) {
+            consoleLogs.push(msg.text());
+          }
+        });
+        
+        // Find an active integration (claude-api should be active)
+        const claudeDispatchButton = await page.$('[data-testid="dispatch-button-claude-api"]');
+        expect(claudeDispatchButton).toBeTruthy();
+        
+        // Check initial status
+        const initialStatus = await page.$eval('[data-testid="dispatch-status-claude-api"]', el => el.textContent);
+        expect(initialStatus.toLowerCase()).toBe('idle');
+        
+        // Click dispatch button
+        await claudeDispatchButton.click();
+        
+        // Wait for status to change to queued
+        await page.waitForFunction(
+          () => {
+            const statusEl = document.querySelector('[data-testid="dispatch-status-claude-api"]');
+            return statusEl && statusEl.textContent.toLowerCase() === 'queued';
+          },
+          { timeout: 5000 }
+        );
+        
+        // Verify console log shows template execution
+        await page.waitForTimeout(1000);
+        expect(consoleLogs.length).toBeGreaterThan(0);
+        expect(consoleLogs[0]).toContain('claude-health-001');
+        
+        console.log('Dispatch test completed successfully');
       });
     });
   });
