@@ -18,5 +18,5 @@ jobs:
         
       - name: Run scaffold script
         run: |
-          chmod +x scripts/claude/scaffold.sh
-          ./scripts/claude/scaffold.sh "${{ github.event.inputs.phase_id }}"
+          chmod +x wombat-track/scripts/claude/scaffold.sh
+          ./wombat-track/scripts/claude/scaffold.sh "${{ github.event.inputs.phase_id }}"
