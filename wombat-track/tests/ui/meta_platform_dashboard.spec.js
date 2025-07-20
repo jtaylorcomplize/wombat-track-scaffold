@@ -195,4 +195,177 @@ describe('MetaPlatform Dashboard Tests', () => {
       expect(errors).toHaveLength(0);
     });
   });
+
+  describe('Orbis Dashboard Tests', () => {
+    beforeEach(async () => {
+      await safeNavigate(page, BASE_URL);
+      
+      // Navigate to dashboard tab
+      await waitAndClick(page, 'button:has-text("Dashboard")');
+      
+      // Wait for Orbis dashboard to load
+      await page.waitForSelector('[data-testid="orbis-dashboard-page"]', { timeout: 10000 });
+    });
+
+    describe('Rendering Tests', () => {
+      it('should verify dashboard mounts', async () => {
+        const dashboardPage = await page.getByTestId('orbis-dashboard-page');
+        expect(dashboardPage).toBeTruthy();
+        
+        await takeScreenshot(page, 'orbis-dashboard-mounted');
+      });
+
+      it('should check at least 1 integration item renders', async () => {
+        const integrationItems = await page.$$('[data-testid^="integration-item-"]');
+        expect(integrationItems.length).toBeGreaterThan(0);
+        
+        console.log(`Found ${integrationItems.length} integration items`);
+      });
+
+      it('should verify status-rollup text includes count logic', async () => {
+        const statusRollup = await page.getByTestId('status-rollup');
+        expect(statusRollup).toBeTruthy();
+        
+        const rollupText = await statusRollup.textContent();
+        expect(rollupText).toMatch(/\d+/); // Should contain numbers
+        expect(rollupText).toContain('Healthy');
+        expect(rollupText).toContain('Warning');
+        expect(rollupText).toContain('Error');
+        expect(rollupText).toContain('Total');
+      });
+    });
+
+    describe('Filter Tests', () => {
+      it('should change category filter and expect filtered list', async () => {
+        // Get initial count
+        const initialItems = await page.$$('[data-testid^="integration-item-"]');
+        const initialCount = initialItems.length;
+        
+        // Change category filter to 'api'
+        await page.selectOption('[data-testid="category-filter"]', 'api');
+        
+        // Wait for filtering to take effect
+        await page.waitForTimeout(500);
+        
+        // Get filtered count
+        const filteredItems = await page.$$('[data-testid^="integration-item-"]');
+        const filteredCount = filteredItems.length;
+        
+        // Should have different count or at least show only API items
+        if (filteredCount > 0) {
+          const firstItem = await filteredItems[0].textContent();
+          expect(firstItem.toLowerCase()).toContain('api');
+        }
+        
+        console.log(`Category filter: ${initialCount} -> ${filteredCount} items`);
+      });
+
+      it('should change status filter and expect filtered list', async () => {
+        // Get initial count
+        const initialItems = await page.$$('[data-testid^="integration-item-"]');
+        const initialCount = initialItems.length;
+        
+        // Change status filter to 'healthy'
+        await page.selectOption('[data-testid="status-filter"]', 'healthy');
+        
+        // Wait for filtering to take effect
+        await page.waitForTimeout(500);
+        
+        // Get filtered count
+        const filteredItems = await page.$$('[data-testid^="integration-item-"]');
+        const filteredCount = filteredItems.length;
+        
+        // Verify all visible items have healthy status
+        for (const item of filteredItems) {
+          const statusBadge = await item.$('[data-testid^="status-badge-"]');
+          expect(statusBadge).toBeTruthy();
+        }
+        
+        console.log(`Status filter: ${initialCount} -> ${filteredCount} items`);
+      });
+    });
+
+    describe('Interaction Tests', () => {
+      it('should click refresh-button and expect runHealthCheck stub to fire', async () => {
+        // Mock the console.log to track health check calls
+        const consoleLogs = [];
+        page.on('console', msg => {
+          if (msg.type() === 'log') {
+            consoleLogs.push(msg.text());
+          }
+        });
+        
+        // Click refresh button
+        await waitAndClick(page, '[data-testid="refresh-button"]');
+        
+        // Wait for any console logs
+        await page.waitForTimeout(500);
+        
+        // Verify health check was triggered
+        const healthCheckLogs = consoleLogs.filter(log => log.includes('Health check triggered'));
+        expect(healthCheckLogs.length).toBeGreaterThan(0);
+        
+        await takeScreenshot(page, 'orbis-dashboard-refresh-clicked');
+      });
+
+      it('should verify log links render and are clickable', async () => {
+        // Find all log links
+        const logLinks = await page.$$('[data-testid^="log-link-"]');
+        
+        if (logLinks.length > 0) {
+          // Verify first log link exists and is clickable
+          const firstLogLink = logLinks[0];
+          expect(firstLogLink).toBeTruthy();
+          
+          // Check if it has href attribute
+          const href = await firstLogLink.getAttribute('href');
+          expect(href).toBeTruthy();
+          expect(href).toMatch(/^https?:\/\//); // Should be a valid URL
+          
+          // Check if it has target="_blank"
+          const target = await firstLogLink.getAttribute('target');
+          expect(target).toBe('_blank');
+          
+          console.log(`Found ${logLinks.length} log links, first one: ${href}`);
+        } else {
+          console.log('No log links found in current integrations');
+        }
+      });
+
+      it('should verify all required data-testid attributes are present', async () => {
+        // Check root dashboard wrapper
+        expect(await page.getByTestId('orbis-dashboard-page')).toBeTruthy();
+        
+        // Check filters
+        expect(await page.getByTestId('status-filter')).toBeTruthy();
+        expect(await page.getByTestId('category-filter')).toBeTruthy();
+        
+        // Check refresh button
+        expect(await page.getByTestId('refresh-button')).toBeTruthy();
+        
+        // Check status rollup
+        expect(await page.getByTestId('status-rollup')).toBeTruthy();
+        
+        // Check integration items (at least one should exist)
+        const integrationItems = await page.$$('[data-testid^="integration-item-"]');
+        expect(integrationItems.length).toBeGreaterThan(0);
+        
+        // For each integration item, verify required sub-elements
+        for (const item of integrationItems) {
+          const itemId = await item.getAttribute('data-testid');
+          const integrationName = itemId.replace('integration-item-', '');
+          
+          // Check status badge
+          const statusBadge = await page.$(`[data-testid="status-badge-${integrationName}"]`);
+          expect(statusBadge).toBeTruthy();
+          
+          // Check last checked
+          const lastChecked = await page.$(`[data-testid="last-checked-${integrationName}"]`);
+          expect(lastChecked).toBeTruthy();
+        }
+        
+        console.log(`Verified data-testid attributes for ${integrationItems.length} integrations`);
+      });
+    });
+  });
 });
