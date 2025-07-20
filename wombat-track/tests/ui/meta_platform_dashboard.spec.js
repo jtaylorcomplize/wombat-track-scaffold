@@ -200,17 +200,21 @@ describe('MetaPlatform Dashboard Tests', () => {
     beforeEach(async () => {
       await safeNavigate(page, BASE_URL);
       
-      // Navigate to dashboard tab
-      await waitAndClick(page, 'button:has-text("Dashboard")');
+      // Navigate to Orbis dashboard tab
+      await waitAndClick(page, 'button:has-text("Orbis Dashboard")');
       
       // Wait for Orbis dashboard to load
-      await page.waitForSelector('[data-testid="orbis-dashboard-page"]', { timeout: 10000 });
+      await page.waitForSelector('[data-testid="status-rollup"]', { timeout: 10000 });
     });
 
     describe('Rendering Tests', () => {
       it('should verify dashboard mounts', async () => {
-        const dashboardPage = await page.getByTestId('orbis-dashboard-page');
-        expect(dashboardPage).toBeTruthy();
+        const statusRollup = await page.getByTestId('status-rollup');
+        expect(statusRollup).toBeTruthy();
+        
+        // Check for header text
+        const headerText = await page.textContent('h1');
+        expect(headerText).toContain('Orbis Health Overview');
         
         await takeScreenshot(page, 'orbis-dashboard-mounted');
       });
@@ -228,10 +232,23 @@ describe('MetaPlatform Dashboard Tests', () => {
         
         const rollupText = await statusRollup.textContent();
         expect(rollupText).toMatch(/\d+/); // Should contain numbers
-        expect(rollupText).toContain('Healthy');
-        expect(rollupText).toContain('Warning');
-        expect(rollupText).toContain('Error');
-        expect(rollupText).toContain('Total');
+        expect(rollupText).toContain('operational');
+        expect(rollupText).toMatch(/\d+%/); // Should contain percentage
+      });
+
+      it('should display integration categories correctly', async () => {
+        const integrationItems = await page.$$('[data-testid^="integration-item-"]');
+        expect(integrationItems.length).toBeGreaterThan(0);
+        
+        // Check that integration items show categories
+        for (const item of integrationItems) {
+          const itemText = await item.textContent();
+          // Should contain one of the valid categories
+          const hasValidCategory = ['Claude', 'GitHub', 'CI', 'Sync', 'MemoryPlugin', 'Bubble'].some(category => 
+            itemText.includes(category)
+          );
+          expect(hasValidCategory).toBe(true);
+        }
       });
     });
 
@@ -241,8 +258,8 @@ describe('MetaPlatform Dashboard Tests', () => {
         const initialItems = await page.$$('[data-testid^="integration-item-"]');
         const initialCount = initialItems.length;
         
-        // Change category filter to 'api'
-        await page.selectOption('[data-testid="category-filter"]', 'api');
+        // Change category filter to 'Claude'
+        await page.selectOption('[data-testid="category-filter"]', 'Claude');
         
         // Wait for filtering to take effect
         await page.waitForTimeout(500);
@@ -251,10 +268,10 @@ describe('MetaPlatform Dashboard Tests', () => {
         const filteredItems = await page.$$('[data-testid^="integration-item-"]');
         const filteredCount = filteredItems.length;
         
-        // Should have different count or at least show only API items
+        // Should have different count or at least show only Claude items
         if (filteredCount > 0) {
           const firstItem = await filteredItems[0].textContent();
-          expect(firstItem.toLowerCase()).toContain('api');
+          expect(firstItem).toContain('Claude');
         }
         
         console.log(`Category filter: ${initialCount} -> ${filteredCount} items`);
@@ -265,8 +282,8 @@ describe('MetaPlatform Dashboard Tests', () => {
         const initialItems = await page.$$('[data-testid^="integration-item-"]');
         const initialCount = initialItems.length;
         
-        // Change status filter to 'healthy'
-        await page.selectOption('[data-testid="status-filter"]', 'healthy');
+        // Change status filter to 'working'
+        await page.selectOption('[data-testid="status-filter"]', 'working');
         
         // Wait for filtering to take effect
         await page.waitForTimeout(500);
@@ -275,10 +292,12 @@ describe('MetaPlatform Dashboard Tests', () => {
         const filteredItems = await page.$$('[data-testid^="integration-item-"]');
         const filteredCount = filteredItems.length;
         
-        // Verify all visible items have healthy status
+        // Verify all visible items have working status
         for (const item of filteredItems) {
           const statusBadge = await item.$('[data-testid^="status-badge-"]');
           expect(statusBadge).toBeTruthy();
+          const badgeText = await statusBadge.textContent();
+          expect(badgeText.toLowerCase()).toContain('working');
         }
         
         console.log(`Status filter: ${initialCount} -> ${filteredCount} items`);
@@ -298,11 +317,11 @@ describe('MetaPlatform Dashboard Tests', () => {
         // Click refresh button
         await waitAndClick(page, '[data-testid="refresh-button"]');
         
-        // Wait for any console logs
-        await page.waitForTimeout(500);
+        // Wait for any console logs and refresh to complete
+        await page.waitForTimeout(2000);
         
-        // Verify health check was triggered
-        const healthCheckLogs = consoleLogs.filter(log => log.includes('Health check triggered'));
+        // Verify health check was triggered for multiple integrations
+        const healthCheckLogs = consoleLogs.filter(log => log.includes('Health check triggered for:'));
         expect(healthCheckLogs.length).toBeGreaterThan(0);
         
         await takeScreenshot(page, 'orbis-dashboard-refresh-clicked');
@@ -333,9 +352,6 @@ describe('MetaPlatform Dashboard Tests', () => {
       });
 
       it('should verify all required data-testid attributes are present', async () => {
-        // Check root dashboard wrapper
-        expect(await page.getByTestId('orbis-dashboard-page')).toBeTruthy();
-        
         // Check filters
         expect(await page.getByTestId('status-filter')).toBeTruthy();
         expect(await page.getByTestId('category-filter')).toBeTruthy();
@@ -365,6 +381,28 @@ describe('MetaPlatform Dashboard Tests', () => {
         }
         
         console.log(`Verified data-testid attributes for ${integrationItems.length} integrations`);
+      });
+
+      it('should validate rollup count accuracy', async () => {
+        const statusRollup = await page.getByTestId('status-rollup');
+        const rollupText = await statusRollup.textContent();
+        
+        // Extract the numbers from "X of Y integrations operational"
+        const match = rollupText.match(/(\d+) of (\d+) integrations operational/);
+        expect(match).toBeTruthy();
+        
+        const workingCount = parseInt(match[1]);
+        const totalCount = parseInt(match[2]);
+        
+        // Count actual integration items
+        const integrationItems = await page.$$('[data-testid^="integration-item-"]');
+        const actualTotal = integrationItems.length;
+        
+        // The total should match or be close (active integrations only)
+        expect(totalCount).toBeLessThanOrEqual(actualTotal);
+        expect(workingCount).toBeLessThanOrEqual(totalCount);
+        
+        console.log(`Rollup shows ${workingCount}/${totalCount}, actual items: ${actualTotal}`);
       });
     });
   });

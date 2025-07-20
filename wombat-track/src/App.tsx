@@ -1,17 +1,20 @@
 // wombat-track/src/App.tsx
 import React, { useState } from 'react';
 import { PhasePlan } from './pages/PhasePlan';
-import { OrbisDashboard } from './components/orbis/OrbisDashboard';
+import { OrbisDashboard } from './pages/OrbisDashboard';
 import './App.css';
 console.log("✅ App is being rendered");
 
-type ActiveView = 'phase-plan' | 'dashboard' | 'settings';
+type ActiveView = 'phase-plan' | 'orbis-dashboard' | 'settings';
 
 function App() {
   const [activeView, setActiveView] = useState<ActiveView>('phase-plan');
 
-  const runHealthCheck = () => {
-    console.log('Health check triggered');
+  const runHealthCheck = async (integrationId: string) => {
+    console.log(`Health check triggered for: ${integrationId}`);
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    console.log(`Health check completed for: ${integrationId}`);
   };
 
   return (
@@ -30,10 +33,10 @@ function App() {
               Phase Plan
             </button>
             <button 
-              className={`nav-link ${activeView === 'dashboard' ? 'active' : ''}`}
-              onClick={() => setActiveView('dashboard')}
+              className={`nav-link ${activeView === 'orbis-dashboard' ? 'active' : ''}`}
+              onClick={() => setActiveView('orbis-dashboard')}
             >
-              Dashboard
+              Orbis Dashboard
             </button>
             <button 
               className={`nav-link ${activeView === 'settings' ? 'active' : ''}`}
@@ -47,7 +50,7 @@ function App() {
       
       <main className="app-main">
         {activeView === 'phase-plan' && <PhasePlan />}
-        {activeView === 'dashboard' && <OrbisDashboard onHealthCheck={runHealthCheck} />}
+        {activeView === 'orbis-dashboard' && <OrbisDashboard onHealthCheck={runHealthCheck} />}
         {activeView === 'settings' && <div>Settings coming soon...</div>}
       </main>
       
