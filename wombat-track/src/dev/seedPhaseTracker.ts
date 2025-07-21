@@ -23,47 +23,62 @@ export const seedProject: Project = {
   projectType: 'Platform',
   status: 'Complete',
   wtTag: 'orb-2x-metaplatform',
-  phasePlan: `# MetaPlatform – Orbis Phase 2 Implementation
+  phasePlan: `# 📑 Phase Plan – MetaPlatform: Orbis Phase 2
 
-## Project Overview
-This project represents the complete implementation journey of the Orbis Dashboard system, from initial design through comprehensive admin utilities, spanning 8 major phases with 47 detailed implementation steps.
+## 🧭 Purpose
 
-## Key Achievements
-- **Template Execution System**: Real-time template dispatch with API integration
-- **Phase Tracking**: Hierarchical project management with execution linking
-- **Admin Utilities**: Complete CRUD operations for projects, phases, and steps
-- **Execution Persistence**: Comprehensive logging and history tracking
-- **Interactive UI**: Rich dashboard with status monitoring and controls
+The MetaPlatform project is a subapp of Wombat Track designed to build a fully operational AI-integrated development console. It supports structured workflow execution, real-time status tracking, and interactive governance tooling.
 
-## Technical Milestones
-- ORB-2.0: Initial design and Git workflow setup
-- ORB-2.1: Dispatch button UI with state management
-- ORB-2.2: Template trigger integration
-- ORB-2.3: Real template execution system
-- ORB-2.4: API-driven workflow execution
-- ORB-2.5: Execution log persistence
-- ORB-2.6: Interactive phase tracker UI
-- ORB-2.7: Complete admin system with CRUD operations
+## 🛠️ System Goals
 
-## Success Metrics
-- 47 implementation steps completed
-- 8 major phases delivered on schedule
-- Full integration testing passed
-- Comprehensive admin functionality delivered
-- Real-time execution tracking operational
+- Execute templates (e.g., Claude scaffolds, GitHub workflows)
+- Track executions via live logs
+- Visualise project phases and track completion
+- Manage multiple concurrent projects
+- Serve as a full SDLC manager for AI-assisted delivery
 
-## Architecture Highlights
-- React TypeScript functional components
-- Mock API persistence layer
-- Hierarchical data structures
-- Real-time polling for status updates
-- Modular dispatcher system for multiple platforms
+## 🧱 Architecture Overview
 
-## Resources & Documentation
-- [Template Dispatcher Documentation](https://docs.wombattrack.io/dispatchers)
-- [Phase Tracker API Reference](https://docs.wombattrack.io/phase-tracker)
-- [Admin Utilities Guide](https://docs.wombattrack.io/admin)
-- [Integration Testing Framework](https://docs.wombattrack.io/testing)`,
+- \`OrbisDashboard\` hosts all major views
+- \`templateDispatcher.ts\` handles platform-based dispatch logic
+- \`executionLogAPI.ts\` simulates backend persistence (mock, ready for upgrade)
+- \`PhaseTracker\` visualises Project → Phase → PhaseStep hierarchy
+- \`PhaseAdminModal\` allows CRUD + import/export + metadata tagging
+- \`ProjectSwitcher\` filters views by project context
+- \`PhasePlanEditor\` stores and renders this document!
+
+## 🔁 ORB-2.x Feature Timeline
+
+- **ORB-2.0**: Git setup, test infra, dashboard review
+- **ORB-2.1**: Dispatch button and UI
+- **ORB-2.2**: Template trigger fields, labels, and viewer links
+- **ORB-2.3**: Real execution pipeline (Claude, GitHub, CI)
+- **ORB-2.4**: API-based dispatcher system
+- **ORB-2.5**: Execution logs and history UI
+- **ORB-2.6**: Interactive Phase Tracker (projects → phases → steps)
+- **ORB-2.7**: Phase Admin modal with full CRUD + reordering + archive
+- **ORB-2.8**: Phase Plan tab, ProjectSwitcher, UX polish
+
+## 🧠 Development Philosophy
+
+Wombat Track enables AI-augmented execution and governance with full traceability. Every feature is committed, tested, tracked in Phase history, and linked to real execution.
+
+We use Markdown to author human-readable documentation. We use Puppeteer to automate verification. We use Claude to scaffold code based on these plans.
+
+## 🧩 Governance Structure
+
+- Projects are tracked via seeded structures
+- Templates are linked by ID and trigger dispatches
+- Execution logs persist via API
+- Statuses reflect real outcomes, not assumptions
+
+## 🔗 Resources
+
+- Canvas Source: \`/meta-platform-dashboard\`
+- Execution API: \`src/api/executionLogAPI.ts\`
+- Template Dispatcher: \`src/lib/templateDispatcher.ts\`
+- UI Test Suite: \`tests/ui/meta_platform_dashboard.spec.js\`
+- Canvas Artefact: "Orbis Template Dispatch"`,
   colorTag: '#8b5cf6',
   phases: [
     {
