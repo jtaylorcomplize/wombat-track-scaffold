@@ -7,9 +7,10 @@ declare global {
   }
 }
 
-const generateId = () => {
-  return crypto.randomUUID ? crypto.randomUUID() : `seed_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-};
+// Utility function for generating IDs (currently unused but available for future seeding)
+// const generateId = () => {
+//   return crypto.randomUUID ? crypto.randomUUID() : `seed_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+// };
 
 // Complete WT-2.x project structure with realistic implementation milestones
 export const seedProject: Project = {
@@ -58,6 +59,101 @@ The MetaPlatform project is a subapp of Wombat Track designed to build a fully o
 - **WT-2.6**: Interactive Phase Tracker (projects → phases → steps)
 - **WT-2.7**: Phase Admin modal with full CRUD + reordering + archive
 - **WT-2.8**: Phase Plan tab, ProjectSwitcher, UX polish
+- **WT-2.9**: PhasePlan Dashboard upgrade with execution-aware tracking
+
+## 🎯 WT-2.9: PhasePlan Dashboard Transformation
+
+**WT-2.9** represents a significant upgrade to the Phase Plan functionality, transforming it from a simple markdown editor into a comprehensive governance dashboard that seamlessly combines strategic project planning with tactical SDLC execution tracking.
+
+### 🏗️ Key Components Implemented
+
+#### 1. **PhasePlanDashboard.tsx** - Strategic + Tactical View
+- **Markdown Rendering**: Rich project plan display with full HTML formatting
+- **Phase Timeline**: Collapsible phase hierarchy with execution-aware step tracking
+- **Real-time Polling**: 2-second intervals polling \`fetchExecutionLogs()\` for live status updates
+- **Status Visualization**: ○ ⏳ ✅ ❌ badges reflecting current execution states
+- **Action Controls**: Context-sensitive Start/View Logs buttons for step management
+
+#### 2. **Enhanced Phase Type System**
+- **Phase.summary**: Optional markdown field for rich phase documentation
+- **Execution Integration**: Steps linked to real execution IDs and template systems
+- **Status Synchronization**: Real-time updates from execution API layer
+
+#### 3. **Advanced UX Controls**
+- **Search & Filter**: Find steps by name or description
+- **Show/Hide Completed**: Toggle visibility of finished steps
+- **Expand/Collapse All**: Bulk phase navigation controls
+- **Project Statistics**: Footer showing completion progress and metrics
+
+### 🔗 Technical Implementation
+
+#### Component Architecture
+- **src/components/project/PhasePlanDashboard.tsx**: Main dashboard component
+- **src/components/phase/PhaseAdminModal.tsx**: Integration point (📑 tab)
+- **src/types/phase.ts**: Extended with \`summary?\` field
+- **src/api/executionLogAPI.ts**: Real-time execution status source
+
+#### File Changes Summary
+- **NEW**: \`PhasePlanDashboard.tsx\` (350+ lines) - Complete governance interface
+- **UPDATED**: \`PhaseAdminModal.tsx\` - Replaced PhasePlanEditor with new dashboard
+- **UPDATED**: \`phase.ts\` - Added optional \`summary\` field to Phase interface
+- **UPDATED**: \`meta_platform_dashboard.spec.js\` - 12 new test cases for dashboard
+
+#### Status Integration Flow
+1. **Dashboard Mount**: Initialize expanded phases, load project data
+2. **Polling Cycle**: Every 2000ms, fetch execution logs for steps with \`executionId\`
+3. **Status Sync**: Update local state with latest execution progress
+4. **UI Refresh**: Re-render status badges and action buttons
+5. **Action Triggers**: Start button → creates execution, View Logs → opens execution details
+
+### 🧪 Test Coverage
+
+#### New Test Suite: "Phase Plan Dashboard Tests (WT-2.9)"
+- **Dashboard Rendering**: Project selector, empty states, controls
+- **Phase Timeline**: Collapsible phases, step hierarchy display  
+- **Execution Integration**: Status icons, action buttons, footer stats
+- **User Interactions**: Search filtering, completed step toggle
+- **Markdown Display**: Project plan rendering verification
+
+### 🎨 UX/UI Improvements
+
+#### Visual Hierarchy
+- **Project Level**: Markdown overview with rich formatting
+- **Phase Level**: Collapsible sections with step counts and descriptions  
+- **Step Level**: Status badges, descriptions, timestamps, and action controls
+- **Footer**: Project statistics with completion percentages
+
+#### Responsive Design
+- **Consistent Styling**: Follows WombatConsole inline CSS patterns
+- **Color Coding**: Status-based color themes (gray/yellow/green/red)
+- **Interactive Elements**: Hover states, active indicators, disabled states
+- **Loading States**: Polling indicators and execution feedback
+
+### 🔄 Integration Points
+
+#### With Existing Systems
+- **PhaseAdminModal**: Seamless replacement in 📑 Phase Plan tab
+- **ExecutionLogAPI**: Real-time status polling and log retrieval
+- **TemplateDispatcher**: Action buttons trigger template execution
+- **ProjectSwitcher**: Multi-project context switching support
+
+#### Future Extension Points
+- **Edit Mode**: Toggle between dashboard view and markdown editor
+- **Bulk Operations**: Multi-step selection and batch execution
+- **Advanced Filters**: Status-based filtering, date ranges, template types
+- **Export Features**: Dashboard data export and sharing capabilities
+
+### 📊 Metrics & Analytics
+
+#### Performance Characteristics
+- **Polling Efficiency**: Batched API calls, error handling, cleanup on unmount
+- **Render Optimization**: Conditional rendering, minimal re-renders
+- **Memory Management**: Proper cleanup of intervals and event listeners
+
+#### Usage Analytics Ready
+- **Action Tracking**: Step starts, log views, search usage
+- **Performance Monitoring**: Load times, polling success rates
+- **User Behavior**: Phase expansion patterns, filter usage
 
 ## 🧠 Development Philosophy
 
@@ -553,6 +649,152 @@ We use Markdown to author human-readable documentation. We use Puppeteer to auto
           templateId: 'test-admin-system-001',
           startedAt: '2025-01-22T00:45:00Z',
           completedAt: '2025-01-22T01:30:00Z'
+        }
+      ]
+    },
+    {
+      id: 'phase-wt-2.8',
+      projectId: 'proj-wt-2x-metaplatform',
+      name: 'WT-2.8: Phase Plan & Project Switcher',
+      description: 'Enhanced Phase Plan seeding and Project Switcher UX improvements',
+      order: 9,
+      summary: `WT-2.8 enhanced the Phase Plan functionality with comprehensive seeding systems and improved Project Switcher UX. This phase established the foundation for strategic project documentation within the execution tracking framework.`,
+      steps: [
+        {
+          id: 'step-wt-2.8-phase-seeding',
+          phaseId: 'phase-wt-2.8',
+          name: 'Implement Phase Plan seeding system',
+          status: 'complete',
+          description: 'Created dev-mode seeder for comprehensive WT-2.x project history',
+          templateId: 'dev-seeder-001',
+          executionId: 'exec_seeder_001',
+          startedAt: '2025-07-20T09:00:00Z',
+          completedAt: '2025-07-20T11:00:00Z'
+        },
+        {
+          id: 'step-wt-2.8-project-switcher',
+          phaseId: 'phase-wt-2.8',
+          name: 'Enhance Project Switcher UX',
+          status: 'complete',
+          description: 'Improved project filtering and context switching in Phase Tracker',
+          startedAt: '2025-07-20T11:00:00Z',
+          completedAt: '2025-07-20T13:30:00Z'
+        },
+        {
+          id: 'step-wt-2.8-phase-plan-editor',
+          phaseId: 'phase-wt-2.8',
+          name: 'Refine Phase Plan Editor functionality',
+          status: 'complete',
+          description: 'Enhanced markdown editing with toolbar and auto-save features',
+          startedAt: '2025-07-20T13:30:00Z',
+          completedAt: '2025-07-20T15:00:00Z'
+        }
+      ]
+    },
+    {
+      id: 'phase-wt-2.9',
+      projectId: 'proj-wt-2x-metaplatform',
+      name: 'WT-2.9: PhasePlan Dashboard Upgrade',
+      description: 'Transform Phase Plan tab into comprehensive governance dashboard with execution tracking',
+      order: 10,
+      summary: `**WT-2.9** upgraded the Phase Plan tab into a true governance dashboard that combines strategic project planning with tactical SDLC execution tracking. 
+
+### Key Enhancements
+- **Strategic View**: Rendered markdown project plans with rich formatting
+- **Tactical Integration**: Real-time execution status polling every 2 seconds  
+- **Enhanced UX**: Search, filter, collapse/expand controls for better navigation
+- **Status Visualization**: ○ ⏳ ✅ ❌ badges showing step execution states
+- **Action Controls**: Start/View Logs buttons integrated with execution system
+- **Progress Tracking**: Project statistics footer with completion metrics
+
+This transformation makes the Phase Plan tab the central governance hub where teams review strategic direction while monitoring tactical implementation progress.`,
+      steps: [
+        {
+          id: 'step-wt-2.9-phase-summary',
+          phaseId: 'phase-wt-2.9',
+          name: 'Add optional summary field to Phase type',
+          status: 'complete',
+          description: 'Extended Phase interface with markdown summary documentation field',
+          startedAt: '2025-07-21T09:00:00Z',
+          completedAt: '2025-07-21T09:15:00Z'
+        },
+        {
+          id: 'step-wt-2.9-dashboard-component',
+          phaseId: 'phase-wt-2.9',
+          name: 'Create PhasePlanDashboard component',
+          status: 'complete',
+          description: 'Built comprehensive dashboard replacing PhasePlanEditor with execution-aware interface',
+          templateId: 'react-component-001',
+          executionId: 'exec_dashboard_001',
+          startedAt: '2025-07-21T09:15:00Z',
+          completedAt: '2025-07-21T11:30:00Z'
+        },
+        {
+          id: 'step-wt-2.9-execution-polling',
+          phaseId: 'phase-wt-2.9',
+          name: 'Implement real-time execution status polling',
+          status: 'complete',
+          description: 'Added 2-second polling system for live execution status updates using fetchExecutionLogs',
+          startedAt: '2025-07-21T11:30:00Z',
+          completedAt: '2025-07-21T12:00:00Z'
+        },
+        {
+          id: 'step-wt-2.9-ui-enhancements',
+          phaseId: 'phase-wt-2.9',
+          name: 'Add UI controls for search, filter, and navigation',
+          status: 'complete',
+          description: 'Implemented search steps, show/hide completed toggle, and expand/collapse all functionality',
+          startedAt: '2025-07-21T12:00:00Z',
+          completedAt: '2025-07-21T13:00:00Z'
+        },
+        {
+          id: 'step-wt-2.9-status-badges',
+          phaseId: 'phase-wt-2.9',
+          name: 'Implement execution status badge system',
+          status: 'complete',
+          description: 'Visual status indicators: ○ (not_started), ⏳ (in_progress), ✅ (complete), ❌ (error)',
+          startedAt: '2025-07-21T13:00:00Z',
+          completedAt: '2025-07-21T13:30:00Z'
+        },
+        {
+          id: 'step-wt-2.9-action-buttons',
+          phaseId: 'phase-wt-2.9',
+          name: 'Add step action controls',
+          status: 'complete',
+          description: 'Start execution and View Logs buttons with context-sensitive display logic',
+          startedAt: '2025-07-21T13:30:00Z',
+          completedAt: '2025-07-21T14:00:00Z'
+        },
+        {
+          id: 'step-wt-2.9-integration',
+          phaseId: 'phase-wt-2.9',
+          name: 'Integrate dashboard into PhaseAdminModal',
+          status: 'complete',
+          description: 'Replaced PhasePlanEditor with PhasePlanDashboard in Phase Plan tab',
+          startedAt: '2025-07-21T14:00:00Z',
+          completedAt: '2025-07-21T14:30:00Z'
+        },
+        {
+          id: 'step-wt-2.9-test-coverage',
+          phaseId: 'phase-wt-2.9',
+          name: 'Add comprehensive test coverage',
+          status: 'complete',
+          description: 'Created 12 new test cases covering dashboard rendering, interactions, and execution sync',
+          templateId: 'test-dashboard-001',
+          executionId: 'exec_test_coverage_001',
+          startedAt: '2025-07-21T14:30:00Z',
+          completedAt: '2025-07-21T15:30:00Z'
+        },
+        {
+          id: 'step-wt-2.9-finalization',
+          phaseId: 'phase-wt-2.9',
+          name: 'Finalize phase plan and sync execution data',
+          status: 'complete',
+          description: 'Update project phasePlan with WT-2.9 summary and ensure all execution links are synced',
+          templateId: 'phase-finalization-001',
+          executionId: 'exec_finalization_001',
+          startedAt: '2025-07-21T16:00:00Z',
+          completedAt: '2025-07-21T17:00:00Z'
         }
       ]
     }

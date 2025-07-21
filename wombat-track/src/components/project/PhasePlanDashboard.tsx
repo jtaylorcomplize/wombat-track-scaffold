@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Project, Phase, PhaseStep } from '../../types/phase';
+import type { Project, Phase, PhaseStep } from '../../types/phase';
 import { fetchExecutionLogs } from '../../api/executionLogAPI';
 
 interface PhasePlanDashboardProps {
@@ -325,7 +325,7 @@ export const PhasePlanDashboard: React.FC<PhasePlanDashboardProps> = ({
                   </div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {filteredSteps(phase).map((step, stepIndex) => (
+                    {filteredSteps(phase).map((step) => (
                       <div
                         key={step.id}
                         style={{

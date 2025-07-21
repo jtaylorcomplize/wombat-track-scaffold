@@ -70,6 +70,16 @@ const mockIntegrations: Integration[] = [
     logURL: 'https://logs.example.com/bubble-connector',
     templateName: 'Bubble Sync Repair',
     templateId: 'bubble-sync-006'
+  },
+  {
+    name: 'wt-governance',
+    status: IntegrationStatus.Working,
+    lastChecked: new Date(),
+    isActive: true,
+    category: IntegrationCategory.MemoryPlugin,
+    logURL: 'https://logs.wombattrack.io/wt-governance',
+    templateName: 'WT-2.9 Phase Plan Dashboard',
+    templateId: 'phase-finalization-001'
   }
 ];
 
