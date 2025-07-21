@@ -30,8 +30,8 @@ export interface Project {
   // Enhanced metadata fields
   createdBy: string;
   projectOwner: string;
-  projectType: 'Platform' | 'Content' | 'Migration' | 'R&D' | 'Other';
-  status: 'Planned' | 'Active' | 'Paused' | 'Archived' | 'Complete';
+  projectType: 'Platform' | 'Content' | 'Migration' | 'R&D' | 'Other' | 'execution-console';
+  status: 'Planned' | 'Active' | 'Paused' | 'Archived' | 'Complete' | 'active';
   wtTag?: string; // Semantic tag for MemoryPlugin/DriveMemory integration
   phasePlan?: string; // Rich text/markdown content for phase planning
   colorTag?: string; // Optional color coding for project identification

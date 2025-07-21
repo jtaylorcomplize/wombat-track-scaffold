@@ -73,11 +73,11 @@ const mockIntegrations: Integration[] = [
   }
 ];
 
-interface OrbisDashboardProps {
+interface WombatConsoleProps {
   onHealthCheck?: (integrationId: string) => Promise<void>;
 }
 
-export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck }) => {
+export const WombatConsole: React.FC<WombatConsoleProps> = ({ onHealthCheck }) => {
   const [integrations, setIntegrations] = useState<Integration[]>(mockIntegrations);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
@@ -286,7 +286,7 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
         <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#1f2937', marginBottom: '8px' }}>
-          Orbis Health Overview
+          WombatConsole Health Overview
         </h1>
         <p style={{ color: '#6b7280', fontSize: '16px' }}>
           Monitor the status of core system integrations and SDLC control panel

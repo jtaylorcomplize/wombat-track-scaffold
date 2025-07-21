@@ -1,11 +1,11 @@
 // wombat-track/src/App.tsx
 import React, { useState } from 'react';
 import { PhasePlan } from './pages/PhasePlan';
-import { OrbisDashboard } from './pages/OrbisDashboard';
+import { WombatConsole } from './pages/WombatConsole';
 import './App.css';
 console.log("✅ App is being rendered");
 
-type ActiveView = 'phase-plan' | 'orbis-dashboard' | 'settings';
+type ActiveView = 'phase-plan' | 'wombat-console' | 'settings';
 
 function App() {
   const [activeView, setActiveView] = useState<ActiveView>('phase-plan');
@@ -33,10 +33,10 @@ function App() {
               Phase Plan
             </button>
             <button 
-              className={`nav-link ${activeView === 'orbis-dashboard' ? 'active' : ''}`}
-              onClick={() => setActiveView('orbis-dashboard')}
+              className={`nav-link ${activeView === 'wombat-console' ? 'active' : ''}`}
+              onClick={() => setActiveView('wombat-console')}
             >
-              Orbis Dashboard
+              WombatConsole
             </button>
             <button 
               className={`nav-link ${activeView === 'settings' ? 'active' : ''}`}
@@ -50,7 +50,7 @@ function App() {
       
       <main className="app-main">
         {activeView === 'phase-plan' && <PhasePlan />}
-        {activeView === 'orbis-dashboard' && <OrbisDashboard onHealthCheck={runHealthCheck} />}
+        {activeView === 'wombat-console' && <WombatConsole onHealthCheck={runHealthCheck} />}
         {activeView === 'settings' && <div>Settings coming soon...</div>}
       </main>
       

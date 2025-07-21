@@ -30,11 +30,11 @@ export const ProjectSwitcher: React.FC<ProjectSwitcherProps> = ({
     return matchesArchived && matchesSearch;
   });
 
-  // Group projects by status for better organization
+  // Group projects by projectType for better organization
   const groupedProjects = filteredProjects.reduce((acc, project) => {
-    const status = project.status || 'Active';
-    if (!acc[status]) acc[status] = [];
-    acc[status].push(project);
+    const type = project.projectType || 'Other';
+    if (!acc[type]) acc[type] = [];
+    acc[type].push(project);
     return acc;
   }, {} as Record<string, Project[]>);
 
@@ -46,6 +46,7 @@ export const ProjectSwitcher: React.FC<ProjectSwitcherProps> = ({
       case 'Content': return '📝';
       case 'Migration': return '🔄';
       case 'R&D': return '🔬';
+      case 'execution-console': return '🖥️';
       default: return '📁';
     }
   };
@@ -53,6 +54,7 @@ export const ProjectSwitcher: React.FC<ProjectSwitcherProps> = ({
   const getStatusColor = (status: Project['status']) => {
     switch (status) {
       case 'Active': return '#10b981';
+      case 'active': return '#10b981';
       case 'Planned': return '#6366f1';
       case 'Paused': return '#f59e0b';
       case 'Archived': return '#6b7280';
@@ -63,7 +65,7 @@ export const ProjectSwitcher: React.FC<ProjectSwitcherProps> = ({
 
   const getRecentProjects = () => {
     // In a real app, this would come from localStorage or user preferences
-    const recentIds = ['proj-orb-2x-metaplatform']; // Mock recent project
+    const recentIds = ['proj-wt-2x-metaplatform']; // Mock recent project
     return projects.filter(p => recentIds.includes(p.id) && p.id !== activeProjectId);
   };
 
@@ -101,6 +103,17 @@ export const ProjectSwitcher: React.FC<ProjectSwitcherProps> = ({
                   gap: '6px'
                 }}>
                   {activeProject.name}
+                  {activeProject.wtTag && (
+                    <span style={{
+                      fontSize: '10px',
+                      padding: '2px 4px',
+                      backgroundColor: '#e0e7ff',
+                      color: '#3730a3',
+                      borderRadius: '3px'
+                    }}>
+                      SUBMODULE
+                    </span>
+                  )}
                   {activeProject.archived && (
                     <span style={{
                       fontSize: '10px',
@@ -117,7 +130,7 @@ export const ProjectSwitcher: React.FC<ProjectSwitcherProps> = ({
                       width: '12px',
                       height: '12px',
                       borderRadius: '50%',
-                      backgroundColor: activeProject.colorTag
+                      backgroundColor: activeProject.colorTag === 'purple' ? '#8b5cf6' : activeProject.colorTag
                     }} />
                   )}
                 </div>
@@ -248,9 +261,9 @@ export const ProjectSwitcher: React.FC<ProjectSwitcherProps> = ({
               </div>
             )}
 
-            {/* Grouped Projects */}
-            {Object.entries(groupedProjects).map(([status, statusProjects]) => (
-              <div key={status}>
+            {/* Grouped Projects by Type */}
+            {Object.entries(groupedProjects).map(([projectType, typeProjects]) => (
+              <div key={projectType}>
                 <div style={{
                   padding: '8px 12px',
                   backgroundColor: '#f9fafb',
@@ -263,15 +276,10 @@ export const ProjectSwitcher: React.FC<ProjectSwitcherProps> = ({
                   alignItems: 'center',
                   gap: '6px'
                 }}>
-                  <div style={{
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    backgroundColor: getStatusColor(status as Project['status'])
-                  }} />
-                  {status} ({statusProjects.length})
+                  {getProjectTypeIcon(projectType as Project['projectType'])}
+                  {projectType === 'execution-console' ? 'WT Console' : projectType} ({typeProjects.length})
                 </div>
-                {statusProjects.map(project => (
+                {typeProjects.map(project => (
                   <ProjectOption
                     key={project.id}
                     project={project}
@@ -368,7 +376,18 @@ const ProjectOption: React.FC<{
           alignItems: 'center',
           gap: '6px'
         }}>
-          {project.name}
+          {project.wtTag ? `> Wombat Track → ${project.name.replace('MetaPlatform – ', '')}` : project.name}
+          {project.wtTag && (
+            <span style={{
+              fontSize: '9px',
+              padding: '1px 3px',
+              backgroundColor: '#e0e7ff',
+              color: '#3730a3',
+              borderRadius: '2px'
+            }}>
+              SUBMODULE
+            </span>
+          )}
           {project.archived && (
             <span style={{
               fontSize: '9px',
@@ -385,7 +404,7 @@ const ProjectOption: React.FC<{
               width: '8px',
               height: '8px',
               borderRadius: '50%',
-              backgroundColor: project.colorTag
+              backgroundColor: project.colorTag === 'purple' ? '#8b5cf6' : project.colorTag
             }} />
           )}
         </div>

@@ -196,12 +196,12 @@ describe('MetaPlatform Dashboard Tests', () => {
     });
   });
 
-  describe('Orbis Dashboard Tests', () => {
+  describe('WombatConsole Tests', () => {
     beforeEach(async () => {
       await safeNavigate(page, BASE_URL);
       
       // Navigate to Orbis dashboard tab
-      await waitAndClick(page, 'button:has-text("Orbis Dashboard")');
+      await waitAndClick(page, 'button:has-text("WombatConsole")');
       
       // Wait for Orbis dashboard to load
       await page.waitForSelector('[data-testid="status-rollup"]', { timeout: 10000 });
@@ -214,9 +214,9 @@ describe('MetaPlatform Dashboard Tests', () => {
         
         // Check for header text
         const headerText = await page.textContent('h1');
-        expect(headerText).toContain('Orbis Health Overview');
+        expect(headerText).toContain('WombatConsole Health Overview');
         
-        await takeScreenshot(page, 'orbis-dashboard-mounted');
+        await takeScreenshot(page, 'wombat-console-mounted');
       });
 
       it('should check at least 1 integration item renders', async () => {
@@ -324,7 +324,7 @@ describe('MetaPlatform Dashboard Tests', () => {
         const healthCheckLogs = consoleLogs.filter(log => log.includes('Health check triggered for:'));
         expect(healthCheckLogs.length).toBeGreaterThan(0);
         
-        await takeScreenshot(page, 'orbis-dashboard-refresh-clicked');
+        await takeScreenshot(page, 'wombat-console-refresh-clicked');
       });
 
       it('should verify log links render and are clickable', async () => {
