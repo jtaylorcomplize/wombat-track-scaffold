@@ -3,7 +3,8 @@ import type { Integration } from '../types/integration';
 import { IntegrationCategory, IntegrationStatus, DispatchStatus } from '../types/integration';
 import type { TemplateExecution } from '../types/template';
 import { IntegrationCard } from '../components/integration/IntegrationCard';
-import { triggerTemplate, getExecutionLog } from '../lib/templateDispatcher';
+import { triggerTemplate } from '../lib/templateDispatcher';
+import { fetchExecutionLogs } from '../api/executionLogAPI';
 
 const mockIntegrations: Integration[] = [
   {
@@ -79,16 +80,21 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
   const [executionHistory, setExecutionHistory] = useState<TemplateExecution[]>([]);
   const [showExecutionHistory, setShowExecutionHistory] = useState(false);
 
-  // Update execution history from the global log
-  const refreshExecutionHistory = () => {
-    setExecutionHistory(getExecutionLog());
+  // Fetch execution history from API
+  const refreshExecutionHistory = async () => {
+    try {
+      const logs = await fetchExecutionLogs();
+      setExecutionHistory(logs);
+    } catch (error) {
+      console.error('Failed to fetch execution logs:', error);
+    }
   };
 
   useEffect(() => {
     // Initial load of execution history
     refreshExecutionHistory();
     
-    // Set up a polling interval to refresh execution history
+    // Set up a polling interval to refresh execution history from API
     const interval = setInterval(refreshExecutionHistory, 1000);
     
     return () => clearInterval(interval);
@@ -158,14 +164,18 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
         setDispatchStatus(prev => ({ ...prev, [integrationId]: DispatchStatus.Idle }));
       }
       
-      // Refresh execution history after dispatch
-      refreshExecutionHistory();
+      // Refresh execution history after dispatch (with slight delay to allow API update)
+      setTimeout(() => {
+        refreshExecutionHistory();
+      }, 100);
     } catch (error) {
       console.error(`Dispatch error for ${integrationId}:`, error);
       setDispatchStatus(prev => ({ ...prev, [integrationId]: DispatchStatus.Idle }));
       
       // Refresh execution history even on error
-      refreshExecutionHistory();
+      setTimeout(() => {
+        refreshExecutionHistory();
+      }, 100);
     }
   };
 

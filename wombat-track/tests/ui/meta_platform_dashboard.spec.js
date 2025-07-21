@@ -516,6 +516,25 @@ describe('MetaPlatform Dashboard Tests', () => {
         expect(toggleText).toMatch(/\d+/); // Should contain a number
       });
 
+      it('should fetch execution logs from API on mount', async () => {
+        // Monitor console logs for API fetch calls
+        const consoleLogs = [];
+        page.on('console', msg => {
+          if (msg.type() === 'log' && msg.text().includes('📋 Fetched')) {
+            consoleLogs.push(msg.text());
+          }
+        });
+        
+        // Wait for initial API fetch
+        await page.waitForTimeout(2000);
+        
+        // Verify API fetch was called
+        const fetchLogs = consoleLogs.filter(log => log.includes('execution logs from API store'));
+        expect(fetchLogs.length).toBeGreaterThan(0);
+        
+        console.log(`API fetch verification: ${fetchLogs.length} fetch calls detected`);
+      });
+
       it('should expand and collapse execution history', async () => {
         // Initially history should not be visible
         let historyList = await page.$('[data-testid="execution-history-list"]');
@@ -540,7 +559,15 @@ describe('MetaPlatform Dashboard Tests', () => {
         );
       });
 
-      it('should log execution history when dispatch is triggered', async () => {
+      it('should log execution history when dispatch is triggered via API', async () => {
+        // Monitor API logging calls
+        const consoleLogs = [];
+        page.on('console', msg => {
+          if (msg.type() === 'log' && (msg.text().includes('📝 Logged execution') || msg.text().includes('🔄 Updated execution'))) {
+            consoleLogs.push(msg.text());
+          }
+        });
+        
         // First expand the execution history
         await page.click('[data-testid="execution-history-toggle"]');
         await page.waitForSelector('[data-testid="execution-history-list"]');
@@ -561,7 +588,7 @@ describe('MetaPlatform Dashboard Tests', () => {
             const entries = document.querySelectorAll('[data-testid^="execution-entry-"]');
             return entries.length > prevCount;
           },
-          {},
+          { timeout: 10000 },
           initialCount
         );
         
@@ -577,7 +604,43 @@ describe('MetaPlatform Dashboard Tests', () => {
         expect(entryText).toContain('Claude Health Check');
         expect(entryText).toContain('claude');
         
-        console.log(`Execution history test completed: ${initialCount} -> ${newHistoryEntries.length} entries`);
+        // Verify API logging occurred
+        await page.waitForTimeout(1000);
+        const apiLogCalls = consoleLogs.filter(log => log.includes('📝 Logged execution') || log.includes('🔄 Updated execution'));
+        expect(apiLogCalls.length).toBeGreaterThan(0);
+        
+        console.log(`API-driven execution history test completed: ${initialCount} -> ${newHistoryEntries.length} entries, ${apiLogCalls.length} API calls`);
+      });
+
+      it('should persist execution logs across API polling cycles', async () => {
+        // Trigger a dispatch first
+        const claudeDispatchButton = await page.$('[data-testid="dispatch-button-claude-api"]');
+        if (claudeDispatchButton) {
+          await claudeDispatchButton.click();
+          
+          // Wait for execution to complete
+          await page.waitForTimeout(3000);
+          
+          // Expand execution history
+          await page.click('[data-testid="execution-history-toggle"]');
+          await page.waitForSelector('[data-testid="execution-history-list"]');
+          
+          // Get execution count
+          const historyEntries1 = await page.$$('[data-testid^="execution-entry-"]');
+          const count1 = historyEntries1.length;
+          
+          // Wait for multiple polling cycles
+          await page.waitForTimeout(3000);
+          
+          // Verify logs are still there (persisted)
+          const historyEntries2 = await page.$$('[data-testid^="execution-entry-"]');
+          const count2 = historyEntries2.length;
+          
+          expect(count2).toBe(count1);
+          expect(count2).toBeGreaterThan(0);
+          
+          console.log(`API persistence test: ${count1} entries persisted across polling cycles`);
+        }
       });
 
       it('should display execution status correctly', async () => {

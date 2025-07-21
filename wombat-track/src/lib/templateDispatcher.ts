@@ -1,4 +1,5 @@
 import type { TemplateExecution } from '../types/template';
+import { logExecution, updateExecution } from '../api/executionLogAPI';
 
 export interface TemplateDispatchResult {
   success: boolean;
@@ -184,9 +185,6 @@ const dispatcherMap: Record<string, TemplateDispatcher> = {
   'ci-repair-003': ciDispatcher,
 };
 
-// In-memory execution log store (will be replaced with proper state management)
-let executionLog: TemplateExecution[] = [];
-
 function createExecutionId(): string {
   return crypto.randomUUID ? crypto.randomUUID() : `exec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
@@ -210,21 +208,6 @@ function getTemplateNameFromId(templateId: string): string {
   return templateMap[templateId] || 'Unknown Template';
 }
 
-export function getExecutionLog(): TemplateExecution[] {
-  return [...executionLog].sort((a, b) => b.startTime.getTime() - a.startTime.getTime());
-}
-
-export function addExecutionLog(execution: TemplateExecution): void {
-  executionLog.push(execution);
-}
-
-export function updateExecutionLog(id: string, updates: Partial<TemplateExecution>): void {
-  const index = executionLog.findIndex(exec => exec.id === id);
-  if (index !== -1) {
-    executionLog[index] = { ...executionLog[index], ...updates };
-  }
-}
-
 export async function triggerTemplate(
   templateId: string, 
   integrationName: string
@@ -245,26 +228,27 @@ export async function triggerTemplate(
     platform: getPlatformFromTemplateId(templateId)
   };
   
-  addExecutionLog(execution);
+  // Log initial execution to API
+  await logExecution(execution);
   
   const dispatcher = dispatcherMap[templateId] || defaultDispatcher;
   
   try {
-    // Update status to in_progress
-    updateExecutionLog(executionLogId, { status: 'in_progress' });
+    // Update status to in_progress via API
+    await updateExecution(executionLogId, { status: 'in_progress' });
     
     const result = await dispatcher.execute(templateId, integrationName);
     
-    // Update execution log with results
+    // Update execution log with results via API
     const endTime = new Date();
     if (result.success) {
-      updateExecutionLog(executionLogId, {
+      await updateExecution(executionLogId, {
         status: 'done',
         endTime,
         executionId: result.executionId || 'unknown'
       });
     } else {
-      updateExecutionLog(executionLogId, {
+      await updateExecution(executionLogId, {
         status: 'error',
         endTime,
         executionId: result.executionId || 'unknown',
@@ -288,15 +272,19 @@ export async function triggerTemplate(
   } catch (error) {
     console.error(`❌ Template execution failed:`, error);
     
-    // Update execution log with error
+    // Update execution log with error via API
     const endTime = new Date();
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     
-    updateExecutionLog(executionLogId, {
-      status: 'error',
-      endTime,
-      error: errorMessage
-    });
+    try {
+      await updateExecution(executionLogId, {
+        status: 'error',
+        endTime,
+        error: errorMessage
+      });
+    } catch (updateError) {
+      console.error(`Failed to update execution log with error:`, updateError);
+    }
     
     return {
       success: false,
