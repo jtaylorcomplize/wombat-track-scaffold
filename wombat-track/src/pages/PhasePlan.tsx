@@ -1,9 +1,9 @@
 // wombat-track/src/pages/PhasePlan.tsx
 // WT-2.9: Updated to use PhasePlanDashboard for consistent project management experience
 import React, { useState } from 'react';
-import { PhasePlanDashboard } from '../components/project/PhasePlanDashboard';
+import { ProjectDashboard } from '../components/project/PhasePlanDashboard';
 import { ProjectSwitcher } from '../components/project/ProjectSwitcher';
-import type { Project } from '../types/phase';
+import type { Project, PhaseStep } from '../types/phase';
 import { mockProjects } from '../data/mockProjects';
 import './PhasePlan.css';
 
@@ -14,14 +14,36 @@ export const PhasePlan: React.FC = () => {
   const selectedProject = projects.find(p => p.id === selectedProjectId);
   const activeProjects = projects.filter(p => !p.archived);
 
-  const handleStartStep = (stepId: string) => {
-    console.log(`[WT] Starting step execution: ${stepId}`);
-    // TODO: Implement step execution start logic
+  const handleStepUpdate = (projectId: string, phaseId: string, stepId: string, updates: Partial<PhaseStep>) => {
+    console.log(`[WT] Updating step ${stepId} in phase ${phaseId} of project ${projectId}:`, updates);
+    
+    const updatedProjects = projects.map(project => {
+      if (project.id !== projectId) return project;
+      
+      return {
+        ...project,
+        phases: project.phases.map(phase => {
+          if (phase.id !== phaseId) return phase;
+          
+          return {
+            ...phase,
+            steps: phase.steps.map(step => {
+              if (step.id !== stepId) return step;
+              return { ...step, ...updates };
+            })
+          };
+        }),
+        updatedAt: new Date().toISOString()
+      };
+    });
+    
+    setProjects(updatedProjects);
   };
 
   const handleViewLogs = (executionId: string) => {
     console.log(`[WT] Viewing logs for execution: ${executionId}`);
-    // TODO: Implement log viewing logic
+    // Enhanced log viewing with user feedback
+    alert(`📊 Viewing execution logs for: ${executionId}\n\nIn a production environment, this would:\n- Open detailed execution logs\n- Show real-time status updates\n- Display performance metrics\n- Provide error diagnostics\n\nCheck console for current log details.`);
   };
 
   const handleProjectsUpdate = (updatedProjects: Project[]) => {
@@ -31,7 +53,7 @@ export const PhasePlan: React.FC = () => {
   return (
     <div className="phase-plan">
       <div className="phase-plan-header">
-        <h1>📑 Phase Plan Dashboard</h1>
+        <h1>📊 Project Dashboard</h1>
         <p>Strategic project planning with tactical execution tracking</p>
       </div>
 
@@ -49,9 +71,9 @@ export const PhasePlan: React.FC = () => {
         {/* Phase Plan Dashboard */}
         <div className="dashboard-container">
           {selectedProject ? (
-            <PhasePlanDashboard
+            <ProjectDashboard
               project={selectedProject}
-              onStartStep={handleStartStep}
+              onStepUpdate={handleStepUpdate}
               onViewLogs={handleViewLogs}
               readOnly={false}
             />

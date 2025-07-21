@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Project, Phase, PhaseStep } from '../../types/phase';
-import { PhasePlanDashboard } from '../project/PhasePlanDashboard';
+import { ProjectDashboard } from '../project/PhasePlanDashboard';
 
 interface PhaseAdminModalProps {
   isOpen: boolean;
@@ -1407,9 +1407,31 @@ const PhasePlanTab: React.FC<{
 
       {selectedProject ? (
         <div>
-          <PhasePlanDashboard
+          <ProjectDashboard
             project={selectedProject}
-            onStartStep={handleStartStep}
+            onStepUpdate={(projectId, phaseId, stepId, updates) => {
+              const updatedProjects = projects.map(project => {
+                if (project.id !== projectId) return project;
+                
+                return {
+                  ...project,
+                  phases: project.phases.map(phase => {
+                    if (phase.id !== phaseId) return phase;
+                    
+                    return {
+                      ...phase,
+                      steps: phase.steps.map(step => {
+                        if (step.id !== stepId) return step;
+                        return { ...step, ...updates };
+                      })
+                    };
+                  }),
+                  updatedAt: new Date().toISOString()
+                };
+              });
+              
+              onProjectsUpdate(updatedProjects);
+            }}
             onViewLogs={handleViewLogs}
             readOnly={false}
           />
@@ -1423,8 +1445,8 @@ const PhasePlanTab: React.FC<{
           borderRadius: '8px',
           border: '1px solid #e5e7eb'
         }}>
-          <div style={{ fontSize: '18px', marginBottom: '8px' }}>📑</div>
-          <div style={{ fontSize: '16px', marginBottom: '4px' }}>Select a project to view its phase plan dashboard</div>
+          <div style={{ fontSize: '18px', marginBottom: '8px' }}>📊</div>
+          <div style={{ fontSize: '16px', marginBottom: '4px' }}>Select a project to view the project dashboard</div>
           <div style={{ fontSize: '14px' }}>
             This dashboard combines strategic project planning with tactical execution tracking.
           </div>

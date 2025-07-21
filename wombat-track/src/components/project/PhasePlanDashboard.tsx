@@ -1,33 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import type { Project, Phase, PhaseStep } from '../../types/phase';
+import type { TemplateExecution } from '../../types/template';
 import { fetchExecutionLogs } from '../../api/executionLogAPI';
+import { triggerTemplate } from '../../lib/templateDispatcher';
 
-interface PhasePlanDashboardProps {
+interface ProjectDashboardProps {
   project: Project;
-  onStartStep?: (stepId: string) => void;
+  onStepUpdate?: (projectId: string, phaseId: string, stepId: string, updates: Partial<PhaseStep>) => void;
   onViewLogs?: (executionId: string) => void;
   readOnly?: boolean;
 }
 
-interface ExecutionStatus {
-  [stepId: string]: {
-    status: 'not_started' | 'in_progress' | 'complete' | 'error';
-    executionId?: string;
-    lastUpdate?: string;
-  };
-}
 
-export const PhasePlanDashboard: React.FC<PhasePlanDashboardProps> = ({
+export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
   project,
-  onStartStep,
+  onStepUpdate,
   onViewLogs,
   readOnly = false
 }) => {
   const [expandedPhases, setExpandedPhases] = useState<Set<string>>(new Set());
-  const [executionStatus, setExecutionStatus] = useState<ExecutionStatus>({});
+  const [executionMap, setExecutionMap] = useState<Map<string, TemplateExecution>>(new Map());
+  const [loadingSteps, setLoadingSteps] = useState<Set<string>>(new Set());
   const [showCompleted, setShowCompleted] = useState(true);
   const [searchFilter, setSearchFilter] = useState('');
-  const [isPolling, setIsPolling] = useState(false);
   const [isProjectInfoExpanded, setIsProjectInfoExpanded] = useState(false);
 
   // Initialize expanded phases on mount
@@ -35,48 +30,28 @@ export const PhasePlanDashboard: React.FC<PhasePlanDashboardProps> = ({
     setExpandedPhases(new Set(project.phases.map(phase => phase.id)));
   }, [project.phases]);
 
-  // Poll execution status every 2 seconds
+  // Fetch execution logs for steps with executionIds
   useEffect(() => {
-    const pollExecutionStatus = async () => {
-      if (isPolling) return;
-      setIsPolling(true);
-
+    const fetchExecutions = async () => {
       try {
-        const allSteps = project.phases.flatMap(phase => phase.steps);
-        const stepsWithExecution = allSteps.filter(step => step.executionId);
+        const logs = await fetchExecutionLogs();
+        const execMap = new Map<string, TemplateExecution>();
         
-        for (const step of stepsWithExecution) {
-          if (step.executionId) {
-            try {
-              const logs = await fetchExecutionLogs(step.executionId);
-              if (logs && logs.length > 0) {
-                const latestLog = logs[logs.length - 1];
-                setExecutionStatus(prev => ({
-                  ...prev,
-                  [step.id]: {
-                    status: step.status,
-                    executionId: step.executionId,
-                    lastUpdate: latestLog.timestamp || new Date().toISOString()
-                  }
-                }));
-              }
-            } catch (error) {
-              console.warn(`Failed to fetch logs for step ${step.id}:`, error);
-            }
-          }
-        }
+        logs.forEach(log => {
+          execMap.set(log.executionId, log);
+        });
+        
+        setExecutionMap(execMap);
       } catch (error) {
-        console.error('Error polling execution status:', error);
+        console.error('Failed to fetch execution logs for ProjectDashboard:', error);
       }
-
-      setIsPolling(false);
     };
 
-    pollExecutionStatus();
-    const interval = setInterval(pollExecutionStatus, 2000);
-
+    fetchExecutions();
+    const interval = setInterval(fetchExecutions, 2000); // Poll every 2 seconds
+    
     return () => clearInterval(interval);
-  }, [project.phases]);
+  }, []);
 
   const renderMarkdown = (text: string) => {
     if (!text) return null;
@@ -155,6 +130,60 @@ export const PhasePlanDashboard: React.FC<PhasePlanDashboardProps> = ({
     setIsProjectInfoExpanded(!isProjectInfoExpanded);
   };
 
+  const handleStartStep = async (phase: Phase, step: PhaseStep) => {
+    if (step.templateId) {
+      setLoadingSteps(prev => new Set(prev).add(step.id));
+      
+      try {
+        const result = await triggerTemplate(step.templateId, `${project.name}-${step.name}`);
+        
+        if (onStepUpdate) {
+          onStepUpdate(project.id, phase.id, step.id, {
+            status: 'in_progress',
+            startedAt: new Date().toISOString(),
+            executionId: result.executionId
+          });
+        }
+      } catch (error) {
+        console.error(`Failed to start step ${step.name}:`, error);
+      } finally {
+        setLoadingSteps(prev => {
+          const next = new Set(prev);
+          next.delete(step.id);
+          return next;
+        });
+      }
+    } else {
+      // Manual start without template
+      if (onStepUpdate) {
+        onStepUpdate(project.id, phase.id, step.id, {
+          status: 'in_progress',
+          startedAt: new Date().toISOString()
+        });
+      }
+    }
+  };
+
+  const handleCompleteStep = (phase: Phase, step: PhaseStep) => {
+    if (onStepUpdate) {
+      onStepUpdate(project.id, phase.id, step.id, {
+        status: 'complete',
+        completedAt: new Date().toISOString()
+      });
+    }
+  };
+
+  const handleViewLogs = (executionId: string) => {
+    if (onViewLogs) {
+      onViewLogs(executionId);
+    } else {
+      // Default behavior - log to console and provide feedback
+      console.log(`View log for execution: ${executionId}`);
+      // In a real app, this would open a modal or navigate to logs view
+      alert(`Viewing logs for execution: ${executionId}\nCheck console for details.`);
+    }
+  };
+
   const filteredSteps = (phase: Phase) => {
     return phase.steps.filter(step => {
       const matchesSearch = !searchFilter || 
@@ -180,7 +209,7 @@ export const PhasePlanDashboard: React.FC<PhasePlanDashboardProps> = ({
       }}>
         <div>
           <h3 style={{ fontSize: '18px', fontWeight: '600', margin: 0, color: '#1f2937' }}>
-            📑 {project.name} - Phase Plan Dashboard
+            📊 {project.name} - Project Dashboard
           </h3>
           <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
             {project.phases.length} phases • {project.phases.reduce((acc, p) => acc + p.steps.length, 0)} steps total
@@ -444,88 +473,182 @@ export const PhasePlanDashboard: React.FC<PhasePlanDashboardProps> = ({
                   </div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {filteredSteps(phase).map((step) => (
-                      <div
-                        key={step.id}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '10px 12px',
-                          backgroundColor: '#fafbfc',
-                          border: '1px solid #f0f0f0',
-                          borderRadius: '6px',
-                          borderLeft: `3px solid ${getStatusColor(step)}`
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
-                          <span style={{ 
-                            fontSize: '16px', 
-                            color: getStatusColor(step),
-                            minWidth: '20px' 
+                    {filteredSteps(phase).map((step) => {
+                      const execution = step.executionId ? executionMap.get(step.executionId) : null;
+                      const isLoading = loadingSteps.has(step.id);
+                      
+                      return (
+                        <div
+                          key={step.id}
+                          data-testid={`step-${step.id}`}
+                          style={{
+                            padding: '12px',
+                            backgroundColor: '#fafbfc',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '8px'
+                          }}
+                        >
+                          <div style={{ 
+                            display: 'flex', 
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start'
                           }}>
-                            {getStatusIcon(step)}
-                          </span>
-                          
-                          <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: '14px', fontWeight: '500', color: '#1f2937' }}>
-                              {step.name}
-                            </div>
-                            {step.description && (
-                              <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '2px' }}>
-                                {step.description}
+                            <div style={{ flex: 1 }}>
+                              <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '8px',
+                                marginBottom: '4px'
+                              }}>
+                                <span style={{
+                                  fontSize: '16px',
+                                  color: getStatusColor(step)
+                                }}>
+                                  {getStatusIcon(step)}
+                                </span>
+                                <span style={{
+                                  fontSize: '14px',
+                                  fontWeight: '500',
+                                  color: '#1f2937'
+                                }}>
+                                  {step.name}
+                                </span>
+                                <span 
+                                  data-testid={`step-status-${step.id}`}
+                                  style={{
+                                    fontSize: '11px',
+                                    padding: '2px 6px',
+                                    borderRadius: '4px',
+                                    backgroundColor: getStatusColor(step) + '20',
+                                    color: getStatusColor(step),
+                                    fontWeight: '600'
+                                  }}
+                                >
+                                  {step.status.replace('_', ' ')}
+                                </span>
+                                {step.templateId && (
+                                  <span style={{
+                                    fontSize: '10px',
+                                    padding: '2px 4px',
+                                    borderRadius: '3px',
+                                    backgroundColor: '#e0e7ff',
+                                    color: '#4338ca'
+                                  }}>
+                                    {step.templateId}
+                                  </span>
+                                )}
                               </div>
-                            )}
-                            {executionStatus[step.id]?.lastUpdate && (
-                              <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '2px' }}>
-                                Last updated: {new Date(executionStatus[step.id].lastUpdate!).toLocaleString()}
+                              
+                              {step.description && (
+                                <p style={{ 
+                                  fontSize: '12px', 
+                                  color: '#6b7280',
+                                  marginBottom: '4px'
+                                }}>
+                                  {step.description}
+                                </p>
+                              )}
+
+                              {/* Execution Info */}
+                              {execution && (
+                                <div 
+                                  data-testid={`execution-info-${step.id}`}
+                                  style={{
+                                    fontSize: '11px',
+                                    color: '#6b7280',
+                                    marginTop: '4px',
+                                    padding: '4px 8px',
+                                    backgroundColor: '#f3f4f6',
+                                    borderRadius: '4px',
+                                    display: 'inline-block'
+                                  }}
+                                >
+                                  Execution: {execution.platform} • {execution.status}
+                                  {execution.endTime && ` • ${Math.round((execution.endTime.getTime() - execution.startTime.getTime()) / 1000)}s`}
+                                </div>
+                              )}
+
+                              {/* Timing Info */}
+                              {(step.startedAt || step.completedAt) && (
+                                <div style={{ 
+                                  fontSize: '11px', 
+                                  color: '#6b7280',
+                                  marginTop: '4px'
+                                }}>
+                                  {step.startedAt && `Started: ${new Date(step.startedAt).toLocaleString()}`}
+                                  {step.startedAt && step.completedAt && ' • '}
+                                  {step.completedAt && `Completed: ${new Date(step.completedAt).toLocaleString()}`}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Step Actions */}
+                            {!readOnly && (
+                              <div style={{ 
+                                display: 'flex', 
+                                gap: '8px',
+                                marginLeft: '12px'
+                              }}>
+                                {step.status === 'not_started' && (
+                                  <button
+                                    data-testid={`start-step-${step.id}`}
+                                    onClick={() => handleStartStep(phase, step)}
+                                    disabled={isLoading}
+                                    style={{
+                                      padding: '4px 12px',
+                                      fontSize: '12px',
+                                      backgroundColor: isLoading ? '#e5e7eb' : '#3b82f6',
+                                      color: isLoading ? '#9ca3af' : 'white',
+                                      border: 'none',
+                                      borderRadius: '4px',
+                                      cursor: isLoading ? 'not-allowed' : 'pointer'
+                                    }}
+                                  >
+                                    {isLoading ? 'Starting...' : 'Start'}
+                                  </button>
+                                )}
+
+                                {step.status === 'in_progress' && (
+                                  <button
+                                    data-testid={`complete-step-${step.id}`}
+                                    onClick={() => handleCompleteStep(phase, step)}
+                                    style={{
+                                      padding: '4px 12px',
+                                      fontSize: '12px',
+                                      backgroundColor: '#10b981',
+                                      color: 'white',
+                                      border: 'none',
+                                      borderRadius: '4px',
+                                      cursor: 'pointer'
+                                    }}
+                                  >
+                                    Mark Complete
+                                  </button>
+                                )}
+
+                                {step.executionId && (
+                                  <button
+                                    data-testid={`view-log-${step.id}`}
+                                    onClick={() => handleViewLogs(step.executionId!)}
+                                    style={{
+                                      padding: '4px 12px',
+                                      fontSize: '12px',
+                                      backgroundColor: 'transparent',
+                                      color: '#6b7280',
+                                      border: '1px solid #e5e7eb',
+                                      borderRadius: '4px',
+                                      cursor: 'pointer'
+                                    }}
+                                  >
+                                    View Log
+                                  </button>
+                                )}
                               </div>
                             )}
                           </div>
                         </div>
-
-                        {/* Step Actions */}
-                        {!readOnly && (
-                          <div style={{ display: 'flex', gap: '6px' }}>
-                            {!step.executionId && step.status === 'not_started' && onStartStep && (
-                              <button
-                                onClick={() => onStartStep(step.id)}
-                                style={{
-                                  padding: '4px 8px',
-                                  backgroundColor: '#10b981',
-                                  color: 'white',
-                                  border: 'none',
-                                  borderRadius: '4px',
-                                  fontSize: '11px',
-                                  cursor: 'pointer'
-                                }}
-                                title="Start execution"
-                              >
-                                Start
-                              </button>
-                            )}
-                            
-                            {step.executionId && onViewLogs && (
-                              <button
-                                onClick={() => onViewLogs(step.executionId!)}
-                                style={{
-                                  padding: '4px 8px',
-                                  backgroundColor: '#3b82f6',
-                                  color: 'white',
-                                  border: 'none',
-                                  borderRadius: '4px',
-                                  fontSize: '11px',
-                                  cursor: 'pointer'
-                                }}
-                                title="View execution logs"
-                              >
-                                View Logs
-                              </button>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
