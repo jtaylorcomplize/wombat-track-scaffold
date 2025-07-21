@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import type { Integration } from '../types/integration';
 import { IntegrationCategory, IntegrationStatus, DispatchStatus } from '../types/integration';
 import type { TemplateExecution } from '../types/template';
+import type { Project, PhaseStep } from '../types/phase';
 import { IntegrationCard } from '../components/integration/IntegrationCard';
+import { PhaseTracker } from '../components/phase/PhaseTracker';
 import { triggerTemplate } from '../lib/templateDispatcher';
 import { fetchExecutionLogs } from '../api/executionLogAPI';
+import { mockProjects } from '../data/mockProjects';
 
 const mockIntegrations: Integration[] = [
   {
@@ -79,6 +82,8 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
   const [dispatchStatus, setDispatchStatus] = useState<Record<string, DispatchStatus>>({});
   const [executionHistory, setExecutionHistory] = useState<TemplateExecution[]>([]);
   const [showExecutionHistory, setShowExecutionHistory] = useState(false);
+  const [showPhaseTracker, setShowPhaseTracker] = useState(false);
+  const [projects, setProjects] = useState<Project[]>(mockProjects);
 
   // Fetch execution history from API
   const refreshExecutionHistory = async () => {
@@ -239,6 +244,27 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
     };
   };
 
+  const handlePhaseStepUpdate = (projectId: string, phaseId: string, stepId: string, updates: Partial<PhaseStep>) => {
+    setProjects(prev => prev.map(project => {
+      if (project.id !== projectId) return project;
+      
+      return {
+        ...project,
+        phases: project.phases.map(phase => {
+          if (phase.id !== phaseId) return phase;
+          
+          return {
+            ...phase,
+            steps: phase.steps.map(step => {
+              if (step.id !== stepId) return step;
+              return { ...step, ...updates };
+            })
+          };
+        })
+      };
+    }));
+  };
+
   const stats = getOperationalStats();
 
   return (
@@ -373,6 +399,57 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
           <div style={{ fontSize: '14px' }}>Try adjusting your filters to see more results.</div>
         </div>
       )}
+
+      {/* Phase Tracker Section */}
+      <div style={{ marginTop: '32px' }}>
+        <div 
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            marginBottom: '16px',
+            padding: '16px',
+            backgroundColor: '#f8fafc',
+            border: '1px solid #e2e8f0',
+            borderRadius: '8px',
+            cursor: 'pointer'
+          }}
+          onClick={() => setShowPhaseTracker(!showPhaseTracker)}
+          data-testid="phase-tracker-toggle"
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#1f2937', margin: 0 }}>
+              📊 Phase Tracker
+            </h2>
+            <span style={{ 
+              backgroundColor: '#8b5cf6', 
+              color: 'white', 
+              padding: '2px 8px', 
+              borderRadius: '12px', 
+              fontSize: '12px',
+              fontWeight: '600'
+            }}>
+              {projects.length} projects
+            </span>
+          </div>
+          <div style={{ 
+            fontSize: '18px', 
+            transform: showPhaseTracker ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'transform 0.2s'
+          }}>
+            ⌄
+          </div>
+        </div>
+
+        {showPhaseTracker && (
+          <div data-testid="phase-tracker-content" style={{ marginBottom: '32px' }}>
+            <PhaseTracker 
+              projects={projects}
+              onStepUpdate={handlePhaseStepUpdate}
+            />
+          </div>
+        )}
+      </div>
 
       {/* Execution History Section */}
       <div style={{ marginTop: '32px' }}>

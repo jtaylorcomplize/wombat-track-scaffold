@@ -708,5 +708,218 @@ describe('MetaPlatform Dashboard Tests', () => {
         }
       });
     });
+
+    describe('Phase Tracker Tests (ORB-2.6)', () => {
+      it('should verify phase tracker toggle is present', async () => {
+        const phaseToggle = await page.$('[data-testid="phase-tracker-toggle"]');
+        expect(phaseToggle).toBeTruthy();
+        
+        // Verify toggle shows project count
+        const toggleText = await phaseToggle.textContent();
+        expect(toggleText).toContain('Phase Tracker');
+        expect(toggleText).toMatch(/\d+ projects/);
+      });
+
+      it('should expand and collapse phase tracker', async () => {
+        // Initially phase tracker should not be visible
+        let phaseContent = await page.$('[data-testid="phase-tracker-content"]');
+        expect(phaseContent).toBeFalsy();
+        
+        // Click to expand
+        await page.click('[data-testid="phase-tracker-toggle"]');
+        
+        // Wait for phase tracker to appear
+        await page.waitForSelector('[data-testid="phase-tracker-content"]', { timeout: 5000 });
+        
+        phaseContent = await page.$('[data-testid="phase-tracker-content"]');
+        expect(phaseContent).toBeTruthy();
+        
+        // Verify projects are rendered
+        const projects = await page.$$('[data-testid^="project-"]');
+        expect(projects.length).toBeGreaterThan(0);
+        
+        console.log(`Phase tracker expanded with ${projects.length} projects`);
+      });
+
+      it('should render phases and steps correctly', async () => {
+        // Expand phase tracker
+        await page.click('[data-testid="phase-tracker-toggle"]');
+        await page.waitForSelector('[data-testid="phase-tracker-content"]');
+        
+        // Verify at least one project exists
+        const projects = await page.$$('[data-testid^="project-"]');
+        expect(projects.length).toBeGreaterThan(0);
+        
+        // Get first project and check for phases
+        const firstProject = projects[0];
+        const projectId = await firstProject.getAttribute('data-testid');
+        console.log(`Testing project: ${projectId}`);
+        
+        // Check for phase elements within the project
+        const phases = await firstProject.$$('[data-testid^="phase-"]');
+        expect(phases.length).toBeGreaterThan(0);
+        
+        // Click on first phase to expand
+        if (phases.length > 0) {
+          await phases[0].click();
+          await page.waitForTimeout(500);
+          
+          // Check for step elements
+          const steps = await page.$$('[data-testid^="step-"]');
+          expect(steps.length).toBeGreaterThan(0);
+          
+          console.log(`Found ${phases.length} phases and ${steps.length} steps`);
+        }
+      });
+
+      it('should display step status correctly', async () => {
+        // Expand phase tracker
+        await page.click('[data-testid="phase-tracker-toggle"]');
+        await page.waitForSelector('[data-testid="phase-tracker-content"]');
+        
+        // Click on first phase to see steps
+        const phases = await page.$$('[data-testid^="phase-"]');
+        if (phases.length > 0) {
+          await phases[0].click();
+          await page.waitForTimeout(500);
+          
+          // Find steps and check their status
+          const steps = await page.$$('[data-testid^="step-"]');
+          
+          for (const step of steps) {
+            const stepId = await step.getAttribute('data-testid');
+            const stepName = stepId.replace('step-', '');
+            
+            // Check for status indicator
+            const statusElement = await page.$(`[data-testid="step-status-${stepName}"]`);
+            expect(statusElement).toBeTruthy();
+            
+            const statusText = await statusElement.textContent();
+            const validStatuses = ['not started', 'in progress', 'complete'];
+            expect(validStatuses.some(status => statusText.toLowerCase().includes(status))).toBe(true);
+          }
+        }
+      });
+
+      it('should show execution info for steps with executionId', async () => {
+        // Expand phase tracker
+        await page.click('[data-testid="phase-tracker-toggle"]');
+        await page.waitForSelector('[data-testid="phase-tracker-content"]');
+        
+        // Expand first phase
+        const phases = await page.$$('[data-testid^="phase-"]');
+        if (phases.length > 0) {
+          await phases[0].click();
+          await page.waitForTimeout(500);
+          
+          // Look for execution info elements
+          const executionInfos = await page.$$('[data-testid^="execution-info-"]');
+          
+          if (executionInfos.length > 0) {
+            const firstInfo = executionInfos[0];
+            const infoText = await firstInfo.textContent();
+            
+            // Should contain execution details
+            expect(infoText).toContain('Execution:');
+            expect(infoText.toLowerCase()).toMatch(/claude|github|ci/); // Platform
+            
+            console.log(`Found ${executionInfos.length} steps with execution info`);
+          } else {
+            console.log('No steps with execution info found in test data');
+          }
+        }
+      });
+
+      it('should handle step actions correctly', async () => {
+        // Expand phase tracker
+        await page.click('[data-testid="phase-tracker-toggle"]');
+        await page.waitForSelector('[data-testid="phase-tracker-content"]');
+        
+        // Expand phases to see steps
+        const phases = await page.$$('[data-testid^="phase-"]');
+        for (const phase of phases) {
+          await phase.click();
+          await page.waitForTimeout(200);
+        }
+        
+        // Check for action buttons
+        const startButtons = await page.$$('[data-testid^="start-step-"]');
+        const completeButtons = await page.$$('[data-testid^="complete-step-"]');
+        const viewLogButtons = await page.$$('[data-testid^="view-log-"]');
+        
+        console.log(`Found buttons - Start: ${startButtons.length}, Complete: ${completeButtons.length}, View Log: ${viewLogButtons.length}`);
+        
+        // Verify at least some action buttons exist
+        const totalActionButtons = startButtons.length + completeButtons.length + viewLogButtons.length;
+        expect(totalActionButtons).toBeGreaterThan(0);
+        
+        // Test clicking a start button if available
+        if (startButtons.length > 0) {
+          const firstStartButton = startButtons[0];
+          const buttonText = await firstStartButton.textContent();
+          expect(buttonText).toBe('Start');
+          
+          // Monitor console for template trigger
+          const consoleLogs = [];
+          page.on('console', msg => {
+            if (msg.type() === 'log' && msg.text().includes('🚀 Triggering template')) {
+              consoleLogs.push(msg.text());
+            }
+          });
+          
+          await firstStartButton.click();
+          await page.waitForTimeout(1000);
+          
+          // If step has templateId, should trigger template
+          // Otherwise just updates status
+          console.log(`Start button clicked, template triggers: ${consoleLogs.length}`);
+        }
+      });
+
+      it('should update step status when actions are performed', async () => {
+        // Expand phase tracker
+        await page.click('[data-testid="phase-tracker-toggle"]');
+        await page.waitForSelector('[data-testid="phase-tracker-content"]');
+        
+        // Expand all phases
+        const phases = await page.$$('[data-testid^="phase-"]');
+        for (const phase of phases) {
+          await phase.click();
+          await page.waitForTimeout(200);
+        }
+        
+        // Find a step that can be started
+        const startButtons = await page.$$('[data-testid^="start-step-"]');
+        
+        if (startButtons.length > 0) {
+          // Get the step ID from the button
+          const buttonTestId = await startButtons[0].getAttribute('data-testid');
+          const stepId = buttonTestId.replace('start-step-', '');
+          
+          // Get initial status
+          const initialStatus = await page.$eval(
+            `[data-testid="step-status-${stepId}"]`,
+            el => el.textContent
+          );
+          expect(initialStatus.toLowerCase()).toContain('not started');
+          
+          // Click start button
+          await startButtons[0].click();
+          
+          // Wait for status to update
+          await page.waitForTimeout(1000);
+          
+          // Check if status changed
+          const updatedStatus = await page.$eval(
+            `[data-testid="step-status-${stepId}"]`,
+            el => el.textContent
+          );
+          
+          // Status should have changed from 'not started'
+          expect(updatedStatus.toLowerCase()).not.toContain('not started');
+          console.log(`Step status updated from '${initialStatus}' to '${updatedStatus}'`);
+        }
+      });
+    });
   });
 });
