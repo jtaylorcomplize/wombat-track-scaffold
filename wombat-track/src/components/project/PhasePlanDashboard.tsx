@@ -28,6 +28,7 @@ export const PhasePlanDashboard: React.FC<PhasePlanDashboardProps> = ({
   const [showCompleted, setShowCompleted] = useState(true);
   const [searchFilter, setSearchFilter] = useState('');
   const [isPolling, setIsPolling] = useState(false);
+  const [isProjectInfoExpanded, setIsProjectInfoExpanded] = useState(false);
 
   // Initialize expanded phases on mount
   useEffect(() => {
@@ -95,12 +96,11 @@ export const PhasePlanDashboard: React.FC<PhasePlanDashboardProps> = ({
     return (
       <div 
         style={{
-          padding: '16px',
-          backgroundColor: '#fafbfc',
-          border: '1px solid #e5e7eb',
+          padding: '12px',
+          backgroundColor: '#f9fafb',
           borderRadius: '6px',
-          marginBottom: '24px',
-          lineHeight: 1.6
+          lineHeight: 1.6,
+          fontSize: '14px'
         }}
         dangerouslySetInnerHTML={{ __html: html }}
       />
@@ -149,6 +149,10 @@ export const PhasePlanDashboard: React.FC<PhasePlanDashboardProps> = ({
     } else {
       setExpandedPhases(new Set(project.phases.map(phase => phase.id)));
     }
+  };
+
+  const toggleProjectInfo = () => {
+    setIsProjectInfoExpanded(!isProjectInfoExpanded);
   };
 
   const filteredSteps = (phase: Phase) => {
@@ -210,6 +214,21 @@ export const PhasePlanDashboard: React.FC<PhasePlanDashboardProps> = ({
           </label>
           
           <button
+            onClick={toggleProjectInfo}
+            style={{
+              padding: '4px 8px',
+              backgroundColor: isProjectInfoExpanded ? '#e0e7ff' : '#f3f4f6',
+              color: isProjectInfoExpanded ? '#3730a3' : '#374151',
+              border: '1px solid #d1d5db',
+              borderRadius: '4px',
+              fontSize: '11px',
+              cursor: 'pointer'
+            }}
+          >
+            Project Info
+          </button>
+
+          <button
             onClick={toggleAllPhases}
             style={{
               padding: '4px 8px',
@@ -225,8 +244,108 @@ export const PhasePlanDashboard: React.FC<PhasePlanDashboardProps> = ({
         </div>
       </div>
 
-      {/* Project Plan Overview */}
-      {project.phasePlan && renderMarkdown(project.phasePlan)}
+      {/* Project Information */}
+      {project.phasePlan && (
+        <div style={{
+          marginBottom: '16px',
+          border: '1px solid #e5e7eb',
+          borderRadius: '8px',
+          backgroundColor: 'white'
+        }}>
+          {/* Project Info Header */}
+          <div
+            onClick={toggleProjectInfo}
+            style={{
+              padding: '12px 16px',
+              cursor: 'pointer',
+              backgroundColor: isProjectInfoExpanded ? '#f8fafc' : '#ffffff',
+              borderRadius: isProjectInfoExpanded ? '8px 8px 0 0' : '8px',
+              borderBottom: isProjectInfoExpanded ? '1px solid #e5e7eb' : 'none',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '12px', color: '#6b7280' }}>
+                  Project Overview
+                </span>
+                <span style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
+                  {project.name}
+                </span>
+                <div style={{ 
+                  fontSize: '11px', 
+                  backgroundColor: project.colorTag || '#e5e7eb', 
+                  padding: '2px 6px', 
+                  borderRadius: '10px',
+                  color: '#ffffff'
+                }}>
+                  {project.projectType}
+                </div>
+                <div style={{ 
+                  fontSize: '11px', 
+                  backgroundColor: project.status === 'Active' ? '#10b981' : '#e5e7eb', 
+                  padding: '2px 6px', 
+                  borderRadius: '10px',
+                  color: '#ffffff'
+                }}>
+                  {project.status}
+                </div>
+              </div>
+              {project.description && (
+                <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '4px' }}>
+                  {project.description}
+                </div>
+              )}
+            </div>
+            
+            <div style={{ fontSize: '12px', color: '#9ca3af' }}>
+              {isProjectInfoExpanded ? '▲' : '▼'}
+            </div>
+          </div>
+
+          {/* Project Info Content */}
+          {isProjectInfoExpanded && (
+            <div style={{ padding: '16px' }}>
+              <div style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '8px' }}>
+                Project Details
+              </div>
+              
+              {/* Project metadata */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '12px',
+                marginBottom: '16px'
+              }}>
+                <div style={{ fontSize: '12px' }}>
+                  <span style={{ color: '#6b7280', fontWeight: '500' }}>Owner: </span>
+                  <span style={{ color: '#1f2937' }}>{project.projectOwner}</span>
+                </div>
+                <div style={{ fontSize: '12px' }}>
+                  <span style={{ color: '#6b7280', fontWeight: '500' }}>Created: </span>
+                  <span style={{ color: '#1f2937' }}>{new Date(project.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div style={{ fontSize: '12px' }}>
+                  <span style={{ color: '#6b7280', fontWeight: '500' }}>WT Tag: </span>
+                  <span style={{ color: '#1f2937' }}>{project.wtTag}</span>
+                </div>
+                <div style={{ fontSize: '12px' }}>
+                  <span style={{ color: '#6b7280', fontWeight: '500' }}>Phases: </span>
+                  <span style={{ color: '#1f2937' }}>{project.phases.length}</span>
+                </div>
+              </div>
+
+              {/* Project Plan Overview */}
+              <div style={{ fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '8px' }}>
+                Project Plan
+              </div>
+              {renderMarkdown(project.phasePlan)}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Phases Timeline */}
       <div style={{ marginTop: '16px' }}>
