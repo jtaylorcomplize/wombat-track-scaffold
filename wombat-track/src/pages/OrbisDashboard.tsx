@@ -9,6 +9,7 @@ import { PhaseAdminModal } from '../components/phase/PhaseAdminModal';
 import { triggerTemplate } from '../lib/templateDispatcher';
 import { fetchExecutionLogs } from '../api/executionLogAPI';
 import { mockProjects } from '../data/mockProjects';
+import { seedPhaseTracker, forceSeedPhaseTracker, isPhaseTrackerSeeded } from '../dev/seedPhaseTracker';
 
 const mockIntegrations: Integration[] = [
   {
@@ -100,6 +101,9 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
   useEffect(() => {
     // Initial load of execution history
     refreshExecutionHistory();
+    
+    // Seed Phase Tracker in development mode
+    seedPhaseTracker(setProjects);
     
     // Set up a polling interval to refresh execution history from API
     const interval = setInterval(refreshExecutionHistory, 1000);
@@ -449,25 +453,51 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
               ⌄
             </div>
           </div>
-          <button
-            onClick={() => setShowPhaseAdmin(true)}
-            data-testid="manage-projects-button"
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#6366f1',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            ⚙️ Manage Projects
-          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {/* Development Seed Button */}
+            {import.meta.env?.MODE === 'development' && (
+              <button
+                onClick={() => forceSeedPhaseTracker(setProjects)}
+                data-testid="seed-phase-tracker-button"
+                style={{
+                  padding: '6px 12px',
+                  backgroundColor: isPhaseTrackerSeeded() ? '#22c55e' : '#f59e0b',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontWeight: '500',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
+                }}
+                title={isPhaseTrackerSeeded() ? 'Phase Tracker seeded (click to refresh)' : 'Seed Phase Tracker with ORB-2.x history'}
+              >
+                {isPhaseTrackerSeeded() ? '✅' : '🌱'} Seed
+              </button>
+            )}
+            
+            <button
+              onClick={() => setShowPhaseAdmin(true)}
+              data-testid="manage-projects-button"
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#6366f1',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '500',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              ⚙️ Manage Projects
+            </button>
+          </div>
         </div>
 
         {showPhaseTracker && (
