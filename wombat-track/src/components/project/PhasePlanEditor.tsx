@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
+/**
+ * @deprecated WT-2.9: PhasePlanEditor is deprecated in favor of PhasePlanDashboard
+ * Use PhasePlanDashboard for comprehensive project management with execution tracking.
+ * This component will be removed in a future version.
+ */
+
 interface PhasePlanEditorProps {
   projectId: string;
   projectName: string;
