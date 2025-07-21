@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { PhasePlan } from './pages/PhasePlan';
 import { WombatConsole } from './pages/WombatConsole';
 import './App.css';
+console.log("🚀 WT Version 1.2.9 loaded");
 console.log("✅ App is being rendered");
 
 type ActiveView = 'phase-plan' | 'wombat-console' | 'settings';
