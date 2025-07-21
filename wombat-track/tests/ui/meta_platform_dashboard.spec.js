@@ -921,5 +921,158 @@ describe('MetaPlatform Dashboard Tests', () => {
         }
       });
     });
+
+    describe('Phase Admin Tests (ORB-2.7)', () => {
+      it('should verify manage projects button is present', async () => {
+        const manageButton = await page.$('[data-testid="manage-projects-button"]');
+        expect(manageButton).toBeTruthy();
+        
+        const buttonText = await manageButton.textContent();
+        expect(buttonText).toContain('Manage Projects');
+      });
+
+      it('should open admin modal when manage button is clicked', async () => {
+        // Click manage projects button
+        await page.click('[data-testid="manage-projects-button"]');
+        
+        // Wait for modal to appear
+        await page.waitForTimeout(500);
+        
+        // Check if modal is visible
+        const modalText = await page.textContent('body');
+        expect(modalText).toContain('Phase Tracker Admin');
+        
+        console.log('Admin modal opened successfully');
+      });
+
+      it('should have working tabs in admin modal', async () => {
+        // Open admin modal
+        await page.click('[data-testid="manage-projects-button"]');
+        await page.waitForTimeout(500);
+        
+        // Check for tab buttons
+        const tabs = ['projects', 'phases', 'steps'];
+        
+        for (const tab of tabs) {
+          const tabButton = await page.$(`button:has-text("${tab}")`);
+          expect(tabButton).toBeTruthy();
+          
+          // Click tab
+          await tabButton.click();
+          await page.waitForTimeout(200);
+          
+          console.log(`${tab} tab is functional`);
+        }
+      });
+
+      it('should close modal when clicking outside or close button', async () => {
+        // Open admin modal
+        await page.click('[data-testid="manage-projects-button"]');
+        await page.waitForTimeout(500);
+        
+        // Verify modal is open
+        let modalText = await page.textContent('body');
+        expect(modalText).toContain('Phase Tracker Admin');
+        
+        // Click close button (×)
+        const closeButton = await page.$('button:has-text("×")');
+        expect(closeButton).toBeTruthy();
+        await closeButton.click();
+        
+        // Wait for modal to close
+        await page.waitForTimeout(500);
+        
+        // Verify modal is closed (text should not be visible)
+        modalText = await page.textContent('body');
+        // Modal content should not be visible anymore
+        const adminElements = await page.$$('[data-testid*="admin"]');
+        expect(adminElements.length).toBe(1); // Only the button should remain
+        
+        console.log('Admin modal closed successfully');
+      });
+
+      it('should have import and export functionality', async () => {
+        // Open admin modal
+        await page.click('[data-testid="manage-projects-button"]');
+        await page.waitForTimeout(500);
+        
+        // Check for import/export buttons
+        const exportButton = await page.$('button:has-text("Export")');
+        const importLabel = await page.$('label:has-text("Import")');
+        
+        expect(exportButton).toBeTruthy();
+        expect(importLabel).toBeTruthy();
+        
+        // Test export button functionality (should not throw error)
+        await exportButton.click();
+        await page.waitForTimeout(200);
+        
+        console.log('Import/Export functionality verified');
+      });
+
+      it('should allow creating new projects', async () => {
+        // Monitor console for CRUD operations
+        const consoleLogs = [];
+        page.on('console', msg => {
+          if (msg.type() === 'log' && (msg.text().includes('Creating project') || msg.text().includes('Updating project') || msg.text().includes('Deleting project'))) {
+            consoleLogs.push(msg.text());
+          }
+        });
+        
+        // Open admin modal
+        await page.click('[data-testid="manage-projects-button"]');
+        await page.waitForTimeout(500);
+        
+        // Should be on projects tab by default
+        const projectNameInput = await page.$('input[placeholder="Project name"]');
+        expect(projectNameInput).toBeTruthy();
+        
+        // Fill out form
+        await projectNameInput.fill('Test Project');
+        
+        const descriptionInput = await page.$('input[placeholder="Description"]');
+        await descriptionInput.fill('Test Description');
+        
+        // Click create button
+        const createButton = await page.$('button:has-text("Create")');
+        await createButton.click();
+        
+        // Wait for creation
+        await page.waitForTimeout(500);
+        
+        // Verify console log
+        const createLogs = consoleLogs.filter(log => log.includes('Creating project'));
+        expect(createLogs.length).toBeGreaterThan(0);
+        
+        console.log('Project creation test completed');
+      });
+
+      it('should show archive functionality', async () => {
+        // Open admin modal
+        await page.click('[data-testid="manage-projects-button"]');
+        await page.waitForTimeout(500);
+        
+        // Look for archive checkbox
+        const archiveCheckbox = await page.$('input[type="checkbox"]');
+        expect(archiveCheckbox).toBeTruthy();
+        
+        // Look for archive buttons
+        const archiveButtons = await page.$$('button:has-text("Archive")');
+        
+        if (archiveButtons.length > 0) {
+          console.log(`Found ${archiveButtons.length} archive buttons`);
+        } else {
+          console.log('No archive buttons found (no projects to archive)');
+        }
+        
+        // Test showing archived projects
+        if (archiveCheckbox) {
+          await archiveCheckbox.click();
+          await page.waitForTimeout(200);
+          
+          console.log('Archive toggle functionality verified');
+        }
+      });
+    });
   });
 });

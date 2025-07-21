@@ -24,7 +24,9 @@ export interface Project {
   name: string;
   description: string;
   createdAt: string;
+  updatedAt?: string;
   phases: Phase[];
+  archived?: boolean;
 }
 
 export interface PhaseStepUpdate {

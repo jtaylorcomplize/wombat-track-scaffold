@@ -5,6 +5,7 @@ import type { TemplateExecution } from '../types/template';
 import type { Project, PhaseStep } from '../types/phase';
 import { IntegrationCard } from '../components/integration/IntegrationCard';
 import { PhaseTracker } from '../components/phase/PhaseTracker';
+import { PhaseAdminModal } from '../components/phase/PhaseAdminModal';
 import { triggerTemplate } from '../lib/templateDispatcher';
 import { fetchExecutionLogs } from '../api/executionLogAPI';
 import { mockProjects } from '../data/mockProjects';
@@ -83,6 +84,7 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
   const [executionHistory, setExecutionHistory] = useState<TemplateExecution[]>([]);
   const [showExecutionHistory, setShowExecutionHistory] = useState(false);
   const [showPhaseTracker, setShowPhaseTracker] = useState(false);
+  const [showPhaseAdmin, setShowPhaseAdmin] = useState(false);
   const [projects, setProjects] = useState<Project[]>(mockProjects);
 
   // Fetch execution history from API
@@ -411,13 +413,20 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
             padding: '16px',
             backgroundColor: '#f8fafc',
             border: '1px solid #e2e8f0',
-            borderRadius: '8px',
-            cursor: 'pointer'
+            borderRadius: '8px'
           }}
-          onClick={() => setShowPhaseTracker(!showPhaseTracker)}
-          data-testid="phase-tracker-toggle"
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px',
+              cursor: 'pointer',
+              flex: 1
+            }}
+            onClick={() => setShowPhaseTracker(!showPhaseTracker)}
+            data-testid="phase-tracker-toggle"
+          >
             <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#1f2937', margin: 0 }}>
               📊 Phase Tracker
             </h2>
@@ -431,14 +440,34 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
             }}>
               {projects.length} projects
             </span>
+            <div style={{ 
+              fontSize: '18px', 
+              transform: showPhaseTracker ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s',
+              marginLeft: '8px'
+            }}>
+              ⌄
+            </div>
           </div>
-          <div style={{ 
-            fontSize: '18px', 
-            transform: showPhaseTracker ? 'rotate(180deg)' : 'rotate(0deg)',
-            transition: 'transform 0.2s'
-          }}>
-            ⌄
-          </div>
+          <button
+            onClick={() => setShowPhaseAdmin(true)}
+            data-testid="manage-projects-button"
+            style={{
+              padding: '8px 16px',
+              backgroundColor: '#6366f1',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '500',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            ⚙️ Manage Projects
+          </button>
         </div>
 
         {showPhaseTracker && (
@@ -602,6 +631,14 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
           </div>
         )}
       </div>
+
+      {/* Phase Admin Modal */}
+      <PhaseAdminModal
+        isOpen={showPhaseAdmin}
+        onClose={() => setShowPhaseAdmin(false)}
+        projects={projects}
+        onProjectsUpdate={setProjects}
+      />
     </div>
   );
 };
