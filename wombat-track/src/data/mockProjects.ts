@@ -6,6 +6,34 @@ export const mockProjects: Project[] = [
     name: 'Wombat Platform Integration',
     description: 'Complete integration of Wombat Track with core platform services',
     createdAt: '2024-01-15T10:00:00Z',
+    updatedAt: '2024-01-20T15:30:00Z',
+    createdBy: 'Jordan Taylor',
+    projectOwner: 'Jordan Taylor',
+    projectType: 'Platform',
+    status: 'Active',
+    wtTag: 'platform-integration',
+    phasePlan: `# Wombat Platform Integration
+
+## Project Overview
+This project focuses on establishing a robust integration between Wombat Track and core platform services, including Claude API and GitHub services.
+
+## Key Objectives
+- **API Integration**: Seamless connection with Claude API for AI-powered features
+- **GitHub Integration**: Automated workflow integration with repository management
+- **CI/CD Pipeline**: Establish reliable deployment automation
+- **Monitoring**: Comprehensive health monitoring and alerting
+
+## Success Criteria
+- 99.9% API uptime
+- Sub-200ms response times
+- Automated deployment pipeline functional
+- Complete test coverage for integration points
+
+## Resources
+- [API Documentation](https://docs.claude.ai)
+- [GitHub Webhooks Guide](https://docs.github.com/webhooks)
+- [CI/CD Best Practices](https://example.com/cicd)`,
+    colorTag: '#3b82f6',
     phases: [
       {
         id: 'phase-001',
@@ -98,6 +126,38 @@ export const mockProjects: Project[] = [
     name: 'Memory Optimization Initiative',
     description: 'Optimize memory usage across all platform components',
     createdAt: '2024-01-20T09:00:00Z',
+    updatedAt: '2024-01-22T14:15:00Z',
+    createdBy: 'Alex Chen',
+    projectOwner: 'Alex Chen',
+    projectType: 'R&D',
+    status: 'Active',
+    wtTag: 'memory-optimization',
+    phasePlan: `# Memory Optimization Initiative
+
+## Project Overview
+Comprehensive optimization of memory usage across all Wombat Track platform components to improve performance and reduce operational costs.
+
+## Key Phases
+- **Phase 1**: Memory Analysis and Profiling
+- **Phase 2**: Implementation of optimization strategies
+- **Phase 3**: Performance validation and monitoring
+
+## Target Metrics
+- Reduce memory usage by 30-40%
+- Improve response times by 15-20%
+- Decrease memory-related incidents by 90%
+
+## Technical Approach
+- Memory profiling with advanced tools
+- Algorithm optimization and data structure improvements
+- Caching strategy enhancement
+- Continuous monitoring implementation
+
+## Success Criteria
+- All services under target memory thresholds
+- No memory leaks detected in production
+- Performance benchmarks met or exceeded`,
+    colorTag: '#10b981',
     phases: [
       {
         id: 'phase-003',

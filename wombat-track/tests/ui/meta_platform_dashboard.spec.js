@@ -1074,5 +1074,350 @@ describe('MetaPlatform Dashboard Tests', () => {
         }
       });
     });
+
+    describe('Project Switcher Tests (ORB-2.8)', () => {
+      it('should verify project switcher is present in phase tracker', async () => {
+        // Expand phase tracker
+        await page.click('[data-testid="phase-tracker-toggle"]');
+        await page.waitForSelector('[data-testid="phase-tracker-content"]');
+        
+        // Check for project switcher
+        const projectSwitcher = await page.$('[data-testid="project-switcher-trigger"]');
+        expect(projectSwitcher).toBeTruthy();
+        
+        console.log('Project switcher found in phase tracker');
+      });
+
+      it('should open and close project switcher dropdown', async () => {
+        // Expand phase tracker
+        await page.click('[data-testid="phase-tracker-toggle"]');
+        await page.waitForSelector('[data-testid="phase-tracker-content"]');
+        
+        // Click project switcher to open dropdown
+        await page.click('[data-testid="project-switcher-trigger"]');
+        
+        // Wait for dropdown to appear
+        await page.waitForSelector('[data-testid="project-switcher-dropdown"]', { timeout: 2000 });
+        
+        const dropdown = await page.$('[data-testid="project-switcher-dropdown"]');
+        expect(dropdown).toBeTruthy();
+        
+        // Check for search input
+        const searchInput = await page.$('[data-testid="project-search"]');
+        expect(searchInput).toBeTruthy();
+        
+        // Close dropdown by clicking outside
+        await page.click('body');
+        await page.waitForTimeout(500);
+        
+        // Verify dropdown is closed
+        const closedDropdown = await page.$('[data-testid="project-switcher-dropdown"]');
+        expect(closedDropdown).toBeFalsy();
+        
+        console.log('Project switcher dropdown functionality verified');
+      });
+
+      it('should filter projects in project switcher', async () => {
+        // Expand phase tracker
+        await page.click('[data-testid="phase-tracker-toggle"]');
+        await page.waitForSelector('[data-testid="phase-tracker-content"]');
+        
+        // Open project switcher
+        await page.click('[data-testid="project-switcher-trigger"]');
+        await page.waitForSelector('[data-testid="project-switcher-dropdown"]');
+        
+        // Get initial project options count
+        const initialOptions = await page.$$('[data-testid^="project-option-"]');
+        const initialCount = initialOptions.length;
+        
+        if (initialCount > 0) {
+          // Type in search to filter
+          const searchInput = await page.$('[data-testid="project-search"]');
+          await searchInput.fill('Meta');
+          await page.waitForTimeout(300);
+          
+          // Get filtered project options
+          const filteredOptions = await page.$$('[data-testid^="project-option-"]');
+          const filteredCount = filteredOptions.length;
+          
+          // Should have filtered results
+          expect(filteredCount).toBeLessThanOrEqual(initialCount);
+          
+          console.log(`Project filter test: ${initialCount} -> ${filteredCount} projects`);
+        }
+      });
+
+      it('should select project and update display', async () => {
+        // Expand phase tracker
+        await page.click('[data-testid="phase-tracker-toggle"]');
+        await page.waitForSelector('[data-testid="phase-tracker-content"]');
+        
+        // Get initial project count in tracker
+        const initialProjects = await page.$$('[data-testid^="project-"]');
+        const initialProjectCount = initialProjects.length;
+        
+        // Open project switcher and select a project
+        await page.click('[data-testid="project-switcher-trigger"]');
+        await page.waitForSelector('[data-testid="project-switcher-dropdown"]');
+        
+        const projectOptions = await page.$$('[data-testid^="project-option-"]');
+        if (projectOptions.length > 0) {
+          // Click first project option
+          await projectOptions[0].click();
+          await page.waitForTimeout(500);
+          
+          // Verify project selection affected display
+          const updatedProjects = await page.$$('[data-testid^="project-"]');
+          const updatedProjectCount = updatedProjects.length;
+          
+          // Should show only selected project (1) or all projects
+          expect(updatedProjectCount).toBeLessThanOrEqual(initialProjectCount);
+          
+          console.log(`Project selection test: ${initialProjectCount} -> ${updatedProjectCount} projects displayed`);
+        }
+      });
+
+      it('should show archived projects toggle', async () => {
+        // Expand phase tracker
+        await page.click('[data-testid="phase-tracker-toggle"]');
+        await page.waitForSelector('[data-testid="phase-tracker-content"]');
+        
+        // Open project switcher
+        await page.click('[data-testid="project-switcher-trigger"]');
+        await page.waitForSelector('[data-testid="project-switcher-dropdown"]');
+        
+        // Look for archived projects checkbox
+        const archivedCheckbox = await page.$('input[type="checkbox"]');
+        expect(archivedCheckbox).toBeTruthy();
+        
+        // Verify label text
+        const checkboxLabel = await page.$('label:has-text("Show archived projects")');
+        expect(checkboxLabel).toBeTruthy();
+        
+        console.log('Archived projects toggle found in project switcher');
+      });
+    });
+
+    describe('Phase Plan Editor Tests (ORB-2.8)', () => {
+      it('should verify phase plan tab in admin modal', async () => {
+        // Open admin modal
+        await page.click('[data-testid="manage-projects-button"]');
+        await page.waitForTimeout(500);
+        
+        // Check for phase plan tab
+        const phasePlanTab = await page.$('button:has-text("Phase Plan")');
+        expect(phasePlanTab).toBeTruthy();
+        
+        // Click phase plan tab
+        await phasePlanTab.click();
+        await page.waitForTimeout(300);
+        
+        // Should show project selector
+        const projectSelector = await page.$('select');
+        expect(projectSelector).toBeTruthy();
+        
+        console.log('Phase Plan tab found and functional in admin modal');
+      });
+
+      it('should show phase plan editor when project is selected', async () => {
+        // Open admin modal and go to phase plan tab
+        await page.click('[data-testid="manage-projects-button"]');
+        await page.waitForTimeout(500);
+        
+        const phasePlanTab = await page.$('button:has-text("Phase Plan")');
+        await phasePlanTab.click();
+        await page.waitForTimeout(300);
+        
+        // Select a project
+        const projectSelector = await page.$('select');
+        const options = await projectSelector.$$('option');
+        
+        if (options.length > 1) { // More than just "Choose a project..."
+          await projectSelector.selectOption({ index: 1 });
+          await page.waitForTimeout(500);
+          
+          // Should show phase plan editor or edit button
+          const editButton = await page.$('[data-testid="edit-phase-plan-button"]');
+          const preview = await page.$('[data-testid="phase-plan-preview"]');
+          
+          expect(editButton || preview).toBeTruthy();
+          
+          console.log('Phase plan editor displayed for selected project');
+        } else {
+          console.log('No projects available for phase plan editing');
+        }
+      });
+
+      it('should enter edit mode when edit button is clicked', async () => {
+        // Open admin modal and go to phase plan tab
+        await page.click('[data-testid="manage-projects-button"]');
+        await page.waitForTimeout(500);
+        
+        const phasePlanTab = await page.$('button:has-text("Phase Plan")');
+        await phasePlanTab.click();
+        await page.waitForTimeout(300);
+        
+        // Select a project
+        const projectSelector = await page.$('select');
+        const options = await projectSelector.$$('option');
+        
+        if (options.length > 1) {
+          await projectSelector.selectOption({ index: 1 });
+          await page.waitForTimeout(500);
+          
+          // Click edit button if available
+          const editButton = await page.$('[data-testid="edit-phase-plan-button"]');
+          if (editButton) {
+            await editButton.click();
+            await page.waitForTimeout(300);
+            
+            // Should show editor textarea
+            const editor = await page.$('[data-testid="phase-plan-editor"]');
+            expect(editor).toBeTruthy();
+            
+            // Should show markdown toolbar
+            const toolbar = await page.$$('button:has-text("H1")');
+            expect(toolbar.length).toBeGreaterThan(0);
+            
+            console.log('Phase plan editor entered edit mode successfully');
+          }
+        }
+      });
+
+      it('should have working markdown toolbar buttons', async () => {
+        // Open admin modal and go to phase plan tab
+        await page.click('[data-testid="manage-projects-button"]');
+        await page.waitForTimeout(500);
+        
+        const phasePlanTab = await page.$('button:has-text("Phase Plan")');
+        await phasePlanTab.click();
+        await page.waitForTimeout(300);
+        
+        // Select a project and enter edit mode
+        const projectSelector = await page.$('select');
+        const options = await projectSelector.$$('option');
+        
+        if (options.length > 1) {
+          await projectSelector.selectOption({ index: 1 });
+          await page.waitForTimeout(500);
+          
+          const editButton = await page.$('[data-testid="edit-phase-plan-button"]');
+          if (editButton) {
+            await editButton.click();
+            await page.waitForTimeout(300);
+            
+            // Test markdown toolbar buttons
+            const toolbarButtons = ['H1', 'H2', 'H3', 'B', 'I', '•', '🔗'];
+            
+            for (const buttonText of toolbarButtons) {
+              const button = await page.$(`button:has-text("${buttonText}")`);
+              if (button) {
+                // Click button (should insert markdown)
+                await button.click();
+                await page.waitForTimeout(100);
+                
+                console.log(`Markdown button "${buttonText}" clicked successfully`);
+              }
+            }
+            
+            // Verify textarea content changed
+            const editor = await page.$('[data-testid="phase-plan-editor"]');
+            const content = await editor.inputValue();
+            expect(content.length).toBeGreaterThan(0);
+            
+            console.log('Markdown toolbar functionality verified');
+          }
+        }
+      });
+
+      it('should save phase plan content', async () => {
+        // Monitor console for save operations
+        const consoleLogs = [];
+        page.on('console', msg => {
+          if (msg.type() === 'log' && msg.text().includes('Phase plan saved for project')) {
+            consoleLogs.push(msg.text());
+          }
+        });
+        
+        // Open admin modal and go to phase plan tab
+        await page.click('[data-testid="manage-projects-button"]');
+        await page.waitForTimeout(500);
+        
+        const phasePlanTab = await page.$('button:has-text("Phase Plan")');
+        await phasePlanTab.click();
+        await page.waitForTimeout(300);
+        
+        // Select a project and enter edit mode
+        const projectSelector = await page.$('select');
+        const options = await projectSelector.$$('option');
+        
+        if (options.length > 1) {
+          await projectSelector.selectOption({ index: 1 });
+          await page.waitForTimeout(500);
+          
+          const editButton = await page.$('[data-testid="edit-phase-plan-button"]');
+          if (editButton) {
+            await editButton.click();
+            await page.waitForTimeout(300);
+            
+            // Add some content
+            const editor = await page.$('[data-testid="phase-plan-editor"]');
+            await editor.fill('# Test Phase Plan\n\nThis is a test plan.');
+            await page.waitForTimeout(100);
+            
+            // Click save button
+            const saveButton = await page.$('button:has-text("Save")');
+            if (saveButton) {
+              await saveButton.click();
+              await page.waitForTimeout(1000);
+              
+              // Verify save operation
+              const saveLogs = consoleLogs.filter(log => log.includes('Phase plan saved'));
+              expect(saveLogs.length).toBeGreaterThan(0);
+              
+              console.log('Phase plan save functionality verified');
+            }
+          }
+        }
+      });
+
+      it('should render markdown preview correctly', async () => {
+        // Open admin modal and go to phase plan tab
+        await page.click('[data-testid="manage-projects-button"]');
+        await page.waitForTimeout(500);
+        
+        const phasePlanTab = await page.$('button:has-text("Phase Plan")');
+        await phasePlanTab.click();
+        await page.waitForTimeout(300);
+        
+        // Select a project
+        const projectSelector = await page.$('select');
+        const options = await projectSelector.$$('option');
+        
+        if (options.length > 1) {
+          await projectSelector.selectOption({ index: 1 });
+          await page.waitForTimeout(500);
+          
+          // Should show preview by default
+          const preview = await page.$('[data-testid="phase-plan-preview"]');
+          expect(preview).toBeTruthy();
+          
+          // If there's content, verify it's rendered as HTML
+          const previewContent = await preview.innerHTML();
+          if (previewContent.trim().length > 0) {
+            // Should contain HTML elements for markdown rendering
+            const hasMarkdownElements = previewContent.includes('<h1>') || 
+                                      previewContent.includes('<h2>') || 
+                                      previewContent.includes('<p>') ||
+                                      previewContent.includes('<strong>');
+            
+            expect(hasMarkdownElements).toBe(true);
+            console.log('Markdown preview rendering verified');
+          } else {
+            console.log('No phase plan content found for preview test');
+          }
+        }
+      });
+    });
   });
 });

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Project, Phase, PhaseStep } from '../../types/phase';
+import { PhasePlanEditor } from '../project/PhasePlanEditor';
 
 interface PhaseAdminModalProps {
   isOpen: boolean;
@@ -8,7 +9,7 @@ interface PhaseAdminModalProps {
   onProjectsUpdate: (projects: Project[]) => void;
 }
 
-type TabType = 'projects' | 'phases' | 'steps';
+type TabType = 'projects' | 'phases' | 'steps' | 'phaseplan';
 
 export const PhaseAdminModal: React.FC<PhaseAdminModalProps> = ({
   isOpen,
@@ -429,7 +430,7 @@ export const PhaseAdminModal: React.FC<PhaseAdminModalProps> = ({
           borderBottom: '1px solid #e5e7eb',
           backgroundColor: '#f9fafb'
         }}>
-          {(['projects', 'phases', 'steps'] as TabType[]).map(tab => (
+          {(['projects', 'phases', 'steps', 'phaseplan'] as TabType[]).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -448,7 +449,8 @@ export const PhaseAdminModal: React.FC<PhaseAdminModalProps> = ({
               {tab === 'projects' && '📁 '}
               {tab === 'phases' && '📦 '}
               {tab === 'steps' && '🧩 '}
-              {tab}
+              {tab === 'phaseplan' && '📑 '}
+              {tab === 'phaseplan' ? 'Phase Plan' : tab}
             </button>
           ))}
         </div>
@@ -504,6 +506,15 @@ export const PhaseAdminModal: React.FC<PhaseAdminModalProps> = ({
               onCreateStep={handleCreateStep}
               onUpdateStep={handleUpdateStep}
               onDeleteStep={handleDeleteStep}
+            />
+          )}
+
+          {activeTab === 'phaseplan' && (
+            <PhasePlanTab
+              projects={projects}
+              selectedProjectId={selectedProjectId}
+              setSelectedProjectId={setSelectedProjectId}
+              onProjectsUpdate={onProjectsUpdate}
             />
           )}
         </div>
@@ -1338,6 +1349,89 @@ const StepsTab: React.FC<{
             </div>
           </div>
         </>
+      )}
+    </div>
+  );
+};
+
+// Phase Plan Tab Component
+const PhasePlanTab: React.FC<{
+  projects: Project[];
+  selectedProjectId: string;
+  setSelectedProjectId: (id: string) => void;
+  onProjectsUpdate: (projects: Project[]) => void;
+}> = ({
+  projects,
+  selectedProjectId,
+  setSelectedProjectId,
+  onProjectsUpdate
+}) => {
+  const activeProjects = projects.filter(p => !p.archived);
+  const selectedProject = projects.find(p => p.id === selectedProjectId);
+
+  const handlePhasePlanSave = (content: string) => {
+    if (!selectedProjectId) return;
+
+    const updatedProjects = projects.map(project => 
+      project.id === selectedProjectId 
+        ? { ...project, phasePlan: content, updatedAt: new Date().toISOString() }
+        : project
+    );
+
+    onProjectsUpdate(updatedProjects);
+    console.log(`[WT] Phase plan saved for project: ${selectedProject?.name}`);
+  };
+
+  return (
+    <div>
+      {/* Project Selector */}
+      <div style={{ marginBottom: '20px' }}>
+        <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>
+          Select Project:
+        </label>
+        <select
+          value={selectedProjectId}
+          onChange={(e) => setSelectedProjectId(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '8px 12px',
+            border: '1px solid #d1d5db',
+            borderRadius: '6px'
+          }}
+        >
+          <option value="">Choose a project...</option>
+          {activeProjects.map(project => (
+            <option key={project.id} value={project.id}>
+              {project.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {selectedProject ? (
+        <div>
+          <PhasePlanEditor
+            projectId={selectedProject.id}
+            projectName={selectedProject.name}
+            initialContent={selectedProject.phasePlan || ''}
+            onSave={handlePhasePlanSave}
+          />
+        </div>
+      ) : (
+        <div style={{
+          textAlign: 'center',
+          padding: '60px 20px',
+          color: '#6b7280',
+          backgroundColor: '#f9fafb',
+          borderRadius: '8px',
+          border: '1px solid #e5e7eb'
+        }}>
+          <div style={{ fontSize: '18px', marginBottom: '8px' }}>📑</div>
+          <div style={{ fontSize: '16px', marginBottom: '4px' }}>Select a project to edit its phase plan</div>
+          <div style={{ fontSize: '14px' }}>
+            Use this tab to create detailed project documentation, goals, and phase breakdowns.
+          </div>
+        </div>
       )}
     </div>
   );

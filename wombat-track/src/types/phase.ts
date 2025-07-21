@@ -27,6 +27,14 @@ export interface Project {
   updatedAt?: string;
   phases: Phase[];
   archived?: boolean;
+  // Enhanced metadata fields
+  createdBy: string;
+  projectOwner: string;
+  projectType: 'Platform' | 'Content' | 'Migration' | 'R&D' | 'Other';
+  status: 'Planned' | 'Active' | 'Paused' | 'Archived' | 'Complete';
+  wtTag?: string; // Semantic tag for MemoryPlugin/DriveMemory integration
+  phasePlan?: string; // Rich text/markdown content for phase planning
+  colorTag?: string; // Optional color coding for project identification
 }
 
 export interface PhaseStepUpdate {

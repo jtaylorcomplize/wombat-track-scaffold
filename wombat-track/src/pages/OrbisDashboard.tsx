@@ -6,6 +6,7 @@ import type { Project, PhaseStep } from '../types/phase';
 import { IntegrationCard } from '../components/integration/IntegrationCard';
 import { PhaseTracker } from '../components/phase/PhaseTracker';
 import { PhaseAdminModal } from '../components/phase/PhaseAdminModal';
+import { ProjectSwitcher } from '../components/project/ProjectSwitcher';
 import { triggerTemplate } from '../lib/templateDispatcher';
 import { fetchExecutionLogs } from '../api/executionLogAPI';
 import { mockProjects } from '../data/mockProjects';
@@ -87,6 +88,8 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
   const [showPhaseTracker, setShowPhaseTracker] = useState(false);
   const [showPhaseAdmin, setShowPhaseAdmin] = useState(false);
   const [projects, setProjects] = useState<Project[]>(mockProjects);
+  const [activeProjectId, setActiveProjectId] = useState<string>('');
+  const [showArchivedProjects, setShowArchivedProjects] = useState(false);
 
   // Fetch execution history from API
   const refreshExecutionHistory = async () => {
@@ -272,6 +275,11 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
   };
 
   const stats = getOperationalStats();
+  
+  // Filter projects for display based on active project selection
+  const displayProjects = activeProjectId 
+    ? projects.filter(p => p.id === activeProjectId)
+    : projects;
 
   return (
     <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'system-ui, sans-serif' }}>
@@ -442,7 +450,7 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
               fontSize: '12px',
               fontWeight: '600'
             }}>
-              {projects.length} projects
+              {displayProjects.length} {activeProjectId ? 'project' : 'projects'}
             </span>
             <div style={{ 
               fontSize: '18px', 
@@ -502,8 +510,19 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
 
         {showPhaseTracker && (
           <div data-testid="phase-tracker-content" style={{ marginBottom: '32px' }}>
+            {/* Project Switcher */}
+            <div style={{ marginBottom: '16px' }}>
+              <ProjectSwitcher
+                projects={projects}
+                activeProjectId={activeProjectId}
+                onProjectSelect={setActiveProjectId}
+                showArchived={showArchivedProjects}
+                onToggleArchived={setShowArchivedProjects}
+              />
+            </div>
+            
             <PhaseTracker 
-              projects={projects}
+              projects={displayProjects}
               onStepUpdate={handlePhaseStepUpdate}
             />
           </div>
