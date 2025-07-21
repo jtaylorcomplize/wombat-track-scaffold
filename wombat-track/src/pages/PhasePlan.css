@@ -36,6 +36,28 @@
   gap: 32px;
 }
 
+.phase-plan-content-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.project-selector-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.project-selector-container > div {
+  max-width: 500px;
+  width: 100%;
+}
+
+.dashboard-container {
+  width: 100%;
+  max-width: none;
+}
+
 .main-content {
   background: white;
   border-radius: 16px;
@@ -272,6 +294,14 @@
     gap: 24px;
   }
   
+  .phase-plan-content-vertical {
+    gap: 20px;
+  }
+  
+  .project-selector-container > div {
+    max-width: 100%;
+  }
+  
   .sidebar {
     flex-direction: row;
   }
@@ -297,6 +327,14 @@
   
   .phase-plan-header p {
     font-size: 16px;
+  }
+  
+  .phase-plan-content-vertical {
+    gap: 16px;
+  }
+  
+  .project-selector-container {
+    margin-bottom: 12px;
   }
   
   .main-content {

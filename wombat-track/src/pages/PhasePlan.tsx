@@ -35,9 +35,9 @@ export const PhasePlan: React.FC = () => {
         <p>Strategic project planning with tactical execution tracking</p>
       </div>
 
-      <div className="phase-plan-content">
+      <div className="phase-plan-content-vertical">
         {/* Project Selector */}
-        <div style={{ marginBottom: '24px' }}>
+        <div className="project-selector-container">
           <ProjectSwitcher
             projects={activeProjects}
             selectedProjectId={selectedProjectId}
@@ -47,29 +47,31 @@ export const PhasePlan: React.FC = () => {
         </div>
 
         {/* Phase Plan Dashboard */}
-        {selectedProject ? (
-          <PhasePlanDashboard
-            project={selectedProject}
-            onStartStep={handleStartStep}
-            onViewLogs={handleViewLogs}
-            readOnly={false}
-          />
-        ) : (
-          <div style={{
-            textAlign: 'center',
-            padding: '60px 20px',
-            color: '#6b7280',
-            backgroundColor: '#f9fafb',
-            borderRadius: '8px',
-            border: '1px solid #e5e7eb'
-          }}>
-            <div style={{ fontSize: '48px', marginBottom: '16px' }}>📑</div>
-            <h2 style={{ fontSize: '24px', marginBottom: '8px', color: '#1f2937' }}>No Projects Available</h2>
-            <p style={{ fontSize: '16px' }}>
-              Create a project to start planning and tracking your phases.
-            </p>
-          </div>
-        )}
+        <div className="dashboard-container">
+          {selectedProject ? (
+            <PhasePlanDashboard
+              project={selectedProject}
+              onStartStep={handleStartStep}
+              onViewLogs={handleViewLogs}
+              readOnly={false}
+            />
+          ) : (
+            <div style={{
+              textAlign: 'center',
+              padding: '60px 20px',
+              color: '#6b7280',
+              backgroundColor: '#f9fafb',
+              borderRadius: '8px',
+              border: '1px solid #e5e7eb'
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>📑</div>
+              <h2 style={{ fontSize: '24px', marginBottom: '8px', color: '#1f2937' }}>No Projects Available</h2>
+              <p style={{ fontSize: '16px' }}>
+                Create a project to start planning and tracking your phases.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
