@@ -17,6 +17,7 @@ export interface Phase {
   description: string;
   order: number;
   steps: PhaseStep[];
+  summary?: string; // Optional markdown summary for phase documentation
 }
 
 export interface Project {

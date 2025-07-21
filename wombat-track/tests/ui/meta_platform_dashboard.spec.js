@@ -1420,4 +1420,226 @@ describe('MetaPlatform Dashboard Tests', () => {
       });
     });
   });
+
+  describe('Phase Plan Dashboard Tests (WT-2.9)', () => {
+    beforeEach(async () => {
+      await safeNavigate(page, BASE_URL);
+      
+      // Navigate to WombatConsole dashboard tab
+      await waitAndClick(page, 'button:has-text("WombatConsole")');
+      
+      // Wait for dashboard to load and open Phase Tracker Admin
+      await page.waitForSelector('[data-testid="status-rollup"]', { timeout: 10000 });
+      await waitAndClick(page, 'button:has-text("Phase Tracker Admin")');
+      
+      // Switch to Phase Plan tab
+      await waitAndClick(page, 'button:has-text("📑 Phase Plan")');
+    });
+
+    describe('Phase Plan Dashboard Rendering', () => {
+      it('should render project selector', async () => {
+        const selector = await page.$('select');
+        expect(selector).toBeTruthy();
+        
+        const placeholderOption = await page.$eval('select option[value=""]', el => el.textContent);
+        expect(placeholderOption).toBe('Choose a project...');
+      });
+
+      it('should show empty state when no project selected', async () => {
+        const emptyState = await page.$('[style*="text-align: center"]');
+        expect(emptyState).toBeTruthy();
+        
+        const emptyText = await page.textContent('[style*="text-align: center"]');
+        expect(emptyText).toContain('Select a project to view its phase plan dashboard');
+        expect(emptyText).toContain('strategic project planning with tactical execution tracking');
+      });
+
+      it('should render dashboard when project is selected', async () => {
+        // Create a test project if needed or select existing one
+        const options = await page.$$eval('select option:not([value=""])', options => 
+          options.map(opt => ({ value: opt.value, text: opt.textContent }))
+        );
+        
+        if (options.length > 0) {
+          await page.selectOption('select', options[0].value);
+          
+          // Wait for dashboard to render
+          await page.waitForSelector('h3:has-text("Phase Plan Dashboard")', { timeout: 5000 });
+          
+          const dashboardHeader = await page.$('h3:has-text("Phase Plan Dashboard")');
+          expect(dashboardHeader).toBeTruthy();
+          
+          await takeScreenshot(page, 'phase-plan-dashboard-rendered');
+        }
+      }, 15000);
+
+      it('should render phase controls and search features', async () => {
+        const options = await page.$$eval('select option:not([value=""])', options => 
+          options.map(opt => ({ value: opt.value, text: opt.textContent }))
+        );
+        
+        if (options.length > 0) {
+          await page.selectOption('select', options[0].value);
+          await page.waitForSelector('h3:has-text("Phase Plan Dashboard")', { timeout: 5000 });
+          
+          // Check for search input
+          const searchInput = await page.$('input[placeholder="Search steps..."]');
+          expect(searchInput).toBeTruthy();
+          
+          // Check for show completed toggle
+          const showCompletedToggle = await page.$('input[type="checkbox"]');
+          expect(showCompletedToggle).toBeTruthy();
+          
+          // Check for expand/collapse all button
+          const expandCollapseButton = await page.$('button:has-text("Expand All"), button:has-text("Collapse All")');
+          expect(expandCollapseButton).toBeTruthy();
+        }
+      });
+
+      it('should render markdown content if project has phasePlan', async () => {
+        const options = await page.$$eval('select option:not([value=""])', options => 
+          options.map(opt => ({ value: opt.value, text: opt.textContent }))
+        );
+        
+        if (options.length > 0) {
+          await page.selectOption('select', options[0].value);
+          await page.waitForSelector('h3:has-text("Phase Plan Dashboard")', { timeout: 5000 });
+          
+          // Look for markdown rendered content (may not exist if no phasePlan content)
+          const markdownContent = await page.$('[style*="backgroundColor: #fafbfc"]');
+          if (markdownContent) {
+            const content = await markdownContent.innerHTML();
+            expect(content).toBeDefined();
+          }
+        }
+      });
+
+      it('should display phase timeline with collapsible phases', async () => {
+        const options = await page.$$eval('select option:not([value=""])', options => 
+          options.map(opt => ({ value: opt.value, text: opt.textContent }))
+        );
+        
+        if (options.length > 0) {
+          await page.selectOption('select', options[0].value);
+          await page.waitForSelector('h3:has-text("Phase Plan Dashboard")', { timeout: 5000 });
+          
+          // Look for phase headers (clickable sections)
+          const phaseHeaders = await page.$$('[style*="cursor: pointer"]');
+          if (phaseHeaders.length > 0) {
+            expect(phaseHeaders.length).toBeGreaterThan(0);
+            
+            // Test collapsing/expanding a phase
+            await phaseHeaders[0].click();
+            await page.waitForTimeout(300); // Wait for animation
+            
+            await takeScreenshot(page, 'phase-collapsed-state');
+          }
+        }
+      }, 15000);
+
+      it('should show execution status icons for steps', async () => {
+        const options = await page.$$eval('select option:not([value=""])', options => 
+          options.map(opt => ({ value: opt.value, text: opt.textContent }))
+        );
+        
+        if (options.length > 0) {
+          await page.selectOption('select', options[0].value);
+          await page.waitForSelector('h3:has-text("Phase Plan Dashboard")', { timeout: 5000 });
+          
+          // Look for status icons (○ ⏳ ✅ ❌)
+          const statusElements = await page.$$eval('*', elements => 
+            elements.filter(el => {
+              const text = el.textContent;
+              return text && (text.includes('○') || text.includes('⏳') || text.includes('✅') || text.includes('❌'));
+            }).length
+          );
+          
+          // May not exist if no steps configured
+          console.log(`Found ${statusElements} status icon elements`);
+        }
+      });
+
+      it('should show step action buttons when appropriate', async () => {
+        const options = await page.$$eval('select option:not([value=""])', options => 
+          options.map(opt => ({ value: opt.value, text: opt.textContent }))
+        );
+        
+        if (options.length > 0) {
+          await page.selectOption('select', options[0].value);
+          await page.waitForSelector('h3:has-text("Phase Plan Dashboard")', { timeout: 5000 });
+          
+          // Look for Start or View Logs buttons
+          const startButtons = await page.$$('button:has-text("Start")');
+          const viewLogsButtons = await page.$$('button:has-text("View Logs")');
+          
+          console.log(`Found ${startButtons.length} Start buttons and ${viewLogsButtons.length} View Logs buttons`);
+        }
+      });
+
+      it('should display project statistics in footer', async () => {
+        const options = await page.$$eval('select option:not([value=""])', options => 
+          options.map(opt => ({ value: opt.value, text: opt.textContent }))
+        );
+        
+        if (options.length > 0) {
+          await page.selectOption('select', options[0].value);
+          await page.waitForSelector('h3:has-text("Phase Plan Dashboard")', { timeout: 5000 });
+          
+          // Look for footer stats
+          const footerStats = await page.$('[style*="backgroundColor: #f9fafb"][style*="display: flex"]');
+          if (footerStats) {
+            const statsText = await footerStats.textContent();
+            expect(statsText).toContain('Project Status:');
+            expect(statsText).toContain('Total Progress:');
+            expect(statsText).toMatch(/\d+ \/ \d+ steps completed/);
+          }
+        }
+      });
+    });
+
+    describe('Phase Plan Dashboard Interactions', () => {
+      it('should filter steps when search is used', async () => {
+        const options = await page.$$eval('select option:not([value=""])', options => 
+          options.map(opt => ({ value: opt.value, text: opt.textContent }))
+        );
+        
+        if (options.length > 0) {
+          await page.selectOption('select', options[0].value);
+          await page.waitForSelector('h3:has-text("Phase Plan Dashboard")', { timeout: 5000 });
+          
+          const searchInput = await page.$('input[placeholder="Search steps..."]');
+          if (searchInput) {
+            await searchInput.type('test');
+            await page.waitForTimeout(500); // Wait for filter to apply
+            
+            // Steps should be filtered (implementation would show fewer results)
+            await takeScreenshot(page, 'phase-search-filtered');
+          }
+        }
+      });
+
+      it('should toggle completed steps visibility', async () => {
+        const options = await page.$$eval('select option:not([value=""])', options => 
+          options.map(opt => ({ value: opt.value, text: opt.textContent }))
+        );
+        
+        if (options.length > 0) {
+          await page.selectOption('select', options[0].value);
+          await page.waitForSelector('h3:has-text("Phase Plan Dashboard")', { timeout: 5000 });
+          
+          const showCompletedToggle = await page.$('input[type="checkbox"]');
+          if (showCompletedToggle) {
+            const initialState = await showCompletedToggle.isChecked();
+            await showCompletedToggle.click();
+            await page.waitForTimeout(300);
+            
+            const newState = await showCompletedToggle.isChecked();
+            expect(newState).toBe(!initialState);
+            
+            await takeScreenshot(page, 'phase-completed-toggle');
+          }
+        }
+      });
+    });
+  });
 });

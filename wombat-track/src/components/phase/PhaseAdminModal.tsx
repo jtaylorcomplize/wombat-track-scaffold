@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Project, Phase, PhaseStep } from '../../types/phase';
-import { PhasePlanEditor } from '../project/PhasePlanEditor';
+import { PhasePlanDashboard } from '../project/PhasePlanDashboard';
 
 interface PhaseAdminModalProps {
   isOpen: boolean;
@@ -1369,17 +1369,14 @@ const PhasePlanTab: React.FC<{
   const activeProjects = projects.filter(p => !p.archived);
   const selectedProject = projects.find(p => p.id === selectedProjectId);
 
-  const handlePhasePlanSave = (content: string) => {
-    if (!selectedProjectId) return;
+  const handleStartStep = (stepId: string) => {
+    console.log(`[WT] Starting step execution: ${stepId}`);
+    // TODO: Implement step execution start logic
+  };
 
-    const updatedProjects = projects.map(project => 
-      project.id === selectedProjectId 
-        ? { ...project, phasePlan: content, updatedAt: new Date().toISOString() }
-        : project
-    );
-
-    onProjectsUpdate(updatedProjects);
-    console.log(`[WT] Phase plan saved for project: ${selectedProject?.name}`);
+  const handleViewLogs = (executionId: string) => {
+    console.log(`[WT] Viewing logs for execution: ${executionId}`);
+    // TODO: Implement log viewing logic
   };
 
   return (
@@ -1410,11 +1407,11 @@ const PhasePlanTab: React.FC<{
 
       {selectedProject ? (
         <div>
-          <PhasePlanEditor
-            projectId={selectedProject.id}
-            projectName={selectedProject.name}
-            initialContent={selectedProject.phasePlan || ''}
-            onSave={handlePhasePlanSave}
+          <PhasePlanDashboard
+            project={selectedProject}
+            onStartStep={handleStartStep}
+            onViewLogs={handleViewLogs}
+            readOnly={false}
           />
         </div>
       ) : (
@@ -1427,9 +1424,9 @@ const PhasePlanTab: React.FC<{
           border: '1px solid #e5e7eb'
         }}>
           <div style={{ fontSize: '18px', marginBottom: '8px' }}>📑</div>
-          <div style={{ fontSize: '16px', marginBottom: '4px' }}>Select a project to edit its phase plan</div>
+          <div style={{ fontSize: '16px', marginBottom: '4px' }}>Select a project to view its phase plan dashboard</div>
           <div style={{ fontSize: '14px' }}>
-            Use this tab to create detailed project documentation, goals, and phase breakdowns.
+            This dashboard combines strategic project planning with tactical execution tracking.
           </div>
         </div>
       )}
