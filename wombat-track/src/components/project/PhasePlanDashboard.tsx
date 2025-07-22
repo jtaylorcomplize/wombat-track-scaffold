@@ -3,10 +3,12 @@ import type { Project, Phase, PhaseStep } from '../../types/phase';
 import type { TemplateExecution } from '../../types/template';
 import { fetchExecutionLogs } from '../../api/executionLogAPI';
 import { triggerTemplate } from '../../lib/templateDispatcher';
+import { PhaseMetadataModal } from '../phase/PhaseMetadataModal';
 
 interface ProjectDashboardProps {
   project: Project;
   onStepUpdate?: (projectId: string, phaseId: string, stepId: string, updates: Partial<PhaseStep>) => void;
+  onPhaseUpdate?: (projectId: string, phaseId: string, updates: Partial<Phase>) => void;
   onViewLogs?: (executionId: string) => void;
   readOnly?: boolean;
 }
@@ -15,6 +17,7 @@ interface ProjectDashboardProps {
 export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
   project,
   onStepUpdate,
+  onPhaseUpdate,
   onViewLogs,
   readOnly = false
 }) => {
@@ -24,6 +27,10 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
   const [showCompleted, setShowCompleted] = useState(true);
   const [searchFilter, setSearchFilter] = useState('');
   const [isProjectInfoExpanded, setIsProjectInfoExpanded] = useState(false);
+  const [editingPhase, setEditingPhase] = useState<Phase | null>(null);
+  const [filterType, setFilterType] = useState<string>('all');
+  const [filterOwner] = useState<string>('all');
+  const [filterRAG, setFilterRAG] = useState<string>('all');
 
   // Initialize expanded phases on mount
   useEffect(() => {
@@ -83,9 +90,7 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
   };
 
   const getStatusIcon = (step: PhaseStep) => {
-    const status = executionStatus[step.id]?.status || step.status;
-    
-    switch (status) {
+    switch (step.status) {
       case 'not_started': return '○';
       case 'in_progress': return '⏳';
       case 'complete': return '✅';
@@ -95,9 +100,7 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
   };
 
   const getStatusColor = (step: PhaseStep) => {
-    const status = executionStatus[step.id]?.status || step.status;
-    
-    switch (status) {
+    switch (step.status) {
       case 'not_started': return '#9ca3af';
       case 'in_progress': return '#f59e0b';
       case 'complete': return '#10b981';
@@ -188,12 +191,43 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
     return phase.steps.filter(step => {
       const matchesSearch = !searchFilter || 
         step.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
-        step.description?.toLowerCase().includes(searchFilter.toLowerCase());
+        step.description?.toLowerCase().includes(searchFilter.toLowerCase()) ||
+        step.stepInstruction?.toLowerCase().includes(searchFilter.toLowerCase());
       
       const matchesVisibility = showCompleted || step.status !== 'complete';
       
       return matchesSearch && matchesVisibility;
     });
+  };
+
+  const filteredPhases = () => {
+    return project.phases.filter(phase => {
+      const matchesType = filterType === 'all' || phase.phaseType === filterType;
+      const matchesOwner = filterOwner === 'all' || phase.phaseOwner === filterOwner;
+      const matchesRAG = filterRAG === 'all' || phase.ragStatus === filterRAG;
+      
+      return matchesType && matchesOwner && matchesRAG;
+    });
+  };
+
+  const getRagIcon = (status?: string) => {
+    switch (status) {
+      case 'red': return '🔴';
+      case 'amber': return '🟡';
+      case 'green': return '🟢';
+      case 'blue': return '🔵';
+      default: return '';
+    }
+  };
+
+  const handlePhaseEdit = (phase: Phase) => {
+    setEditingPhase(phase);
+  };
+
+  const handlePhaseUpdate = (phaseId: string, updates: Partial<Phase>) => {
+    if (onPhaseUpdate) {
+      onPhaseUpdate(project.id, phaseId, updates);
+    }
   };
 
   return (
@@ -217,7 +251,7 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
         </div>
         
         {/* Controls */}
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
           <input
             type="text"
             placeholder="Search steps..."
@@ -231,6 +265,46 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
               width: '150px'
             }}
           />
+          
+          {/* Filter dropdowns */}
+          <select
+            value={filterRAG}
+            onChange={(e) => setFilterRAG(e.target.value)}
+            style={{
+              padding: '4px 8px',
+              border: '1px solid #d1d5db',
+              borderRadius: '4px',
+              fontSize: '12px',
+              backgroundColor: 'white'
+            }}
+          >
+            <option value="all">All RAG</option>
+            <option value="red">🔴 Red</option>
+            <option value="amber">🟡 Amber</option>
+            <option value="green">🟢 Green</option>
+            <option value="blue">🔵 Blue</option>
+          </select>
+
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            style={{
+              padding: '4px 8px',
+              border: '1px solid #d1d5db',
+              borderRadius: '4px',
+              fontSize: '12px',
+              backgroundColor: 'white'
+            }}
+          >
+            <option value="all">All Types</option>
+            <option value="PlatformOps">PlatformOps</option>
+            <option value="Governance">Governance</option>
+            <option value="Console">Console</option>
+            <option value="Infrastructure">Infrastructure</option>
+            <option value="Development">Development</option>
+            <option value="Testing">Testing</option>
+            <option value="Other">Other</option>
+          </select>
           
           <label style={{ fontSize: '12px', color: '#4b5563', display: 'flex', alignItems: 'center', gap: '4px' }}>
             <input
@@ -378,7 +452,7 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
 
       {/* Phases Timeline */}
       <div style={{ marginTop: '16px' }}>
-        {project.phases
+        {filteredPhases()
           .sort((a, b) => a.order - b.order)
           .map((phase, phaseIndex) => (
           <div
@@ -412,6 +486,31 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
                   <span style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                     {phase.name}
                   </span>
+                  {phase.ragStatus && (
+                    <span style={{ fontSize: '14px' }}>{getRagIcon(phase.ragStatus)}</span>
+                  )}
+                  {phase.phaseType && (
+                    <div style={{ 
+                      fontSize: '10px', 
+                      backgroundColor: '#e0e7ff', 
+                      padding: '2px 6px', 
+                      borderRadius: '10px',
+                      color: '#4338ca'
+                    }}>
+                      {phase.phaseType}
+                    </div>
+                  )}
+                  {phase.phaseOwner && (
+                    <div style={{ 
+                      fontSize: '10px', 
+                      backgroundColor: '#fef3c7', 
+                      padding: '2px 6px', 
+                      borderRadius: '10px',
+                      color: '#92400e'
+                    }}>
+                      👤 {phase.phaseOwner}
+                    </div>
+                  )}
                   <div style={{ 
                     fontSize: '11px', 
                     backgroundColor: '#e5e7eb', 
@@ -429,8 +528,29 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
                 )}
               </div>
               
-              <div style={{ fontSize: '12px', color: '#9ca3af' }}>
-                {expandedPhases.has(phase.id) ? '▲' : '▼'}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {!readOnly && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePhaseEdit(phase);
+                    }}
+                    style={{
+                      padding: '4px 8px',
+                      backgroundColor: 'transparent',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '4px',
+                      fontSize: '11px',
+                      cursor: 'pointer',
+                      color: '#6b7280'
+                    }}
+                  >
+                    Edit
+                  </button>
+                )}
+                <div style={{ fontSize: '12px', color: '#9ca3af' }}>
+                  {expandedPhases.has(phase.id) ? '▲' : '▼'}
+                </div>
               </div>
             </div>
 
@@ -513,6 +633,18 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
                                 }}>
                                   {step.name}
                                 </span>
+                                {step.isSideQuest && (
+                                  <span style={{
+                                    fontSize: '10px',
+                                    padding: '2px 4px',
+                                    borderRadius: '3px',
+                                    backgroundColor: '#fef3c7',
+                                    color: '#92400e',
+                                    fontWeight: '600'
+                                  }}>
+                                    🎯 Side Quest
+                                  </span>
+                                )}
                                 <span 
                                   data-testid={`step-status-${step.id}`}
                                   style={{
@@ -547,6 +679,20 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
                                 }}>
                                   {step.description}
                                 </p>
+                              )}
+
+                              {step.stepInstruction && (
+                                <div style={{ 
+                                  fontSize: '12px', 
+                                  color: '#4b5563',
+                                  backgroundColor: '#f3f4f6',
+                                  padding: '6px 10px',
+                                  borderRadius: '4px',
+                                  marginTop: '4px',
+                                  borderLeft: '3px solid #3b82f6'
+                                }}>
+                                  <strong>Instruction:</strong> {step.stepInstruction}
+                                </div>
                               )}
 
                               {/* Execution Info */}
@@ -678,6 +824,14 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
           </strong>
         </div>
       </div>
+
+      {/* Phase Metadata Modal */}
+      <PhaseMetadataModal
+        isOpen={!!editingPhase}
+        onClose={() => setEditingPhase(null)}
+        phase={editingPhase}
+        onUpdate={handlePhaseUpdate}
+      />
     </div>
   );
 };

@@ -97,6 +97,7 @@ export const WombatConsole: React.FC<WombatConsoleProps> = ({ onHealthCheck }) =
   const [showExecutionHistory, setShowExecutionHistory] = useState(false);
   const [showPhaseTracker, setShowPhaseTracker] = useState(false);
   const [showPhaseAdmin, setShowPhaseAdmin] = useState(false);
+  const [showIntegrations, setShowIntegrations] = useState(true);
   const [projects, setProjects] = useState<Project[]>(mockProjects);
   const [activeProjectId, setActiveProjectId] = useState<string>('');
   const [showArchivedProjects, setShowArchivedProjects] = useState(false);
@@ -303,126 +304,163 @@ export const WombatConsole: React.FC<WombatConsoleProps> = ({ onHealthCheck }) =
         </p>
       </div>
 
-      {/* Summary Row */}
-      <div 
-        data-testid="status-rollup"
-        style={{ 
-          backgroundColor: '#f8fafc',
-          border: '1px solid #e2e8f0',
-          borderRadius: '12px',
-          padding: '20px',
-          marginBottom: '24px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}
-      >
-        <div>
-          <div style={{ fontSize: '24px', fontWeight: '700', color: '#1f2937' }}>
-            {stats.working} of {stats.total} integrations operational
+      {/* Integration Health Section */}
+      <div style={{ marginBottom: '32px' }}>
+        <div 
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            marginBottom: '16px',
+            padding: '16px',
+            backgroundColor: '#f8fafc',
+            border: '1px solid #e2e8f0',
+            borderRadius: '8px'
+          }}
+        >
+          <div 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '12px',
+              cursor: 'pointer',
+              flex: 1
+            }}
+            onClick={() => setShowIntegrations(!showIntegrations)}
+            data-testid="integrations-toggle"
+          >
+            <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#1f2937', margin: 0 }}>
+              🏥 Integration Health
+            </h2>
+            <span style={{ 
+              backgroundColor: stats.percentage >= 80 ? '#15803d' : stats.percentage >= 60 ? '#d97706' : '#dc2626',
+              color: 'white', 
+              padding: '3px 10px', 
+              borderRadius: '12px', 
+              fontSize: '14px',
+              fontWeight: '700'
+            }}>
+              {stats.percentage}%
+            </span>
+            <span style={{ 
+              backgroundColor: '#6b7280', 
+              color: 'white', 
+              padding: '2px 8px', 
+              borderRadius: '12px', 
+              fontSize: '12px',
+              fontWeight: '600'
+            }}>
+              {stats.working}/{stats.total} operational
+            </span>
+            <div style={{ 
+              fontSize: '18px', 
+              transform: showIntegrations ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s',
+              marginLeft: '8px'
+            }}>
+              ⌄
+            </div>
           </div>
-          <div style={{ color: '#6b7280', fontSize: '14px' }}>
-            {stats.percentage}% system health
+          
+          <button 
+            data-testid="refresh-button"
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            style={{ 
+              padding: '8px 16px', 
+              backgroundColor: isRefreshing ? '#9ca3af' : '#3b82f6', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '6px',
+              cursor: isRefreshing ? 'not-allowed' : 'pointer',
+              fontSize: '14px',
+              fontWeight: '500'
+            }}
+          >
+            {isRefreshing ? 'Refreshing...' : 'Refresh All'}
+          </button>
+        </div>
+
+        {showIntegrations && (
+          <div data-testid="integrations-content" style={{ marginBottom: '32px' }}>
+            {/* Filters */}
+            <div style={{ 
+              display: 'flex', 
+              gap: '16px', 
+              marginBottom: '24px', 
+              alignItems: 'center',
+              flexWrap: 'wrap' as const,
+              padding: '16px',
+              backgroundColor: '#ffffff',
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px'
+            }}>
+              <select 
+                data-testid="status-filter"
+                value={statusFilter} 
+                onChange={(e) => setStatusFilter(e.target.value)}
+                style={{ 
+                  padding: '8px 12px', 
+                  border: '1px solid #d1d5db', 
+                  borderRadius: '6px',
+                  backgroundColor: 'white',
+                  fontSize: '14px'
+                }}
+              >
+                <option value="all">All Status</option>
+                <option value={IntegrationStatus.Working}>Working</option>
+                <option value={IntegrationStatus.Degraded}>Degraded</option>
+                <option value={IntegrationStatus.Broken}>Broken</option>
+              </select>
+
+              <select 
+                data-testid="category-filter"
+                value={categoryFilter} 
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                style={{ 
+                  padding: '8px 12px', 
+                  border: '1px solid #d1d5db', 
+                  borderRadius: '6px',
+                  backgroundColor: 'white',
+                  fontSize: '14px'
+                }}
+              >
+                <option value="all">All Categories</option>
+                {Object.values(IntegrationCategory).map(category => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Integration List */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {filteredIntegrations.map((integration) => (
+                <IntegrationCard
+                  key={integration.name}
+                  integration={integration}
+                  onHealthCheck={runHealthCheck}
+                  onDispatch={handleDispatch}
+                  dispatchStatus={dispatchStatus[integration.name] || DispatchStatus.Idle}
+                />
+              ))}
+            </div>
+
+            {filteredIntegrations.length === 0 && (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '60px 20px', 
+                color: '#6b7280',
+                backgroundColor: '#f9fafb',
+                borderRadius: '8px',
+                border: '1px solid #e5e7eb'
+              }}>
+                <div style={{ fontSize: '18px', marginBottom: '8px' }}>No integrations found</div>
+                <div style={{ fontSize: '14px' }}>Try adjusting your filters to see more results.</div>
+              </div>
+            )}
           </div>
-        </div>
-        <div style={{ 
-          fontSize: '48px', 
-          fontWeight: '700',
-          color: stats.percentage >= 80 ? '#15803d' : stats.percentage >= 60 ? '#d97706' : '#dc2626'
-        }}>
-          {stats.percentage}%
-        </div>
+        )}
       </div>
-
-      {/* Filters */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '16px', 
-        marginBottom: '24px', 
-        alignItems: 'center',
-        flexWrap: 'wrap' as const
-      }}>
-        <select 
-          data-testid="status-filter"
-          value={statusFilter} 
-          onChange={(e) => setStatusFilter(e.target.value)}
-          style={{ 
-            padding: '8px 12px', 
-            border: '1px solid #d1d5db', 
-            borderRadius: '6px',
-            backgroundColor: 'white',
-            fontSize: '14px'
-          }}
-        >
-          <option value="all">All Status</option>
-          <option value={IntegrationStatus.Working}>Working</option>
-          <option value={IntegrationStatus.Degraded}>Degraded</option>
-          <option value={IntegrationStatus.Broken}>Broken</option>
-        </select>
-
-        <select 
-          data-testid="category-filter"
-          value={categoryFilter} 
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          style={{ 
-            padding: '8px 12px', 
-            border: '1px solid #d1d5db', 
-            borderRadius: '6px',
-            backgroundColor: 'white',
-            fontSize: '14px'
-          }}
-        >
-          <option value="all">All Categories</option>
-          {Object.values(IntegrationCategory).map(category => (
-            <option key={category} value={category}>{category}</option>
-          ))}
-        </select>
-
-        <button 
-          data-testid="refresh-button"
-          onClick={handleRefresh}
-          disabled={isRefreshing}
-          style={{ 
-            padding: '8px 16px', 
-            backgroundColor: isRefreshing ? '#9ca3af' : '#3b82f6', 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: '6px',
-            cursor: isRefreshing ? 'not-allowed' : 'pointer',
-            fontSize: '14px',
-            fontWeight: '500'
-          }}
-        >
-          {isRefreshing ? 'Refreshing...' : 'Refresh All'}
-        </button>
-      </div>
-
-      {/* Integration List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {filteredIntegrations.map((integration) => (
-          <IntegrationCard
-            key={integration.name}
-            integration={integration}
-            onHealthCheck={runHealthCheck}
-            onDispatch={handleDispatch}
-            dispatchStatus={dispatchStatus[integration.name] || DispatchStatus.Idle}
-          />
-        ))}
-      </div>
-
-      {filteredIntegrations.length === 0 && (
-        <div style={{ 
-          textAlign: 'center', 
-          padding: '60px 20px', 
-          color: '#6b7280',
-          backgroundColor: '#f9fafb',
-          borderRadius: '8px',
-          border: '1px solid #e5e7eb'
-        }}>
-          <div style={{ fontSize: '18px', marginBottom: '8px' }}>No integrations found</div>
-          <div style={{ fontSize: '14px' }}>Try adjusting your filters to see more results.</div>
-        </div>
-      )}
 
       {/* Phase Tracker Section */}
       <div style={{ marginTop: '32px' }}>

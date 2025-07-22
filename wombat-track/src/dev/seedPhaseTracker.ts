@@ -168,6 +168,28 @@ We use Markdown to author human-readable documentation. We use Puppeteer to auto
 - Execution logs persist via API
 - Statuses reflect real outcomes, not assumptions
 
+## 🚀 WT-3.x: Platform Evolution & Governance
+
+**WT-3.x** represents the next evolution of Wombat Track, focusing on platform maturity, testing infrastructure, and governance automation.
+
+### 🧪 WT-3.1: Advanced Testing Infrastructure
+- Puppeteer-based comprehensive test suite
+- GitHub Actions integration with artifact storage
+- Coverage thresholds and failure visibility
+- RAG-style test result dashboard
+
+### 🔄 WT-3.2: CI/CD Pipeline Migration
+- Complete CI/CD automation with GitHub Actions
+- Automated deployment with health-check rollback
+- Governance logging for all deployments
+- Build outcome visibility and developer feedback
+
+### 🛡️ WT-3.3: MetaValidator System
+- Automated governance and structure validation
+- Detection of missing metadata and anti-patterns
+- CI/CD integration with configurable strictness
+- Intelligent fix suggestions and task generation
+
 ## 🔗 Resources
 
 - Canvas Source: \`/meta-platform-dashboard\`
@@ -183,6 +205,9 @@ We use Markdown to author human-readable documentation. We use Puppeteer to auto
       name: 'WT-2.0: Design & Planning',
       description: 'Initial dashboard finalization and Git workflow setup',
       order: 1,
+      phaseType: 'Governance',
+      phaseOwner: 'jackson',
+      ragStatus: 'green',
       steps: [
         {
           id: 'step-wt-2.0-git-setup',
@@ -217,6 +242,8 @@ We use Markdown to author human-readable documentation. We use Puppeteer to auto
           name: 'Fix UI test timeout issues',
           status: 'complete',
           description: 'Resolve npm run test:ui hanging and navigation issues',
+          stepInstruction: 'Investigate test runner configuration and fix timeout issues in Puppeteer setup',
+          isSideQuest: true,
           templateId: 'test-repair-001',
           startedAt: '2025-01-15T11:00:00Z',
           completedAt: '2025-01-15T12:00:00Z'
@@ -229,6 +256,9 @@ We use Markdown to author human-readable documentation. We use Puppeteer to auto
       name: 'WT-2.1: Dispatch Button UI',
       description: 'Add dispatch triggers with state management for integration orchestration',
       order: 2,
+      phaseType: 'Development',
+      phaseOwner: 'jackson',
+      ragStatus: 'green',
       steps: [
         {
           id: 'step-wt-2.1-dispatch-types',
@@ -339,6 +369,9 @@ We use Markdown to author human-readable documentation. We use Puppeteer to auto
       name: 'WT-2.3: Real Template Execution',
       description: 'Replace simulation with real template execution system',
       order: 4,
+      phaseType: 'PlatformOps',
+      phaseOwner: 'sarah',
+      ragStatus: 'green',
       steps: [
         {
           id: 'step-wt-2.3-dispatcher-module',
@@ -453,6 +486,9 @@ We use Markdown to author human-readable documentation. We use Puppeteer to auto
       name: 'WT-2.5: Persist Execution Logs',
       description: 'Create TemplateExecution history with API persistence and UI display',
       order: 6,
+      phaseType: 'Infrastructure',
+      phaseOwner: 'mike',
+      ragStatus: 'amber',
       steps: [
         {
           id: 'step-wt-2.5-execution-types',
@@ -498,6 +534,8 @@ We use Markdown to author human-readable documentation. We use Puppeteer to auto
           name: 'Add comprehensive execution history tests',
           status: 'complete',
           description: 'Test logging, display, and API persistence',
+          stepInstruction: 'Create test suite covering all execution lifecycle stages and UI updates',
+          isSideQuest: true,
           templateId: 'test-execution-history-001',
           startedAt: '2025-01-20T15:30:00Z',
           completedAt: '2025-01-20T16:45:00Z'
@@ -585,6 +623,9 @@ We use Markdown to author human-readable documentation. We use Puppeteer to auto
       name: 'WT-2.7: Phase Tracker Admin System',
       description: 'Complete CRUD management for Projects, Phases, and PhaseSteps',
       order: 8,
+      phaseType: 'Console',
+      phaseOwner: 'jackson',
+      ragStatus: 'green',
       steps: [
         {
           id: 'step-wt-2.7-admin-modal',
@@ -795,6 +836,198 @@ This transformation makes the Phase Plan tab the central governance hub where te
           executionId: 'exec_finalization_001',
           startedAt: '2025-07-21T16:00:00Z',
           completedAt: '2025-07-21T17:00:00Z'
+        }
+      ]
+    },
+    {
+      id: 'phase-wt-3.1',
+      projectId: 'proj-wt-2x-metaplatform',
+      name: 'WT-3.1: Advanced Testing Infrastructure',
+      description: 'Implement a reliable, CI-integrated testing framework for Wombat Track using Puppeteer and GitHub Actions',
+      order: 11,
+      phaseType: 'PlatformOps',
+      phaseOwner: 'jackson',
+      ragStatus: 'amber',
+      summary: `**WT-3.1** establishes a comprehensive testing infrastructure with Puppeteer and GitHub Actions integration.
+
+### Objectives
+- Route-level UI tests for major features
+- Test automation in CI pipeline  
+- Visual and log-based failure diagnosis
+- Defined minimum coverage standards
+
+### Key Deliverables
+- Puppeteer-based test suite for core features
+- GitHub Action test runner with artifact storage
+- Coverage thresholds and failure logging
+- Test results visibility in UI dashboard`,
+      steps: [
+        {
+          id: 'step-wt-3.1-1',
+          phaseId: 'phase-wt-3.1',
+          name: 'Implement Puppeteer-based test suite',
+          status: 'in_progress',
+          description: 'Add core test files for Phase Tracker, Dispatcher, and Plan Dashboard',
+          stepInstruction: 'Add core test files for: Phase Tracker, Dispatcher, Plan Dashboard. Ensure cross-route testability.',
+          isSideQuest: false,
+          startedAt: '2025-07-22T09:00:00Z'
+        },
+        {
+          id: 'step-wt-3.1-2',
+          phaseId: 'phase-wt-3.1',
+          name: 'Integrate GitHub Action test runner',
+          status: 'not_started',
+          description: 'Create reusable test job with CI pipeline integration',
+          stepInstruction: 'Create reusable test job (`puppeteer.yml`). Configure test step in CI pipeline. Store logs as GitHub artifacts.',
+          isSideQuest: false
+        },
+        {
+          id: 'step-wt-3.1-3',
+          phaseId: 'phase-wt-3.1',
+          name: 'Standardise coverage thresholds',
+          status: 'not_started',
+          description: 'Define coverage percentage thresholds by route',
+          stepInstruction: 'Define % thresholds by route. Fail build if thresholds not met. Log skipped tests and flakiness.',
+          isSideQuest: false
+        },
+        {
+          id: 'step-wt-3.1-4',
+          phaseId: 'phase-wt-3.1',
+          name: 'Add failure logging + visibility',
+          status: 'not_started',
+          description: 'Push failed tests to GovernanceLog with UI dashboard integration',
+          stepInstruction: 'Push failed tests to GovernanceLog. Enable test results in UI dashboard (RAG-style).',
+          isSideQuest: false
+        }
+      ]
+    },
+    {
+      id: 'phase-wt-3.2',
+      projectId: 'proj-wt-2x-metaplatform',
+      name: 'WT-3.2: CI/CD Pipeline Migration',
+      description: 'Establish a robust CI/CD system for code validation, deployment, and rollback across Wombat Track',
+      order: 12,
+      phaseType: 'PlatformOps',
+      phaseOwner: 'jackson',
+      ragStatus: 'green',
+      summary: `**WT-3.2** creates a comprehensive CI/CD pipeline with full governance and log integration.
+
+### Objectives
+- CI config with lint/test/deploy checks
+- Rollback and deploy hooks
+- Audit logs linked to deploys
+- Developer feedback on build outcomes
+
+### Implementation
+- GitHub Actions workflows for CI/CD
+- Automated deployment on main branch
+- Health check based rollback system
+- Governance logging for all deployments`,
+      steps: [
+        {
+          id: 'step-wt-3.2-1',
+          phaseId: 'phase-wt-3.2',
+          name: 'Create CI Pipeline',
+          status: 'complete',
+          description: 'Implement CI workflow with comprehensive checks',
+          stepInstruction: 'Use `ci.yml` + `reusable-deploy.yml` templates. Include linting, type checking, build, and test.',
+          isSideQuest: false,
+          startedAt: '2025-07-15T09:00:00Z',
+          completedAt: '2025-07-15T12:00:00Z'
+        },
+        {
+          id: 'step-wt-3.2-2',
+          phaseId: 'phase-wt-3.2',
+          name: 'Configure Deploy & Rollback',
+          status: 'complete',
+          description: 'Set up automated deployment with rollback capabilities',
+          stepInstruction: 'Trigger deploy on merge to `main`. Rollback if health checks fail. Document logic in GovernanceLog.',
+          isSideQuest: false,
+          startedAt: '2025-07-15T13:00:00Z',
+          completedAt: '2025-07-15T16:00:00Z'
+        },
+        {
+          id: 'step-wt-3.2-3',
+          phaseId: 'phase-wt-3.2',
+          name: 'Add structured governance hooks',
+          status: 'complete',
+          description: 'Implement automated governance logging for deployments',
+          stepInstruction: 'Auto-log deploys in `governance.jsonl`. Attach Phase ID and outcome summary.',
+          isSideQuest: false,
+          startedAt: '2025-07-16T09:00:00Z',
+          completedAt: '2025-07-16T11:00:00Z'
+        },
+        {
+          id: 'step-wt-3.2-4',
+          phaseId: 'phase-wt-3.2',
+          name: 'Integrate RAG signals in dashboard',
+          status: 'complete',
+          description: 'Add deployment health indicators to dashboard',
+          stepInstruction: 'Post-deploy, show health as Red/Amber/Green. Include coverage and outcome stats.',
+          isSideQuest: false,
+          startedAt: '2025-07-16T13:00:00Z',
+          completedAt: '2025-07-16T15:00:00Z'
+        }
+      ]
+    },
+    {
+      id: 'phase-wt-3.3',
+      projectId: 'proj-wt-2x-metaplatform',
+      name: 'WT-3.3: MetaValidator System',
+      description: 'Create a governance-aware code and phase validator that enforces structural integrity',
+      order: 13,
+      phaseType: 'Governance',
+      phaseOwner: 'jackson',
+      ragStatus: 'blue',
+      summary: `**WT-3.3** introduces the MetaValidator system for automated governance and structure validation.
+
+### Objectives
+- Validator CLI or GitHub CI integration
+- Detection of missing phase metadata, broken structures
+- RAG classification for governance readiness
+- Optional: create tasks on validation failure
+
+### Components
+- WTMetaValidator.ts core engine
+- Governance rules and validations
+- CI/CD hook integration
+- Failure logging and fix suggestions`,
+      steps: [
+        {
+          id: 'step-wt-3.3-1',
+          phaseId: 'phase-wt-3.3',
+          name: 'Build Validator Engine',
+          status: 'not_started',
+          description: 'Create core validation engine for project structures',
+          stepInstruction: 'Create `WTMetaValidator.ts`. Scan project folders, markdown, and phase structure.',
+          isSideQuest: false
+        },
+        {
+          id: 'step-wt-3.3-2',
+          phaseId: 'phase-wt-3.3',
+          name: 'Add Governance Rules',
+          status: 'not_started',
+          description: 'Implement validation rules for governance compliance',
+          stepInstruction: 'Rules: markdown required, step count > 1, RAG tag present. Missing items trigger warnings or task suggestions.',
+          isSideQuest: false
+        },
+        {
+          id: 'step-wt-3.3-3',
+          phaseId: 'phase-wt-3.3',
+          name: 'CI/CD Hook or Git Hook Integration',
+          status: 'not_started',
+          description: 'Integrate validator with CI/CD pipeline',
+          stepInstruction: 'Option 1: Run on commit via pre-push hook. Option 2: GitHub Action blocking build. Configurable strictness.',
+          isSideQuest: false
+        },
+        {
+          id: 'step-wt-3.3-4',
+          phaseId: 'phase-wt-3.3',
+          name: 'Log Failures + Suggest Fixes',
+          status: 'not_started',
+          description: 'Implement failure logging and fix suggestions',
+          stepInstruction: 'Post to ExecutionLog with reason. Suggest backlog task generation. Include Claude prompt scaffold (if enabled).',
+          isSideQuest: false
         }
       ]
     }

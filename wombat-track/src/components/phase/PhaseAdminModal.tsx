@@ -43,7 +43,11 @@ export const PhaseAdminModal: React.FC<PhaseAdminModalProps> = ({
       description: projectForm.description || '',
       createdAt: new Date().toISOString(),
       phases: [],
-      archived: false
+      archived: false,
+      createdBy: 'admin',
+      projectOwner: projectForm.projectOwner || 'admin',
+      projectType: projectForm.projectType || 'Other',
+      status: projectForm.status || 'Planned'
     };
     
     console.log('Creating project:', newProject);

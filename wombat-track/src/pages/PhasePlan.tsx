@@ -3,8 +3,9 @@
 import React, { useState } from 'react';
 import { ProjectDashboard } from '../components/project/PhasePlanDashboard';
 import { ProjectSwitcher } from '../components/project/ProjectSwitcher';
-import type { Project, PhaseStep } from '../types/phase';
+import type { Project, Phase, PhaseStep } from '../types/phase';
 import { mockProjects } from '../data/mockProjects';
+import { logPhaseMetadataChange } from '../api/governanceLogAPI';
 import './PhasePlan.css';
 
 export const PhasePlan: React.FC = () => {
@@ -40,15 +41,50 @@ export const PhasePlan: React.FC = () => {
     setProjects(updatedProjects);
   };
 
+  const handlePhaseUpdate = async (projectId: string, phaseId: string, updates: Partial<Phase>) => {
+    console.log(`[WT] Updating phase ${phaseId} in project ${projectId}:`, updates);
+    
+    // Track changes for governance logging
+    const changes: Record<string, { old: unknown; new: unknown }> = {};
+    
+    const updatedProjects = projects.map(project => {
+      if (project.id !== projectId) return project;
+      
+      return {
+        ...project,
+        phases: project.phases.map(phase => {
+          if (phase.id !== phaseId) return phase;
+          
+          // Track changes for governance
+          Object.keys(updates).forEach(key => {
+            if (updates[key as keyof Phase] !== phase[key as keyof Phase]) {
+              changes[key] = {
+                old: phase[key as keyof Phase],
+                new: updates[key as keyof Phase]
+              };
+            }
+          });
+          
+          return { ...phase, ...updates };
+        }),
+        updatedAt: new Date().toISOString()
+      };
+    });
+    
+    setProjects(updatedProjects);
+    
+    // Log governance change if there were actual changes
+    if (Object.keys(changes).length > 0) {
+      await logPhaseMetadataChange(projectId, phaseId, 'current-user', changes);
+    }
+  };
+
   const handleViewLogs = (executionId: string) => {
     console.log(`[WT] Viewing logs for execution: ${executionId}`);
     // Enhanced log viewing with user feedback
     alert(`📊 Viewing execution logs for: ${executionId}\n\nIn a production environment, this would:\n- Open detailed execution logs\n- Show real-time status updates\n- Display performance metrics\n- Provide error diagnostics\n\nCheck console for current log details.`);
   };
 
-  const handleProjectsUpdate = (updatedProjects: Project[]) => {
-    setProjects(updatedProjects);
-  };
 
   return (
     <div className="phase-plan">
@@ -62,9 +98,8 @@ export const PhasePlan: React.FC = () => {
         <div className="project-selector-container">
           <ProjectSwitcher
             projects={activeProjects}
-            selectedProjectId={selectedProjectId}
+            activeProjectId={selectedProjectId}
             onProjectSelect={setSelectedProjectId}
-            onProjectsUpdate={handleProjectsUpdate}
           />
         </div>
 
@@ -74,6 +109,7 @@ export const PhasePlan: React.FC = () => {
             <ProjectDashboard
               project={selectedProject}
               onStepUpdate={handleStepUpdate}
+              onPhaseUpdate={handlePhaseUpdate}
               onViewLogs={handleViewLogs}
               readOnly={false}
             />

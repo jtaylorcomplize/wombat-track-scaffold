@@ -2,12 +2,14 @@ export interface PhaseStep {
   id: string;
   phaseId: string;
   name: string;
-  status: 'not_started' | 'in_progress' | 'complete';
+  status: 'not_started' | 'in_progress' | 'complete' | 'error';
   executionId?: string;
   startedAt?: string;
   completedAt?: string;
   description?: string;
   templateId?: string;
+  stepInstruction?: string;
+  isSideQuest?: boolean;
 }
 
 export interface Phase {
@@ -18,6 +20,9 @@ export interface Phase {
   order: number;
   steps: PhaseStep[];
   summary?: string; // Optional markdown summary for phase documentation
+  phaseType?: 'PlatformOps' | 'Governance' | 'Console' | 'Infrastructure' | 'Development' | 'Testing' | 'Other';
+  phaseOwner?: string;
+  ragStatus?: 'red' | 'amber' | 'green' | 'blue';
 }
 
 export interface Project {
