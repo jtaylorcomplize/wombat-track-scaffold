@@ -1,5 +1,3 @@
-// Phase types - restored from recovery branch for ProjectDashboard compatibility
-
 export interface PhaseStep {
   id: string;
   phaseId: string;
@@ -21,8 +19,8 @@ export interface Phase {
   description: string;
   order: number;
   steps: PhaseStep[];
-  summary?: string;
-  phaseType?: string;
+  summary?: string; // Optional markdown summary for phase documentation
+  phaseType?: 'PlatformOps' | 'Governance' | 'Console' | 'Infrastructure' | 'Development' | 'Testing' | 'Other';
   phaseOwner?: string;
   ragStatus?: 'red' | 'amber' | 'green' | 'blue';
 }
@@ -35,11 +33,23 @@ export interface Project {
   updatedAt?: string;
   phases: Phase[];
   archived?: boolean;
+  // Enhanced metadata fields
   createdBy: string;
   projectOwner: string;
-  projectType: string;
+  projectType: 'Platform' | 'Content' | 'Migration' | 'R&D' | 'Other' | 'execution-console';
   status: 'Planned' | 'Active' | 'Paused' | 'Archived' | 'Complete' | 'active';
-  wtTag?: string;
-  phasePlan?: string;
-  colorTag?: string;
+  wtTag?: string; // Semantic tag for MemoryPlugin/DriveMemory integration
+  phasePlan?: string; // Rich text/markdown content for phase planning
+  colorTag?: string; // Optional color coding for project identification
+}
+
+export interface PhaseStepUpdate {
+  stepId: string;
+  updates: Partial<PhaseStep>;
+}
+
+export interface PhaseTrackerState {
+  projects: Project[];
+  activeProjectId?: string;
+  expandedPhases: Set<string>;
 }
