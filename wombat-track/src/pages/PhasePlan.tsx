@@ -2,7 +2,7 @@
 // WT-2.9: Updated to use PhasePlanDashboard for consistent project management experience
 import React, { useState } from 'react';
 import { ProjectDashboard } from '../components/project/PhasePlanDashboard';
-import ProjectSidebar from '../components/project/ProjectSidebar';
+import ProjectSidebarSimple from '../components/project/ProjectSidebarSimple';
 import type { Project, Phase, PhaseStep } from '../types/phase';
 import { harmonisedProjects } from '../data/harmonisedProjects';
 import { logPhaseMetadataChange } from '../api/governanceLogAPI';
@@ -90,7 +90,7 @@ export const PhasePlan: React.FC = () => {
     <div style={{ display: 'flex', height: '100vh', backgroundColor: '#f9fafb' }}>
       {/* Project Sidebar */}
       <div style={{ width: '300px', flexShrink: 0 }}>
-        <ProjectSidebar
+        <ProjectSidebarSimple
           projects={projects}
           selectedProjectId={selectedProjectId}
           onProjectSelect={setSelectedProjectId}
