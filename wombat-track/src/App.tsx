@@ -1,7 +1,7 @@
 // wombat-track/src/App.tsx
 import React, { useState } from 'react';
 import { PhasePlan } from './pages/PhasePlan';
-import { WombatConsoleWithSidebar } from './pages/WombatConsoleWithSidebar';
+import { WombatConsole } from './pages/WombatConsole';
 import './App.css';
 console.log("🚀 WT Version 1.2.9 loaded");
 console.log("✅ App is being rendered");
@@ -51,7 +51,7 @@ function App() {
       
       <main className="app-main">
         {activeView === 'phase-plan' && <PhasePlan />}
-        {activeView === 'wombat-console' && <WombatConsoleWithSidebar onHealthCheck={runHealthCheck} />}
+        {activeView === 'wombat-console' && <WombatConsole onHealthCheck={runHealthCheck} />}
         {activeView === 'settings' && <div>Settings coming soon...</div>}
       </main>
       
