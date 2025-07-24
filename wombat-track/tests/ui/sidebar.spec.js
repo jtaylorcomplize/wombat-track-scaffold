@@ -8,12 +8,12 @@ describe('ProjectSidebar Smoke Test', () => {
     });
   });
 
-  test('sidebar renders on WombatConsole tab', async () => {
-    // Navigate to WombatConsole tab
-    await page.click('button:has-text("WombatConsole")');
+  test('sidebar renders on Phase Plan tab', async () => {
+    // Navigate to Phase Plan tab
+    await page.click('button:has-text("Phase Plan")');
     
     // Wait for the sidebar to be visible
-    await page.waitForSelector('[data-testid*="sidebar"], .project-sidebar, div:has-text("Projects")', {
+    await page.waitForSelector('h2:has-text("Projects"), button:has-text("New Project")', {
       timeout: 5000
     });
     
@@ -21,10 +21,9 @@ describe('ProjectSidebar Smoke Test', () => {
     const sidebarExists = await page.evaluate(() => {
       // Look for sidebar indicators
       return !!(
-        document.querySelector('div:has-text("Projects")') ||
-        document.querySelector('[class*="sidebar"]') ||
-        document.querySelector('div[style*="width: 300px"]') ||
-        document.querySelector('button:has-text("New Project")')
+        document.querySelector('h2') && document.querySelector('h2').textContent.includes('Projects') ||
+        document.querySelector('button') && document.querySelector('button').textContent.includes('New Project') ||
+        document.querySelector('input[placeholder*="Search projects"]')
       );
     });
     
@@ -56,8 +55,14 @@ describe('ProjectSidebar Smoke Test', () => {
     }
   });
 
-  test('sidebar shows project hierarchy', async () => {
-    // Check for project structure indicators
+  test('sidebar shows project hierarchy with Headless UI', async () => {
+    // Navigate to Phase Plan tab first
+    await page.click('button:has-text("Phase Plan")');
+    
+    // Wait for sidebar to load
+    await page.waitForTimeout(1000);
+    
+    // Check for project structure indicators and Tailwind classes
     const hasProjectStructure = await page.evaluate(() => {
       const projectIndicators = [
         'WT-1.x',
@@ -68,9 +73,17 @@ describe('ProjectSidebar Smoke Test', () => {
         'Developer Infrastructure'
       ];
       
-      return projectIndicators.some(indicator => 
+      const hasTailwindClasses = !!(
+        document.querySelector('[class*="bg-white"]') ||
+        document.querySelector('[class*="border-gray"]') ||
+        document.querySelector('[class*="text-gray"]')
+      );
+      
+      const hasProjectText = projectIndicators.some(indicator => 
         document.body.textContent.includes(indicator)
       );
+      
+      return hasProjectText && hasTailwindClasses;
     });
     
     expect(hasProjectStructure).toBe(true);

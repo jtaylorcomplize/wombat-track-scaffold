@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from 'react';
+import { Disclosure } from '@headlessui/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronRight, 
   ChevronDown,
@@ -6,7 +8,6 @@ import {
   Circle,
   AlertCircle,
   XCircle,
-  ChevronUp,
   Clock,
   Archive,
   Plus,
@@ -36,25 +37,27 @@ const getProjectLifecycle = (project: Project): ProjectLifecycle => {
 };
 
 const getStatusIcon = (status: string) => {
+  const iconClass = "w-4 h-4";
+  
   switch (status) {
     case 'complete':
     case 'Complete':
-      return <CheckCircle className="w-4 h-4 text-green-500" />;
+      return <CheckCircle className={cn(iconClass, "text-status-complete")} />;
     case 'in_progress':
     case 'Active':
-      return <Clock className="w-4 h-4 text-yellow-500 animate-pulse" />;
+      return <Clock className={cn(iconClass, "text-status-progress animate-pulse-slow")} />;
     case 'not_started':
     case 'Planned':
-      return <Circle className="w-4 h-4 text-gray-400" />;
+      return <Circle className={cn(iconClass, "text-status-pending")} />;
     case 'failed':
     case 'Blocked':
-      return <XCircle className="w-4 h-4 text-red-500" />;
+      return <XCircle className={cn(iconClass, "text-status-error")} />;
     case 'Paused':
-      return <AlertCircle className="w-4 h-4 text-orange-500" />;
+      return <AlertCircle className={cn(iconClass, "text-status-blocked")} />;
     case 'Archived':
-      return <Archive className="w-4 h-4 text-gray-500" />;
+      return <Archive className={cn(iconClass, "text-gray-500")} />;
     default:
-      return <Circle className="w-4 h-4 text-gray-400" />;
+      return <Circle className={cn(iconClass, "text-status-pending")} />;
   }
 };
 
@@ -62,17 +65,14 @@ const getRagBadge = (ragStatus?: 'red' | 'amber' | 'green' | 'blue') => {
   if (!ragStatus) return null;
   
   const colors = {
-    red: 'bg-red-500',
-    amber: 'bg-amber-500',
-    green: 'bg-green-500',
-    blue: 'bg-blue-500'
+    red: 'bg-rag-red',
+    amber: 'bg-rag-amber',
+    green: 'bg-rag-green',
+    blue: 'bg-rag-blue'
   };
   
   return (
-    <div className={cn(
-      'w-2 h-2 rounded-full',
-      colors[ragStatus]
-    )} />
+    <div className={cn('w-2 h-2 rounded-full', colors[ragStatus])} />
   );
 };
 
@@ -96,31 +96,9 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
   onProjectSelect,
   className
 }) => {
-  const [expandedProjects, setExpandedProjects] = useState<Set<string>>(new Set());
-  const [expandedPhases, setExpandedPhases] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [showLifecycle, setShowLifecycle] = useState<ProjectLifecycle | 'all'>('all');
   const [showOnlyRag, setShowOnlyRag] = useState(false);
-  
-  const toggleProject = (projectId: string) => {
-    const newExpanded = new Set(expandedProjects);
-    if (newExpanded.has(projectId)) {
-      newExpanded.delete(projectId);
-    } else {
-      newExpanded.add(projectId);
-    }
-    setExpandedProjects(newExpanded);
-  };
-  
-  const togglePhase = (phaseId: string) => {
-    const newExpanded = new Set(expandedPhases);
-    if (newExpanded.has(phaseId)) {
-      newExpanded.delete(phaseId);
-    } else {
-      newExpanded.add(phaseId);
-    }
-    setExpandedPhases(newExpanded);
-  };
   
   const filteredProjects = useMemo(() => {
     return projects.filter(project => {
@@ -178,105 +156,154 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
     return grouped;
   }, [filteredProjects]);
   
-  const renderStep = (step: PhaseStep) => (
-    <div
-      key={step.id}
-      className="flex items-center gap-2 py-1 px-8 text-xs text-gray-600 hover:bg-gray-50"
+  const StepComponent: React.FC<{ step: PhaseStep }> = ({ step }) => (
+    <motion.div
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -10 }}
+      className="flex items-center gap-2 py-1 px-8 text-xs text-gray-600 hover:bg-gray-50 rounded-md mx-2"
     >
       {getStatusIcon(step.status || 'not_started')}
-      <span className="truncate">{step.name}</span>
-    </div>
+      <span className="truncate flex-1">{step.name}</span>
+    </motion.div>
   );
   
-  const renderPhase = (phase: Phase, projectId: string) => {
-    const isExpanded = expandedPhases.has(phase.id);
+  const PhaseComponent: React.FC<{ phase: Phase; projectId: string }> = ({ phase, projectId }) => {
     const isSideQuest = phase.name.toLowerCase().includes('side quest');
     
     return (
-      <div key={phase.id}>
-        <button
-          onClick={() => togglePhase(phase.id)}
-          className="w-full flex items-center gap-2 py-1 px-4 text-sm hover:bg-gray-50"
-        >
-          <div className="flex items-center gap-1">
-            {isExpanded ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-            {isSideQuest && <Sword className="w-3 h-3 text-purple-500" />}
-          </div>
-          <span className="flex-1 text-left truncate">{phase.name}</span>
-          {getRagBadge(phase.ragStatus)}
-        </button>
-        
-        {isExpanded && phase.steps && (
-          <div>
-            {phase.steps.map(step => renderStep(step))}
-          </div>
+      <Disclosure>
+        {({ open }) => (
+          <>
+            <Disclosure.Button className="w-full flex items-center gap-2 py-2 px-4 text-sm hover:bg-gray-50 rounded-md mx-2 group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset">
+              <div className="flex items-center gap-1">
+                <ChevronRight 
+                  className={cn(
+                    'w-3 h-3 transition-transform duration-200',
+                    open && 'rotate-90'
+                  )} 
+                />
+                {isSideQuest && <Sword className="w-3 h-3 text-purple-500" />}
+              </div>
+              <span className="flex-1 text-left truncate group-hover:text-gray-900">{phase.name}</span>
+              {getRagBadge(phase.ragStatus)}
+            </Disclosure.Button>
+            
+            <AnimatePresence>
+              {open && (
+                <Disclosure.Panel
+                  as={motion.div}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden"
+                >
+                  {phase.steps?.map(step => (
+                    <StepComponent key={step.id} step={step} />
+                  ))}
+                </Disclosure.Panel>
+              )}
+            </AnimatePresence>
+          </>
         )}
-      </div>
+      </Disclosure>
     );
   };
   
-  const renderProject = (project: Project) => {
-    const isExpanded = expandedProjects.has(project.id);
+  const ProjectComponent: React.FC<{ project: Project }> = ({ project }) => {
     const isSelected = project.id === selectedProjectId;
     const hasUnknownStatus = !project.wtTag || project.wtTag === 'wtPhaseUnknown';
     
     return (
-      <div key={project.id} className="border-b border-gray-100">
-        <button
-          onClick={() => {
-            onProjectSelect(project.id);
-            toggleProject(project.id);
-          }}
-          className={cn(
-            'w-full flex items-center gap-2 py-2 px-2 hover:bg-gray-50',
+      <Disclosure>
+        {({ open }) => (
+          <div className={cn(
+            'border-b border-gray-100 last:border-b-0',
             isSelected && 'bg-blue-50'
-          )}
-        >
-          <div className="flex items-center gap-1">
-            {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-            {getProjectTypeBadge(project.projectType || 'Other')}
-          </div>
-          <span className="flex-1 text-left font-medium truncate">{project.name}</span>
-          <div className="flex items-center gap-1">
-            {hasUnknownStatus && <AlertTriangle className="w-4 h-4 text-yellow-500" />}
-            {project.archived && <Archive className="w-4 h-4 text-gray-400" />}
-            {getStatusIcon(project.status || 'Planned')}
-          </div>
-        </button>
-        
-        {isExpanded && project.phases && (
-          <div className="bg-gray-50">
-            {project.phases
-              .sort((a, b) => a.order - b.order)
-              .map(phase => renderPhase(phase, project.id))}
+          )}>
+            <Disclosure.Button
+              onClick={() => onProjectSelect(project.id)}
+              className={cn(
+                'w-full flex items-center gap-2 py-3 px-3 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset rounded-md mx-1',
+                isSelected && 'bg-blue-50 hover:bg-blue-100'
+              )}
+            >
+              <div className="flex items-center gap-1">
+                <ChevronRight 
+                  className={cn(
+                    'w-4 h-4 transition-transform duration-200',
+                    open && 'rotate-90'
+                  )} 
+                />
+                {getProjectTypeBadge(project.projectType || 'Other')}
+              </div>
+              <span className="flex-1 text-left font-medium truncate text-gray-900">{project.name}</span>
+              <div className="flex items-center gap-1">
+                {hasUnknownStatus && (
+                  <AlertTriangle 
+                    className="w-4 h-4 text-yellow-500" 
+                    aria-label="Needs Review"
+                  />
+                )}
+                {project.archived && <Archive className="w-4 h-4 text-gray-400" />}
+                {getStatusIcon(project.status || 'Planned')}
+              </div>
+            </Disclosure.Button>
+            
+            <AnimatePresence>
+              {open && (
+                <Disclosure.Panel
+                  as={motion.div}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden bg-gray-50"
+                >
+                  {project.phases
+                    ?.sort((a, b) => a.order - b.order)
+                    .map(phase => (
+                      <PhaseComponent key={phase.id} phase={phase} projectId={project.id} />
+                    ))}
+                </Disclosure.Panel>
+              )}
+            </AnimatePresence>
           </div>
         )}
-      </div>
+      </Disclosure>
     );
   };
   
-  const renderLifecycleSection = (title: string, icon: React.ReactNode, projects: Project[]) => {
+  const LifecycleSectionComponent: React.FC<{ 
+    title: string; 
+    icon: React.ReactNode; 
+    projects: Project[] 
+  }> = ({ title, icon, projects }) => {
     if (projects.length === 0) return null;
     
     return (
-      <div className="mb-4">
-        <div className="flex items-center gap-2 px-2 py-1 text-xs font-semibold text-gray-500 uppercase">
+      <div className="mb-6">
+        <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
           {icon}
           <span>{title}</span>
           <span className="text-gray-400">({projects.length})</span>
         </div>
-        <div>
-          {projects.map(project => renderProject(project))}
+        <div className="space-y-1">
+          {projects.map(project => (
+            <ProjectComponent key={project.id} project={project} />
+          ))}
         </div>
       </div>
     );
   };
   
   return (
-    <div className={cn('flex flex-col h-full bg-white border-r border-gray-200', className)}>
+    <div className={cn(
+      'flex flex-col h-full bg-white border-r border-gray-200 shadow-sm',
+      className
+    )}>
       {/* Header */}
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold mb-3">Projects</h2>
+      <div className="p-4 border-b border-gray-200 bg-white">
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">Projects</h2>
         
         {/* Search */}
         <div className="relative mb-3">
@@ -286,7 +313,8 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search projects, phases, steps..."
-            className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            aria-label="Search projects"
           />
         </div>
         
@@ -295,7 +323,8 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
           <select
             value={showLifecycle}
             onChange={(e) => setShowLifecycle(e.target.value as ProjectLifecycle | 'all')}
-            className="text-sm border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            aria-label="Filter by project lifecycle"
           >
             <option value="all">All Projects</option>
             <option value="current">Current</option>
@@ -306,11 +335,13 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
           <button
             onClick={() => setShowOnlyRag(!showOnlyRag)}
             className={cn(
-              'flex items-center gap-1 px-2 py-1 text-sm border rounded-md',
+              'flex items-center gap-1 px-2 py-1 text-sm border rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500',
               showOnlyRag
                 ? 'bg-blue-50 border-blue-300 text-blue-700'
-                : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                : 'border-gray-300 text-gray-600 hover:bg-gray-50'
             )}
+            aria-label="Filter by RAG status"
+            aria-pressed={showOnlyRag}
           >
             <Filter className="w-3 h-3" />
             RAG
@@ -318,7 +349,7 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
         </div>
         
         {/* Quick Actions */}
-        <button className="w-full flex items-center justify-center gap-2 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md">
+        <button className="w-full flex items-center justify-center gap-2 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
           <Plus className="w-4 h-4" />
           New Project
         </button>
@@ -327,45 +358,50 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
       {/* Project List */}
       <div className="flex-1 overflow-y-auto">
         {showLifecycle === 'all' ? (
-          <>
-            {renderLifecycleSection(
-              'Current Projects',
-              <Clock className="w-4 h-4" />,
-              projectsByLifecycle.current
-            )}
-            {renderLifecycleSection(
-              'Completed Projects',
-              <CheckCircle className="w-4 h-4" />,
-              projectsByLifecycle.completed
-            )}
-            {renderLifecycleSection(
-              'Future Projects',
-              <Beaker className="w-4 h-4" />,
-              projectsByLifecycle.future
-            )}
-          </>
-        ) : (
           <div className="p-2">
-            {filteredProjects.map(project => renderProject(project))}
+            <LifecycleSectionComponent
+              title="Current Projects"
+              icon={<Clock className="w-4 h-4" />}
+              projects={projectsByLifecycle.current}
+            />
+            <LifecycleSectionComponent
+              title="Completed Projects"
+              icon={<CheckCircle className="w-4 h-4" />}
+              projects={projectsByLifecycle.completed}
+            />
+            <LifecycleSectionComponent
+              title="Future Projects"
+              icon={<Beaker className="w-4 h-4" />}
+              projects={projectsByLifecycle.future}
+            />
+          </div>
+        ) : (
+          <div className="p-2 space-y-1">
+            {filteredProjects.map(project => (
+              <ProjectComponent key={project.id} project={project} />
+            ))}
           </div>
         )}
         
         {filteredProjects.length === 0 && (
           <div className="p-4 text-center text-sm text-gray-500">
+            <div className="text-2xl mb-2">🔍</div>
             No projects found
           </div>
         )}
       </div>
       
       {/* Footer Stats */}
-      <div className="p-4 border-t border-gray-200 text-xs text-gray-500">
+      <div className="p-4 border-t border-gray-200 text-xs text-gray-500 bg-gray-50">
         <div className="flex justify-between">
           <span>Total Projects:</span>
-          <span className="font-medium">{projects.length}</span>
+          <span className="font-medium text-gray-900">{projects.length}</span>
         </div>
         <div className="flex justify-between mt-1">
           <span>Active:</span>
-          <span className="font-medium">{projects.filter(p => p.status === 'Active').length}</span>
+          <span className="font-medium text-gray-900">
+            {projects.filter(p => p.status === 'Active').length}
+          </span>
         </div>
       </div>
     </div>
