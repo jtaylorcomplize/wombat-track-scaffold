@@ -20,17 +20,51 @@ type SidebarItemProps = {
   status?: string;
 };
 
+const getPhaseStatus = (phase: Phase): string => {
+  if (!phase.steps || phase.steps.length === 0) {
+    return 'not_started';
+  }
+  
+  const stepStatuses = phase.steps.map(step => step.status);
+  
+  // If any step has error, phase has error
+  if (stepStatuses.includes('error')) {
+    return 'error';
+  }
+  
+  // If all steps are complete, phase is complete
+  if (stepStatuses.every(status => status === 'complete')) {
+    return 'complete';
+  }
+  
+  // If any step is in progress, phase is in progress
+  if (stepStatuses.includes('in_progress')) {
+    return 'in_progress';
+  }
+  
+  // If all steps are not started, phase is not started
+  if (stepStatuses.every(status => status === 'not_started')) {
+    return 'not_started';
+  }
+  
+  // Mixed states mean in progress
+  return 'in_progress';
+};
+
 const getStatusIcon = (status: string) => {
   switch (status) {
     case 'Complete':
     case 'complete':
       return <CheckCircle className="w-4 h-4 text-emerald-500" />;
     case 'Active':
+    case 'active':
     case 'in_progress':
       return <Clock className="w-4 h-4 text-amber-500" />;
     case 'Planned':
     case 'not_started':
       return <Circle className="w-4 h-4 text-slate-400" />;
+    case 'error':
+      return <Circle className="w-4 h-4 text-red-500" />;
     default:
       return <Circle className="w-4 h-4 text-slate-400" />;
   }
@@ -100,7 +134,7 @@ const ProjectSidebarSimple: React.FC<ProjectSidebarSimpleProps> = ({
                     <SidebarItem
                       key={phase.id}
                       name={phase.name}
-                      status={phase.status}
+                      status={getPhaseStatus(phase)}
                     >
                       {phase.steps.map((step) => (
                         <SidebarItem
