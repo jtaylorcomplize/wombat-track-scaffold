@@ -259,7 +259,7 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
   );
   
   return (
-    <div className={cn('w-64 h-full bg-slate-50 border-r border-slate-200 flex flex-col', className)}>
+    <div className={cn('h-full bg-slate-50 border-r border-slate-200 flex flex-col', className)}>
       {/* Header */}
       <div className="p-4 bg-white border-b border-slate-200">
         <h2 className="text-lg font-bold text-slate-900 mb-4">Projects</h2>
