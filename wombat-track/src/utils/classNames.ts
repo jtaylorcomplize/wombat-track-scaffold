@@ -1,7 +1,9 @@
+import clsx from 'clsx';
+
 /**
  * Utility function to conditionally join classNames together
- * Similar to clsx but without the dependency
+ * Uses clsx for robust class name handling
  */
-export function cn(...classes: (string | boolean | undefined | null)[]): string {
-  return classes.filter(Boolean).join(' ');
+export function cn(...classes: Parameters<typeof clsx>): string {
+  return clsx(...classes);
 }
