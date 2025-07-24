@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WT-3.x Phase Dashboard Preview</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 { color: #1f2937; }
+        .phase-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .phase-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .phase-name { font-size: 18px; font-weight: 600; }
+        .badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .rag-status { font-size: 14px; }
+        .phase-type { background: #e0e7ff; color: #4338ca; }
+        .phase-owner { background: #fef3c7; color: #92400e; }
+        .step {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 8px 0;
+        }
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .step-status {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .status-in_progress { background: #fef3c720; color: #f59e0b; }
+        .status-not_started { background: #9ca3af20; color: #9ca3af; }
+        .status-complete { background: #10b98120; color: #10b981; }
+        .side-quest {
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        .instruction {
+            background: #f3f4f6;
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin-top: 4px;
+            border-left: 3px solid #3b82f6;
+            font-size: 12px;
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <h1>📊 WT-3.x Phase Dashboard Preview</h1>
+    <p>This preview shows how the new WT-3.x phases will appear with enhanced metadata.</p>
+
+    <!-- WT-3.1 -->
+    <div class="phase-card">
+        <div class="phase-header">
+            <div class="phase-title">
+                <span class="phase-name">WT-3.1: Advanced Testing Infrastructure</span>
+                <span class="rag-status">🟡</span>
+                <span class="badge phase-type">PlatformOps</span>
+                <span class="badge phase-owner">👤 jackson</span>
+            </div>
+            <button>Edit</button>
+        </div>
+        <p style="color: #6b7280; font-size: 13px;">Implement a reliable, CI-integrated testing framework for Wombat Track using Puppeteer and GitHub Actions</p>
+        
+        <div class="step">
+            <div class="step-header">
+                <span>⏳</span>
+                <span style="font-weight: 500;">Implement Puppeteer-based test suite</span>
+                <span class="step-status status-in_progress">in progress</span>
+            </div>
+            <div class="instruction"><strong>Instruction:</strong> Add core test files for: Phase Tracker, Dispatcher, Plan Dashboard. Ensure cross-route testability.</div>
+        </div>
+
+        <div class="step">
+            <div class="step-header">
+                <span>○</span>
+                <span style="font-weight: 500;">Integrate GitHub Action test runner</span>
+                <span class="step-status status-not_started">not started</span>
+            </div>
+            <div class="instruction"><strong>Instruction:</strong> Create reusable test job (`puppeteer.yml`). Configure test step in CI pipeline. Store logs as GitHub artifacts.</div>
+        </div>
+    </div>
+
+    <!-- WT-3.2 -->
+    <div class="phase-card">
+        <div class="phase-header">
+            <div class="phase-title">
+                <span class="phase-name">WT-3.2: CI/CD Pipeline Migration</span>
+                <span class="rag-status">🟢</span>
+                <span class="badge phase-type">PlatformOps</span>
+                <span class="badge phase-owner">👤 jackson</span>
+            </div>
+            <button>Edit</button>
+        </div>
+        <p style="color: #6b7280; font-size: 13px;">Establish a robust CI/CD system for code validation, deployment, and rollback across Wombat Track</p>
+        
+        <div class="step">
+            <div class="step-header">
+                <span>✅</span>
+                <span style="font-weight: 500;">Create CI Pipeline</span>
+                <span class="step-status status-complete">complete</span>
+            </div>
+            <div class="instruction"><strong>Instruction:</strong> Use `ci.yml` + `reusable-deploy.yml` templates. Include linting, type checking, build, and test.</div>
+        </div>
+    </div>
+
+    <!-- WT-3.3 -->
+    <div class="phase-card">
+        <div class="phase-header">
+            <div class="phase-title">
+                <span class="phase-name">WT-3.3: MetaValidator System</span>
+                <span class="rag-status">🔵</span>
+                <span class="badge phase-type">Governance</span>
+                <span class="badge phase-owner">👤 jackson</span>
+            </div>
+            <button>Edit</button>
+        </div>
+        <p style="color: #6b7280; font-size: 13px;">Create a governance-aware code and phase validator that enforces structural integrity</p>
+        
+        <div class="step">
+            <div class="step-header">
+                <span>○</span>
+                <span style="font-weight: 500;">Build Validator Engine</span>
+                <span class="step-status status-not_started">not started</span>
+            </div>
+            <div class="instruction"><strong>Instruction:</strong> Create `WTMetaValidator.ts`. Scan project folders, markdown, and phase structure.</div>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; padding: 20px; background: #e0e7ff; border-radius: 8px;">
+        <h3>✅ Features Demonstrated:</h3>
+        <ul>
+            <li>RAG Status indicators (🟡 Amber, 🟢 Green, 🔵 Blue)</li>
+            <li>Phase Type badges (PlatformOps, Governance)</li>
+            <li>Phase Owner display</li>
+            <li>Step Instructions with visual formatting</li>
+            <li>Status badges for each step</li>
+            <li>Edit buttons for phase metadata</li>
+        </ul>
+    </div>
+</body>
+</html>
