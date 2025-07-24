@@ -83,7 +83,7 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
   };
 
   const getStatusIcon = (step: PhaseStep) => {
-    const status = executionStatus[step.id]?.status || step.status;
+    const status = step.status;
     
     switch (status) {
       case 'not_started': return '○';
@@ -95,7 +95,7 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
   };
 
   const getStatusColor = (step: PhaseStep) => {
-    const status = executionStatus[step.id]?.status || step.status;
+    const status = step.status;
     
     switch (status) {
       case 'not_started': return '#9ca3af';
