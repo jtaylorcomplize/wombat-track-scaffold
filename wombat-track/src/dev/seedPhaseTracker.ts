@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Project } from '../types/phase';
 
 // Global flag to ensure seeding runs only once per session
@@ -1039,9 +1040,9 @@ This transformation makes the Phase Plan tab the central governance hub where te
  * Seeds the Phase Tracker with the complete WT-2.x project history
  * Only runs once per session and only in development mode
  */
-export function seedPhaseTracker(setProjects: (projects: Project[]) => void): boolean {
+export function seedPhaseTracker(setProjects: React.Dispatch<React.SetStateAction<Project[]>>): boolean {
   // Only run in development mode
-  if (typeof window !== 'undefined' && import.meta.env?.MODE !== 'development') {
+  if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'development') {
     return false;
   }
 
@@ -1055,9 +1056,9 @@ export function seedPhaseTracker(setProjects: (projects: Project[]) => void): bo
 
   try {
     // Add the seed project to existing projects
-    setProjects(prevProjects => {
+    setProjects((prevProjects: Project[]) => {
       // Check if seed project already exists
-      const seedExists = prevProjects.some(p => p.id === seedProject.id);
+      const seedExists = prevProjects.some((p: Project) => p.id === seedProject.id);
       if (seedExists) {
         console.info('[WT] Seed project already exists, skipping...');
         return prevProjects;
@@ -1089,7 +1090,7 @@ export function seedPhaseTracker(setProjects: (projects: Project[]) => void): bo
  * Development utility to manually trigger seeding
  * Useful for testing or manual refresh
  */
-export function forceSeedPhaseTracker(setProjects: (projects: Project[]) => void): boolean {
+export function forceSeedPhaseTracker(setProjects: React.Dispatch<React.SetStateAction<Project[]>>): boolean {
   if (typeof window !== 'undefined') {
     window.__hasSeededPhaseTracker = false;
   }

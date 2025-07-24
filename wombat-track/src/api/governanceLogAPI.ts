@@ -6,7 +6,7 @@ export interface PhaseGovernanceLog {
   phaseId: string;
   timestamp: Date;
   user: string;
-  action: 'create' | 'update' | 'delete' | 'metadata_change';
+  action: 'create' | 'update' | 'delete' | 'metadata_change' | 'dev_failure';
   changes: {
     field: string;
     oldValue: unknown;
@@ -77,6 +77,69 @@ export async function fetchGovernanceLogs(projectId?: string): Promise<PhaseGove
  */
 export async function fetchPhaseGovernanceLogs(phaseId: string): Promise<PhaseGovernanceLog[]> {
   return governanceLogs.filter(log => log.phaseId === phaseId);
+}
+
+/**
+ * Log a development failure for governance tracking
+ */
+export async function logDevFailure(
+  projectId: string,
+  phaseId: string,
+  user: string,
+  failureDetails: {
+    type: 'missing_import' | 'build_error' | 'type_error' | 'test_failure';
+    description: string;
+    filePath?: string;
+    missingModule?: string;
+    errorMessage?: string;
+  }
+): Promise<PhaseGovernanceLog> {
+  const log: PhaseGovernanceLog = {
+    id: `dev_failure_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    projectId,
+    phaseId,
+    timestamp: new Date(),
+    user,
+    action: 'dev_failure',
+    changes: [
+      {
+        field: 'dev_failure_type',
+        oldValue: null,
+        newValue: failureDetails.type
+      },
+      {
+        field: 'description',
+        oldValue: null,
+        newValue: failureDetails.description
+      },
+      ...(failureDetails.filePath ? [{
+        field: 'file_path',
+        oldValue: null,
+        newValue: failureDetails.filePath
+      }] : []),
+      ...(failureDetails.missingModule ? [{
+        field: 'missing_module',
+        oldValue: null,
+        newValue: failureDetails.missingModule
+      }] : []),
+      ...(failureDetails.errorMessage ? [{
+        field: 'error_message',
+        oldValue: null,
+        newValue: failureDetails.errorMessage
+      }] : [])
+    ]
+  };
+
+  governanceLogs.push(log);
+  
+  console.log('[Governance] DevFailure logged:', {
+    type: failureDetails.type,
+    description: failureDetails.description,
+    file: failureDetails.filePath,
+    user
+  });
+
+  return log;
 }
 
 /**

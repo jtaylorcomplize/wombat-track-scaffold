@@ -511,7 +511,7 @@ export const WombatConsole: React.FC<WombatConsoleProps> = ({ onHealthCheck }) =
           </div>
           <div style={{ display: 'flex', gap: '8px' }}>
             {/* Development Seed Button */}
-            {import.meta.env?.MODE === 'development' && (
+            {process.env.NODE_ENV === 'development' && (
               <button
                 onClick={() => forceSeedPhaseTracker(setProjects)}
                 data-testid="seed-phase-tracker-button"
