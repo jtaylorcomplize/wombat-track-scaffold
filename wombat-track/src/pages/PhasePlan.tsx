@@ -1,7 +1,9 @@
 // wombat-track/src/pages/PhasePlan.tsx
 import React, { useState } from 'react';
 import { StepCard } from '../components/StepCard';
-import type { PhaseStep } from '../types/models';
+import ProjectSidebarSimple from '../components/ProjectSidebarSimple';
+import type { PhaseStep, Phase } from '../types/models';
+import { getPhaseStatus, getPhaseProgress } from '../utils/phaseStatus';
 import './PhasePlan.css';
 
 // Dummy data for testing the Side Quest toggle feature
@@ -52,9 +54,35 @@ const initialDummySteps: PhaseStep[] = [
   }
 ];
 
+// Mock project data for sidebar demonstration
+const mockProjects = [
+  {
+    id: 'complize-ui-retrofit',
+    name: 'Complize UI Retrofit',
+    description: 'Sidebar recovery and status logic restoration',
+    status: 'In Progress',
+    phases: [
+      {
+        id: 'wt-5.1-sidebar-ui',
+        name: 'WT 5.1 – Sidebar UX + Status Logic',
+        description: 'Restore sidebar functionality',
+        steps: initialDummySteps.slice(0, 2)
+      } as Phase,
+      {
+        id: 'wt-5.2-testing',
+        name: 'WT 5.2 – Testing & QA',
+        description: 'Visual QA and Puppeteer validation',
+        steps: initialDummySteps.slice(2)
+      } as Phase
+    ]
+  }
+];
+
 export const PhasePlan: React.FC = () => {
   const [steps, setSteps] = useState<PhaseStep[]>(initialDummySteps);
   const [filterType, setFilterType] = useState<'all' | 'core' | 'side-quest'>('all');
+  const [showSidebar, setShowSidebar] = useState(false); // SIDEBAR RECOVERY: Toggle for sidebar
+  const [selectedProjectId, setSelectedProjectId] = useState<string>(mockProjects[0]?.id || '');
 
   const handleStepUpdate = (updatedStep: PhaseStep) => {
     setSteps(currentSteps =>
@@ -81,11 +109,35 @@ export const PhasePlan: React.FC = () => {
   const inProgressSteps = steps.filter(s => s.stepProgress?.status === 'In Progress').length;
 
   return (
-    <div className="phase-plan">
-      <div className="phase-plan-header">
-        <h1>Phase Plan</h1>
-        <p>Manage your compliance roadmap steps and side quests</p>
-      </div>
+    <div className="phase-plan" style={{ display: 'flex' }}>
+      {/* SIDEBAR RECOVERY: Optional sidebar */}
+      {showSidebar && (
+        <div style={{ width: '300px', flexShrink: 0 }}>
+          <ProjectSidebarSimple
+            projects={mockProjects}
+            selectedProjectId={selectedProjectId}
+            onProjectSelect={setSelectedProjectId}
+          />
+        </div>
+      )}
+      
+      <div style={{ flex: 1 }}>
+        <div className="phase-plan-header">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <h1>Phase Plan</h1>
+              <p>Manage your compliance roadmap steps and side quests</p>
+            </div>
+            {/* SIDEBAR RECOVERY: Toggle button */}
+            <button
+              onClick={() => setShowSidebar(!showSidebar)}
+              className="filter-btn"
+              style={{ marginLeft: '16px' }}
+            >
+              {showSidebar ? '← Hide Sidebar' : 'Show Sidebar →'}
+            </button>
+          </div>
+        </div>
 
       <div className="phase-plan-content">
         <div className="main-content">
@@ -186,6 +238,7 @@ export const PhasePlan: React.FC = () => {
           </div>
         </div>
       </div>
+      </div> {/* End flex container */}
     </div>
   );
 };
