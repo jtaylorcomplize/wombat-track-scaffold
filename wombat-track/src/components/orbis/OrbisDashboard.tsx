@@ -1,55 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
+import { 
+  getIntegrationsHealth, 
+  refreshIntegrationsHealth, 
+  analyzeIntegrationWithClaude
+} from '../../api/integrationHealthAPI';
+import type { IntegrationHealth } from '../../lib/getIntegrationHealth';
+import { ClaudePromptButton } from '../common/ClaudePromptButton';
+
+// Legacy interface for backward compatibility
 interface Integration {
   name: string;
   status: 'healthy' | 'warning' | 'error' | 'unknown';
-  category: 'api' | 'database' | 'service' | 'monitoring';
+  category: 'AI' | 'CI/CD' | 'Test' | 'Data' | 'API' | 'Database' | 'Service' | 'Monitoring';
   lastChecked: Date;
   logUrl?: string;
+  type: 'AI' | 'CI/CD' | 'Test' | 'Data';
 }
 
 interface OrbisDashboardProps {
   onHealthCheck?: () => void;
 }
 
-const mockIntegrations: Integration[] = [
-  {
-    name: 'payments-api',
-    status: 'healthy',
-    category: 'api',
-    lastChecked: new Date(Date.now() - 5 * 60 * 1000),
-    logUrl: 'https://logs.example.com/payments-api'
-  },
-  {
-    name: 'user-database',
-    status: 'warning',
-    category: 'database',
-    lastChecked: new Date(Date.now() - 10 * 60 * 1000),
-    logUrl: 'https://logs.example.com/user-database'
-  },
-  {
-    name: 'notification-service',
-    status: 'error',
-    category: 'service',
-    lastChecked: new Date(Date.now() - 2 * 60 * 1000)
-  },
-  {
-    name: 'monitoring-dashboard',
-    status: 'healthy',
-    category: 'monitoring',
-    lastChecked: new Date(Date.now() - 1 * 60 * 1000),
-    logUrl: 'https://logs.example.com/monitoring'
-  }
-];
+// Convert IntegrationHealth to legacy Integration format for UI compatibility
+const mapHealthToIntegration = (health: IntegrationHealth): Integration => ({
+  name: health.id,
+  status: health.status,
+  category: health.category,
+  type: health.type,
+  lastChecked: new Date(health.lastChecked),
+  logUrl: health.logUrl
+});
 
 export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck }) => {
-  const [integrations, setIntegrations] = useState<Integration[]>(mockIntegrations);
+  const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<string>('');
+  const [analysisStates, setAnalysisStates] = useState<Record<string, { loading: boolean; response?: string }>>({});
+
+  // Load integration health data on component mount
+  const loadIntegrationHealth = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const response = await getIntegrationsHealth();
+      const mappedIntegrations = response.data.map(mapHealthToIntegration);
+      
+      setIntegrations(mappedIntegrations);
+      setLastUpdated(response.timestamp);
+      
+      // Call the optional onHealthCheck callback
+      if (onHealthCheck) {
+        onHealthCheck();
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load integration health data');
+      console.error('Failed to load integration health:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [onHealthCheck]);
+
+  // Initial load
+  useEffect(() => {
+    loadIntegrationHealth();
+  }, [loadIntegrationHealth]);
 
   const filteredIntegrations = integrations.filter(integration => {
     const statusMatch = statusFilter === 'all' || integration.status === statusFilter;
-    const categoryMatch = categoryFilter === 'all' || integration.category === categoryFilter;
+    const categoryMatch = categoryFilter === 'all' || integration.type === categoryFilter;
     return statusMatch && categoryMatch;
   });
 
@@ -62,11 +86,54 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
     return counts;
   };
 
-  const handleRefresh = () => {
-    if (onHealthCheck) {
-      onHealthCheck();
+  const handleRefresh = async () => {
+    try {
+      setIsRefreshing(true);
+      setError(null);
+      
+      const response = await refreshIntegrationsHealth();
+      const mappedIntegrations = response.data.map(mapHealthToIntegration);
+      
+      setIntegrations(mappedIntegrations);
+      setLastUpdated(response.timestamp);
+      
+      if (onHealthCheck) {
+        onHealthCheck();
+      }
+      
+      console.log(`🔄 Refreshed ${response.refreshed.length} integrations`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to refresh integration health');
+      console.error('Failed to refresh health data:', err);
+    } finally {
+      setIsRefreshing(false);
     }
-    setIntegrations([...integrations]);
+  };
+
+  const handleClaudeAnalysis = async (integrationName: string, prompt: string): Promise<string> => {
+    try {
+      setAnalysisStates(prev => ({
+        ...prev,
+        [integrationName]: { loading: true }
+      }));
+
+      const response = await analyzeIntegrationWithClaude(integrationName, prompt);
+      const analysisResult = `**Analysis for ${response.data.integration?.label}**\n\n${response.data.analysis}\n\n**Risk Level**: ${response.data.riskLevel.toUpperCase()}\n\n**Recommendations**:\n${response.data.recommendations.map((rec, idx) => `${idx + 1}. ${rec}`).join('\n')}`;
+      
+      setAnalysisStates(prev => ({
+        ...prev,
+        [integrationName]: { loading: false, response: analysisResult }
+      }));
+
+      return analysisResult;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to analyze integration';
+      setAnalysisStates(prev => ({
+        ...prev,
+        [integrationName]: { loading: false, response: `Error: ${errorMessage}` }
+      }));
+      throw err;
+    }
   };
 
   const formatLastChecked = (date: Date) => {
@@ -93,60 +160,114 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
     }
   };
 
+  const getTypeTagStyle = (type: string) => {
+    switch (type) {
+      case 'AI':
+        return 'bg-purple-100 text-purple-800 border-purple-200';
+      case 'CI/CD':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'Test':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'Data':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  const getCategoryIcon = (type: string) => {
+    switch (type) {
+      case 'AI':
+        return '🧠';
+      case 'CI/CD':
+        return '🔧';
+      case 'Test':
+        return '🧪';
+      case 'Data':
+        return '💾';
+      default:
+        return '⚙️';
+    }
+  };
+
+  const groupIntegrationsByType = () => {
+    const groups = filteredIntegrations.reduce((acc, integration) => {
+      if (!acc[integration.type]) {
+        acc[integration.type] = [];
+      }
+      acc[integration.type].push(integration);
+      return acc;
+    }, {} as Record<string, Integration[]>);
+    
+    return groups;
+  };
+
   const statusCounts = getStatusCounts();
+  const groupedIntegrations = groupIntegrationsByType();
+
+  if (isLoading) {
+    return (
+      <div data-testid="orbis-dashboard-loading" className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="text-gray-600">Loading integration health data...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div data-testid="orbis-dashboard-page" style={{ padding: '20px', fontFamily: 'system-ui, sans-serif' }}>
-      <div style={{ marginBottom: '24px' }}>
-        <h1>Orbis Dashboard</h1>
-        <p>Monitor integration status and health metrics</p>
-      </div>
-
-      <div data-testid="status-rollup" style={{ 
-        display: 'flex', 
-        gap: '16px', 
-        marginBottom: '24px',
-        padding: '16px',
-        backgroundColor: '#f8fafc',
-        borderRadius: '8px'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#22c55e' }}>
+    <div data-testid="orbis-dashboard-page" className="space-y-6">
+      {/* Status Rollup */}
+      <div data-testid="status-rollup" className="grid grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg border">
+        {lastUpdated && (
+          <div className="col-span-4 text-xs text-gray-500 mb-2">
+            Last updated: {new Date(lastUpdated).toLocaleString()}
+          </div>
+        )}
+        <div className="text-center">
+          <div className="text-2xl font-bold text-green-500">
             {statusCounts.healthy || 0}
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280' }}>Healthy</div>
+          <div className="text-xs text-gray-600">Healthy</div>
         </div>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#f59e0b' }}>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-amber-500">
             {statusCounts.warning || 0}
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280' }}>Warning</div>
+          <div className="text-xs text-gray-600">Warning</div>
         </div>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#ef4444' }}>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-red-500">
             {statusCounts.error || 0}
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280' }}>Error</div>
+          <div className="text-xs text-gray-600">Error</div>
         </div>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#6b7280' }}>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-gray-600">
             {integrations.length}
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280' }}>Total</div>
+          <div className="text-xs text-gray-600">Total</div>
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', alignItems: 'center' }}>
+      {/* Error Display */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="flex items-center gap-2">
+            <span className="text-red-500 text-sm font-medium">⚠️ Error:</span>
+            <span className="text-red-700 text-sm">{error}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Filters */}
+      <div className="flex gap-4 items-center">
         <select 
           data-testid="status-filter"
           value={statusFilter} 
           onChange={(e) => setStatusFilter(e.target.value)}
-          style={{ 
-            padding: '8px 12px', 
-            border: '1px solid #d1d5db', 
-            borderRadius: '6px',
-            backgroundColor: 'white'
-          }}
+          className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm"
         >
           <option value="all">All Status</option>
           <option value="healthy">Healthy</option>
@@ -159,104 +280,105 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
           data-testid="category-filter"
           value={categoryFilter} 
           onChange={(e) => setCategoryFilter(e.target.value)}
-          style={{ 
-            padding: '8px 12px', 
-            border: '1px solid #d1d5db', 
-            borderRadius: '6px',
-            backgroundColor: 'white'
-          }}
+          className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm"
         >
-          <option value="all">All Categories</option>
-          <option value="api">API</option>
-          <option value="database">Database</option>
-          <option value="service">Service</option>
-          <option value="monitoring">Monitoring</option>
+          <option value="all">All Types</option>
+          <option value="AI">AI Services</option>
+          <option value="CI/CD">CI/CD</option>
+          <option value="Test">Testing</option>
+          <option value="Data">Data Services</option>
         </select>
 
         <button 
           data-testid="refresh-button"
           onClick={handleRefresh}
-          style={{ 
-            padding: '8px 16px', 
-            backgroundColor: '#3b82f6', 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: '6px',
-            cursor: 'pointer'
-          }}
+          disabled={isRefreshing}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Refresh
+          {isRefreshing ? 'Refreshing...' : 'Refresh All'}
         </button>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {filteredIntegrations.map((integration) => (
-          <div 
-            key={integration.name}
-            data-testid={`integration-item-${integration.name}`}
-            style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center',
-              padding: '16px', 
-              backgroundColor: 'white',
-              border: '1px solid #e5e7eb', 
-              borderRadius: '8px'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span 
-                data-testid={`status-badge-${integration.name}`}
-                style={{ 
-                  width: '12px', 
-                  height: '12px', 
-                  borderRadius: '50%', 
-                  backgroundColor: getStatusBadgeColor(integration.status)
-                }}
-              />
-              <div>
-                <div style={{ fontWeight: '600' }}>{integration.name}</div>
-                <div style={{ fontSize: '14px', color: '#6b7280', textTransform: 'capitalize' }}>
-                  {integration.category}
-                </div>
-              </div>
-            </div>
+      {/* Grouped Integrations */}
+      <div className="space-y-6">
+        {Object.entries(groupedIntegrations).map(([type, integrations]) => (
+          <div key={type} className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <span className="text-xl">{getCategoryIcon(type)}</span>
+              {type === 'AI' && '🧠 AI Services'}
+              {type === 'CI/CD' && '🔧 CI/CD'}
+              {type === 'Test' && '🧪 Testing + Data'}
+              {type === 'Data' && '💾 Data Services'}
+            </h3>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div 
-                data-testid={`last-checked-${integration.name}`}
-                style={{ fontSize: '14px', color: '#6b7280' }}
-              >
-                {formatLastChecked(integration.lastChecked)}
-              </div>
-              
-              {integration.logUrl && (
-                <a 
-                  data-testid={`log-link-${integration.name}`}
-                  href={integration.logUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ 
-                    color: '#3b82f6', 
-                    textDecoration: 'none',
-                    fontSize: '14px'
-                  }}
+            <div className="grid gap-3">
+              {integrations.map((integration) => (
+                <div 
+                  key={integration.name}
+                  data-testid={`integration-item-${integration.name}`}
+                  className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
                 >
-                  📋 Logs
-                </a>
-              )}
+                  <div className="flex items-center gap-3">
+                    <span 
+                      data-testid={`status-badge-${integration.name}`}
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: getStatusBadgeColor(integration.status) }}
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-semibold text-gray-900">{integration.name}</span>
+                        <span 
+                          className={`text-xs px-2 py-0.5 rounded-full border ${getTypeTagStyle(integration.type)}`}
+                        >
+                          {integration.type}
+                        </span>
+                      </div>
+                      <p 
+                        data-testid={`last-checked-${integration.name}`}
+                        className="text-xs text-gray-500"
+                      >
+                        Last checked: {integration.lastChecked.toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-gray-500">
+                      {formatLastChecked(integration.lastChecked)}
+                    </span>
+                    {integration.logUrl && (
+                      <a 
+                        data-testid={`log-link-${integration.name}`}
+                        href={integration.logUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 text-sm underline"
+                      >
+                        📋 Logs
+                      </a>
+                    )}
+                    <ClaudePromptButton
+                      type="analyze"
+                      label="Analyze"
+                      prompt={`Analyze integration status for ${integration.name}`}
+                      context={{ integration }}
+                      loading={analysisStates[integration.name]?.loading || false}
+                      onPrompt={(prompt) => handleClaudeAnalysis(integration.name, prompt)}
+                      className="scale-75 origin-right"
+                      testId={`claude-analysis-${integration.name}`}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ))}
       </div>
 
       {filteredIntegrations.length === 0 && (
-        <div style={{ 
-          textAlign: 'center', 
-          padding: '40px', 
-          color: '#6b7280' 
-        }}>
-          No integrations match the current filters.
+        <div className="text-center py-12 text-gray-500">
+          <div className="text-lg font-medium mb-2">No integrations found</div>
+          <p>Try adjusting your filters to see more results.</p>
         </div>
       )}
     </div>

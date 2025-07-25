@@ -24,7 +24,7 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
-          path: |
+          path:  < /dev/null | 
             ~/.npm
             wombat-track/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('wombat-track/package-lock.json') }}
@@ -91,18 +91,17 @@ jobs:
         run: npm run build
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: wombat-track/dist
 
   notify:
+    if: false  # Temporarily disabled due to permissions issue
     needs: [build]
     runs-on: ubuntu-latest
-    if: always()
     steps:
       - name: Notify via PR comment
-        if: github.event_name == 'pull_request'
         uses: peter-evans/create-or-update-comment@v3
         with:
           issue-number: ${{ github.event.pull_request.number }}
