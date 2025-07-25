@@ -51,3 +51,84 @@ export const logSelfManagementInitiative = () => {
     }
   });
 };
+
+export const logPhase2Completion = () => {
+  return createGovernanceEvent({
+    phaseStepId: 'wt-phase-2-completion',
+    triggeredBy: 'claude-orchestrator',
+    eventType: 'PhaseUpdated',
+    linkedProject: 'wt-self-managed-app-migration',
+    linkedPhase: 'phase-2-self-management-initiative',
+    severity: 'medium',
+    systemComponent: 'phase-tracker',
+    details: {
+      summary: 'Phase 2 tested, merged, and tagged. Phase 3 branch created.',
+      status: 'completed',
+      testResults: {
+        buildStatus: 'passing',
+        agentMeshTesting: 'completed',
+        dataFieldVerification: 'completed',
+        governanceLogTesting: 'completed'
+      },
+      releaseInfo: {
+        tag: 'v2.2.0-self-managing-core',
+        branch: 'main',
+        mergedAt: new Date().toISOString()
+      },
+      nextPhase: {
+        branch: 'feature/phase-3-metaproject-activation',
+        description: 'MetaProject Activation with agent orchestration capabilities'
+      },
+      completedFeatures: [
+        'AgentMesh CRUD with localStorage persistence',
+        'Extended Project/PhaseStep data models',
+        'Enhanced GovernanceLogViewer with filtering',
+        'New governance event types (MeshChange, SystemUpgrade, AgentAction)',
+        'Project metadata components (techStack, outputFiles, repoRefs)',
+        'PhaseStep enhancements (completionChecklist, ciWorkflowRefs)'
+      ]
+    }
+  });
+};
+
+export const logAIConsoleInteraction = (params: {
+  projectId?: string;
+  phaseStepId?: string;
+  agent: 'claude' | 'gizmo';
+  prompt: string;
+  response: string;
+  promptType?: string;
+  triggeredBy: string;
+  isLive?: boolean;
+  responseTime?: number;
+  agentVersion?: string;
+}) => {
+  return createGovernanceEvent({
+    phaseStepId: params.phaseStepId || 'ai-console-general',
+    triggeredBy: params.triggeredBy,
+    eventType: 'AIConsoleInteraction',
+    linkedProject: params.projectId,
+    linkedPhase: params.phaseStepId,
+    severity: 'low',
+    agentId: params.agent,
+    systemComponent: 'ai-console',
+    details: {
+      agent: params.agent,
+      prompt: params.prompt,
+      response: params.response,
+      promptType: params.promptType || 'general',
+      promptLength: params.prompt.length,
+      responseLength: params.response.length,
+      isLive: params.isLive || false,
+      responseTime: params.responseTime,
+      agentVersion: params.agentVersion,
+      // DriveMemory + MemoryPlugin tags
+      memoryTags: ['wt-5.5-governance-log-hook', 'ai-console-logging'],
+      interactionMetrics: {
+        hasContext: Boolean(params.projectId || params.phaseStepId),
+        isProjectSpecific: Boolean(params.projectId),
+        isPhaseSpecific: Boolean(params.phaseStepId)
+      }
+    }
+  });
+};

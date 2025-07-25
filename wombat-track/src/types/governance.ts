@@ -6,7 +6,8 @@ export type GovernanceEventType =
   | 'PhaseUpdated'
   | 'MeshChange'
   | 'SystemUpgrade'
-  | 'AgentAction';
+  | 'AgentAction'
+  | 'AIConsoleInteraction';
 
 export interface GovernanceEvent {
   id: string;

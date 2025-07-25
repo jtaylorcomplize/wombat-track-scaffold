@@ -36,6 +36,8 @@ export const GovernanceLogViewer: React.FC<GovernanceLogViewerProps> = ({ projec
         return '⬆️';
       case 'AgentAction':
         return '🤖';
+      case 'AIConsoleInteraction':
+        return '💬';
       default:
         return '📋';
     }
@@ -87,6 +89,7 @@ export const GovernanceLogViewer: React.FC<GovernanceLogViewerProps> = ({ projec
                 <option value="MeshChange">Mesh Change</option>
                 <option value="SystemUpgrade">System Upgrade</option>
                 <option value="AgentAction">Agent Action</option>
+                <option value="AIConsoleInteraction">AI Console Interaction</option>
               </select>
             </div>
           </div>

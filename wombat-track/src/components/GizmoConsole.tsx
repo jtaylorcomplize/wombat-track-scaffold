@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Bot, Zap, Loader2, RotateCcw, Copy, ChevronDown } from 'lucide-react';
+import { Send, Bot, Zap, Loader2, RotateCcw, Copy, ChevronDown, Save, Settings } from 'lucide-react';
+import { useProjectContext } from '../contexts/ProjectContext';
+import { logAIConsoleInteraction } from '../utils/governanceLogger';
 
 export type AIAgent = 'claude' | 'gizmo';
 
@@ -10,6 +12,8 @@ export interface ConsoleMessage {
   timestamp: string;
   agentName?: string;
   isLoading?: boolean;
+  isLogged?: boolean;
+  logId?: string;
 }
 
 export interface GizmoConsoleProps {
@@ -18,6 +22,12 @@ export interface GizmoConsoleProps {
   initialAgent?: AIAgent;
   placeholder?: string;
   maxHeight?: string;
+  // Governance logging context
+  projectId?: string;
+  phaseStepId?: string;
+  promptType?: string;
+  autoLog?: boolean;
+  userId?: string;
 }
 
 const AGENT_CONFIGS = {
@@ -46,16 +56,26 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
   onPrompt,
   initialAgent = 'claude',
   placeholder = 'Type your message...',
-  maxHeight = 'max-h-96'
+  maxHeight = 'max-h-96',
+  projectId,
+  phaseStepId,
+  promptType = 'general',
+  autoLog = false,
+  userId = 'current-user'
 }) => {
   const [messages, setMessages] = useState<ConsoleMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [selectedAgent, setSelectedAgent] = useState<AIAgent>(initialAgent);
   const [isLoading, setIsLoading] = useState(false);
   const [showAgentDropdown, setShowAgentDropdown] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [autoLogEnabled, setAutoLogEnabled] = useState(autoLog);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  
+  // Project context for governance logging
+  const { logGovernanceEvent } = useProjectContext();
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -71,15 +91,54 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
     sender: 'user' | AIAgent,
     content: string,
     agentName?: string,
-    isLoading = false
+    isLoading = false,
+    isLogged = false,
+    logId?: string
   ): ConsoleMessage => ({
     id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     sender,
     content,
     timestamp: new Date().toISOString(),
     agentName,
-    isLoading
+    isLoading,
+    isLogged,
+    logId
   });
+
+  const logConversationToGovernance = async (
+    prompt: string,
+    response: string,
+    agent: AIAgent
+  ): Promise<string | null> => {
+    try {
+      const governanceEvent = logAIConsoleInteraction({
+        projectId,
+        phaseStepId,
+        agent,
+        prompt,
+        response,
+        promptType,
+        triggeredBy: userId
+      });
+      
+      // Add to governance log via context
+      logGovernanceEvent(governanceEvent);
+      
+      return governanceEvent.id;
+    } catch (error) {
+      console.error('Failed to log conversation to governance:', error);
+      return null;
+    }
+  };
+
+  const markMessagesAsLogged = (userMessageId: string, aiMessageId: string, logId: string) => {
+    setMessages(prev => prev.map(msg => {
+      if (msg.id === userMessageId || msg.id === aiMessageId) {
+        return { ...msg, isLogged: true, logId };
+      }
+      return msg;
+    }));
+  };
 
   const mockClaudeDispatcher = async (prompt: string): Promise<string> => {
     // Simulate network delay
@@ -133,11 +192,21 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
           : await mockGizmoDispatcher(userMessage.content);
       }
 
+      // Create response message
+      const responseMessage = createMessage(selectedAgent, response, AGENT_CONFIGS[selectedAgent].name);
+      
+      // Auto-log if enabled
+      let logId: string | null = null;
+      if (autoLogEnabled) {
+        logId = await logConversationToGovernance(userMessage.content, response, selectedAgent);
+      }
+
       // Remove loading message and add actual response
       setMessages(prev => {
         const withoutLoading = prev.filter(msg => !msg.isLoading);
-        const responseMessage = createMessage(selectedAgent, response, AGENT_CONFIGS[selectedAgent].name);
-        return [...withoutLoading, responseMessage];
+        const updatedUserMessage = logId ? { ...userMessage, isLogged: true, logId } : userMessage;
+        const updatedResponseMessage = logId ? { ...responseMessage, isLogged: true, logId } : responseMessage;
+        return [...withoutLoading.slice(0, -1), updatedUserMessage, updatedResponseMessage];
       });
     } catch (error) {
       console.error('AI Console error:', error);
@@ -165,6 +234,51 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
 
   const copyMessage = (content: string) => {
     navigator.clipboard.writeText(content);
+  };
+
+  const saveLatestExchangeToLog = async () => {
+    const reversedMessages = [...messages].reverse();
+    const latestUserMessage = reversedMessages.find(msg => msg.sender === 'user' && !msg.isLogged);
+    const latestAIMessage = reversedMessages.find(msg => msg.sender !== 'user' && !msg.isLogged && !msg.isLoading);
+    
+    if (latestUserMessage && latestAIMessage) {
+      const logId = await logConversationToGovernance(
+        latestUserMessage.content,
+        latestAIMessage.content,
+        latestAIMessage.sender as AIAgent
+      );
+      
+      if (logId) {
+        markMessagesAsLogged(latestUserMessage.id, latestAIMessage.id, logId);
+      }
+    }
+  };
+
+  const saveAllToLog = async () => {
+    const exchanges: { user: ConsoleMessage; ai: ConsoleMessage }[] = [];
+    
+    // Group messages into exchanges
+    for (let i = 0; i < messages.length - 1; i++) {
+      const current = messages[i];
+      const next = messages[i + 1];
+      
+      if (current.sender === 'user' && next.sender !== 'user' && !next.isLoading && !current.isLogged) {
+        exchanges.push({ user: current, ai: next });
+      }
+    }
+    
+    // Log each exchange
+    for (const exchange of exchanges) {
+      const logId = await logConversationToGovernance(
+        exchange.user.content,
+        exchange.ai.content,
+        exchange.ai.sender as AIAgent
+      );
+      
+      if (logId) {
+        markMessagesAsLogged(exchange.user.id, exchange.ai.id, logId);
+      }
+    }
   };
 
   const formatTimestamp = (timestamp: string) => {
@@ -222,6 +336,11 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
               <span className="text-xs text-gray-500">
                 {formatTimestamp(message.timestamp)}
               </span>
+              {message.isLogged && (
+                <span className="text-xs text-green-600 font-medium" title={`Logged to governance (ID: ${message.logId})`}>
+                  📝 Logged
+                </span>
+              )}
               <button
                 onClick={() => copyMessage(message.content)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -294,6 +413,66 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
           <span className="text-xs text-gray-500">
             {messages.length} messages
           </span>
+          
+          {/* Governance Logging Controls */}
+          {messages.length > 0 && (
+            <>
+              <button
+                onClick={saveLatestExchangeToLog}
+                disabled={isLoading}
+                className="text-blue-500 hover:text-blue-700 transition-colors disabled:opacity-50"
+                title="Save latest exchange to governance log"
+              >
+                <Save className="w-4 h-4" />
+              </button>
+              
+              <div className="relative">
+                <button
+                  onClick={() => setShowSettings(!showSettings)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  title="Governance settings"
+                >
+                  <Settings className="w-4 h-4" />
+                </button>
+                
+                {showSettings && (
+                  <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 min-w-[200px] p-3">
+                    <div className="space-y-3">
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          checked={autoLogEnabled}
+                          onChange={(e) => setAutoLogEnabled(e.target.checked)}
+                          className="rounded"
+                        />
+                        <span className="text-sm">Auto-log conversations</span>
+                      </label>
+                      
+                      <button
+                        onClick={() => {
+                          saveAllToLog();
+                          setShowSettings(false);
+                        }}
+                        disabled={isLoading}
+                        className="w-full text-left text-sm text-blue-600 hover:text-blue-800 transition-colors disabled:opacity-50"
+                      >
+                        Save all to governance log
+                      </button>
+                      
+                      {(projectId || phaseStepId) && (
+                        <div className="text-xs text-gray-500 pt-2 border-t">
+                          <div>Project: {projectId || 'None'}</div>
+                          <div>Phase/Step: {phaseStepId || 'None'}</div>
+                          <div>Type: {promptType}</div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+          
           <button
             onClick={clearMessages}
             disabled={messages.length === 0 || isLoading}
