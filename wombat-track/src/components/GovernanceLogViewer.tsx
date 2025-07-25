@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { useProjectContext } from '../contexts/ProjectContext';
 import { Clock, User, FileText, Filter } from 'lucide-react';
-import type { GovernanceEventType } from '../types/governance';
+import type { GovernanceEventType, GovernanceEvent } from '../types/governance';
 
 interface GovernanceLogViewerProps {
   projectFilter?: string;
 }
 
 export const GovernanceLogViewer: React.FC<GovernanceLogViewerProps> = ({ projectFilter }) => {
-  const { governanceLog, projects } = useProjectContext();
+  const { governanceLog } = useProjectContext();
   const [eventTypeFilter, setEventTypeFilter] = useState<GovernanceEventType | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
 
