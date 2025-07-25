@@ -27,9 +27,9 @@ jobs:
           path:  < /dev/null | 
             ~/.npm
             wombat-track/node_modules
-          key: \${{ runner.os }}-node-\${{ hashFiles('wombat-track/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('wombat-track/package-lock.json') }}
           restore-keys: |
-            \${{ runner.os }}-node-
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         working-directory: ./wombat-track
@@ -69,7 +69,7 @@ jobs:
         with:
           args: --severity-threshold=high --file=wombat-track/package.json
         env:
-          SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   build:
     needs: [lint, security]
@@ -104,24 +104,24 @@ jobs:
       - name: Notify via PR comment
         uses: peter-evans/create-or-update-comment@v3
         with:
-          issue-number: \${{ github.event.pull_request.number }}
+          issue-number: ${{ github.event.pull_request.number }}
           body: |
             ## 🤖 CI Build Status
             
             | Check | Status |
             |-------|--------|
-            | Lint | \${{ needs.lint.result }} |
-            | Security | \${{ needs.security.result }} |
-            | Build | \${{ needs.build.result }} |
+            | Lint | ${{ needs.lint.result }} |
+            | Security | ${{ needs.security.result }} |
+            | Build | ${{ needs.build.result }} |
             
-            [View workflow run](\${{ github.server_url }}/\${{ github.repository }}/actions/runs/\${{ github.run_id }})
+            [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
       - name: Slack notification
         if: github.ref == 'refs/heads/main'
         uses: 8398a7/action-slack@v3
         with:
-          status: \${{ job.status }}
-          text: 'Build \${{ job.status }} for \${{ github.repository }}'
-          webhook_url: \${{ secrets.SLACK_WEBHOOK }}
+          status: ${{ job.status }}
+          text: 'Build ${{ job.status }} for ${{ github.repository }}'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
         env:
-          SLACK_WEBHOOK_URL: \${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
