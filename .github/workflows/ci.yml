@@ -97,7 +97,7 @@ jobs:
           path: wombat-track/dist
 
   notify:
-    if: github.event_name == 'pull_request'
+    if: false  # Temporarily disabled due to permissions issue
     needs: [build]
     runs-on: ubuntu-latest
     steps:
