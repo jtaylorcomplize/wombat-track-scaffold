@@ -1,11 +1,16 @@
 // wombat-track/src/App.tsx
 import React, { useState } from 'react';
+import { AppLayout } from './components/layout/AppLayout';
 import { PhasePlan } from './pages/PhasePlan';
 import { OrbisDashboard } from './pages/OrbisDashboard';
-import './App.css';
+import { ProjectComposerView } from './components/ProjectComposerView';
+import { DocsPage } from './pages/DocsPage';
 console.log("✅ App is being rendered");
 
-type ActiveView = 'phase-plan' | 'orbis-dashboard' | 'settings';
+// Toggle between old tabbed interface and new Work Surfaces layout
+const USE_NEW_LAYOUT = true;
+
+type ActiveView = 'phase-plan' | 'project-composer' | 'orbis-dashboard' | 'docs' | 'settings';
 
 function App() {
   const [activeView, setActiveView] = useState<ActiveView>('phase-plan');
@@ -17,6 +22,12 @@ function App() {
     console.log(`Health check completed for: ${integrationId}`);
   };
 
+  // Use new Work Surfaces layout
+  if (USE_NEW_LAYOUT) {
+    return <AppLayout />;
+  }
+
+  // Keep original tabbed layout as fallback
   return (
     <div className="App">
       <header className="app-header" data-testid="dashboard-header">
@@ -33,10 +44,22 @@ function App() {
               Phase Plan
             </button>
             <button 
+              className={`nav-link ${activeView === 'project-composer' ? 'active' : ''}`}
+              onClick={() => setActiveView('project-composer')}
+            >
+              🚀 Project Composer
+            </button>
+            <button 
               className={`nav-link ${activeView === 'orbis-dashboard' ? 'active' : ''}`}
               onClick={() => setActiveView('orbis-dashboard')}
             >
               Orbis Dashboard
+            </button>
+            <button 
+              className={`nav-link ${activeView === 'docs' ? 'active' : ''}`}
+              onClick={() => setActiveView('docs')}
+            >
+              📝 Docs
             </button>
             <button 
               className={`nav-link ${activeView === 'settings' ? 'active' : ''}`}
@@ -50,7 +73,9 @@ function App() {
       
       <main className="app-main">
         {activeView === 'phase-plan' && <PhasePlan />}
+        {activeView === 'project-composer' && <ProjectComposerView />}
         {activeView === 'orbis-dashboard' && <OrbisDashboard onHealthCheck={runHealthCheck} />}
+        {activeView === 'docs' && <DocsPage />}
         {activeView === 'settings' && <div>Settings coming soon...</div>}
       </main>
       
