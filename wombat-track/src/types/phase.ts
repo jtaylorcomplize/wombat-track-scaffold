@@ -10,6 +10,18 @@ export interface PhaseStep {
   templateId?: string;
   stepInstruction?: string;
   isSideQuest?: boolean;
+  // Self-management enhancements
+  completionChecklist?: {
+    item: string;
+    completed: boolean;
+    verifiedAt?: string;
+  }[];
+  ciWorkflowRefs?: {
+    workflowId: string;
+    runId?: string;
+    status?: 'pending' | 'running' | 'success' | 'failure';
+    url?: string;
+  }[];
 }
 
 export interface Phase {
@@ -41,6 +53,19 @@ export interface Project {
   wtTag?: string; // Semantic tag for MemoryPlugin/DriveMemory integration
   phasePlan?: string; // Rich text/markdown content for phase planning
   colorTag?: string; // Optional color coding for project identification
+  // Self-management enhancements
+  techStack?: string[]; // Technologies and frameworks used
+  outputFiles?: string[]; // Key deliverable files and artifacts
+  repoRefs?: {
+    url: string;
+    branch?: string;
+    path?: string;
+  }[];
+  governanceLinks?: {
+    type: 'compliance' | 'security' | 'architecture' | 'documentation';
+    url: string;
+    description?: string;
+  }[];
 }
 
 export interface PhaseStepUpdate {
