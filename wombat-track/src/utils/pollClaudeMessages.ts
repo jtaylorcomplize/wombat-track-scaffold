@@ -110,8 +110,8 @@ export async function pollClaudeMessages() {
   }
 }
 
-// Check if running as main module
-if (require.main === module) {
+// Check if running as main module (ES module compatible)
+if (import.meta.url === `file://${process.argv[1]}`) {
   console.log('🤖 Gizmo Message Poller Started\n');
   pollClaudeMessages()
     .then(() => console.log('\n✅ Polling complete'))
