@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-07-26T02:54:06.738Z",
+  "summary": {
+    "errors": 3,
+    "warnings": 0,
+    "status": "FAIL"
+  },
+  "details": {
+    "errors": [
+      "ProjectSidebarSimple: Missing required pattern \"useState\" (React hooks)",
+      "AgentMesh: Missing required pattern \"CRUD\" (CRUD operations)",
+      "AgentMesh: Missing required pattern \"modal\" (Modal dialogs)"
+    ],
+    "warnings": []
+  }
+}

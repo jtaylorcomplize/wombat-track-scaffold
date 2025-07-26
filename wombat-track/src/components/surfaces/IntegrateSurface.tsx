@@ -1,6 +1,7 @@
-import React from 'react';
-import { Plug, Activity, RefreshCw } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plug, Activity, RefreshCw, Network } from 'lucide-react';
 import { OrbisDashboard } from '../orbis/OrbisDashboard';
+import { AgentMesh } from '../mesh/AgentMesh';
 import { StatusCard } from '../common/StatusCard';
 import { ClaudePromptButton } from '../common/ClaudePromptButton';
 import type { Project, Phase, PhaseStep as Step } from '../../types/phase';
@@ -20,6 +21,7 @@ export const IntegrateSurface: React.FC<IntegrateSurfaceProps> = ({
   onPhaseChange,
   onStepChange
 }) => {
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'mesh'>('dashboard');
   const handleClaudePrompt = async (prompt: string, context?: any) => {
     await new Promise(resolve => setTimeout(resolve, 2000));
     
@@ -162,33 +164,58 @@ What would you like help with today?`;
         </div>
       </div>
 
-      {/* Orbis Dashboard */}
+      {/* Tab Navigation */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-        <div className="border-b border-gray-200 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
-                <Activity className="w-5 h-5 text-purple-600" />
+        <div className="border-b border-gray-200">
+          <nav className="flex space-x-8 px-6">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'dashboard'
+                  ? 'border-purple-500 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <Activity className="w-4 h-4" />
                 <span>Integration Dashboard</span>
-              </h2>
-              <p className="text-sm text-gray-600 mt-1">
-                Real-time monitoring of all system integrations and dependencies
-              </p>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <ClaudePromptButton
-                type="ask"
-                label="Ask About Integrations"
-                onPrompt={handleClaudePrompt}
-                testId="integrate-claude-ask"
-              />
-            </div>
-          </div>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('mesh')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'mesh'
+                  ? 'border-purple-500 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <Network className="w-4 h-4" />
+                <span>Agent Mesh</span>
+              </div>
+            </button>
+          </nav>
         </div>
         
         <div className="p-6">
-          <OrbisDashboard onHealthCheck={handleHealthCheck} />
+          {activeTab === 'dashboard' && (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-900 flex items-center space-x-2 mb-2">
+                  <Activity className="w-5 h-5 text-purple-600" />
+                  <span>Integration Dashboard</span>
+                </h2>
+                <p className="text-sm text-gray-600">
+                  Real-time monitoring of all system integrations and dependencies
+                </p>
+              </div>
+              <OrbisDashboard onHealthCheck={handleHealthCheck} />
+            </div>
+          )}
+          
+          {activeTab === 'mesh' && (
+            <AgentMesh />
+          )}
         </div>
       </div>
     </div>
