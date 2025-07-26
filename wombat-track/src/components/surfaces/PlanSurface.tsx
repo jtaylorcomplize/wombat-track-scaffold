@@ -3,6 +3,10 @@ import { Plus, Layout, Target, Bot, Calendar, Users } from 'lucide-react';
 import { StatusCard } from '../common/StatusCard';
 import { ClaudePromptButton } from '../common/ClaudePromptButton';
 import { PhaseBreadcrumb } from '../common/PhaseBreadcrumb';
+import { ProgressBar } from '../common/ProgressBar';
+import { HelpTooltip } from '../common/HelpTooltip';
+import { SmartSuggestion } from '../common/SmartSuggestion';
+import { EmptyState } from '../common/EmptyState';
 import type { Project, Phase, PhaseStep as Step } from '../../types/phase';
 
 interface PlanSurfaceProps {
@@ -24,13 +28,20 @@ export const PlanSurface: React.FC<PlanSurfaceProps> = ({
 
   if (!currentProject) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <Layout className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No Project Selected</h3>
-          <p className="text-gray-600">Select a project to start planning.</p>
-        </div>
-      </div>
+      <EmptyState
+        icon={Layout}
+        title="No Project Selected"
+        description="Select a project from the sidebar to start planning your work surfaces and phases."
+        action={{
+          label: "Create New Project",
+          onClick: () => console.log("Create project clicked"),
+          variant: "primary"
+        }}
+        secondaryAction={{
+          label: "Browse Templates",
+          onClick: () => console.log("Browse templates clicked")
+        }}
+      />
     );
   }
 
@@ -107,43 +118,92 @@ Would you like me to elaborate on any of these areas?`;
   const stats = getProjectStats();
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6" data-testid="plan-surface">
+    <div className="wt-section-spacing" data-testid="plan-surface">
+      {/* Smart Suggestions */}
+      {stats.completionRate < 20 && (
+        <SmartSuggestion
+          title="Get Started with AI Scaffolding"
+          description="Let Claude help you create a complete project structure based on your requirements. This can save hours of planning time."
+          variant="tip"
+          actions={[
+            {
+              label: "Try AI Scaffold",
+              onClick: () => setActiveTab('scaffold'),
+              variant: "primary"
+            },
+            {
+              label: "Learn More",
+              onClick: () => console.log("Learn more clicked")
+            }
+          ]}
+        />
+      )}
+
+      {stats.totalPhases === 0 && (
+        <SmartSuggestion
+          title="Create Your First Phase"
+          description="Break your project into manageable phases to track progress and organize work effectively."
+          variant="info"
+          actions={[
+            {
+              label: "Add Phase",
+              onClick: () => console.log("Add phase clicked"),
+              variant: "primary"
+            }
+          ]}
+        />
+      )}
+
       {/* Header */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-        <div className="flex items-center justify-between mb-4">
+      <div className="wt-card wt-breathing-room mb-6">
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center space-x-3">
-              <Layout className="w-6 h-6 text-blue-600" />
-              <span>Plan Surface</span>
-            </h1>
-            <p className="text-gray-600 mt-1">
+            <div className="flex items-center mb-2" style={{ gap: 'var(--wt-space-3)' }}>
+              <h1 className="wt-heading-2 flex items-center" style={{ gap: 'var(--wt-space-3)' }}>
+                <Layout className="w-6 h-6" style={{ color: 'var(--wt-primary-600)' }} />
+                <span>Set Up</span>
+              </h1>
+              <HelpTooltip 
+                content="The Set Up surface helps you plan your project structure, create phases, and use AI to scaffold your work."
+                position="right"
+              />
+            </div>
+            <p className="wt-body-large">
               Composer, phase setup, and AI scaffolding for {currentProject.name}
             </p>
           </div>
           
-          <div className="flex items-center space-x-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <ClaudePromptButton
               type="scaffold"
               label="AI Scaffold"
               onPrompt={handleClaudePrompt}
               testId="plan-ai-scaffold"
             />
-            <button className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+            <button className="wt-button-primary wt-focus-ring wt-mobile-full-width flex items-center justify-center gap-2">
               <Plus className="w-4 h-4" />
               <span>New Phase</span>
             </button>
           </div>
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatusCard
-            title="Project Progress"
-            status={stats.completionRate >= 80 ? 'success' : stats.completionRate >= 50 ? 'warning' : 'error'}
-            value={`${stats.completionRate}%`}
-            description={`${stats.completedSteps} of ${stats.totalSteps} steps`}
-            testId="plan-progress-card"
+        {/* Project Progress Overview */}
+        <div className="wt-card mb-6" style={{ padding: 'var(--wt-space-6)' }}>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="wt-heading-4">Project Progress</h3>
+            <span className="wt-caption">{stats.completedSteps} of {stats.totalSteps} steps complete</span>
+          </div>
+          <ProgressBar
+            value={stats.completionRate}
+            max={100}
+            variant={stats.completionRate >= 80 ? 'success' : stats.completionRate >= 50 ? 'default' : 'warning'}
+            showPercentage={true}
+            animated={true}
           />
+        </div>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 wt-section-spacing">
           <StatusCard
             title="Active Phases"
             status="in_progress"

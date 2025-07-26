@@ -19,12 +19,12 @@ const SURFACE_ICONS: Record<WorkSurface, React.ReactNode> = {
   integrate: <span className="text-sm">🧬</span>
 };
 
-const SURFACE_COLORS: Record<WorkSurface, string> = {
-  plan: 'bg-blue-50 text-blue-700 border-blue-200',
-  execute: 'bg-green-50 text-green-700 border-green-200',
-  document: 'bg-purple-50 text-purple-700 border-purple-200',
-  govern: 'bg-orange-50 text-orange-700 border-orange-200',
-  integrate: 'bg-pink-50 text-pink-700 border-pink-200'
+const SURFACE_STYLES: Record<WorkSurface, { background: string; color: string; border: string }> = {
+  plan: { background: 'var(--wt-primary-50)', color: 'var(--wt-primary-700)', border: 'var(--wt-primary-200)' },
+  execute: { background: 'var(--wt-success-50)', color: 'var(--wt-success-700)', border: 'var(--wt-success-200)' },
+  document: { background: 'var(--wt-primary-50)', color: 'var(--wt-primary-700)', border: 'var(--wt-primary-200)' },
+  govern: { background: 'var(--wt-warning-50)', color: 'var(--wt-warning-700)', border: 'var(--wt-warning-200)' },
+  integrate: { background: 'var(--wt-primary-50)', color: 'var(--wt-primary-700)', border: 'var(--wt-primary-200)' }
 };
 
 export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
@@ -36,11 +36,11 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
 }) => {
   const getSurfaceLabel = (surface: WorkSurface) => {
     const labels: Record<WorkSurface, string> = {
-      plan: 'Plan',
-      execute: 'Execute',
-      document: 'Document',
-      govern: 'Govern',
-      integrate: 'Integrate'
+      plan: 'Set Up',
+      execute: 'Track Progress',
+      document: 'Create Records',
+      govern: 'Review & Audit',
+      integrate: 'Connect Tools'
     };
     return labels[surface];
   };
@@ -75,15 +75,28 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
-      <div className="px-6 py-4">
+    <header 
+      className="sticky top-0 z-30 border-b shadow-sm"
+      style={{ 
+        background: 'var(--wt-neutral-0)',
+        borderColor: 'var(--wt-neutral-200)',
+        boxShadow: 'var(--wt-shadow-sm)'
+      }}
+    >
+      <div style={{ padding: 'var(--wt-space-6)' }}>
         {/* Surface Selector */}
         <div className="flex items-center justify-between mb-4">
-          <div className={`inline-flex items-center px-3 py-2 rounded-lg border text-sm font-medium ${
-            SURFACE_COLORS[selectedSurface]
-          }`}>
+          <div 
+            className="inline-flex items-center rounded-lg border wt-caption"
+            style={{
+              padding: 'var(--wt-space-3) var(--wt-space-4)',
+              background: SURFACE_STYLES[selectedSurface].background,
+              color: SURFACE_STYLES[selectedSurface].color,
+              borderColor: SURFACE_STYLES[selectedSurface].border
+            }}
+          >
             {SURFACE_ICONS[selectedSurface]}
-            <span className="ml-2">{getSurfaceLabel(selectedSurface)} Surface</span>
+            <span style={{ marginLeft: 'var(--wt-space-2)' }}>{getSurfaceLabel(selectedSurface)}</span>
           </div>
 
           <div className="flex items-center space-x-2">
@@ -91,11 +104,18 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
               <button
                 key={surface}
                 onClick={() => onSurfaceChange(surface)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                  selectedSurface === surface
-                    ? SURFACE_COLORS[surface]
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
+                style={selectedSurface === surface ? {
+                  padding: 'var(--wt-space-2) var(--wt-space-3)',
+                  background: SURFACE_STYLES[surface].background,
+                  color: SURFACE_STYLES[surface].color,
+                  borderColor: SURFACE_STYLES[surface].border,
+                  border: '1px solid'
+                } : {
+                  padding: 'var(--wt-space-2) var(--wt-space-3)',
+                  background: 'var(--wt-neutral-100)',
+                  color: 'var(--wt-neutral-600)'
+                }}
+                className="rounded-md text-xs font-medium transition-colors wt-focus-ring"
                 data-testid={`surface-tab-${surface}`}
               >
                 {getSurfaceLabel(surface)}

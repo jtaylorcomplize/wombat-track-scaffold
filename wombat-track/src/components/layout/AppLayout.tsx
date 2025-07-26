@@ -34,7 +34,7 @@ const mockProjects: Project[] = [
         name: 'Phase 1: Planning',
         description: 'Initial planning phase',
         order: 1,
-        status: 'completed',
+        status: 'completed' as const,
         completionPercentage: 100,
         steps: []
       },
@@ -44,14 +44,14 @@ const mockProjects: Project[] = [
         name: 'Phase 2: Development',
         description: 'Core development phase',
         order: 2,
-        status: 'in_progress',
+        status: 'in_progress' as const,
         completionPercentage: 75,
         steps: [
           {
             id: 'step-1',
             phaseId: 'phase-2',
             name: 'Setup Development Environment',
-            status: 'complete',
+            status: 'complete' as const,
             description: 'Set up development environment and tools',
             stepInstruction: 'Configure development environment',
             isSideQuest: false
@@ -60,7 +60,7 @@ const mockProjects: Project[] = [
             id: 'step-2',
             phaseId: 'phase-2',
             name: 'Implement Core Features',
-            status: 'in_progress',
+            status: 'in_progress' as const,
             description: 'Implement main application features',
             stepInstruction: 'Develop core functionality',
             isSideQuest: false
@@ -76,7 +76,7 @@ const mockProjects: Project[] = [
     createdAt: new Date().toISOString(),
     createdBy: 'user',
     projectOwner: 'security-team',
-    projectType: 'Security',
+    projectType: 'Security' as const,
     status: 'Active',
     completionPercentage: 30,
     currentPhase: 'Analysis',
@@ -87,7 +87,7 @@ const mockProjects: Project[] = [
         name: 'Phase 1: Analysis',
         description: 'Security analysis and requirements',
         order: 1,
-        status: 'in_progress',
+        status: 'in_progress' as const,
         completionPercentage: 45,
         steps: []
       }
@@ -149,17 +149,21 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
 
   if (!currentProject) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2">No Projects Available</h2>
-          <p className="text-gray-600">Create a project to get started with Wombat Track.</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--wt-neutral-50)' }}>
+        <div className="text-center wt-breathing-room">
+          <h2 className="wt-heading-2 mb-4">No Projects Available</h2>
+          <p className="wt-body-large">Create a project to get started with Wombat Track.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex" data-testid="app-layout">
+    <div 
+      className="min-h-screen flex" 
+      data-testid="app-layout"
+      style={{ background: 'var(--wt-neutral-50)' }}
+    >
       {/* Persistent Sidebar */}
       <ProjectSidebar
         projects={projects}
@@ -172,9 +176,13 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
       />
 
       {/* Main Content Area */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${
-        sidebarCollapsed ? 'ml-16' : 'ml-80'
-      }`}>
+      <div 
+        className={`flex-1 flex flex-col`}
+        style={{ 
+          marginLeft: sidebarCollapsed ? 'var(--wt-sidebar-collapsed)' : 'var(--wt-sidebar-width)',
+          transition: 'margin-left var(--wt-transition-normal)'
+        }}
+      >
         {/* Sticky Breadcrumb Header */}
         <BreadcrumbHeader
           currentProject={currentProject}
@@ -185,8 +193,14 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
         />
 
         {/* Work Surface Content */}
-        <main className="flex-1 overflow-auto" data-testid={`${selectedSurface}-surface`}>
-          {renderCurrentSurface()}
+        <main 
+          className="flex-1 overflow-auto wt-content-max-width" 
+          data-testid={`${selectedSurface}-surface`}
+          style={{ paddingTop: 'var(--wt-space-6)' }}
+        >
+          <div className="wt-surface">
+            {renderCurrentSurface()}
+          </div>
         </main>
       </div>
     </div>
