@@ -1,20 +1,27 @@
 import React from 'react';
 import { GizmoConsole } from '../GizmoConsole';
+import { handleAIPrompt, testDispatchers } from '../../lib/aiDispatchers';
 
 interface GizmoConsoleExampleProps {
   className?: string;
 }
 
 export const GizmoConsoleExample: React.FC<GizmoConsoleExampleProps> = ({ className = '' }) => {
-  // Example custom prompt handler with governance context
-  const handlePrompt = async (prompt: string, agent: 'claude' | 'gizmo') => {
-    // Simulate API call to Claude/Gizmo
+  // Test dispatcher functionality
+  const runDispatcherTest = async () => {
+    console.log('Running dispatcher test...');
+    const results = await testDispatchers('Test prompt for Phase WT-5.6 integration');
+    console.log('Test results:', results);
+  };
+
+  // Example custom prompt handler (legacy - for comparison)
+  const handleLegacyPrompt = async (prompt: string, agent: 'claude' | 'gizmo') => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     if (agent === 'claude') {
-      return `Claude's response to: "${prompt.slice(0, 30)}${prompt.length > 30 ? '...' : ''}"\n\nThis response includes project context and will be automatically logged to the governance system for tracking and audit purposes.`;
+      return `Legacy Claude response to: "${prompt.slice(0, 30)}${prompt.length > 30 ? '...' : ''}"\n\nThis is using the old mock system for comparison.`;
     } else {
-      return `Gizmo's response: "${prompt}"\n\n⚡ Processed with project context\n🔧 Available actions logged\n📊 Metrics recorded`;
+      return `Legacy Gizmo response: "${prompt}"\n\n⚡ This is the old mock response system`;
     }
   };
 
@@ -22,37 +29,65 @@ export const GizmoConsoleExample: React.FC<GizmoConsoleExampleProps> = ({ classN
     <div className={`space-y-6 ${className}`}>
       <div>
         <h2 className="text-xl font-bold text-gray-900 mb-2">
-          AI Console with Governance Logging
+          Phase WT-5.6: Real-Time AI Console with Live Dispatchers
         </h2>
         <p className="text-gray-600 mb-4">
-          This example demonstrates the GizmoConsole with full governance logging integration.
-          All conversations can be tracked, logged, and audited through the governance system.
+          This example demonstrates the enhanced GizmoConsole with real-time Claude + Gizmo integration,
+          live/fallback indicators, performance tracking, and governance logging with isLive metadata.
         </p>
+        <button
+          onClick={runDispatcherTest}
+          className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          🧪 Test Dispatchers (Check Console)
+        </button>
       </div>
 
-      {/* Basic Console */}
+      {/* Real-Time AI Console */}
       <div className="bg-gray-50 rounded-lg p-4">
-        <h3 className="text-lg font-semibold mb-3">Basic Console</h3>
+        <h3 className="text-lg font-semibold mb-3">🚀 Real-Time AI Console (Phase WT-5.6)</h3>
+        <p className="text-sm text-gray-600 mb-3">
+          Uses live dispatchers with fallback handling. Notice the live/fallback indicators!
+        </p>
         <GizmoConsole 
-          onPrompt={handlePrompt}
-          placeholder="Ask Claude or Gizmo about your project..."
-          maxHeight="max-h-80"
-        />
-      </div>
-
-      {/* Console with Project Context */}
-      <div className="bg-gray-50 rounded-lg p-4">
-        <h3 className="text-lg font-semibold mb-3">Console with Project Context & Auto-Logging</h3>
-        <GizmoConsole 
-          onPrompt={handlePrompt}
           projectId="wt-self-managed-app-migration"
           phaseStepId="phase-3-metaproject-activation"
           promptType="development"
           autoLog={true}
           userId="developer-user"
-          placeholder="This console automatically logs all conversations to governance..."
+          placeholder="Real-time AI with live status indicators and performance tracking..."
           maxHeight="max-h-80"
         />
+      </div>
+
+      {/* Legacy Console for Comparison */}
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <h3 className="text-lg font-semibold mb-3">📝 Legacy Console (For Comparison)</h3>
+        <p className="text-sm text-yellow-800 mb-3">
+          Uses old mock system - compare the response quality and indicators
+        </p>
+        <GizmoConsole 
+          onPrompt={handleLegacyPrompt}
+          projectId="legacy-test"
+          phaseStepId="comparison-test"
+          promptType="testing"
+          autoLog={false}
+          placeholder="Legacy mock responses for comparison..."
+          maxHeight="max-h-80"
+        />
+      </div>
+
+      {/* Phase WT-5.6 Features */}
+      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        <h4 className="font-semibold text-green-900 mb-2">🚀 Phase WT-5.6 New Features:</h4>
+        <ul className="text-sm text-green-800 space-y-1">
+          <li>• <strong>Live Indicators:</strong> 🟢 Live API / 🟡 Fallback status on agent selector and messages</li>
+          <li>• <strong>Performance Tracking:</strong> Response times displayed in message tooltips</li>
+          <li>• <strong>Real Dispatchers:</strong> dispatchToClaude() with /api/claude/dispatch integration</li>
+          <li>• <strong>Enhanced Gizmo:</strong> Context-aware responses ready for AI integration</li>
+          <li>• <strong>Governance Metadata:</strong> isLive, responseTime, and dispatchMode tracked</li>
+          <li>• <strong>Fallback Handling:</strong> Graceful degradation when APIs are unavailable</li>
+        </ul>
       </div>
 
       {/* Usage Instructions */}
@@ -63,8 +98,8 @@ export const GizmoConsoleExample: React.FC<GizmoConsoleExampleProps> = ({ classN
           <li>• <strong>Manual save:</strong> Click the 💾 save icon to log the latest exchange</li>
           <li>• <strong>Batch save:</strong> Use settings menu to save all unlogged conversations</li>
           <li>• <strong>Context tracking:</strong> Project ID, phase/step ID, and prompt type are recorded</li>
-          <li>• <strong>Audit trail:</strong> All interactions tagged with DriveMemory + MemoryPlugin identifiers</li>
-          <li>• <strong>Visual indicators:</strong> 📝 Logged status appears on saved conversations</li>
+          <li>• <strong>Live metadata:</strong> isLive status and performance metrics in governance logs</li>
+          <li>• <strong>Visual indicators:</strong> 📝 Logged, 🟢 Live, 🟡 Fallback status on messages</li>
         </ul>
       </div>
 

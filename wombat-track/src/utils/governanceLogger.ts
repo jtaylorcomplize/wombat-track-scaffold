@@ -119,15 +119,18 @@ export const logAIConsoleInteraction = (params: {
       promptType: params.promptType || 'general',
       promptLength: params.prompt.length,
       responseLength: params.response.length,
+      // Phase WT-5.6 enhancements
       isLive: params.isLive || false,
       responseTime: params.responseTime,
       agentVersion: params.agentVersion,
       // DriveMemory + MemoryPlugin tags
-      memoryTags: ['wt-5.5-governance-log-hook', 'ai-console-logging'],
+      memoryTags: ['wt-5.5-governance-log-hook', 'ai-console-logging', 'wt-5.6-live-agent-dispatch'],
       interactionMetrics: {
         hasContext: Boolean(params.projectId || params.phaseStepId),
         isProjectSpecific: Boolean(params.projectId),
-        isPhaseSpecific: Boolean(params.phaseStepId)
+        isPhaseSpecific: Boolean(params.phaseStepId),
+        isRealTime: params.isLive || false,
+        dispatchMode: params.isLive ? 'live-api' : 'fallback-mock'
       }
     }
   });

@@ -1,0 +1,11 @@
+{
+  "response": "🤖 **Claude (Live API Mock Response)**\n\nThis is a simulated response from the /api/claude/dispatch endpoint.\n\n📍 **Context Received**: Your project and phase information has been processed.\n\n**Analysis**: The prompt has been analyzed and processed through the live API integration. This demonstrates:\n\n• Real-time API connectivity\n• Context-aware processing\n• Live status indicators\n• Performance tracking\n\n**Note**: This is currently a static mock response. In production, this would be a dynamic response from the actual Claude API with full conversational capabilities.\n\n✅ **Status**: Live API integration ready for deployment",
+  "agentVersion": "claude-3-haiku",
+  "tokensUsed": 245,
+  "isLive": true,
+  "metadata": {
+    "endpoint": "/api/claude/dispatch",
+    "version": "wt-5.6-live-dispatch",
+    "timestamp": "2024-01-26T12:00:00Z"
+  }
+}

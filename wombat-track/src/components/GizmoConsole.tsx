@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Bot, Zap, Loader2, RotateCcw, Copy, ChevronDown, Save, Settings } from 'lucide-react';
+import { Send, Bot, Zap, Loader2, RotateCcw, Copy, ChevronDown, Save, Settings, Wifi, WifiOff } from 'lucide-react';
 import { useProjectContext } from '../contexts/ProjectContext';
 import { logAIConsoleInteraction } from '../utils/governanceLogger';
+import { handleAIPrompt, getDispatcherStatus } from '../lib/aiDispatchers';
 
 export type AIAgent = 'claude' | 'gizmo';
 
@@ -14,6 +15,8 @@ export interface ConsoleMessage {
   isLoading?: boolean;
   isLogged?: boolean;
   logId?: string;
+  isLive?: boolean;
+  responseTime?: number;
 }
 
 export interface GizmoConsoleProps {
@@ -70,6 +73,7 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
   const [showAgentDropdown, setShowAgentDropdown] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [autoLogEnabled, setAutoLogEnabled] = useState(autoLog);
+  const [dispatcherStatus, setDispatcherStatus] = useState(getDispatcherStatus());
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -93,7 +97,9 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
     agentName?: string,
     isLoading = false,
     isLogged = false,
-    logId?: string
+    logId?: string,
+    isLive = false,
+    responseTime?: number
   ): ConsoleMessage => ({
     id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     sender,
@@ -102,13 +108,17 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
     agentName,
     isLoading,
     isLogged,
-    logId
+    logId,
+    isLive,
+    responseTime
   });
 
   const logConversationToGovernance = async (
     prompt: string,
     response: string,
-    agent: AIAgent
+    agent: AIAgent,
+    isLive = false,
+    responseTime?: number
   ): Promise<string | null> => {
     try {
       const governanceEvent = logAIConsoleInteraction({
@@ -118,7 +128,9 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
         prompt,
         response,
         promptType,
-        triggeredBy: userId
+        triggeredBy: userId,
+        isLive,
+        responseTime
       });
       
       // Add to governance log via context
@@ -180,25 +192,53 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
     setInputValue('');
     setIsLoading(true);
 
+    const startTime = Date.now();
+
     try {
       let response: string;
+      let isLive = false;
       
       if (onPrompt) {
+        // Use custom prompt handler
         response = await onPrompt(userMessage.content, selectedAgent);
+        isLive = false; // Custom handler doesn't guarantee live status
       } else {
-        // Use mock dispatchers
-        response = selectedAgent === 'claude' 
-          ? await mockClaudeDispatcher(userMessage.content)
-          : await mockGizmoDispatcher(userMessage.content);
+        // Use real AI dispatchers
+        const dispatchContext = {
+          projectId,
+          phaseStepId,
+          promptType,
+          userId
+        };
+        
+        response = await handleAIPrompt(userMessage.content, selectedAgent, dispatchContext);
+        isLive = dispatcherStatus[selectedAgent]?.isLive || false;
       }
 
-      // Create response message
-      const responseMessage = createMessage(selectedAgent, response, AGENT_CONFIGS[selectedAgent].name);
+      const responseTime = Date.now() - startTime;
+
+      // Create response message with performance data
+      const responseMessage = createMessage(
+        selectedAgent, 
+        response, 
+        AGENT_CONFIGS[selectedAgent].name,
+        false, // isLoading
+        false, // isLogged
+        undefined, // logId
+        isLive,
+        responseTime
+      );
       
       // Auto-log if enabled
       let logId: string | null = null;
       if (autoLogEnabled) {
-        logId = await logConversationToGovernance(userMessage.content, response, selectedAgent);
+        logId = await logConversationToGovernance(
+          userMessage.content, 
+          response, 
+          selectedAgent,
+          isLive,
+          responseTime
+        );
       }
 
       // Remove loading message and add actual response
@@ -208,11 +248,26 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
         const updatedResponseMessage = logId ? { ...responseMessage, isLogged: true, logId } : responseMessage;
         return [...withoutLoading.slice(0, -1), updatedUserMessage, updatedResponseMessage];
       });
+      
+      // Update dispatcher status if needed
+      setDispatcherStatus(getDispatcherStatus());
+      
     } catch (error) {
       console.error('AI Console error:', error);
+      const errorTime = Date.now() - startTime;
+      
       setMessages(prev => {
         const withoutLoading = prev.filter(msg => !msg.isLoading);
-        const errorMessage = createMessage(selectedAgent, 'Sorry, there was an error processing your request. Please try again.', AGENT_CONFIGS[selectedAgent].name);
+        const errorMessage = createMessage(
+          selectedAgent, 
+          'Sorry, there was an error processing your request. Please try again.', 
+          AGENT_CONFIGS[selectedAgent].name,
+          false, // isLoading
+          false, // isLogged
+          undefined, // logId
+          false, // isLive
+          errorTime
+        );
         return [...withoutLoading, errorMessage];
       });
     } finally {
@@ -245,7 +300,9 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
       const logId = await logConversationToGovernance(
         latestUserMessage.content,
         latestAIMessage.content,
-        latestAIMessage.sender as AIAgent
+        latestAIMessage.sender as AIAgent,
+        latestAIMessage.isLive,
+        latestAIMessage.responseTime
       );
       
       if (logId) {
@@ -272,7 +329,9 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
       const logId = await logConversationToGovernance(
         exchange.user.content,
         exchange.ai.content,
-        exchange.ai.sender as AIAgent
+        exchange.ai.sender as AIAgent,
+        exchange.ai.isLive,
+        exchange.ai.responseTime
       );
       
       if (logId) {
@@ -335,9 +394,18 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
             <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <span className="text-xs text-gray-500">
                 {formatTimestamp(message.timestamp)}
+                {message.responseTime && (
+                  <span className="ml-1 text-gray-400">({message.responseTime}ms)</span>
+                )}
               </span>
+              {!isUser && message.isLive !== undefined && (
+                <span className={`text-xs font-medium ${message.isLive ? 'text-green-600' : 'text-amber-600'}`} 
+                      title={message.isLive ? 'Live API response' : 'Fallback response'}>
+                  {message.isLive ? '🟢 Live' : '🟡 Fallback'}
+                </span>
+              )}
               {message.isLogged && (
-                <span className="text-xs text-green-600 font-medium" title={`Logged to governance (ID: ${message.logId})`}>
+                <span className="text-xs text-blue-600 font-medium" title={`Logged to governance (ID: ${message.logId})`}>
                   📝 Logged
                 </span>
               )}
@@ -378,7 +446,14 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
               } ${AGENT_CONFIGS[selectedAgent].hoverColor} text-white`}
               disabled={isLoading}
             >
-              <span>{AGENT_CONFIGS[selectedAgent].name}</span>
+              <div className="flex items-center space-x-1">
+                {dispatcherStatus[selectedAgent]?.isLive ? (
+                  <Wifi className="w-3 h-3" title="Live API connection" />
+                ) : (
+                  <WifiOff className="w-3 h-3" title="Fallback mode" />
+                )}
+                <span>{AGENT_CONFIGS[selectedAgent].name}</span>
+              </div>
               <ChevronDown className="w-3 h-3" />
             </button>
             
@@ -395,12 +470,19 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
                         setSelectedAgent(agent);
                         setShowAgentDropdown(false);
                       }}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 text-sm hover:bg-gray-50 transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                      className={`w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-gray-50 transition-colors first:rounded-t-lg last:rounded-b-lg ${
                         selectedAgent === agent ? 'bg-gray-100 font-medium' : ''
                       }`}
                     >
-                      <IconComponent className={`w-4 h-4 ${config.textColor}`} />
-                      <span>{config.name}</span>
+                      <div className="flex items-center space-x-2">
+                        <IconComponent className={`w-4 h-4 ${config.textColor}`} />
+                        <span>{config.name}</span>
+                      </div>
+                      {dispatcherStatus[agent]?.isLive ? (
+                        <Wifi className="w-3 h-3 text-green-500" title="Live" />
+                      ) : (
+                        <WifiOff className="w-3 h-3 text-gray-400" title="Fallback" />
+                      )}
                     </button>
                   );
                 })}
@@ -536,8 +618,13 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
           <div className="text-xs text-gray-500">
             Press Enter to send, Shift+Enter for new line
           </div>
-          <div className="text-xs text-gray-400">
-            Connected to {AGENT_CONFIGS[selectedAgent].name}
+          <div className="flex items-center space-x-2 text-xs text-gray-400">
+            <span>Connected to {AGENT_CONFIGS[selectedAgent].name}</span>
+            {dispatcherStatus[selectedAgent]?.isLive ? (
+              <span className="text-green-600 font-medium">🟢 Live</span>
+            ) : (
+              <span className="text-amber-600 font-medium">🟡 Fallback</span>
+            )}
           </div>
         </div>
       </div>
