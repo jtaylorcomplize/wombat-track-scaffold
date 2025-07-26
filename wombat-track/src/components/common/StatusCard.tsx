@@ -15,39 +15,29 @@ export interface StatusCardProps {
 
 const STATUS_STYLES = {
   success: {
-    bg: 'bg-green-50',
-    border: 'border-green-200',
-    icon: 'text-green-500',
-    title: 'text-green-900',
-    value: 'text-green-700'
+    cssClass: 'wt-status-success',
+    iconColor: 'var(--wt-success-600)',
+    valueColor: 'var(--wt-success-700)'
   },
   warning: {
-    bg: 'bg-amber-50',
-    border: 'border-amber-200',
-    icon: 'text-amber-500',
-    title: 'text-amber-900',
-    value: 'text-amber-700'
+    cssClass: 'wt-status-warning',
+    iconColor: 'var(--wt-warning-600)',
+    valueColor: 'var(--wt-warning-700)'
   },
   error: {
-    bg: 'bg-red-50',
-    border: 'border-red-200',
-    icon: 'text-red-500',
-    title: 'text-red-900',
-    value: 'text-red-700'
+    cssClass: 'wt-status-error',
+    iconColor: 'var(--wt-error-600)',
+    valueColor: 'var(--wt-error-700)'
   },
   info: {
-    bg: 'bg-blue-50',
-    border: 'border-blue-200',
-    icon: 'text-blue-500',
-    title: 'text-blue-900',
-    value: 'text-blue-700'
+    cssClass: 'wt-status-info',
+    iconColor: 'var(--wt-primary-600)',
+    valueColor: 'var(--wt-primary-700)'
   },
   in_progress: {
-    bg: 'bg-purple-50',
-    border: 'border-purple-200',
-    icon: 'text-purple-500',
-    title: 'text-purple-900',
-    value: 'text-purple-700'
+    cssClass: 'wt-status-info',
+    iconColor: 'var(--wt-primary-600)',
+    valueColor: 'var(--wt-primary-700)'
   }
 };
 
@@ -77,11 +67,11 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     if (!trend) return null;
     switch (trend) {
       case 'up':
-        return <span className="text-green-500">↗</span>;
+        return <span style={{ color: 'var(--wt-success-600)' }}>↗</span>;
       case 'down':
-        return <span className="text-red-500">↘</span>;
+        return <span style={{ color: 'var(--wt-error-600)' }}>↘</span>;
       case 'stable':
-        return <span className="text-gray-500">→</span>;
+        return <span style={{ color: 'var(--wt-neutral-500)' }}>→</span>;
       default:
         return null;
     }
@@ -89,37 +79,51 @@ export const StatusCard: React.FC<StatusCardProps> = ({
 
   return (
     <div
-      className={`p-4 rounded-lg border-2 transition-all duration-200 ${
-        styles.bg
-      } ${styles.border} ${
-        onClick ? 'cursor-pointer hover:shadow-md hover:scale-105' : ''
-      } ${className}`}
+      className={`wt-card ${styles.cssClass} ${
+        onClick ? 'wt-interactive wt-focus-ring' : ''
+      } ${className} wt-animate-fade-in`}
+      style={{ 
+        padding: 'var(--wt-space-5)'
+      }}
       onClick={onClick}
       data-testid={testId}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      } : undefined}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <div className="flex items-center space-x-2 mb-1">
-            <IconComponent className={`w-4 h-4 ${styles.icon}`} />
-            <h3 className={`text-sm font-medium ${styles.title}`}>{title}</h3>
+          <div className="flex items-center mb-2" style={{ gap: 'var(--wt-space-2)' }}>
+            <IconComponent 
+              className="w-4 h-4" 
+              style={{ color: styles.iconColor }}
+            />
+            <h3 className="wt-caption">{title}</h3>
           </div>
           
           {value && (
-            <div className={`text-2xl font-bold ${styles.value} mb-1`}>
+            <div 
+              className="wt-heading-3 mb-2"
+              style={{ color: styles.valueColor }}
+            >
               {value}
             </div>
           )}
           
           {description && (
-            <p className="text-sm text-gray-600 mb-2">
+            <p className="wt-body-small mb-3">
               {description}
             </p>
           )}
           
           {trend && trendValue && (
-            <div className="flex items-center space-x-1 text-xs">
+            <div className="flex items-center wt-caption" style={{ gap: 'var(--wt-space-1)' }}>
               {getTrendIcon()}
-              <span className="text-gray-600">{trendValue}</span>
+              <span>{trendValue}</span>
             </div>
           )}
         </div>

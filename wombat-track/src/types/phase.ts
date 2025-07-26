@@ -31,6 +31,8 @@ export interface Phase {
   description: string;
   order: number;
   steps: PhaseStep[];
+  status: 'not_started' | 'in_progress' | 'completed' | 'error';
+  completionPercentage: number;
   summary?: string; // Optional markdown summary for phase documentation
   phaseType?: 'PlatformOps' | 'Governance' | 'Console' | 'Infrastructure' | 'Development' | 'Testing' | 'Other';
   phaseOwner?: string;
@@ -48,8 +50,10 @@ export interface Project {
   // Enhanced metadata fields
   createdBy: string;
   projectOwner: string;
-  projectType: 'Platform' | 'Content' | 'Migration' | 'R&D' | 'Other' | 'execution-console';
+  projectType: 'Platform' | 'Content' | 'Migration' | 'R&D' | 'Other' | 'execution-console' | 'Security';
   status: 'Planned' | 'Active' | 'Paused' | 'Archived' | 'Complete' | 'active';
+  completionPercentage: number;
+  currentPhase: string;
   wtTag?: string; // Semantic tag for MemoryPlugin/DriveMemory integration
   phasePlan?: string; // Rich text/markdown content for phase planning
   colorTag?: string; // Optional color coding for project identification
