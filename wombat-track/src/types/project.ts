@@ -8,7 +8,13 @@ export interface ExtendedProject extends Omit<import('./phase').Project, 'status
   currentPhase?: string;
 }
 
-export interface ExtendedPhase extends import('./phase').Phase {
+export interface ExtendedPhase extends Omit<import('./phase').Phase, 'id' | 'projectId' | 'name' | 'description' | 'order' | 'steps'> {
+  id: string;
+  projectId: string;
+  name: string;
+  description: string;
+  order: number;
+  steps: ExtendedStep[];
   status: 'not_started' | 'in_progress' | 'completed' | 'blocked' | 'on_hold';
   completionPercentage?: number;
 }
