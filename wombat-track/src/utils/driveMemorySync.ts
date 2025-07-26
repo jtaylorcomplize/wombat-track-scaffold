@@ -1,6 +1,22 @@
 import { createNotionClient } from './notionClient';
 import type { GovernanceEvent } from '../types/governance';
 
+// Retry utility with exponential backoff for QA robustness
+async function withRetry<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
+  let delay = 500;
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (i === retries - 1) throw e;
+      console.log(`⚠️  Retry ${i + 1}/${retries} after ${delay}ms...`);
+      await new Promise(res => setTimeout(res, delay));
+      delay *= 2;
+    }
+  }
+  throw new Error('Retry logic failed');
+}
+
 export interface SyncMetadata {
   lastSynced: string;
   sourceSystem: 'Notion' | 'DriveMemory' | 'WombatTrack' | 'API';
@@ -41,10 +57,12 @@ export class DriveMemorySync {
     filters?: any
   ): Promise<DriveMemoryRecord[]> {
     try {
-      const response = await this.notionClient.queryDatabase({
-        database_id: databaseId,
-        filter: filters,
-      });
+      const response = await withRetry(() => 
+        this.notionClient.queryDatabase({
+          database_id: databaseId,
+          filter: filters,
+        })
+      );
 
       const records: DriveMemoryRecord[] = [];
 
@@ -85,10 +103,12 @@ export class DriveMemorySync {
       try {
         const properties = this.mapToNotionProperties(record, databaseId);
         
-        await this.notionClient.writePage({
-          parent: { database_id: databaseId },
-          properties,
-        });
+        await withRetry(() => 
+          this.notionClient.writePage({
+            parent: { database_id: databaseId },
+            properties,
+          })
+        );
 
         results.success++;
       } catch (error) {

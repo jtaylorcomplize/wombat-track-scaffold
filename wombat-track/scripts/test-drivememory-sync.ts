@@ -6,6 +6,17 @@ import type { DriveMemoryRecord } from '../src/utils/driveMemorySync.ts';
 
 dotenv.config();
 
+// Schema assertion utility for QA
+function assertNotionSchema(expected: string[], actual: any[]) {
+  const actualFields = actual.map((p: any) => p.name);
+  expected.forEach(f => {
+    if (!actualFields.includes(f)) {
+      throw new Error(`Missing expected field: ${f}`);
+    }
+  });
+  console.log(`✅ Schema validation passed: ${expected.length} fields verified`);
+}
+
 // Load database IDs from the generated file
 async function loadDatabaseIds() {
   try {
