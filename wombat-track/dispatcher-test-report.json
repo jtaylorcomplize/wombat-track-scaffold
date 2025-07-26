@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-07-26T02:54:02.753Z",
+  "results": {
+    "claude": {
+      "status": "configured",
+      "error": null,
+      "responseTime": 0
+    },
+    "gizmo": {
+      "status": "configured",
+      "error": null,
+      "responseTime": 1
+    },
+    "overall": "pass"
+  },
+  "summary": {
+    "claude": "configured",
+    "gizmo": "configured",
+    "overall": "pass"
+  }
+}

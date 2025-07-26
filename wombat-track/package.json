@@ -10,7 +10,11 @@
     "test": "jest",
     "test:ui": "jest tests/ui",
     "test:ui:headed": "HEADLESS=false jest tests/ui",
-    "test:ui:watch": "jest tests/ui --watch"
+    "test:ui:watch": "jest tests/ui --watch",
+    "sdlc:check-commit": "scripts/check-commit-message.sh",
+    "sdlc:test-dispatchers": "node .github/scripts/test-dispatchers.cjs",
+    "sdlc:watchdog": "node .github/scripts/sidebar-watchdog.cjs",
+    "sdlc:validate": "npm run lint && npm run test && npm run sdlc:test-dispatchers && npm run sdlc:watchdog"
   },
   "dependencies": {
     "@tiptap/extension-placeholder": "^3.0.7",

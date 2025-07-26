@@ -1,0 +1,168 @@
+name: 🛡️ SDLC Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches: [main]
+    paths:
+      - 'wombat-track/**'
+      - '.github/**'
+
+jobs:
+  sdlc-validation:
+    name: Validate SDLC Controls
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: wombat-track/package-lock.json
+      
+      - name: Install dependencies
+        run: |
+          cd wombat-track
+          npm ci
+      
+      - name: Validate PR Title Format
+        run: |
+          echo "🔍 Validating PR title: ${{ github.event.pull_request.title }}"
+          
+          # Check if PR title follows WT-<phase> format
+          if [[ "${{ github.event.pull_request.title }}" =~ ^(WT-[0-9]+(\.[0-9]+)*|Phase WT-[0-9]+(\.[0-9]+)*) ]]; then
+            echo "✅ PR title follows WT phase format"
+          else
+            echo "❌ PR title must start with 'WT-<phase>' or 'Phase WT-<phase>'"
+            echo "Examples:"
+            echo "  ✅ WT-5.6 – Real-Time Claude Integration"
+            echo "  ✅ Phase WT-3.2 - AgentMesh Enhancements"
+            echo "Your title: ${{ github.event.pull_request.title }}"
+            exit 1
+          fi
+      
+      - name: Validate Commit Messages
+        run: |
+          echo "🔍 Validating commit messages in PR..."
+          cd wombat-track
+          chmod +x scripts/check-commit-message.sh
+          
+          # Get commits in this PR
+          COMMITS=$(git log --format="%H:%s" origin/main..HEAD)
+          
+          if [ -z "$COMMITS" ]; then
+            echo "⚠️  No commits found in PR"
+            exit 0
+          fi
+          
+          INVALID_COUNT=0
+          while IFS=':' read -r commit_hash commit_msg; do
+            echo "Checking: $commit_msg"
+            if ! ./scripts/check-commit-message.sh "$commit_msg"; then
+              INVALID_COUNT=$((INVALID_COUNT + 1))
+            fi
+          done <<< "$COMMITS"
+          
+          if [ $INVALID_COUNT -gt 0 ]; then
+            echo "❌ Found $INVALID_COUNT invalid commit messages"
+            exit 1
+          fi
+          
+          echo "✅ All commit messages are valid"
+      
+      - name: Check Governance Metadata
+        run: |
+          echo "🔍 Checking for governance metadata requirements..."
+          cd wombat-track
+          
+          # Check if PR modifies governance-related files
+          GOVERNANCE_FILES=$(git diff --name-only origin/main..HEAD | grep -E "(governance|dispatcher|console)" || echo "")
+          
+          if [ -n "$GOVERNANCE_FILES" ]; then
+            echo "📋 Governance-related files modified:"
+            echo "$GOVERNANCE_FILES"
+            
+            # Check if PR body contains governance metadata
+            PR_BODY="${{ github.event.pull_request.body }}"
+            
+            MISSING_METADATA=""
+            
+            if [[ ! "$PR_BODY" =~ isLive|dispatchMode ]]; then
+              MISSING_METADATA="$MISSING_METADATA\n• Governance metadata (isLive, dispatchMode)"
+            fi
+            
+            if [[ ! "$PR_BODY" =~ MemoryPlugin ]]; then
+              MISSING_METADATA="$MISSING_METADATA\n• MemoryPlugin sync status"
+            fi
+            
+            if [ -n "$MISSING_METADATA" ]; then
+              echo "❌ Missing required metadata in PR description:"
+              echo -e "$MISSING_METADATA"
+              echo ""
+              echo "Please add the following to your PR description:"
+              echo "- [ ] MemoryPlugin sync status updated"
+              echo "- [ ] GovernanceLog metadata includes isLive and dispatchMode"
+              exit 1
+            fi
+            
+            echo "✅ Required governance metadata found"
+          else
+            echo "ℹ️  No governance files modified, skipping metadata check"
+          fi
+      
+      - name: Test AI Dispatchers
+        run: |
+          echo "🧪 Running comprehensive dispatcher tests..."
+          cd wombat-track
+          
+          # Run dispatcher diagnostic test
+          if [ -f ".github/scripts/test-dispatchers.cjs" ]; then
+            node .github/scripts/test-dispatchers.cjs
+          else
+            echo "⚠️  Dispatcher test script not found, skipping"
+          fi
+      
+      - name: Run Sidebar Watchdog
+        run: |
+          echo "🛡️  Running sidebar regression watchdog..."
+          cd wombat-track
+          
+          # Run sidebar watchdog
+          if [ -f ".github/scripts/sidebar-watchdog.cjs" ]; then
+            node .github/scripts/sidebar-watchdog.cjs
+          else
+            echo "⚠️  Sidebar watchdog not found, skipping"
+          fi
+      
+      - name: Lint and Type Check
+        run: |
+          cd wombat-track
+          echo "🔍 Running ESLint..."
+          npm run lint
+          
+          echo "🔍 Running TypeScript check..."
+          npx tsc --noEmit
+      
+      - name: Run Tests
+        run: |
+          cd wombat-track
+          echo "🧪 Running test suite..."
+          npm test
+      
+      - name: SDLC Summary
+        run: |
+          echo "🛡️  SDLC Validation Summary"
+          echo "================================="
+          echo "✅ PR title format validated"
+          echo "✅ Commit messages validated"
+          echo "✅ Governance metadata checked"
+          echo "✅ Code quality checks passed"
+          echo "✅ Tests executed"
+          echo ""
+          echo "🎉 All SDLC controls passed!"
