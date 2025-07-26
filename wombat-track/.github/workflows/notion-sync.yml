@@ -1,0 +1,119 @@
+name: Notion Sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      phase_id:
+        description: 'Phase ID to sync'
+        required: false
+        type: string
+      log_data:
+        description: 'JSON governance log data to sync'
+        required: false
+        type: string
+      content_type:
+        description: 'Type of content to sync'
+        required: false
+        type: choice
+        options:
+          - governance_log
+          - phase_data
+          - project_metadata
+        default: governance_log
+      database_id:
+        description: 'Notion database ID (optional, will use default if not provided)'
+        required: false
+        type: string
+
+jobs:
+  sync-to-notion:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync governance log to Notion
+        if: ${{ github.event.inputs.content_type == 'governance_log' }}
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_GOVERNANCE_DB_ID: ${{ secrets.NOTION_GOVERNANCE_DB_ID }}
+        run: |
+          node -e "
+          import('./src/utils/syncGovernanceLogToNotion.js').then(async (module) => {
+            const { syncGovernanceLogToNotion } = module;
+            
+            const logData = '${{ github.event.inputs.log_data }}';
+            const databaseId = '${{ github.event.inputs.database_id }}' || process.env.NOTION_GOVERNANCE_DB_ID;
+            
+            if (!logData) {
+              console.log('No log data provided, syncing from governance log file...');
+              const { syncGovernanceLogFileToNotion } = module;
+              const results = await syncGovernanceLogFileToNotion('./logs/governance.jsonl', {
+                databaseId: databaseId,
+                token: process.env.NOTION_TOKEN
+              });
+              
+              const successful = results.filter(r => r.success).length;
+              const failed = results.filter(r => !r.success).length;
+              
+              console.log(\`Sync complete: \${successful} successful, \${failed} failed\`);
+              
+              if (failed > 0) {
+                console.error('Failed syncs:', results.filter(r => !r.success));
+                process.exit(1);
+              }
+            } else {
+              console.log('Syncing provided log data...');
+              const event = JSON.parse(logData);
+              const result = await syncGovernanceLogToNotion(event, {
+                databaseId: databaseId,
+                token: process.env.NOTION_TOKEN
+              });
+              
+              if (result.success) {
+                console.log(\`Successfully synced to Notion: \${result.url}\`);
+              } else {
+                console.error('Sync failed:', result.error);
+                process.exit(1);
+              }
+            }
+          }).catch(console.error);
+          "
+
+      - name: Test Notion connection
+        if: ${{ github.event.inputs.content_type == 'phase_data' || github.event.inputs.content_type == 'project_metadata' }}
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: |
+          node -e "
+          import('./src/utils/testNotionConnection.js').then(async (module) => {
+            const { testNotionConnection } = module;
+            const result = await testNotionConnection();
+            
+            if (result.success) {
+              console.log('✅ Notion connection test passed');
+              console.log('Available databases:', result.accessibleDatabases?.map(db => db.title).join(', '));
+            } else {
+              console.error('❌ Notion connection test failed:', result.error);
+              process.exit(1);
+            }
+          }).catch(console.error);
+          "
+
+      - name: Create workflow summary
+        run: |
+          echo "## Notion Sync Results" >> $GITHUB_STEP_SUMMARY
+          echo "- **Content Type:** ${{ github.event.inputs.content_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Phase ID:** ${{ github.event.inputs.phase_id || 'N/A' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Database ID:** ${{ github.event.inputs.database_id || 'Default' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ✅ Completed successfully" >> $GITHUB_STEP_SUMMARY
