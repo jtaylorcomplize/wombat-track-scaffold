@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { ProjectSidebar } from './ProjectSidebar';
+import { EnhancedProjectSidebar } from './EnhancedProjectSidebar';
 import { BreadcrumbHeader } from './BreadcrumbHeader';
 import { PlanSurface } from '../surfaces/PlanSurface';
 import { ExecuteSurface } from '../surfaces/ExecuteSurface';
 import { DocumentSurface } from '../surfaces/DocumentSurface';
 import { GovernSurface } from '../surfaces/GovernSurface';
 import { IntegrateSurface } from '../surfaces/IntegrateSurface';
+import { SubAppDashboard } from '../SubAppDashboard';
 import type { Project, Phase, PhaseStep as Step } from '../../types/phase';
+import { mockPrograms } from '../../data/mockPrograms';
 
 export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate';
 
@@ -98,6 +100,8 @@ const mockProjects: Project[] = [
 export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProjects }) => {
   const [projects] = useState<Project[]>(initialProjects);
   const [currentProject, setCurrentProject] = useState<Project | null>(projects[0] || null);
+  const [currentSubApp, setCurrentSubApp] = useState<string>(mockPrograms[0]?.id || 'prog-orbis-001');
+  const [showSubAppDashboard, setShowSubAppDashboard] = useState<boolean>(true);
   const [selectedSurface, setSelectedSurface] = useState<WorkSurface>('plan');
   const [currentPhase, setCurrentPhase] = useState<Phase | null>(
     currentProject?.phases.find(p => p.status === 'in_progress') || currentProject?.phases[0] || null
@@ -120,6 +124,11 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
     setCurrentPhase(phase);
     const activeStep = phase.steps.find(s => s.status === 'in_progress') || phase.steps[0] || null;
     setCurrentStep(activeStep);
+  };
+
+  const handleWorkSurfaceSelect = (surface: string) => {
+    setSelectedSurface(surface as WorkSurface);
+    setShowSubAppDashboard(false);
   };
 
   const renderCurrentSurface = () => {
@@ -164,15 +173,23 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
       data-testid="app-layout"
       style={{ background: 'var(--wt-neutral-50)' }}
     >
-      {/* Persistent Sidebar */}
-      <ProjectSidebar
+      {/* Enhanced Sidebar with Sub-App Support */}
+      <EnhancedProjectSidebar
         projects={projects}
         currentProject={currentProject}
         selectedSurface={selectedSurface}
         collapsed={sidebarCollapsed}
+        currentSubApp={currentSubApp}
         onProjectChange={handleProjectChange}
-        onSurfaceChange={setSelectedSurface}
+        onSurfaceChange={(surface) => {
+          setSelectedSurface(surface);
+          setShowSubAppDashboard(false);
+        }}
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        onSubAppChange={(subAppId) => {
+          setCurrentSubApp(subAppId);
+          setShowSubAppDashboard(true);
+        }}
       />
 
       {/* Main Content Area */}
@@ -192,14 +209,22 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
           onSurfaceChange={setSelectedSurface}
         />
 
-        {/* Work Surface Content */}
+        {/* Work Surface Content or Sub-App Dashboard */}
         <main 
-          className="flex-1 overflow-auto wt-content-max-width" 
-          data-testid={`${selectedSurface}-surface`}
-          style={{ paddingTop: 'var(--wt-space-6)' }}
+          className="flex-1 overflow-auto" 
+          data-testid={showSubAppDashboard ? 'subapp-dashboard' : `${selectedSurface}-surface`}
         >
           <div className="wt-surface">
-            {renderCurrentSurface()}
+            {showSubAppDashboard ? (
+            <SubAppDashboard 
+              subApp={mockPrograms.find(p => p.id === currentSubApp) || mockPrograms[0]}
+              onWorkSurfaceSelect={handleWorkSurfaceSelect}
+            />
+          ) : (
+            <div className="wt-content-max-width" style={{ paddingTop: 'var(--wt-space-6)' }}>
+              {renderCurrentSurface()}
+            </div>
+          )}
           </div>
         </main>
       </div>

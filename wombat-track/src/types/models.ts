@@ -70,3 +70,12 @@ export interface Phase {
   endDate?: Date;
   status?: 'planning' | 'active' | 'completed' | 'on-hold';
 }
+
+// Program interface for sub-app organization
+export interface Program {
+  id: string;
+  name: string;
+  description: string;
+  status: 'Active' | 'Planning' | 'On-Hold' | 'Completed';
+  programType: 'Platform' | 'Security' | 'Analytics' | 'Development';
+}
