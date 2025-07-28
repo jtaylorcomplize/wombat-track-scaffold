@@ -1,0 +1,13 @@
+Entry,Tags,DestinationDB,Notes
+Claude-Gizmo SDLC Clarification,"Governance, SDLC, Claude, Gizmo",WT Governance Memory,Formalises role split and GitHub PR process
+WT-5.6 Live Dispatch Payload,"Project Execution, WT-5.6, DriveMemory",PhaseStep DB + DriveMemory Anchors,"Done feature; historical, tag as complete"
+WT-5.4 Console Integration,"Project Execution, WT-5.4, GizmoConsole",PhaseStep DB,Mark as ✅ complete
+WT-5.5 GovernanceLog Hook,"Governance, WT-5.5, AI Logging",Governance Memory + PhaseStep DB,"Dual-tag: one is decision pattern, one is execution"
+WT SDLC Protocol (Markdown),"Governance, Process, Strategy",Governance Memory,High-confidence reusable system doc
+WT Docs Module Feature List,"Strategy, Planning, DocsModule, FutureFeatures",WT Project Tracker,Feature roadmap – execution not yet logged
+Claude Thread Reflections,"Comms, Claude, Backlog",Claude-Gizmo Comms DB + Memory Backlog,Incomplete Claude logic – needs triage
+MetaPlatform Vision,"Strategy, AI Philosophy, Recursive Design",Governance Memory (Strategy),Keep long-term for RAG prompts / design context
+Slash Command Design,"Governance, Planning, WT-5.7",Governance Memory + WT Project Tracker,Slash cmds not yet implemented
+RAG Dashboard Goals,"Strategy, Planning, UX",Project Tracker + Design UX System,User-facing feature idea
+Execution Metrics Schema Plan,"Governance, Planning, Schema, Backlog",Memory Backlog,Never implemented – log as partial
+Claude-Gizmo Messaging Loop,"Comms, Agent Protocol, Runtime",Claude-Gizmo Comms DB,Should sync to threads + runtime ID
