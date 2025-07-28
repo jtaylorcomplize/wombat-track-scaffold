@@ -1,8 +1,7 @@
 import React from 'react';
 import { Activity, Shield, FileText, Grid3x3, Layers } from 'lucide-react';
-import { Program } from '../types/models';
+import type { Program } from '../types/models';
 import { mockProjects } from '../data/mockProjects';
-import { useNavigate } from 'react-router-dom';
 
 interface SubAppDashboardProps {
   subApp: Program;
@@ -55,7 +54,6 @@ export const SubAppDashboard: React.FC<SubAppDashboardProps> = ({
   subApp, 
   onWorkSurfaceSelect 
 }) => {
-  const navigate = useNavigate();
   const theme = subAppThemes[subApp.id] || subAppThemes['prog-orbis-001'];
   
   // Calculate program metrics

@@ -3,11 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { SubAppDashboard } from '../../src/components/SubAppDashboard';
 import { mockPrograms } from '../../src/data/mockPrograms';
 
-// Mock react-router-dom
-jest.mock('react-router-dom', () => ({
-  useNavigate: () => jest.fn()
-}));
-
 describe('SubAppDashboard', () => {
   const mockOnWorkSurfaceSelect = jest.fn();
 

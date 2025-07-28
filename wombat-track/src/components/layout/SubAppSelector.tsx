@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronDown, Grid3x3, Box, Globe } from 'lucide-react';
-import { Program } from '../../types/models';
+import type { Program } from '../../types/models';
 import { mockPrograms } from '../../data/mockPrograms';
 
 interface SubAppSelectorProps {
