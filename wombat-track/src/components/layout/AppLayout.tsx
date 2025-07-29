@@ -6,11 +6,12 @@ import { ExecuteSurface } from '../surfaces/ExecuteSurface';
 import { DocumentSurface } from '../surfaces/DocumentSurface';
 import { GovernSurface } from '../surfaces/GovernSurface';
 import { IntegrateSurface } from '../surfaces/IntegrateSurface';
+import { SPQRRuntimeDashboard } from '../SPQR/SPQRRuntimeDashboard';
 import { SubAppDashboard } from '../SubAppDashboard';
 import type { Project, Phase, PhaseStep as Step } from '../../types/phase';
 import { mockPrograms } from '../../data/mockPrograms';
 
-export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate';
+export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate' | 'spqr-runtime';
 
 export interface AppLayoutProps {
   initialProjects?: Project[];
@@ -150,6 +151,8 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
         return <GovernSurface {...commonProps} />;
       case 'integrate':
         return <IntegrateSurface {...commonProps} />;
+      case 'spqr-runtime':
+        return <SPQRRuntimeDashboard />;
       default:
         return <PlanSurface {...commonProps} />;
     }

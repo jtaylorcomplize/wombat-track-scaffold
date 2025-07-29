@@ -99,11 +99,11 @@ const SPQRPhase4Demo: React.FC = () => {
     return () => clearInterval(interval);
   }, [selectedDashboard]);
 
-  const handleMetricsUpdate = (metrics: any) => {
+  const handleMetricsUpdate = (metrics: Record<string, unknown>) => {
     console.log('Metrics updated:', metrics);
   };
 
-  const handleAlertConfigUpdate = (config: any) => {
+  const handleAlertConfigUpdate = (config: Record<string, unknown>) => {
     console.log('Alert configuration updated:', config);
   };
 

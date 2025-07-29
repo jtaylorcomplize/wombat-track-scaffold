@@ -637,7 +637,7 @@ class GovernanceLogger {
         width: window.innerWidth,
         height: window.innerHeight
       },
-      connection_type: (navigator as any).connection?.effectiveType || 'unknown',
+      connection_type: (navigator as typeof navigator & { connection?: { effectiveType?: string } }).connection?.effectiveType || 'unknown',
       phase: 'Phase4–RuntimeObservability',
       environment: process.env.NODE_ENV || 'production'
     };
@@ -825,12 +825,12 @@ class GovernanceLogger {
       switch (action.type) {
         case 'slack':
           if (this.observabilityConfig.slackWebhookUrl) {
-            await this.sendSlackAlert(rule, metricValue, action, context);
+            await this.sendSlackAlert(rule, metricValue, action);
           }
           break;
         case 'email':
           if (this.observabilityConfig.emailAlertRecipients) {
-            await this.sendEmailAlert(rule, metricValue, action, context);
+            await this.sendEmailAlert(rule, metricValue, action);
           }
           break;
         case 'webhook':
@@ -849,7 +849,7 @@ class GovernanceLogger {
     }
   }
 
-  private async sendSlackAlert(rule: AlertRule, metricValue: number, action: any, context: Record<string, unknown>): Promise<void> {
+  private async sendSlackAlert(rule: AlertRule, metricValue: number, action: { severity: string; target?: string }): Promise<void> {
     try {
       const message = {
         text: `SPQR Alert: ${rule.name}`,
@@ -870,7 +870,7 @@ class GovernanceLogger {
     }
   }
 
-  private async sendEmailAlert(rule: AlertRule, metricValue: number, action: any, context: Record<string, unknown>): Promise<void> {
+  private async sendEmailAlert(rule: AlertRule, metricValue: number, action: { severity: string; target?: string }): Promise<void> {
     console.log('Email alert would be sent:', {
       to: action.target,
       subject: `SPQR Alert: ${rule.name}`,
@@ -880,7 +880,7 @@ class GovernanceLogger {
     });
   }
 
-  private async sendWebhookAlert(rule: AlertRule, metricValue: number, action: any, context: Record<string, unknown>): Promise<void> {
+  private async sendWebhookAlert(rule: AlertRule, metricValue: number, action: { severity: string; target?: string }, context: Record<string, unknown>): Promise<void> {
     console.log('Webhook alert would be sent:', {
       url: action.target,
       payload: {

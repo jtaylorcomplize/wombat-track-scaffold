@@ -389,7 +389,6 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
       <SPQRMetricsCapture
         onLoadCapture={captureLoadMetrics}
         onInteractionCapture={captureInteraction}
-        onErrorCapture={captureError}
       />
     </>
   );
@@ -398,13 +397,11 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
 interface SPQRMetricsCaptureProps {
   onLoadCapture: (loadStartTime: number) => void;
   onInteractionCapture: (type: string, details?: Record<string, unknown>) => void;
-  onErrorCapture: (error: Error, context?: Record<string, unknown>) => void;
 }
 
 const SPQRMetricsCapture: React.FC<SPQRMetricsCaptureProps> = ({
   onLoadCapture,
-  onInteractionCapture,
-  onErrorCapture
+  onInteractionCapture
 }) => {
   const loadStartTimeRef = useRef(Date.now());
 
