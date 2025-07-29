@@ -28,7 +28,7 @@ export const DocsEditor: React.FC<DocsEditorProps> = ({
   // Metadata state
   const [title, setTitle] = useState(initialDoc?.title || '');
   const [docType, setDocType] = useState<DocType>(initialDoc?.docType || 'SOP');
-  const [_relatedFeatureId] = useState(initialDoc?.relatedFeatureId || '');
+  const [relatedFeatureId] = useState(initialDoc?.relatedFeatureId || '');
   const [relatedPhaseId, setRelatedPhaseId] = useState(initialDoc?.relatedPhaseId || '');
   const [relatedProjectId, setRelatedProjectId] = useState(initialDoc?.relatedProjectId || '');
   const [tags, setTags] = useState<string[]>(initialDoc?.tags || []);
@@ -55,7 +55,7 @@ export const DocsEditor: React.FC<DocsEditorProps> = ({
       Typography
     ],
     content: initialDoc?.content || '<p></p>',
-    onUpdate: ({ editor }) => { // eslint-disable-line @typescript-eslint/no-unused-vars
+    onUpdate: () => {
       setSaveStatus('unsaved');
       // Trigger autosave after 2 seconds of inactivity
       clearTimeout(window.autoSaveTimeout);
@@ -81,7 +81,7 @@ export const DocsEditor: React.FC<DocsEditorProps> = ({
       title,
       docType,
       content: editor.getHTML(),
-      relatedFeatureId: _relatedFeatureId || undefined,
+      relatedFeatureId: relatedFeatureId || undefined,
       relatedPhaseId: relatedPhaseId || undefined,
       relatedProjectId: relatedProjectId || undefined,
       memoryAnchorId: initialDoc?.memoryAnchorId,
@@ -114,7 +114,7 @@ export const DocsEditor: React.FC<DocsEditorProps> = ({
       setSaveStatus('failed');
       console.error('Failed to save document:', error);
     }
-  }, [editor, title, docType, _relatedFeatureId, relatedPhaseId, relatedProjectId, tags, initialDoc, onSave, logGovernanceEvent, saveStatus]);
+  }, [editor, title, docType, relatedFeatureId, relatedPhaseId, relatedProjectId, tags, initialDoc, onSave, logGovernanceEvent]);
 
   // Toolbar actions
   const toolbarActions = [

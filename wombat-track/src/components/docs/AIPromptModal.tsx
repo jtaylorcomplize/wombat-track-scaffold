@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Sparkles, RefreshCw, Loader2 } from 'lucide-react'; // no-unused-vars fix
+import { X, Sparkles, RefreshCw, Loader2 } from 'lucide-react';
 import type { AIPromptOption } from '../../types/docs';
 import { useProjectContext } from '../../contexts/ProjectContext';
 
@@ -83,7 +83,6 @@ Keep it under 200 words and focus on governance-relevant information.`,
     setError('');
 
     const prompt = selectedOption ? selectedOption.prompt : customPrompt;
-    // Action is handled by the onApplyResult callback
 
     try {
       // Simulate AI generation - in real app, this would call your AI service
