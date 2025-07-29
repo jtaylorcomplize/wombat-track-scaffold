@@ -110,7 +110,7 @@ export const DocumentSurface: React.FC<DocumentSurfaceProps> = ({
     );
   }
 
-  const handleClaudePrompt = async (prompt: string, context?: Record<string, unknown>) => { // @typescript-eslint/no-explicit-any fix
+  const handleClaudePrompt = async (prompt: string, _context?: Record<string, unknown>) => { // context unused
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     if (prompt.toLowerCase().includes('sop')) {

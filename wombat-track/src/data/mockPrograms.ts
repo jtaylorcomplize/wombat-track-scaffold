@@ -21,5 +21,12 @@ export const mockPrograms: Program[] = [
     description: 'Core infrastructure and platform services for all applications',
     status: 'Planning',
     programType: 'Platform'
+  },
+  {
+    id: 'prog-spqr-001',
+    name: 'SPQR Looker Studio',
+    description: 'Intelligent Looker Studio dashboards powered by Actionstep data with 21-card suite for legal practice analytics',
+    status: 'Active',
+    programType: 'Analytics'
   }
 ];

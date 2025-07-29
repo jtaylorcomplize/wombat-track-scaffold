@@ -1,0 +1,886 @@
+{
+  "timestamp": "2025-07-29T02:39:20.016Z",
+  "phase": "WT-8.0.4",
+  "totalTasks": 146,
+  "successCount": 22,
+  "manualCount": 54,
+  "errorCount": 70,
+  "results": [
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-800b-b279-c50c177e4e2a-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-800b-b279-c50c177e4e2a-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80eb-8192-cc9356bb31f2-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80eb-8192-cc9356bb31f2-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80b5-b0a6-cd217733309c-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80b5-b0a6-cd217733309c-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80ec-9154-c119574e5238-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80ec-9154-c119574e5238-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80ec-9154-c119574e5238-description",
+      "action": "updated",
+      "success": true,
+      "details": "Updated description to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8017-b584-c3bd15bee240-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8017-b584-c3bd15bee240-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-800f-b67d-cab74baddf92-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-800f-b67d-cab74baddf92-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-800f-b67d-cab74baddf92-description",
+      "action": "updated",
+      "success": true,
+      "details": "Updated description to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8096-914a-e499b3d494d7-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8096-914a-e499b3d494d7-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80c7-9980-f25071cdb8e8-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80c7-9980-f25071cdb8e8-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80c7-9980-f25071cdb8e8-description",
+      "action": "updated",
+      "success": true,
+      "details": "Updated description to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-803d-ad14-e25804f430b4-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-803d-ad14-e25804f430b4-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-803d-ad14-e25804f430b4-description",
+      "action": "updated",
+      "success": true,
+      "details": "Updated description to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80e6-a0bc-fa3275d45289-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80e6-a0bc-fa3275d45289-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80e6-a0bc-fa3275d45289-description",
+      "action": "updated",
+      "success": true,
+      "details": "Updated description to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8000-a4e2-f117bb1bbfad-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8000-a4e2-f117bb1bbfad-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80d9-9b34-fe4f9df8e231-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80d9-9b34-fe4f9df8e231-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80cf-a80c-e0f33de178fa-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80cf-a80c-e0f33de178fa-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80cf-a80c-e0f33de178fa-description",
+      "action": "updated",
+      "success": true,
+      "details": "Updated description to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80ab-9083-d898ef487357-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80ab-9083-d898ef487357-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8015-8be7-f4c78cbc062b-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8015-8be7-f4c78cbc062b-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-project-tracker-23de1901-e36e-80cd-ae85-dc296ceea755-projectId",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update projectId"
+    },
+    {
+      "taskId": "wt-project-tracker-23de1901-e36e-80cd-ae85-dc296ceea755-title",
+      "action": "updated",
+      "success": true,
+      "details": "Updated title to \"Auto-generated\""
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81bc-bfb9-d9e13471cb08-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81bc-bfb9-d9e13471cb08-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81bc-bfb9-d9e13471cb08-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8196-8560-c47cb8dcf281-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8196-8560-c47cb8dcf281-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8196-8560-c47cb8dcf281-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8177-ae27-e50626cc8b6e-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8177-ae27-e50626cc8b6e-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8177-ae27-e50626cc8b6e-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-819b-816f-d44fa2d1cadf-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-819b-816f-d44fa2d1cadf-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-819b-816f-d44fa2d1cadf-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81d0-abfe-c372aa880919-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81d0-abfe-c372aa880919-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81d0-abfe-c372aa880919-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-815b-bfdd-dd22e9572101-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-815b-bfdd-dd22e9572101-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-815b-bfdd-dd22e9572101-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8119-b5f0-c2ddded0fcac-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8119-b5f0-c2ddded0fcac-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8119-b5f0-c2ddded0fcac-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8157-8afe-fb9a59c50aaa-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8157-8afe-fb9a59c50aaa-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8157-8afe-fb9a59c50aaa-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8165-8b9c-c9759da2d601-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8165-8b9c-c9759da2d601-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8165-8b9c-c9759da2d601-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-818f-8fda-cbe0b93f92b9-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-818f-8fda-cbe0b93f92b9-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-818f-8fda-cbe0b93f92b9-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8173-9de1-ed528e5c247f-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8173-9de1-ed528e5c247f-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8173-9de1-ed528e5c247f-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8192-bfe3-d7a4f3265072-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8192-bfe3-d7a4f3265072-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8192-bfe3-d7a4f3265072-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-811f-bc5e-c205756ba097-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-811f-bc5e-c205756ba097-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-811f-bc5e-c205756ba097-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8138-a4a9-fca8015536fd-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8138-a4a9-fca8015536fd-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8138-a4a9-fca8015536fd-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81de-924b-e6a582808e50-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81de-924b-e6a582808e50-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81de-924b-e6a582808e50-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81b7-8b1d-df888f83c63e-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81b7-8b1d-df888f83c63e-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81b7-8b1d-df888f83c63e-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81a6-920c-f1e10af91f4c-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81a6-920c-f1e10af91f4c-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81a6-920c-f1e10af91f4c-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81cd-a62f-e782cd7b83e9-Event ID",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event ID"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81cd-a62f-e782cd7b83e9-Event Type",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Event Type"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81cd-a62f-e782cd7b83e9-Summary",
+      "action": "skipped",
+      "success": false,
+      "details": "Failed to update Summary"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-800b-b279-c50c177e4e2a-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80eb-8192-cc9356bb31f2-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80b5-b0a6-cd217733309c-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80ec-9154-c119574e5238-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8017-b584-c3bd15bee240-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-800f-b67d-cab74baddf92-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8096-914a-e499b3d494d7-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80c7-9980-f25071cdb8e8-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-803d-ad14-e25804f430b4-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80e6-a0bc-fa3275d45289-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8000-a4e2-f117bb1bbfad-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80d9-9b34-fe4f9df8e231-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80cf-a80c-e0f33de178fa-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-80ab-9083-d898ef487357-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23ee1901-e36e-8015-8be7-f4c78cbc062b-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-project-tracker-23de1901-e36e-80cd-ae85-dc296ceea755-owner",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81bc-bfb9-d9e13471cb08-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8196-8560-c47cb8dcf281-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8177-ae27-e50626cc8b6e-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-819b-816f-d44fa2d1cadf-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81d0-abfe-c372aa880919-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-815b-bfdd-dd22e9572101-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8119-b5f0-c2ddded0fcac-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8157-8afe-fb9a59c50aaa-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8165-8b9c-c9759da2d601-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-818f-8fda-cbe0b93f92b9-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8173-9de1-ed528e5c247f-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8192-bfe3-d7a4f3265072-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-811f-bc5e-c205756ba097-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-8138-a4a9-fca8015536fd-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81de-924b-e6a582808e50-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81b7-8b1d-df888f83c63e-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81a6-920c-f1e10af91f4c-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-claude-gizmo-comm-23ce1901-e36e-81cd-a62f-e782cd7b83e9-Author",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Ownership assignment requires human decision"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-8109-b618-fbb939d47bef-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-8143-ada2-e91f7f53d16e-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-8189-ab5b-fbed27f23861-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-81fa-b18b-d6b5263f47cf-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-8134-9c30-ff918911e5d3-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-8161-9a36-e97fb2ba517e-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-81e5-a5f2-ff463ba5bef7-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-81e3-bd80-d18961be5104-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-81e7-a1e4-f72d9e96e754-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-8144-b23b-c13561cebfe9-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-816b-8d51-ebb8b369678b-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-81c4-9197-d9872f3f8194-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-8131-b9c2-d0b84a4788ed-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-8149-b0a9-f9245207d5d0-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-810b-b608-c70cb28f6cbb-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-8119-a313-d1bf5a8a1749-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-813e-8a36-c0348dcadc1c-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-814f-af9b-f2d88a2e43ed-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-8100-bcd4-f31f044d2da0-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    },
+    {
+      "taskId": "wt-tech-debt-register-23fe1901-e36e-8182-9cd2-dc0cbeab5af4-linkedPhase",
+      "action": "manual_review_required",
+      "success": false,
+      "details": "Legacy phases may have inconsistent tags - requires human verification"
+    }
+  ]
+}

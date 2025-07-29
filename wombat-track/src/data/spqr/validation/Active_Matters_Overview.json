@@ -1,0 +1,101 @@
+{
+  "id": "act_001",
+  "name": "Active Matters Overview",
+  "description": "Overview of all active legal matters with key metrics",
+  "category": "matter_management",
+  "data_source": {
+    "primary_table": "actionstep_matter_management",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "matter_id",
+        "display_name": "Matter ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "matter_name",
+        "display_name": "Matter Name",
+        "data_type": "string"
+      },
+      {
+        "field_name": "client_name",
+        "display_name": "Client Name",
+        "data_type": "string"
+      },
+      {
+        "field_name": "matter_status",
+        "display_name": "Matter Status",
+        "data_type": "string"
+      },
+      {
+        "field_name": "date_opened",
+        "display_name": "Date Opened",
+        "data_type": "date",
+        "format": "YYYY-MM-DD"
+      },
+      {
+        "field_name": "responsible_partner",
+        "display_name": "Responsible Partner",
+        "data_type": "string"
+      }
+    ],
+    "metrics": []
+  },
+  "filters": {
+    "default_filters": [
+      {
+        "field_name": "matter_status",
+        "operator": "equals",
+        "value": "Active"
+      }
+    ],
+    "available_filters": [
+      {
+        "field_name": "matter_status",
+        "display_name": "Matter Status",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Active"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "table",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "partner",
+      "senior_associate"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.217Z",
+    "last_modified": "2025-07-29T02:54:05.224Z",
+    "version": "2.2",
+    "tags": [
+      "matter management",
+      "high",
+      "matter_management"
+    ]
+  },
+  "validation": {
+    "matched_view": "v_actionstep_matter_management",
+    "missing_fields": [],
+    "filter_issues": [],
+    "notes": [
+      "All fields validated successfully",
+      "All filters validated successfully",
+      "Card contains only dimensions, no metrics defined"
+    ]
+  }
+}

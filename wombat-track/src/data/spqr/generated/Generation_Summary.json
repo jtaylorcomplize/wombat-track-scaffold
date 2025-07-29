@@ -1,0 +1,23 @@
+{
+  "generation_timestamp": "2025-07-29T02:54:05.275Z",
+  "total_cards_processed": 21,
+  "successful_generations": 21,
+  "total_validation_issues": 0,
+  "cards_by_category": {
+    "matter_management": 6,
+    "financials": 9,
+    "workforce_planning": 2,
+    "performance": 4
+  },
+  "cards_by_dashboard_group": {
+    "Matter Management": 6,
+    "Financials": 9,
+    "Workforce Planning": 2,
+    "Performance": 4
+  },
+  "issues_by_severity": {
+    "high_severity": 0,
+    "medium_severity": 0,
+    "low_severity": 0
+  }
+}

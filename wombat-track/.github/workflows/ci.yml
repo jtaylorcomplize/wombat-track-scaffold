@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Check for lint-override label
+      id: check-override
+      uses: actions/github-script@v6
+      if: github.event_name == 'pull_request'
+      with:
+        result-encoding: string
+        script: |
+          const pr = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.pull_request.number
+          });
+          
+          const hasOverride = pr.data.labels.some(l => l.name === 'lint-override:approved');
+          return hasOverride ? 'true' : 'false';
+
+    - name: Run linting
+      run: npm run lint
+
+    - name: Check Lint Error Count
+      if: steps.check-override.outputs.result != 'true'
+      run: |
+        npm run lint -- --format json --output-file lint-report.json || true
+        if [ -f lint-report.json ]; then
+          ERRORS=$(jq 'map(select(.severity == 2)) | length' lint-report.json)
+          echo "Total Lint Errors: $ERRORS"
+          if [ $ERRORS -gt 10 ]; then
+            echo "::error::Lint error threshold exceeded ($ERRORS > 10). Add 'lint-override:approved' label to bypass this check."
+            exit 1
+          fi
+        else
+          echo "No lint report generated, proceeding with build"
+        fi
+
+    - name: Run tests
+      run: npm test
+
+    - name: Build project
+      run: npm run build
+
+    - name: Run SDLC validation
+      run: npm run sdlc:validate

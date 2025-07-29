@@ -1,0 +1,78 @@
+{
+  "name": "Client Communication Log",
+  "dataSource": {
+    "name": "Client Communication Log Data Source",
+    "type": "BIGQUERY",
+    "config": {
+      "query": "\n        SELECT \n          c.participant_id as client_id,\n          c.display_name as client_name,\n          AVG(cs.satisfaction_rating) as satisfaction_score,\n          cs.survey_date,\n          cs.feedback_category,\n          comm.communication_date,\n          comm.communication_type,\n          AVG(DATEDIFF(comm.response_date, comm.inquiry_date) * 24) as response_time_hours,\n          p.display_name as fee_earner_name,\n          tasks.tasks_completed,\n          tasks.tasks_pending,\n          (tasks.tasks_completed / (tasks.tasks_completed + tasks.tasks_pending) * 100) as completion_rate,\n          AVG(DATEDIFF(tasks.completion_date, tasks.assignment_date)) as avg_completion_time\n        FROM participants c\n        LEFT JOIN client_surveys cs ON c.participant_id = cs.client_id\n        LEFT JOIN communications comm ON c.participant_id = comm.client_id\n        LEFT JOIN participants p ON comm.fee_earner_id = p.participant_id\n        LEFT JOIN (\n          SELECT \n            fee_earner_id,\n            SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as tasks_completed,\n            SUM(CASE WHEN status IN ('pending', 'in_progress') THEN 1 ELSE 0 END) as tasks_pending,\n            completion_date,\n            assignment_date\n          FROM tasks\n          GROUP BY fee_earner_id\n        ) tasks ON p.participant_id = tasks.fee_earner_id\n        WHERE c.participant_type = 'client'\n        GROUP BY c.participant_id, cs.survey_date, comm.communication_date\n      ",
+      "dataset": "actionstep_analytics",
+      "project": "law-firm-analytics"
+    }
+  },
+  "fields": [
+    {
+      "name": "client_id",
+      "type": "TEXT",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "communication_date",
+      "type": "DATE",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "communication_type",
+      "type": "TEXT",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "fee_earner_name",
+      "type": "TEXT",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "response_time_hours",
+      "type": "NUMBER",
+      "aggregation": "COUNT"
+    }
+  ],
+  "filters": [
+    {
+      "field": "communication_type",
+      "type": "DROPDOWN",
+      "allowMultiple": true,
+      "options": [
+        "\"Email"
+      ]
+    }
+  ],
+  "visualization": {
+    "type": "TABLE",
+    "config": {
+      "dimensions": [
+        "client_id",
+        "communication_date",
+        "communication_type",
+        "fee_earner_name"
+      ],
+      "metrics": [
+        "response_time_hours"
+      ],
+      "colorScheme": "blue_actionstep_theme",
+      "showDataLabels": true
+    }
+  },
+  "permissions": {
+    "viewRoles": [
+      "all_users"
+    ],
+    "editRoles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "embedConfig": {
+    "allowExternalEmbed": false,
+    "domains": []
+  }
+}

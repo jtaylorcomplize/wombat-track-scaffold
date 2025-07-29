@@ -1,0 +1,22 @@
+card_id,card_name,category,description,priority,status,dashboard_group,visual_type,target_audience
+act_001,Active Matters Overview,Matter Management,Overview of all active legal matters with key metrics,high,approved,Matter Management,table,Partners
+act_002,Deadline Tracker,Matter Management,Critical deadlines and upcoming due dates across all matters,high,approved,Matter Management,bar_chart,All Users
+act_003,Client Revenue Summary,Financials,Revenue breakdown by client with billing summaries,high,approved,Financials,bar_chart,Partners
+act_004,Matter Profitability Analysis,Financials,Profit margins and cost analysis per matter,high,approved,Financials,table,Partners
+act_005,Time Entry Dashboard,Workforce Planning,Time tracking and billable hours analysis,medium,approved,Workforce Planning,line_chart,Fee Earners
+act_006,Staff Utilization Report,Workforce Planning,Resource allocation and capacity planning,medium,approved,Workforce Planning,bar_chart,Partners
+act_007,Trust Account Reconciliation,Financials,Trust account balances and reconciliation status,high,approved,Financials,kpi,Finance Team
+act_008,Invoice Status Tracker,Financials,Outstanding invoices and payment tracking,high,approved,Financials,table,Finance Team
+act_009,Matter Type Distribution,Matter Management,Distribution of matters by practice area,medium,approved,Matter Management,pie_chart,Partners
+act_010,Client Satisfaction Metrics,Performance,Client feedback and satisfaction scores,medium,approved,Performance,line_chart,Partners
+act_011,Document Production Status,Matter Management,Status of document reviews and productions,medium,approved,Matter Management,bar_chart,All Users
+act_012,Billing Rate Analysis,Financials,Analysis of billing rates by fee earner and matter type,medium,approved,Financials,table,Partners
+act_013,Court Appearance Calendar,Matter Management,Upcoming court dates and hearing schedules,high,approved,Matter Management,table,All Users
+act_014,Conflict Check Dashboard,Matter Management,Conflict checking status and resolution,medium,approved,Matter Management,table,All Users
+act_015,WIP Aging Report,Financials,Work in progress aging and realization tracking,high,approved,Financials,bar_chart,Finance Team
+act_016,Task Completion Metrics,Performance,Task completion rates and efficiency metrics,medium,approved,Performance,line_chart,Partners
+act_017,Client Communication Log,Performance,Client communication frequency and response times,low,approved,Performance,table,All Users
+act_018,Fee Earner Performance,Performance,Individual fee earner productivity and billing metrics,medium,approved,Performance,table,Partners
+act_019,Matter Budget Variance,Financials,Budget vs actual costs for matters,medium,approved,Financials,bar_chart,Partners
+act_020,Disbursement Tracking,Financials,Disbursement requests and reimbursement status,medium,approved,Financials,table,Finance Team
+act_021,Practice Area Revenue,Financials,Revenue breakdown by legal practice area,medium,approved,Financials,pie_chart,Partners

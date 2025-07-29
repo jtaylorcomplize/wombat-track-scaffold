@@ -332,6 +332,275 @@ export class NotionDatabaseCreator {
 
     return schema;
   }
+
+  // Backfill Task Tracker Database Schema
+  static getBackfillTaskTrackerSchema(phaseDbId?: string): DatabaseSchema {
+    const schema: DatabaseSchema = {
+      name: 'wt-backfill-task-tracker',
+      description: 'Track data reconciliation and governance backfill tasks for WT-8.0.3',
+      properties: {
+        taskTitle: {
+          title: {},
+        },
+        databaseName: {
+          select: {
+            options: [
+              { name: 'wt-project-tracker', color: 'blue' },
+              { name: 'wt-claude-gizmo-comm', color: 'green' },
+              { name: 'wt-tech-debt-register', color: 'orange' },
+              { name: 'wt-schema-sync-report', color: 'purple' },
+              { name: 'Multiple Databases', color: 'gray' },
+            ],
+          },
+        },
+        issueType: {
+          select: {
+            options: [
+              { name: 'Missing Field', color: 'red' },
+              { name: 'Orphaned Entry', color: 'yellow' },
+              { name: 'Relationship Mismatch', color: 'orange' },
+              { name: 'Invalid Value', color: 'pink' },
+              { name: 'Data Quality', color: 'blue' },
+            ],
+          },
+        },
+        priority: {
+          select: {
+            options: [
+              { name: 'High', color: 'red' },
+              { name: 'Medium', color: 'yellow' },
+              { name: 'Low', color: 'green' },
+            ],
+          },
+        },
+        category: {
+          select: {
+            options: [
+              { name: 'Data Quality', color: 'blue' },
+              { name: 'Relationships', color: 'green' },
+              { name: 'Governance', color: 'purple' },
+              { name: 'Migration', color: 'orange' },
+            ],
+          },
+        },
+        status: {
+          select: {
+            options: [
+              { name: 'Open', color: 'red' },
+              { name: 'In Progress', color: 'yellow' },
+              { name: 'Resolved', color: 'green' },
+              { name: 'Deferred', color: 'gray' },
+              { name: 'Blocked', color: 'purple' },
+            ],
+          },
+        },
+        assignee: {
+          rich_text: {},
+        },
+        estimatedEffort: {
+          select: {
+            options: [
+              { name: '<30min', color: 'green' },
+              { name: '1-2 hours', color: 'yellow' },
+              { name: '1+ days', color: 'red' },
+              { name: 'Automated', color: 'blue' },
+            ],
+          },
+        },
+        recordsAffected: {
+          number: {},
+        },
+        suggestedFix: {
+          rich_text: {},
+        },
+        notes: {
+          rich_text: {},
+        },
+        createdAt: {
+          created_time: {},
+        },
+        updatedAt: {
+          last_edited_time: {},
+        },
+      },
+    };
+
+    // Add relation if phaseDbId is provided
+    if (phaseDbId) {
+      schema.properties.linkedPhase = {
+        relation: {
+          database_id: phaseDbId,
+          type: 'single_select',
+        },
+      };
+    } else {
+      schema.properties.linkedPhase = {
+        rich_text: {},
+      };
+    }
+
+    return schema;
+  }
+
+  // Schema Sync Report Database Schema  
+  static getSchemaSyncReportSchema(phaseDbId?: string): DatabaseSchema {
+    const schema: DatabaseSchema = {
+      name: 'wt-schema-sync-report',
+      description: 'Schema synchronization tracking and issue management for oApp migration',
+      properties: {
+        tableName: {
+          title: {},
+        },
+        fieldName: {
+          rich_text: {},
+        },
+        issueType: {
+          select: {
+            options: [
+              { name: 'Missing', color: 'red' },
+              { name: 'Renamed', color: 'yellow' },
+              { name: 'Deprecated', color: 'gray' },
+              { name: 'Type Mismatch', color: 'orange' },
+              { name: 'Extra Field', color: 'blue' },
+            ],
+          },
+        },
+        resolution: {
+          select: {
+            options: [
+              { name: 'Map', color: 'blue' },
+              { name: 'Add', color: 'green' },
+              { name: 'Ignore', color: 'gray' },
+              { name: 'Deprecate', color: 'red' },
+            ],
+          },
+        },
+        canonicalSource: {
+          rich_text: {},
+        },
+        status: {
+          select: {
+            options: [
+              { name: 'Open', color: 'red' },
+              { name: 'In Progress', color: 'yellow' },
+              { name: 'Resolved', color: 'green' },
+              { name: 'Deferred', color: 'gray' },
+            ],
+          },
+        },
+        notes: {
+          rich_text: {},
+        },
+        createdAt: {
+          created_time: {},
+        },
+        updatedAt: {
+          last_edited_time: {},
+        },
+      },
+    };
+
+    // Add relation if phaseDbId is provided
+    if (phaseDbId) {
+      schema.properties.linkedPhase = {
+        relation: {
+          database_id: phaseDbId,
+          type: 'single_select',
+        },
+      };
+    } else {
+      // Fallback to text field
+      schema.properties.linkedPhase = {
+        rich_text: {},
+      };
+    }
+
+    return schema;
+  }
+
+  // Tech Debt Register Database Schema
+  static getTechDebtRegisterSchema(phaseDbId?: string): DatabaseSchema {
+    const schema: DatabaseSchema = {
+      name: 'wt-tech-debt-register',
+      description: 'Central registry for active technical debt, lint violations, and code quality issues',
+      properties: {
+        title: {
+          title: {},
+        },
+        category: {
+          select: {
+            options: [
+              { name: 'Lint', color: 'yellow' },
+              { name: 'Dead Code', color: 'red' },
+              { name: 'Structural', color: 'blue' },
+              { name: 'Design Debt', color: 'purple' },
+              { name: 'Legacy', color: 'gray' },
+            ],
+          },
+        },
+        priority: {
+          select: {
+            options: [
+              { name: 'High', color: 'red' },
+              { name: 'Medium', color: 'yellow' },
+              { name: 'Low', color: 'green' },
+            ],
+          },
+        },
+        originFile: {
+          rich_text: {},
+        },
+        lineReference: {
+          rich_text: {},
+        },
+        status: {
+          select: {
+            options: [
+              { name: 'Open', color: 'red' },
+              { name: 'Suppressed', color: 'yellow' },
+              { name: 'Fixed', color: 'green' },
+              { name: 'Deferred', color: 'gray' },
+            ],
+          },
+        },
+        effortEstimate: {
+          rich_text: {},
+        },
+        linkedPR: {
+          url: {},
+        },
+        notes: {
+          rich_text: {},
+        },
+        canonicalUse: {
+          checkbox: {},
+        },
+        createdAt: {
+          created_time: {},
+        },
+        updatedAt: {
+          last_edited_time: {},
+        },
+      },
+    };
+
+    // Add relation if phaseDbId is provided
+    if (phaseDbId) {
+      schema.properties.linkedPhase = {
+        relation: {
+          database_id: phaseDbId,
+          type: 'single_select',
+        },
+      };
+    } else {
+      // Fallback to text field
+      schema.properties.linkedPhase = {
+        rich_text: {},
+      };
+    }
+
+    return schema;
+  }
 }
 
 // Utility function to create all databases

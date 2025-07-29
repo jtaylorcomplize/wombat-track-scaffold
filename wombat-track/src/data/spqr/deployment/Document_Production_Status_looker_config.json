@@ -1,0 +1,78 @@
+{
+  "name": "Document Production Status",
+  "dataSource": {
+    "name": "Document Production Status Data Source",
+    "type": "BIGQUERY",
+    "config": {
+      "query": "\n        SELECT \n          m.matter_number as matter_id,\n          m.matter_name,\n          p.display_name as client_name,\n          m.matter_status,\n          m.date_opened,\n          rp.display_name as responsible_partner,\n          t.due_date as deadline_date,\n          t.task_type as deadline_type,\n          ap.display_name as assigned_fee_earner,\n          t.priority as priority_level,\n          doc.document_count,\n          doc.reviewed_count,\n          dp.production_status,\n          ca.appearance_date as court_date,\n          ca.court_name,\n          ca.hearing_type,\n          ca.attending_participant as attending_counsel,\n          cc.conflict_status,\n          cc.check_date,\n          cc.checked_by_participant as checked_by,\n          m.practice_area\n        FROM matters m\n        LEFT JOIN participants p ON m.client_id = p.participant_id\n        LEFT JOIN participants rp ON m.responsible_partner_id = rp.participant_id\n        LEFT JOIN tasks t ON m.matter_id = t.matter_id\n        LEFT JOIN participants ap ON t.assigned_participant_id = ap.participant_id\n        LEFT JOIN (\n          SELECT matter_id, COUNT(*) as document_count, \n                 SUM(CASE WHEN review_status = 'reviewed' THEN 1 ELSE 0 END) as reviewed_count\n          FROM documents \n          GROUP BY matter_id\n        ) doc ON m.matter_id = doc.matter_id\n        LEFT JOIN document_productions dp ON m.matter_id = dp.matter_id\n        LEFT JOIN court_appearances ca ON m.matter_id = ca.matter_id\n        LEFT JOIN conflict_checks cc ON m.matter_id = cc.matter_id\n      ",
+      "dataset": "actionstep_analytics",
+      "project": "law-firm-analytics"
+    }
+  },
+  "fields": [
+    {
+      "name": "matter_id",
+      "type": "TEXT",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "production_status",
+      "type": "TEXT",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "due_date",
+      "type": "DATE",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "document_count",
+      "type": "NUMBER",
+      "aggregation": "COUNT"
+    },
+    {
+      "name": "reviewed_count",
+      "type": "NUMBER",
+      "aggregation": "COUNT"
+    }
+  ],
+  "filters": [
+    {
+      "field": "production_status",
+      "type": "DROPDOWN",
+      "allowMultiple": true,
+      "options": [
+        "\"Not Started"
+      ]
+    }
+  ],
+  "visualization": {
+    "type": "BAR_CHART",
+    "config": {
+      "dimensions": [
+        "matter_id",
+        "production_status",
+        "due_date"
+      ],
+      "metrics": [
+        "document_count",
+        "reviewed_count"
+      ],
+      "colorScheme": "blue_actionstep_theme",
+      "showDataLabels": true
+    }
+  },
+  "permissions": {
+    "viewRoles": [
+      "all_users"
+    ],
+    "editRoles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "embedConfig": {
+    "allowExternalEmbed": false,
+    "domains": []
+  }
+}

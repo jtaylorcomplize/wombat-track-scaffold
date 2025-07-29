@@ -1,0 +1,90 @@
+{
+  "id": "act_020",
+  "name": "Disbursement Tracking",
+  "description": "Disbursement requests and reimbursement status",
+  "category": "financials",
+  "data_source": {
+    "primary_table": "actionstep_financials",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "disbursement_id",
+        "display_name": "Disbursement ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "disbursement_type",
+        "display_name": "Disbursement Type",
+        "data_type": "string"
+      },
+      {
+        "field_name": "reimbursement_status",
+        "display_name": "Reimbursement Status",
+        "data_type": "string"
+      },
+      {
+        "field_name": "matter_name",
+        "display_name": "Matter Name",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "disbursement_amount",
+        "display_name": "Disbursement Amount",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "disbursement_type",
+        "display_name": "Disbursement Type",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Court Fees"
+        ]
+      },
+      {
+        "field_name": "reimbursement_status",
+        "display_name": "Reimbursement Status",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Pending"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "table",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "analyst",
+      "admin"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.273Z",
+    "last_modified": "2025-07-29T02:54:05.273Z",
+    "version": "2.2",
+    "tags": [
+      "financials",
+      "medium",
+      "financials"
+    ]
+  }
+}

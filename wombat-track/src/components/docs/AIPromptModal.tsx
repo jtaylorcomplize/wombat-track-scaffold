@@ -83,7 +83,7 @@ Keep it under 200 words and focus on governance-relevant information.`,
     setError('');
 
     const prompt = selectedOption ? selectedOption.prompt : customPrompt;
-    const _action = selectedOption?.action || 'append'; // no-unused-vars fix
+    // Action is handled by the onApplyResult callback
 
     try {
       // Simulate AI generation - in real app, this would call your AI service

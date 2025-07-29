@@ -28,7 +28,7 @@ export const DocsEditor: React.FC<DocsEditorProps> = ({
   // Metadata state
   const [title, setTitle] = useState(initialDoc?.title || '');
   const [docType, setDocType] = useState<DocType>(initialDoc?.docType || 'SOP');
-  const [_relatedFeatureId, setRelatedFeatureId] = useState(initialDoc?.relatedFeatureId || '');
+  const [_relatedFeatureId] = useState(initialDoc?.relatedFeatureId || ''); // setter unused
   const [relatedPhaseId, setRelatedPhaseId] = useState(initialDoc?.relatedPhaseId || '');
   const [relatedProjectId, setRelatedProjectId] = useState(initialDoc?.relatedProjectId || '');
   const [tags, setTags] = useState<string[]>(initialDoc?.tags || []);

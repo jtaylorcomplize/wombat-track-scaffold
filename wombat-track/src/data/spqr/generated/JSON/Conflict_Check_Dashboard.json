@@ -1,0 +1,79 @@
+{
+  "id": "act_014",
+  "name": "Conflict Check Dashboard",
+  "description": "Conflict checking status and resolution",
+  "category": "matter_management",
+  "data_source": {
+    "primary_table": "actionstep_matter_management",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "matter_id",
+        "display_name": "Matter ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "client_name",
+        "display_name": "Client Name",
+        "data_type": "string"
+      },
+      {
+        "field_name": "conflict_status",
+        "display_name": "Conflict Status",
+        "data_type": "string"
+      },
+      {
+        "field_name": "check_date",
+        "display_name": "Check Date",
+        "data_type": "date",
+        "format": "YYYY-MM-DD"
+      },
+      {
+        "field_name": "checked_by",
+        "display_name": "Checked By",
+        "data_type": "string"
+      }
+    ],
+    "metrics": []
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "conflict_status",
+        "display_name": "Conflict Status",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Clear"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "table",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "all_users"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.247Z",
+    "last_modified": "2025-07-29T02:54:05.247Z",
+    "version": "2.2",
+    "tags": [
+      "matter management",
+      "medium",
+      "matter_management"
+    ]
+  }
+}

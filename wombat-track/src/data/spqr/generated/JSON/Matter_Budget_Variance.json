@@ -1,0 +1,86 @@
+{
+  "id": "act_019",
+  "name": "Matter Budget Variance",
+  "description": "Budget vs actual costs for matters",
+  "category": "financials",
+  "data_source": {
+    "primary_table": "actionstep_financials",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "matter_id",
+        "display_name": "Matter ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "budget_status",
+        "display_name": "Budget Status",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "budgeted_amount",
+        "display_name": "Budgeted Amount",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      },
+      {
+        "field_name": "actual_amount",
+        "display_name": "Actual Amount",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      },
+      {
+        "field_name": "variance_percentage",
+        "display_name": "Variance %",
+        "data_type": "decimal",
+        "aggregation": "avg",
+        "format": "0.00%"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "budget_status",
+        "display_name": "Budget Status",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Under Budget"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "bar_chart",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "partner",
+      "senior_associate"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.272Z",
+    "last_modified": "2025-07-29T02:54:05.272Z",
+    "version": "2.2",
+    "tags": [
+      "financials",
+      "medium",
+      "financials"
+    ]
+  }
+}

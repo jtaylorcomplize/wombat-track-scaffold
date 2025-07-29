@@ -1,0 +1,89 @@
+{
+  "id": "act_006",
+  "name": "Staff Utilization Report",
+  "description": "Resource allocation and capacity planning",
+  "category": "workforce_planning",
+  "data_source": {
+    "primary_table": "actionstep_workforce_planning",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "fee_earner_id",
+        "display_name": "Fee Earner ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "fee_earner_name",
+        "display_name": "Fee Earner Name",
+        "data_type": "string"
+      },
+      {
+        "field_name": "department",
+        "display_name": "Department",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "utilization_rate",
+        "display_name": "Utilization Rate",
+        "data_type": "decimal",
+        "aggregation": "avg",
+        "format": "0.00%"
+      },
+      {
+        "field_name": "target_hours",
+        "display_name": "Target Hours",
+        "data_type": "decimal",
+        "aggregation": "count"
+      },
+      {
+        "field_name": "actual_hours",
+        "display_name": "Actual Hours",
+        "data_type": "decimal",
+        "aggregation": "count"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "department",
+        "display_name": "Department",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Litigation"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "bar_chart",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "partner",
+      "senior_associate"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.232Z",
+    "last_modified": "2025-07-29T02:54:05.232Z",
+    "version": "2.2",
+    "tags": [
+      "workforce planning",
+      "medium",
+      "workforce_planning"
+    ]
+  }
+}

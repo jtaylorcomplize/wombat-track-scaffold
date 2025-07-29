@@ -1,0 +1,102 @@
+{
+  "id": "act_021",
+  "name": "Practice Area Revenue",
+  "description": "Revenue breakdown by legal practice area",
+  "category": "financials",
+  "data_source": {
+    "primary_table": "actionstep_financials",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "practice_area",
+        "display_name": "Practice Area",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "revenue_amount",
+        "display_name": "Revenue Amount",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      },
+      {
+        "field_name": "matter_count",
+        "display_name": "Matter Count",
+        "data_type": "integer",
+        "aggregation": "count"
+      },
+      {
+        "field_name": "avg_matter_value",
+        "display_name": "Average Matter Value",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      },
+      {
+        "field_name": "growth_rate",
+        "display_name": "Growth Rate",
+        "data_type": "decimal",
+        "aggregation": "avg",
+        "format": "0.00%"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "practice_area",
+        "display_name": "Practice Area",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Litigation"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "pie_chart",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "partner",
+      "senior_associate"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.274Z",
+    "last_modified": "2025-07-29T02:54:05.274Z",
+    "version": "2.2",
+    "tags": [
+      "financials",
+      "medium",
+      "financials"
+    ]
+  },
+  "validation": {
+    "matched_view": "v_actionstep_financials",
+    "missing_fields": [
+      "dimension: practice_area",
+      "metric: revenue_amount",
+      "metric: avg_matter_value",
+      "metric: growth_rate"
+    ],
+    "filter_issues": [
+      "available filter field not found: practice_area"
+    ],
+    "notes": [
+      "Validation completed"
+    ]
+  }
+}

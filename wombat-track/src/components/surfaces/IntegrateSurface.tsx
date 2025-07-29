@@ -16,13 +16,13 @@ interface IntegrateSurfaceProps {
 
 export const IntegrateSurface: React.FC<IntegrateSurfaceProps> = ({
   currentProject,
-  currentPhase,
-  currentStep,
-  onPhaseChange,
-  onStepChange
+  currentPhase: _currentPhase, // unused
+  currentStep: _currentStep, // unused
+  onPhaseChange: _onPhaseChange, // unused
+  onStepChange: _onStepChange // unused
 }) => {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'mesh'>('dashboard');
-  const handleClaudePrompt = async (prompt: string, context?: any) => {
+  const handleClaudePrompt = async (prompt: string, _context?: Record<string, unknown>) => { // context unused
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     if (prompt.toLowerCase().includes('integration')) {

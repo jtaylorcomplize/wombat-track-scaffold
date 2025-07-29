@@ -1,0 +1,104 @@
+{
+  "id": "act_008",
+  "name": "Invoice Status Tracker",
+  "description": "Outstanding invoices and payment tracking",
+  "category": "financials",
+  "data_source": {
+    "primary_table": "actionstep_financials",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "invoice_id",
+        "display_name": "Invoice ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "invoice_date",
+        "display_name": "Invoice Date",
+        "data_type": "date",
+        "format": "YYYY-MM-DD"
+      },
+      {
+        "field_name": "payment_status",
+        "display_name": "Payment Status",
+        "data_type": "string"
+      },
+      {
+        "field_name": "client_name",
+        "display_name": "Client Name",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "invoice_amount",
+        "display_name": "Invoice Amount",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      },
+      {
+        "field_name": "days_outstanding",
+        "display_name": "Days Outstanding",
+        "data_type": "integer",
+        "aggregation": "count"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "payment_status",
+        "display_name": "Payment Status",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Paid"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "table",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "analyst",
+      "admin"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.237Z",
+    "last_modified": "2025-07-29T02:54:05.238Z",
+    "version": "2.2",
+    "tags": [
+      "financials",
+      "high",
+      "financials"
+    ]
+  },
+  "validation": {
+    "matched_view": "v_actionstep_financials",
+    "missing_fields": [
+      "dimension: invoice_id",
+      "dimension: invoice_date",
+      "dimension: payment_status",
+      "metric: days_outstanding"
+    ],
+    "filter_issues": [
+      "available filter field not found: payment_status"
+    ],
+    "notes": [
+      "Validation completed"
+    ]
+  }
+}

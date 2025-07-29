@@ -1,0 +1,96 @@
+{
+  "id": "act_017",
+  "name": "Client Communication Log",
+  "description": "Client communication frequency and response times",
+  "category": "performance",
+  "data_source": {
+    "primary_table": "actionstep_performance",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "client_id",
+        "display_name": "Client ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "communication_date",
+        "display_name": "Communication Date",
+        "data_type": "date",
+        "format": "YYYY-MM-DD"
+      },
+      {
+        "field_name": "communication_type",
+        "display_name": "Communication Type",
+        "data_type": "string"
+      },
+      {
+        "field_name": "fee_earner_name",
+        "display_name": "Fee Earner Name",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "response_time_hours",
+        "display_name": "Response Time (Hours)",
+        "data_type": "decimal",
+        "aggregation": "count"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "communication_type",
+        "display_name": "Communication Type",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Email"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "table",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "all_users"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.250Z",
+    "last_modified": "2025-07-29T02:54:05.250Z",
+    "version": "2.2",
+    "tags": [
+      "performance",
+      "low",
+      "performance"
+    ]
+  },
+  "validation": {
+    "matched_view": "v_actionstep_performance",
+    "missing_fields": [
+      "dimension: communication_date",
+      "dimension: communication_type",
+      "dimension: fee_earner_name",
+      "metric: response_time_hours"
+    ],
+    "filter_issues": [
+      "available filter field not found: communication_type"
+    ],
+    "notes": [
+      "Validation completed"
+    ]
+  }
+}

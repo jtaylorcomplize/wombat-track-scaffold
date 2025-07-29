@@ -1,0 +1,79 @@
+{
+  "name": "Matter Budget Variance",
+  "dataSource": {
+    "name": "Matter Budget Variance Data Source",
+    "type": "BIGQUERY",
+    "config": {
+      "query": "\n        SELECT \n          c.participant_id as client_id,\n          c.display_name as client_name,\n          SUM(CASE WHEN i.payment_status = 'paid' THEN i.total_amount ELSE 0 END) as total_revenue,\n          'current_month' as billing_period,\n          COUNT(DISTINCT m.matter_id) as matter_count,\n          SUM(CASE WHEN i.payment_status != 'paid' THEN i.total_amount ELSE 0 END) as outstanding_balance,\n          i.invoice_id,\n          i.invoice_amount,\n          i.invoice_date,\n          i.payment_status,\n          DATEDIFF(CURRENT_DATE, i.invoice_date) as days_outstanding,\n          m.matter_id,\n          m.matter_name,\n          SUM(te.billable_amount) as total_fees,\n          SUM(d.cost_amount) as total_costs,\n          ((SUM(te.billable_amount) - SUM(d.cost_amount)) / SUM(te.billable_amount) * 100) as profit_margin,\n          ta.trust_account_id,\n          ta.current_balance as account_balance,\n          ta.last_reconciliation_date as last_reconciled,\n          ta.reconciliation_status,\n          wip.wip_amount,\n          wip.aging_bucket,\n          mb.budgeted_amount,\n          (SUM(te.billable_amount) + SUM(d.amount)) as actual_amount,\n          (((SUM(te.billable_amount) + SUM(d.amount)) - mb.budgeted_amount) / mb.budgeted_amount * 100) as variance_percentage,\n          CASE \n            WHEN (SUM(te.billable_amount) + SUM(d.amount)) > mb.budgeted_amount THEN 'Over Budget'\n            WHEN (SUM(te.billable_amount) + SUM(d.amount)) < mb.budgeted_amount * 0.9 THEN 'Under Budget'\n            ELSE 'On Budget'\n          END as budget_status,\n          d.disbursement_id,\n          d.disbursement_amount,\n          d.disbursement_type,\n          d.reimbursement_status,\n          pa.practice_area,\n          SUM(pa_rev.revenue_amount) as revenue_amount,\n          AVG(pa_rev.avg_matter_value) as avg_matter_value,\n          pa_rev.growth_rate\n        FROM participants c\n        LEFT JOIN matters m ON c.participant_id = m.client_id\n        LEFT JOIN invoices i ON m.matter_id = i.matter_id\n        LEFT JOIN time_entries te ON m.matter_id = te.matter_id\n        LEFT JOIN disbursements d ON m.matter_id = d.matter_id\n        LEFT JOIN trust_accounts ta ON c.participant_id = ta.client_id\n        LEFT JOIN matter_budgets mb ON m.matter_id = mb.matter_id\n        LEFT JOIN (\n          SELECT matter_id, SUM(billable_amount) as wip_amount,\n                 CASE \n                   WHEN DATEDIFF(CURRENT_DATE, entry_date) <= 30 THEN '0-30 days'\n                   WHEN DATEDIFF(CURRENT_DATE, entry_date) <= 60 THEN '31-60 days'\n                   WHEN DATEDIFF(CURRENT_DATE, entry_date) <= 90 THEN '61-90 days'\n                   ELSE '90+ days'\n                 END as aging_bucket\n          FROM time_entries \n          WHERE invoice_id IS NULL\n          GROUP BY matter_id\n        ) wip ON m.matter_id = wip.matter_id\n        LEFT JOIN practice_areas pa ON m.practice_area_id = pa.practice_area_id\n        LEFT JOIN practice_area_revenue pa_rev ON pa.practice_area_id = pa_rev.practice_area_id\n        WHERE c.participant_type = 'client'\n        GROUP BY c.participant_id, i.invoice_id, d.disbursement_id\n      ",
+      "dataset": "actionstep_analytics",
+      "project": "law-firm-analytics"
+    }
+  },
+  "fields": [
+    {
+      "name": "matter_id",
+      "type": "TEXT",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "budget_status",
+      "type": "TEXT",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "budgeted_amount",
+      "type": "NUMBER",
+      "aggregation": "SUM"
+    },
+    {
+      "name": "actual_amount",
+      "type": "NUMBER",
+      "aggregation": "SUM"
+    },
+    {
+      "name": "variance_percentage",
+      "type": "NUMBER",
+      "aggregation": "AVG"
+    }
+  ],
+  "filters": [
+    {
+      "field": "budget_status",
+      "type": "DROPDOWN",
+      "allowMultiple": true,
+      "options": [
+        "\"Under Budget"
+      ]
+    }
+  ],
+  "visualization": {
+    "type": "BAR_CHART",
+    "config": {
+      "dimensions": [
+        "matter_id",
+        "budget_status"
+      ],
+      "metrics": [
+        "budgeted_amount",
+        "actual_amount",
+        "variance_percentage"
+      ],
+      "colorScheme": "blue_actionstep_theme",
+      "showDataLabels": true
+    }
+  },
+  "permissions": {
+    "viewRoles": [
+      "partner",
+      "senior_associate"
+    ],
+    "editRoles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "embedConfig": {
+    "allowExternalEmbed": false,
+    "domains": []
+  }
+}

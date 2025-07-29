@@ -45,7 +45,7 @@ export const PlanSurface: React.FC<PlanSurfaceProps> = ({
     );
   }
 
-  const handleClaudePrompt = async (prompt: string, context?: any) => {
+  const handleClaudePrompt = async (prompt: string, _context?: Record<string, unknown>) => { // context unused
     // Mock Claude API call
     await new Promise(resolve => setTimeout(resolve, 2000));
     
@@ -239,7 +239,7 @@ Would you like me to elaborate on any of these areas?`;
             ].map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
-                onClick={() => setActiveTab(id as any)}
+                onClick={() => setActiveTab(id as 'overview' | 'phases' | 'ai-planning')} // type-safe tab switch
                 className={`flex items-center space-x-2 py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === id
                     ? 'border-blue-500 text-blue-600'

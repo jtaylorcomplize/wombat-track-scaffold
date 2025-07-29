@@ -1,0 +1,115 @@
+{
+  "id": "act_012",
+  "name": "Billing Rate Analysis",
+  "description": "Analysis of billing rates by fee earner and matter type",
+  "category": "financials",
+  "data_source": {
+    "primary_table": "actionstep_financials",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "fee_earner_id",
+        "display_name": "Fee Earner ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "fee_earner_name",
+        "display_name": "Fee Earner Name",
+        "data_type": "string"
+      },
+      {
+        "field_name": "practice_area",
+        "display_name": "Practice Area",
+        "data_type": "string"
+      },
+      {
+        "field_name": "seniority_level",
+        "display_name": "Seniority Level",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "standard_rate",
+        "display_name": "Standard Rate",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      },
+      {
+        "field_name": "effective_rate",
+        "display_name": "Effective Rate",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "practice_area",
+        "display_name": "Practice Area",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Litigation"
+        ]
+      },
+      {
+        "field_name": "seniority_level",
+        "display_name": "Seniority Level",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Partner"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "table",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "partner",
+      "senior_associate"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.244Z",
+    "last_modified": "2025-07-29T02:54:05.244Z",
+    "version": "2.2",
+    "tags": [
+      "financials",
+      "medium",
+      "financials"
+    ]
+  },
+  "validation": {
+    "matched_view": "v_actionstep_financials",
+    "missing_fields": [
+      "dimension: fee_earner_id",
+      "dimension: fee_earner_name",
+      "dimension: practice_area",
+      "dimension: seniority_level",
+      "metric: standard_rate",
+      "metric: effective_rate"
+    ],
+    "filter_issues": [
+      "available filter field not found: practice_area",
+      "available filter field not found: seniority_level"
+    ],
+    "notes": [
+      "Validation completed"
+    ]
+  }
+}

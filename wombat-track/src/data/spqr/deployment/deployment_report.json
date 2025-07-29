@@ -1,0 +1,185 @@
+{
+  "deployment_timestamp": "2025-07-29T03:29:54.307Z",
+  "total_cards": 21,
+  "successful_deployments": 21,
+  "warnings": 0,
+  "errors": 0,
+  "results": [
+    {
+      "card_id": "act_001",
+      "card_name": "Active Matters Overview",
+      "status": "success",
+      "looker_report_id": "looker_act_001_1753759794150",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.150Z"
+    },
+    {
+      "card_id": "act_012",
+      "card_name": "Billing Rate Analysis",
+      "status": "success",
+      "looker_report_id": "looker_act_012_1753759794297",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.297Z"
+    },
+    {
+      "card_id": "act_017",
+      "card_name": "Client Communication Log",
+      "status": "success",
+      "looker_report_id": "looker_act_017_1753759794298",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.298Z"
+    },
+    {
+      "card_id": "act_003",
+      "card_name": "Client Revenue Summary",
+      "status": "success",
+      "looker_report_id": "looker_act_003_1753759794298",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.298Z"
+    },
+    {
+      "card_id": "act_010",
+      "card_name": "Client Satisfaction Metrics",
+      "status": "success",
+      "looker_report_id": "looker_act_010_1753759794299",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.299Z"
+    },
+    {
+      "card_id": "act_014",
+      "card_name": "Conflict Check Dashboard",
+      "status": "success",
+      "looker_report_id": "looker_act_014_1753759794299",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.299Z"
+    },
+    {
+      "card_id": "act_013",
+      "card_name": "Court Appearance Calendar",
+      "status": "success",
+      "looker_report_id": "looker_act_013_1753759794300",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.300Z"
+    },
+    {
+      "card_id": "act_002",
+      "card_name": "Deadline Tracker",
+      "status": "success",
+      "looker_report_id": "looker_act_002_1753759794301",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.301Z"
+    },
+    {
+      "card_id": "act_020",
+      "card_name": "Disbursement Tracking",
+      "status": "success",
+      "looker_report_id": "looker_act_020_1753759794302",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.302Z"
+    },
+    {
+      "card_id": "act_011",
+      "card_name": "Document Production Status",
+      "status": "success",
+      "looker_report_id": "looker_act_011_1753759794303",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.303Z"
+    },
+    {
+      "card_id": "act_018",
+      "card_name": "Fee Earner Performance",
+      "status": "success",
+      "looker_report_id": "looker_act_018_1753759794304",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.304Z"
+    },
+    {
+      "card_id": "act_008",
+      "card_name": "Invoice Status Tracker",
+      "status": "success",
+      "looker_report_id": "looker_act_008_1753759794304",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.304Z"
+    },
+    {
+      "card_id": "act_019",
+      "card_name": "Matter Budget Variance",
+      "status": "success",
+      "looker_report_id": "looker_act_019_1753759794304",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.304Z"
+    },
+    {
+      "card_id": "act_004",
+      "card_name": "Matter Profitability Analysis",
+      "status": "success",
+      "looker_report_id": "looker_act_004_1753759794304",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.304Z"
+    },
+    {
+      "card_id": "act_009",
+      "card_name": "Matter Type Distribution",
+      "status": "success",
+      "looker_report_id": "looker_act_009_1753759794304",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.304Z"
+    },
+    {
+      "card_id": "act_021",
+      "card_name": "Practice Area Revenue",
+      "status": "success",
+      "looker_report_id": "looker_act_021_1753759794305",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.305Z"
+    },
+    {
+      "card_id": "act_006",
+      "card_name": "Staff Utilization Report",
+      "status": "success",
+      "looker_report_id": "looker_act_006_1753759794305",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.305Z"
+    },
+    {
+      "card_id": "act_016",
+      "card_name": "Task Completion Metrics",
+      "status": "success",
+      "looker_report_id": "looker_act_016_1753759794305",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.305Z"
+    },
+    {
+      "card_id": "act_005",
+      "card_name": "Time Entry Dashboard",
+      "status": "success",
+      "looker_report_id": "looker_act_005_1753759794305",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.305Z"
+    },
+    {
+      "card_id": "act_007",
+      "card_name": "Trust Account Reconciliation",
+      "status": "success",
+      "looker_report_id": "looker_act_007_1753759794305",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.305Z"
+    },
+    {
+      "card_id": "act_015",
+      "card_name": "WIP Aging Report",
+      "status": "success",
+      "looker_report_id": "looker_act_015_1753759794305",
+      "issues": [],
+      "deployment_timestamp": "2025-07-29T03:29:54.305Z"
+    }
+  ],
+  "looker_studio_config": {
+    "internal_only": true,
+    "external_embed": false,
+    "data_source_type": "BigQuery",
+    "actionstep_integration": true
+  },
+  "sql_views_generated": 4,
+  "governance_status": "DeploymentComplete"
+}

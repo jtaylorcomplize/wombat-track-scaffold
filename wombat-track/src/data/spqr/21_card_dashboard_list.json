@@ -1,0 +1,165 @@
+{
+  "dashboard_name": "SPQR MVP Dashboard Suite",
+  "description": "21-card executive dashboard covering key business metrics",
+  "version": "1.0",
+  "approved_cards": [
+    {
+      "id": "fin_001",
+      "name": "Revenue Summary",
+      "category": "Financial",
+      "priority": "high",
+      "status": "approved"
+    },
+    {
+      "id": "fin_002", 
+      "name": "Profit & Loss Overview",
+      "category": "Financial",
+      "priority": "high",
+      "status": "approved"
+    },
+    {
+      "id": "fin_003",
+      "name": "Cash Flow Analysis",
+      "category": "Financial", 
+      "priority": "medium",
+      "status": "approved"
+    },
+    {
+      "id": "ops_001",
+      "name": "Performance Metrics",
+      "category": "Operations",
+      "priority": "high",
+      "status": "approved"
+    },
+    {
+      "id": "ops_002",
+      "name": "System Uptime Dashboard",
+      "category": "Operations",
+      "priority": "high",
+      "status": "approved"
+    },
+    {
+      "id": "ops_003",
+      "name": "Resource Utilization",
+      "category": "Operations",
+      "priority": "medium",
+      "status": "approved"
+    },
+    {
+      "id": "comp_001",
+      "name": "Compliance Dashboard",
+      "category": "Compliance",
+      "priority": "high",
+      "status": "approved"
+    },
+    {
+      "id": "comp_002",
+      "name": "Risk Assessment Matrix",
+      "category": "Compliance",
+      "priority": "medium",
+      "status": "approved"
+    },
+    {
+      "id": "sales_001",
+      "name": "Sales Pipeline",
+      "category": "Sales",
+      "priority": "high",
+      "status": "approved"
+    },
+    {
+      "id": "sales_002",
+      "name": "Revenue Forecasting",
+      "category": "Sales",
+      "priority": "medium",
+      "status": "approved"
+    },
+    {
+      "id": "sales_003",
+      "name": "Sales Rep Performance",
+      "category": "Sales",
+      "priority": "medium",
+      "status": "approved"
+    },
+    {
+      "id": "hr_001",
+      "name": "Employee Metrics",
+      "category": "Human Resources",
+      "priority": "medium",
+      "status": "approved"
+    },
+    {
+      "id": "hr_002",
+      "name": "Headcount Analysis",
+      "category": "Human Resources",
+      "priority": "low",
+      "status": "approved"
+    },
+    {
+      "id": "inv_001",
+      "name": "Inventory Levels",
+      "category": "Inventory",
+      "priority": "medium",
+      "status": "approved"
+    },
+    {
+      "id": "inv_002",
+      "name": "Stock Movement Tracking",
+      "category": "Inventory",
+      "priority": "low",
+      "status": "approved"
+    },
+    {
+      "id": "cust_001",
+      "name": "Customer Analytics",
+      "category": "Customer",
+      "priority": "medium",
+      "status": "approved"
+    },
+    {
+      "id": "cust_002",
+      "name": "Customer Satisfaction Trends",
+      "category": "Customer",
+      "priority": "low",
+      "status": "approved"
+    },
+    {
+      "id": "proj_001",
+      "name": "Project Status",
+      "category": "Project Management",
+      "priority": "medium",
+      "status": "approved"
+    },
+    {
+      "id": "mkt_001",
+      "name": "Marketing Campaigns",
+      "category": "Marketing",
+      "priority": "medium",
+      "status": "approved"
+    },
+    {
+      "id": "mkt_002",
+      "name": "Lead Generation Metrics",
+      "category": "Marketing",
+      "priority": "low",
+      "status": "approved"
+    },
+    {
+      "id": "qual_001",
+      "name": "Quality Metrics",
+      "category": "Quality Assurance",
+      "priority": "medium",
+      "status": "approved"
+    }
+  ],
+  "metadata": {
+    "created_by": "Claude",
+    "created_date": "2025-07-29T00:00:00Z",
+    "total_cards": 21,
+    "categories": ["Financial", "Operations", "Compliance", "Sales", "Human Resources", "Inventory", "Customer", "Project Management", "Marketing", "Quality Assurance"],
+    "priority_distribution": {
+      "high": 6,
+      "medium": 11,
+      "low": 4
+    }
+  }
+}
