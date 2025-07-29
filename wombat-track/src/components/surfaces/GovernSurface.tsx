@@ -174,11 +174,8 @@ None identified
 ];
 
 export const GovernSurface: React.FC<GovernSurfaceProps> = ({
-  currentProject,
-  currentPhase,
-  currentStep,
-  onPhaseChange,
-  onStepChange
+  currentProject
+  // currentPhase, currentStep, onPhaseChange, onStepChange - @typescript-eslint/no-unused-vars fix
 }) => {
   const [activeTab, setActiveTab] = useState<'logs' | 'reviews' | 'audit'>('logs');
   const [governanceEntries] = useState<GovernanceLogEntry[]>(mockGovernanceEntries);
@@ -197,7 +194,7 @@ export const GovernSurface: React.FC<GovernSurfaceProps> = ({
     );
   }
 
-  const handleClaudePrompt = async (prompt: string, context?: any) => {
+  const handleClaudePrompt = async (prompt: string, context?: Record<string, unknown>) => { // @typescript-eslint/no-explicit-any fix
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     if (prompt.toLowerCase().includes('audit')) {
