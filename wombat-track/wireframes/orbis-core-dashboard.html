@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbis Core - Dashboard Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'obsidian': '#0C0C0E',
+                        'quantum-violet': '#6B46C1',
+                        'solar-copper': '#D77B28',
+                        'growth-sage': '#10B981',
+                        'lumen-cream': '#F2F0E6',
+                        'orbit-gray': '#B3B6B7',
+                        'depth-1': '#1A1A1E',
+                        'depth-2': '#242428',
+                        'depth-3': '#2E2E32'
+                    },
+                    fontFamily: {
+                        'space': ['Space Grotesk', 'system-ui', 'sans-serif'],
+                        'inter': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Component: Orbital Animation */
+        .orbital-pulse {
+            animation: orbital-pulse 3s ease-in-out infinite;
+        }
+        @keyframes orbital-pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            50% { transform: scale(1.02) rotate(180deg); opacity: 1; }
+        }
+        
+        /* Component: Confidence Gradient */
+        .confidence-gradient {
+            background: linear-gradient(90deg, 
+                #6B46C1 0%, 
+                #8B5CF6 var(--confidence-level, 70%), 
+                #D1D5DB var(--confidence-level, 70%), 
+                #6B7280 100%);
+        }
+        
+        /* Component: Aurora Gradient (Claude Actions) */
+        .aurora-gradient {
+            background: linear-gradient(135deg, #1C5D99 0%, #6B46C1 100%);
+        }
+        
+        /* Component: Depth Tokens */
+        .depth-0 { background-color: #0C0C0E; }
+        .depth-1 { background-color: #1A1A1E; }
+        .depth-2 { background-color: #242428; }
+        .depth-3 { background-color: #2E2E32; }
+    </style>
+</head>
+<body class="depth-0 text-lumen-cream font-inter min-h-screen">
+    
+    <!-- Component: Humanization Header -->
+    <header class="depth-1 p-6 border-b border-orbit-gray/20" data-testid="orbis-header">
+        <div class="flex items-center justify-between">
+            <!-- Component: Orbis Logo -->
+            <div class="flex items-center gap-4" data-testid="orbis-logo">
+                <div class="w-10 h-10 rounded-full border-2 border-quantum-violet relative orbital-pulse">
+                    <div class="absolute inset-2 rounded-full border border-solar-copper opacity-60"></div>
+                    <div class="absolute inset-4 rounded-full bg-quantum-violet/30"></div>
+                </div>
+                <div>
+                    <h1 class="text-xl font-space font-bold tracking-wide">ORBIS CORE</h1>
+                    <p class="text-sm text-orbit-gray">Good morning, system status nominal</p>
+                </div>
+            </div>
+            
+            <!-- Component: System Status -->
+            <div class="flex items-center gap-3" data-testid="system-status">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-growth-sage"></div>
+                    <span class="text-sm text-orbit-gray">All Systems Operational</span>
+                </div>
+                <div class="px-3 py-1 depth-2 rounded-full text-xs font-mono">
+                    v2.1.4
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Component: Main Dashboard Grid -->
+    <main class="p-6 grid grid-cols-2 gap-6 h-[calc(100vh-120px)]" data-testid="dashboard-grid">
+        
+        <!-- Component: Active Orbits (Top Left) -->
+        <div class="depth-1 rounded-xl p-6 border border-quantum-violet/20" data-testid="active-orbits-card">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-space font-semibold">Active Orbits</h2>
+                <div class="confidence-gradient w-16 h-1 rounded-full" style="--confidence-level: 85%"></div>
+            </div>
+            
+            <!-- Component: Circular Orbit Visualization -->
+            <div class="relative w-48 h-48 mx-auto mb-4" data-testid="orbit-visualization">
+                <!-- Outer orbit ring -->
+                <div class="absolute inset-0 rounded-full border-2 border-quantum-violet/30 orbital-pulse"></div>
+                <!-- Middle orbit ring -->
+                <div class="absolute inset-8 rounded-full border border-solar-copper/40"></div>
+                <!-- Inner core -->
+                <div class="absolute inset-16 rounded-full aurora-gradient flex items-center justify-center">
+                    <span class="text-2xl font-space font-bold">42</span>
+                </div>
+                
+                <!-- Component: Orbit Indicators -->
+                <div class="absolute top-4 right-8 w-3 h-3 rounded-full bg-growth-sage animate-pulse"></div>
+                <div class="absolute bottom-8 left-4 w-2 h-2 rounded-full bg-solar-copper"></div>
+                <div class="absolute top-1/2 left-2 w-2 h-2 rounded-full bg-quantum-violet"></div>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-3 text-center text-sm">
+                <div data-testid="orbit-metric-ai">
+                    <div class="text-quantum-violet font-semibold">28</div>
+                    <div class="text-orbit-gray">AI Agents</div>
+                </div>
+                <div data-testid="orbit-metric-human">
+                    <div class="text-solar-copper font-semibold">14</div>
+                    <div class="text-orbit-gray">Human Tasks</div>
+                </div>
+                <div data-testid="orbit-metric-governance">
+                    <div class="text-growth-sage font-semibold">8</div>
+                    <div class="text-orbit-gray">Governance</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Component: Network Growth (Top Right) -->
+        <div class="depth-1 rounded-xl p-6 border border-growth-sage/20" data-testid="network-growth-card">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-space font-semibold">Network Growth</h2>
+                <div class="flex items-center gap-2">
+                    <span class="text-growth-sage text-sm">↗ +12.4%</span>
+                    <div class="px-2 py-1 depth-2 rounded text-xs font-mono">24h</div>
+                </div>
+            </div>
+            
+            <!-- Component: Line Graph Placeholder -->
+            <div class="h-48 depth-2 rounded-lg relative overflow-hidden" data-testid="network-graph">
+                <!-- Simulated line graph with SVG-like pattern -->
+                <div class="absolute bottom-0 left-0 w-full h-full flex items-end justify-between px-4 pb-4">
+                    <div class="w-2 bg-growth-sage rounded-t" style="height: 30%"></div>
+                    <div class="w-2 bg-growth-sage rounded-t" style="height: 45%"></div>
+                    <div class="w-2 bg-growth-sage rounded-t" style="height: 35%"></div>
+                    <div class="w-2 bg-growth-sage rounded-t" style="height: 60%"></div>
+                    <div class="w-2 bg-growth-sage rounded-t" style="height: 70%"></div>
+                    <div class="w-2 bg-growth-sage rounded-t" style="height: 55%"></div>
+                    <div class="w-2 bg-growth-sage rounded-t" style="height: 80%"></div>
+                    <div class="w-2 bg-quantum-violet rounded-t" style="height: 85%"></div>
+                </div>
+                
+                <!-- Graph grid lines -->
+                <div class="absolute inset-0 opacity-20">
+                    <div class="h-full border-l border-orbit-gray ml-8"></div>
+                    <div class="h-full border-l border-orbit-gray ml-16"></div>
+                    <div class="h-full border-l border-orbit-gray ml-24"></div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mt-4 text-sm">
+                <div data-testid="network-nodes">
+                    <div class="text-lumen-cream font-semibold">1,247</div>
+                    <div class="text-orbit-gray">Active Nodes</div>
+                </div>
+                <div data-testid="network-throughput">
+                    <div class="text-quantum-violet font-semibold">892 MB/s</div>
+                    <div class="text-orbit-gray">Throughput</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Component: Dataset Details (Bottom Left) -->
+        <div class="depth-1 rounded-xl p-6 border border-solar-copper/20" data-testid="dataset-details-card">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-space font-semibold">Dataset Details</h2>
+                <div class="px-2 py-1 depth-2 rounded text-xs font-mono text-solar-copper">
+                    LIVE
+                </div>
+            </div>
+            
+            <!-- Component: Dataset Info -->
+            <div class="space-y-4" data-testid="dataset-info">
+                <div class="flex justify-between items-center">
+                    <span class="text-orbit-gray">Dataset ID</span>
+                    <span class="font-mono text-sm">orbis-core-2025-001</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-orbit-gray">Category</span>
+                    <span class="px-2 py-1 depth-2 rounded text-xs aurora-gradient">
+                        Semantic Memory
+                    </span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-orbit-gray">Last Updated</span>
+                    <span class="text-sm">2 minutes ago</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-orbit-gray">Records</span>
+                    <span class="text-growth-sage font-semibold">42,891</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-orbit-gray">Size</span>
+                    <span class="text-sm">1.2 GB</span>
+                </div>
+            </div>
+            
+            <!-- Component: Confidence Trace -->
+            <div class="mt-4 pt-4 border-t border-orbit-gray/20">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs text-orbit-gray">Data Confidence</span>
+                    <div class="confidence-gradient flex-1 h-1 rounded-full" style="--confidence-level: 92%"></div>
+                    <span class="text-xs text-quantum-violet">92%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Component: Governance Proposal (Bottom Right) -->
+        <div class="depth-1 rounded-xl p-6 border border-lumen-cream/20" data-testid="governance-proposal-card">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-space font-semibold">Governance Proposal</h2>
+                <!-- Component: Status Badge -->
+                <div class="px-3 py-1 bg-growth-sage/20 text-growth-sage rounded-full text-sm font-semibold" data-testid="proposal-status-approved">
+                    APPROVED
+                </div>
+            </div>
+            
+            <!-- Component: Proposal Details -->
+            <div class="space-y-4" data-testid="proposal-details">
+                <div class="flex justify-between items-center">
+                    <span class="text-orbit-gray">Proposal ID</span>
+                    <span class="font-mono text-sm">GOP-2025-007</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-orbit-gray">Vote Count</span>
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1">
+                            <div class="w-2 h-2 rounded-full bg-growth-sage"></div>
+                            <span class="text-sm">8</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                            <span class="text-sm">2</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-start">
+                    <span class="text-orbit-gray">Description</span>
+                    <span class="text-sm text-right max-w-xs">
+                        Upgrade semantic memory allocation for Claude integration
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Component: Threaded Governance Timeline -->
+            <div class="mt-4 pt-4 border-t border-orbit-gray/20" data-testid="governance-timeline">
+                <div class="text-xs text-orbit-gray mb-2">Decision Thread</div>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2">
+                        <div class="w-1 h-4 bg-quantum-violet rounded"></div>
+                        <span class="text-xs">Proposal Submitted</span>
+                        <span class="text-xs text-orbit-gray ml-auto">2h ago</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-1 h-4 bg-solar-copper rounded"></div>
+                        <span class="text-xs">Review Period</span>
+                        <span class="text-xs text-orbit-gray ml-auto">1h ago</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-1 h-4 bg-growth-sage rounded"></div>
+                        <span class="text-xs">Approved</span>
+                        <span class="text-xs text-orbit-gray ml-auto">12m ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Component: Footer Breadcrumb -->
+    <footer class="depth-1 p-4 border-t border-orbit-gray/20" data-testid="orbis-footer">
+        <div class="flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2 text-orbit-gray">
+                <span>Orbis Core</span>
+                <span>→</span>
+                <span>Dashboard</span>
+                <span>→</span>
+                <span>System Overview</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-1">
+                    <div class="w-2 h-2 rounded-full aurora-gradient"></div>
+                    <span class="text-quantum-violet">Claude Active</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <div class="w-2 h-2 rounded-full bg-solar-copper animate-pulse"></div>
+                    <span class="text-solar-copper">Gizmo Standby</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

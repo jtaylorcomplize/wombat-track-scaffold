@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cosmic">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wombat Track - Orbis Forge Cosmic Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // Deep cosmic background
+                        'cosmic-void': '#0A0A0F',
+                        'cosmic-depth': '#0F0F16',
+                        'cosmic-surface': '#16161E',
+                        'cosmic-elevated': '#1C1C26',
+                        
+                        // Warm copper/orange orbital elements
+                        'orbital-copper': '#D77B28',
+                        'orbital-warm': '#E97D47', 
+                        'orbital-bright': '#FF8C42',
+                        'orbital-glow': '#FFB366',
+                        
+                        // Subtle cream typography
+                        'cream-primary': '#F2F0E6',
+                        'cream-secondary': '#E8E4D9',
+                        'cream-muted': '#D4CFBF',
+                        'cream-subtle': '#B8B1A3',
+                        
+                        // Nebula blue for interactive states only
+                        'nebula-core': '#2d609f',
+                        'nebula-glow': '#4A7FBF',
+                        'nebula-subtle': '#3D6FA8',
+                        
+                        // Neutral support colors
+                        'cosmic-gray': '#4A4A52',
+                        'cosmic-muted': '#6B6B76'
+                    },
+                    fontFamily: {
+                        'cosmic': ['Inter', 'system-ui', 'sans-serif'],
+                        'orbital': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    animation: {
+                        'orbit-slow': 'orbit 20s linear infinite',
+                        'orbit-medium': 'orbit 12s linear infinite reverse',
+                        'orbit-fast': 'orbit 8s linear infinite',
+                        'nebula-drift': 'nebula-drift 40s ease-in-out infinite',
+                        'lifeforce-pulse': 'lifeforce-pulse 3s ease-in-out infinite',
+                        'glow-subtle': 'glow-subtle 2s ease-in-out infinite alternate'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Reset and base cosmic aesthetic */
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0A0A0F;
+            overflow-x: hidden;
+        }
+        
+        /* Nebula Background Texture */
+        .nebula-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(45, 96, 159, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(215, 123, 40, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(45, 96, 159, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 60% 60%, rgba(233, 125, 71, 0.04) 0%, transparent 50%);
+            animation: nebula-drift 40s ease-in-out infinite;
+        }
+        
+        @keyframes nebula-drift {
+            0%, 100% { 
+                transform: translateX(0) translateY(0) scale(1);
+                opacity: 0.6;
+            }
+            25% { 
+                transform: translateX(-20px) translateY(-10px) scale(1.05);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateX(10px) translateY(20px) scale(0.95);
+                opacity: 0.7;
+            }
+            75% { 
+                transform: translateX(15px) translateY(-15px) scale(1.02);
+                opacity: 0.9;
+            }
+        }
+        
+        /* Orbital Ring Animations */
+        @keyframes orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .orbit-ring {
+            position: absolute;
+            border: 1px solid;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+        
+        .orbit-ring-1 {
+            width: 30px;
+            height: 30px;
+            top: -5px;
+            left: -5px;
+            border-color: #D77B28;
+            animation: orbit-slow;
+        }
+        
+        .orbit-ring-2 {
+            width: 20px;
+            height: 20px;
+            top: 0px;
+            left: 0px;
+            border-color: #E97D47;
+            animation: orbit-medium;
+            opacity: 0.4;
+        }
+        
+        /* Interactive Nebula Glow States */
+        .interactive-element {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .interactive-element:hover {
+            box-shadow: 0 0 20px rgba(45, 96, 159, 0.3);
+        }
+        
+        /* Cosmic Card Styles */
+        .cosmic-card {
+            background: rgba(22, 22, 30, 0.8);
+            border: 1px solid rgba(215, 123, 40, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .cosmic-card:hover {
+            border-color: rgba(215, 123, 40, 0.4);
+            background: rgba(22, 22, 30, 0.9);
+        }
+        
+        .cosmic-sidebar {
+            background: rgba(15, 15, 22, 0.95);
+            border-right: 1px solid rgba(215, 123, 40, 0.3);
+            backdrop-filter: blur(15px);
+        }
+        
+        .cosmic-breadcrumb {
+            background: rgba(15, 15, 22, 0.9);
+            border-bottom: 1px solid rgba(215, 123, 40, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Typography refinements */
+        .cosmic-heading {
+            background: linear-gradient(135deg, #F2F0E6 0%, #E8E4D9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .orbital-accent {
+            color: #D77B28;
+        }
+        
+        /* Status indicators */
+        .status-green { color: #4ADE80; }
+        .status-amber { color: #FBBF24; }
+        .status-red { color: #F87171; }
+        
+        /* Work surface icons with cosmic glow */
+        .surface-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(215, 123, 40, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .surface-icon.active {
+            background: rgba(45, 96, 159, 0.3);
+            box-shadow: 0 0 15px rgba(45, 96, 159, 0.4);
+        }
+        
+        /* Progress bars with cosmic styling */
+        .cosmic-progress {
+            background: rgba(74, 74, 82, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .cosmic-progress-fill {
+            background: linear-gradient(90deg, #D77B28, #E97D47);
+            height: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Scrollbar styling for cosmic theme */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(74, 74, 82, 0.2);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(215, 123, 40, 0.3);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(215, 123, 40, 0.5);
+        }
+
+        /* Work surface card hover effects */
+        .work-surface-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .work-surface-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(45, 96, 159, 0.2);
+        }
+    </style>
+</head>
+
+<body class="font-cosmic text-cream-primary min-h-screen">
+    <!-- Nebula Background -->
+    <div class="nebula-background"></div>
+    
+    <!-- Main Application Layout -->
+    <div class="min-h-screen flex">
+        
+        <!-- Enhanced Sidebar with Cosmic Styling -->
+        <div class="fixed left-0 top-0 h-full w-80 cosmic-sidebar z-40 flex flex-col">
+            
+            <!-- Header with Platform Title -->
+            <div class="p-6 pb-4 border-b border-orbital-copper border-opacity-20">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        <!-- Orbis Forge Logo with mini orbital rings -->
+                        <div class="relative">
+                            <div class="w-8 h-8 bg-gradient-to-r from-orbital-copper to-orbital-bright rounded-full flex items-center justify-center">
+                                <div class="w-3 h-3 bg-cosmic-void rounded-full"></div>
+                            </div>
+                            <div class="orbit-ring orbit-ring-1"></div>
+                            <div class="orbit-ring orbit-ring-2"></div>
+                        </div>
+                        <h1 class="text-xl font-orbital font-bold cosmic-heading">Orbis Platform</h1>
+                    </div>
+                    <button class="p-2 text-cream-muted hover:text-cream-primary hover:bg-cosmic-elevated rounded-md transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sub-App Selector -->
+            <div class="p-6 pt-4 border-b border-orbital-copper border-opacity-20">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-medium text-cream-muted">Sub-Applications</h3>
+                    <div class="w-2 h-2 bg-orbital-bright rounded-full animate-pulse"></div>
+                </div>
+                
+                <div class="relative">
+                    <button class="w-full flex items-center justify-between p-3 cosmic-card rounded-lg interactive-element">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">OI</span>
+                            </div>
+                            <div class="text-left">
+                                <div class="font-medium text-cream-primary">Orbis Intelligence</div>
+                                <div class="text-sm text-cream-muted">Analytics Platform</div>
+                            </div>
+                        </div>
+                        <div class="px-2 py-1 bg-green-500 bg-opacity-20 text-green-400 text-xs font-medium rounded-full">
+                            Active
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Project Selector -->
+            <div class="p-6 pt-4 border-b border-orbital-copper border-opacity-20">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-sm font-medium text-cream-muted">Current Project</h3>
+                    <button class="p-1 text-cream-muted hover:text-orbital-copper">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="cosmic-card rounded-lg p-3 interactive-element">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-orbital-copper" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
+                        </svg>
+                        <div class="flex-1">
+                            <div class="font-medium text-cream-primary">Complize Platform</div>
+                            <div class="text-sm text-cream-muted">Platform Development</div>
+                            <div class="mt-2">
+                                <div class="cosmic-progress">
+                                    <div class="cosmic-progress-fill" style="width: 65%"></div>
+                                </div>
+                                <div class="text-xs text-cream-muted mt-1">65% complete</div>
+                            </div>
+                        </div>
+                        <span class="px-2 py-1 bg-green-500 bg-opacity-20 text-green-400 text-xs font-medium rounded-full">
+                            Active
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work Surfaces Navigation -->
+            <div class="p-6 border-b border-orbital-copper border-opacity-20">
+                <h3 class="text-sm font-medium text-cream-primary mb-3">Work Surfaces</h3>
+                <nav class="space-y-1">
+                    <!-- Plan Surface - Active -->
+                    <button class="w-full flex items-center space-x-3 p-3 rounded-lg bg-nebula-core bg-opacity-30 border border-nebula-core border-opacity-50 text-cream-primary">
+                        <div class="surface-icon active">📋</div>
+                        <div class="flex-1 text-left">
+                            <div class="font-medium">Plan</div>
+                            <div class="text-xs text-cream-muted">Composer, phase setup, AI scaffold</div>
+                        </div>
+                    </button>
+                    
+                    <!-- Execute Surface -->
+                    <button class="w-full flex items-center space-x-3 p-3 rounded-lg text-cream-muted hover:text-cream-primary hover:bg-cosmic-elevated interactive-element">
+                        <div class="surface-icon">⚡</div>
+                        <div class="flex-1 text-left">
+                            <div class="font-medium">Execute</div>
+                            <div class="text-xs text-cream-muted">Track phases, trigger steps, flag blockers</div>
+                        </div>
+                    </button>
+                    
+                    <!-- Document Surface -->
+                    <button class="w-full flex items-center space-x-3 p-3 rounded-lg text-cream-muted hover:text-cream-primary hover:bg-cosmic-elevated interactive-element">
+                        <div class="surface-icon">📝</div>
+                        <div class="flex-1 text-left">
+                            <div class="font-medium">Document</div>
+                            <div class="text-xs text-cream-muted">Rich-text SOP + AI</div>
+                        </div>
+                    </button>
+                    
+                    <!-- Govern Surface -->
+                    <button class="w-full flex items-center space-x-3 p-3 rounded-lg text-cream-muted hover:text-cream-primary hover:bg-cosmic-elevated interactive-element">
+                        <div class="surface-icon">🛡️</div>
+                        <div class="flex-1 text-left">
+                            <div class="font-medium">Govern</div>
+                            <div class="text-xs text-cream-muted">Logs, reviews, AI audit trails</div>
+                        </div>
+                    </button>
+                    
+                    <!-- Integrate Surface -->
+                    <button class="w-full flex items-center space-x-3 p-3 rounded-lg text-cream-muted hover:text-cream-primary hover:bg-cosmic-elevated interactive-element">
+                        <div class="surface-icon">🧬</div>
+                        <div class="flex-1 text-left">
+                            <div class="font-medium">Integrate</div>
+                            <div class="text-xs text-cream-muted">Integration health monitoring</div>
+                        </div>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Filters -->
+            <div class="flex-1 p-6">
+                <div class="flex items-center space-x-2 mb-3">
+                    <svg class="w-4 h-4 text-cream-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+                    </svg>
+                    <h3 class="text-sm font-medium text-cream-primary">Filters</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-cream-muted mb-2">RAG Status</label>
+                        <select class="w-full text-sm bg-cosmic-elevated border border-orbital-copper border-opacity-30 rounded-md px-3 py-2 text-cream-primary focus:outline-none focus:border-orbital-copper focus:border-opacity-60">
+                            <option>All</option>
+                            <option>Green</option>
+                            <option>Amber</option>
+                            <option>Red</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-cream-muted mb-2">Status</label>
+                        <select class="w-full text-sm bg-cosmic-elevated border border-orbital-copper border-opacity-30 rounded-md px-3 py-2 text-cream-primary focus:outline-none focus:border-orbital-copper focus:border-opacity-60">
+                            <option>All</option>
+                            <option>Active</option>
+                            <option>On Hold</option>
+                            <option>Completed</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-cream-muted mb-2">Owner</label>
+                        <select class="w-full text-sm bg-cosmic-elevated border border-orbital-copper border-opacity-30 rounded-md px-3 py-2 text-cream-primary focus:outline-none focus:border-orbital-copper focus:border-opacity-60">
+                            <option>All</option>
+                            <option>Team Lead</option>
+                            <option>Product Owner</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="p-6 border-t border-orbital-copper border-opacity-20">
+                <button class="w-full flex items-center space-x-3 p-3 text-cream-muted hover:text-cream-primary hover:bg-cosmic-elevated rounded-lg transition-colors interactive-element">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span class="text-sm font-medium">Settings</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col" style="margin-left: 320px;">
+            
+            <!-- Breadcrumb Header -->
+            <header class="sticky top-0 z-30 cosmic-breadcrumb">
+                <div class="p-6">
+                    <!-- Surface Selector -->
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="inline-flex items-center rounded-lg border border-nebula-core border-opacity-50 px-4 py-2 bg-nebula-core bg-opacity-20 text-nebula-glow">
+                            <div class="surface-icon active mr-2">📋</div>
+                            <span class="text-sm font-medium">Set Up</span>
+                        </div>
+
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-2 bg-nebula-core bg-opacity-30 text-nebula-glow rounded-md text-xs font-medium border border-nebula-core border-opacity-50">
+                                Set Up
+                            </button>
+                            <button class="px-3 py-2 bg-cosmic-elevated text-cream-muted rounded-md text-xs font-medium hover:text-cream-primary">
+                                Track Progress
+                            </button>
+                            <button class="px-3 py-2 bg-cosmic-elevated text-cream-muted rounded-md text-xs font-medium hover:text-cream-primary">
+                                Create Records
+                            </button>
+                            <button class="px-3 py-2 bg-cosmic-elevated text-cream-muted rounded-md text-xs font-medium hover:text-cream-primary">
+                                Review & Audit
+                            </button>
+                            <button class="px-3 py-2 bg-cosmic-elevated text-cream-muted rounded-md text-xs font-medium hover:text-cream-primary">
+                                Connect Tools
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Breadcrumb Navigation -->
+                    <nav class="flex items-center space-x-2 text-sm">
+                        <!-- Project -->
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-cream-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                            <span class="font-medium text-cream-primary">Complize Platform</span>
+                            <span class="px-2 py-1 text-xs rounded-full bg-green-500 bg-opacity-20 text-green-400">Active</span>
+                        </div>
+
+                        <!-- Phase -->
+                        <svg class="w-4 h-4 text-cream-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-cream-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
+                            </svg>
+                            <span class="text-cream-secondary">Phase 2: Development</span>
+                            <span class="text-blue-400">🔄</span>
+                            <span class="text-xs text-cream-muted">(75%)</span>
+                        </div>
+
+                        <!-- Step -->
+                        <svg class="w-4 h-4 text-cream-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-cream-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1"/>
+                            </svg>
+                            <span class="text-cream-secondary">Implement Core Features</span>
+                            <span class="text-blue-400">🔄</span>
+                        </div>
+                    </nav>
+
+                    <!-- Quick Stats -->
+                    <div class="flex items-center space-x-6 mt-3 text-xs text-cream-muted">
+                        <div class="flex items-center space-x-1">
+                            <span>Project:</span>
+                            <span class="font-medium text-orbital-copper">65% complete</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <span>Phase:</span>
+                            <span class="font-medium text-cream-secondary">2 steps</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <span>Owner:</span>
+                            <span class="font-medium text-cream-secondary">Team Lead</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <span>Type:</span>
+                            <span class="font-medium text-cream-secondary">Platform</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Sub-App Dashboard Content -->
+            <main class="flex-1 overflow-auto p-8">
+                
+                <!-- Welcome Header with Program Context -->
+                <div class="max-w-6xl mx-auto mb-8">
+                    <div class="cosmic-card rounded-xl p-8 interactive-element">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h1 class="text-3xl font-orbital font-bold cosmic-heading mb-2">
+                                    Welcome to Orbis Intelligence
+                                </h1>
+                                <p class="text-lg text-cream-muted">Advanced analytics and intelligence platform for strategic decision making</p>
+                                
+                                <div class="flex items-center gap-6 mt-4">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm text-cream-muted">Status:</span>
+                                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-500 bg-opacity-20 text-green-400">
+                                            Active
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm text-cream-muted">Type:</span>
+                                        <span class="text-sm font-medium text-cream-primary">Analytics</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Program Health Indicator -->
+                            <div class="text-center">
+                                <div class="text-sm text-cream-muted mb-2">Program Health</div>
+                                <div class="relative">
+                                    <div class="w-20 h-20 rounded-full flex items-center justify-center bg-green-500 bg-opacity-20">
+                                        <svg class="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="mt-2 text-sm font-medium text-green-400">
+                                        All Systems Go
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Stats -->
+                        <div class="grid grid-cols-4 gap-4 mt-8 pt-8 border-t border-orbital-copper border-opacity-20">
+                            <div>
+                                <div class="text-2xl font-bold orbital-accent">
+                                    3
+                                </div>
+                                <div class="text-sm text-cream-muted">Active Projects</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-cream-primary">5</div>
+                                <div class="text-sm text-cream-muted">Active Phases</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-green-400">
+                                    0
+                                </div>
+                                <div class="text-sm text-cream-muted">Blocked Steps</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-cream-primary">
+                                    100%
+                                </div>
+                                <div class="text-sm text-cream-muted">Progress Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Work Surface Cards Grid -->
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-xl font-semibold cosmic-heading mb-6">Work Surfaces</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Plan Surface Card -->
+                        <div class="cosmic-card rounded-xl p-6 interactive-element work-surface-card border-l-4 border-l-orbital-copper">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-lg bg-orbital-copper bg-opacity-20 text-orbital-copper flex items-center justify-center">
+                                        <span class="text-lg">📋</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold cosmic-heading">Plan</h3>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-sm text-cream-muted">Active Phases</span>
+                                    <span class="text-2xl font-bold text-cream-primary">5</span>
+                                </div>
+                                
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-sm text-cream-muted">Blocked Steps</span>
+                                    <span class="text-lg font-semibold text-green-400">0</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-orbital-copper border-opacity-20">
+                                <span class="text-sm font-medium text-orbital-copper hover:underline cursor-pointer">
+                                    View Planning Board →
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Govern Surface Card -->
+                        <div class="cosmic-card rounded-xl p-6 interactive-element work-surface-card border-l-4 border-l-orbital-copper">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-lg bg-orbital-copper bg-opacity-20 text-orbital-copper flex items-center justify-center">
+                                        <span class="text-lg">🛡️</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold cosmic-heading">Govern</h3>
+                                </div>
+                                
+                                <span class="px-2 py-1 bg-amber-500 bg-opacity-20 text-amber-400 text-xs font-medium rounded-full">
+                                    Urgent
+                                </span>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-sm text-cream-muted">Governance Logs</span>
+                                    <span class="text-2xl font-bold text-cream-primary">15</span>
+                                </div>
+                                
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-sm text-cream-muted">Pending Reviews</span>
+                                    <span class="text-lg font-semibold text-amber-400">3</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-orbital-copper border-opacity-20">
+                                <span class="text-sm font-medium text-orbital-copper hover:underline cursor-pointer">
+                                    Review Governance →
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Document Surface Card -->
+                        <div class="cosmic-card rounded-xl p-6 interactive-element work-surface-card border-l-4 border-l-orbital-copper">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-lg bg-orbital-copper bg-opacity-20 text-orbital-copper flex items-center justify-center">
+                                        <span class="text-lg">📝</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold cosmic-heading">Document</h3>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-sm text-cream-muted">Documents</span>
+                                    <span class="text-2xl font-bold text-cream-primary">45</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-orbital-copper border-opacity-20">
+                                <span class="text-sm font-medium text-orbital-copper hover:underline cursor-pointer">
+                                    Browse Documents →
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Templates Surface Card -->
+                        <div class="cosmic-card rounded-xl p-6 interactive-element work-surface-card border-l-4 border-l-orbital-copper">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-lg bg-orbital-copper bg-opacity-20 text-orbital-copper flex items-center justify-center">
+                                        <span class="text-lg">🧩</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold cosmic-heading">Templates</h3>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-sm text-cream-muted">Template Sets</span>
+                                    <span class="text-2xl font-bold text-cream-primary">12</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-orbital-copper border-opacity-20">
+                                <span class="text-sm font-medium text-orbital-copper hover:underline cursor-pointer">
+                                    Manage Templates →
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="max-w-6xl mx-auto mt-8">
+                    <div class="cosmic-card rounded-xl p-6 interactive-element">
+                        <h3 class="text-lg font-semibold cosmic-heading mb-4">Recent Activity</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3 text-sm">
+                                <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                                <span class="text-cream-secondary">Phase "Design System Integration" completed</span>
+                                <span class="text-cream-muted ml-auto">2 hours ago</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm">
+                                <div class="w-2 h-2 rounded-full bg-amber-400"></div>
+                                <span class="text-cream-secondary">New blocker in "API Integration" phase</span>
+                                <span class="text-cream-muted ml-auto">5 hours ago</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm">
+                                <div class="w-2 h-2 rounded-full bg-nebula-core"></div>
+                                <span class="text-cream-secondary">Governance review scheduled for tomorrow</span>
+                                <span class="text-cream-muted ml-auto">Yesterday</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</body>
+</html>

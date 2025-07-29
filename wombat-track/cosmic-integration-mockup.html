@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbis Forge Cosmic Integration Mockup - Wombat Track</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #fafafa;
+            color: #171717;
+            line-height: 1.5;
+        }
+
+        /* Wombat Track Design System Variables */
+        :root {
+            --wt-primary-500: #3b82f6;
+            --wt-primary-600: #2563eb;
+            --wt-neutral-0: #ffffff;
+            --wt-neutral-50: #fafafa;
+            --wt-neutral-100: #f5f5f5;
+            --wt-neutral-200: #e5e5e5;
+            --wt-neutral-300: #d4d4d4;
+            --wt-neutral-500: #737373;
+            --wt-neutral-600: #525252;
+            --wt-neutral-700: #404040;
+            --wt-neutral-900: #171717;
+            --wt-radius-lg: 0.75rem;
+            --wt-radius-xl: 1rem;
+            --wt-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --wt-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --wt-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+            /* Cosmic Enhancement Variables */
+            --cosmic-primary: #8B5CF6;
+            --cosmic-secondary: #EC4899;
+            --cosmic-accent: #10B981;
+            --cosmic-dark: #1E1B4B;
+            --cosmic-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --cosmic-orbit-gradient: linear-gradient(45deg, #8B5CF6, #EC4899);
+            --cosmic-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+            --cosmic-subtle-glow: 0 0 10px rgba(139, 92, 246, 0.1);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--cosmic-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            color: var(--wt-neutral-600);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .comparison-panel {
+            background: var(--wt-neutral-0);
+            border-radius: var(--wt-radius-xl);
+            box-shadow: var(--wt-shadow-lg);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--wt-neutral-200);
+        }
+
+        .panel-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .panel-header.current {
+            background: var(--wt-neutral-50);
+        }
+
+        .panel-header.cosmic {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(236, 72, 153, 0.05));
+            border-bottom-color: rgba(139, 92, 246, 0.2);
+        }
+
+        .panel-content {
+            padding: 1.5rem;
+            min-height: 600px;
+        }
+
+        /* Current Wombat Track Styles */
+        .wt-card {
+            background: var(--wt-neutral-0);
+            border: 1px solid var(--wt-neutral-200);
+            border-radius: var(--wt-radius-lg);
+            box-shadow: var(--wt-shadow-sm);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .wt-card:hover {
+            box-shadow: var(--wt-shadow-md);
+            transform: translateY(-1px);
+        }
+
+        .wt-subapp-header {
+            background: var(--wt-neutral-0);
+            border: 1px solid var(--wt-neutral-200);
+            border-radius: var(--wt-radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .wt-work-surface {
+            border-left: 4px solid var(--wt-primary-500);
+            background: var(--wt-neutral-0);
+            border: 1px solid var(--wt-neutral-200);
+            border-radius: var(--wt-radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .wt-work-surface:hover {
+            box-shadow: var(--wt-shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .wt-sidebar {
+            background: var(--wt-neutral-0);
+            border-right: 1px solid var(--wt-neutral-200);
+            width: 20rem;
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .wt-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--wt-radius-lg);
+            margin-bottom: 0.25rem;
+            color: var(--wt-neutral-700);
+            transition: all 0.15s ease;
+        }
+
+        .wt-nav-item:hover {
+            background: var(--wt-neutral-100);
+        }
+
+        .wt-nav-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--wt-primary-600);
+        }
+
+        /* Cosmic Enhancement Styles */
+        .cosmic-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: var(--wt-radius-lg);
+            box-shadow: var(--cosmic-subtle-glow), var(--wt-shadow-sm);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cosmic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--cosmic-orbit-gradient);
+        }
+
+        .cosmic-card:hover {
+            box-shadow: var(--cosmic-glow), var(--wt-shadow-lg);
+            transform: translateY(-2px);
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+
+        .cosmic-subapp-header {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.95), 
+                rgba(139, 92, 246, 0.05), 
+                rgba(236, 72, 153, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: var(--wt-radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cosmic-subapp-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            animation: cosmic-orbit 20s linear infinite;
+        }
+
+        .cosmic-work-surface {
+            border-left: 4px solid transparent;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: var(--wt-radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cosmic-work-surface::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--cosmic-orbit-gradient);
+        }
+
+        .cosmic-work-surface::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .cosmic-work-surface:hover {
+            box-shadow: var(--cosmic-glow), var(--wt-shadow-lg);
+            transform: translateY(-3px);
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+
+        .cosmic-work-surface:hover::after {
+            left: 100%;
+        }
+
+        .cosmic-sidebar {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(139, 92, 246, 0.02));
+            border-right: 1px solid rgba(139, 92, 246, 0.2);
+            width: 20rem;
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .cosmic-sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 2px;
+            background: var(--cosmic-orbit-gradient);
+            opacity: 0.3;
+        }
+
+        .cosmic-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--wt-radius-lg);
+            margin-bottom: 0.25rem;
+            color: var(--wt-neutral-700);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cosmic-nav-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+            transition: left 0.3s ease;
+        }
+
+        .cosmic-nav-item:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.05));
+            transform: translateX(4px);
+        }
+
+        .cosmic-nav-item:hover::before {
+            left: 100%;
+        }
+
+        .cosmic-nav-item.active {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.1));
+            color: var(--cosmic-primary);
+            box-shadow: var(--cosmic-subtle-glow);
+        }
+
+        .orbital-element {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--cosmic-primary);
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .orbital-path {
+            position: absolute;
+            border: 1px dashed rgba(139, 92, 246, 0.2);
+            border-radius: 50%;
+            animation: cosmic-orbit 15s linear infinite;
+        }
+
+        /* Integration Points Visualization */
+        .integration-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .integration-point {
+            background: var(--wt-neutral-0);
+            border: 1px solid var(--wt-neutral-200);
+            border-radius: var(--wt-radius-lg);
+            padding: 1rem;
+        }
+
+        .integration-point.cosmic {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(139, 92, 246, 0.05));
+            border-color: rgba(139, 92, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .integration-point.cosmic::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--cosmic-orbit-gradient);
+        }
+
+        .feature-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--cosmic-primary);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+
+        .enhancement-note {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: var(--wt-radius-lg);
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #047857;
+        }
+
+        .warning-note {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: var(--wt-radius-lg);
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #92400e;
+        }
+
+        /* Animations */
+        @keyframes cosmic-orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes cosmic-pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .cosmic-pulse {
+            animation: cosmic-pulse 3s ease-in-out infinite;
+        }
+
+        /* Typography Enhancements */
+        .cosmic-text-gradient {
+            background: var(--cosmic-orbit-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .annotation {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--wt-radius-lg);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 0.875rem;
+            color: var(--wt-primary-600);
+        }
+
+        .grid-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 1rem;
+            background: var(--wt-neutral-50);
+            border-radius: var(--wt-radius-lg);
+        }
+
+        .metric-card.cosmic {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(236, 72, 153, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--wt-primary-600);
+        }
+
+        .metric-value.cosmic {
+            background: var(--cosmic-orbit-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--wt-neutral-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Orbis Forge Cosmic Integration Mockup</h1>
+            <p>Visual comparison showing how cosmic design elements would integrate with the existing Wombat Track UI system while maintaining current functionality and user experience patterns.</p>
+        </div>
+
+        <div class="comparison-grid">
+            <!-- Current Wombat Track Interface -->
+            <div class="comparison-panel">
+                <div class="panel-header current">
+                    <h2>Current Wombat Track UI</h2>
+                    <p>Existing professional, clean interface with current design system</p>
+                </div>
+                <div class="panel-content">
+                    <!-- Current SubApp Dashboard Header -->
+                    <div class="wt-subapp-header">
+                        <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Welcome to Orbis Forge</h3>
+                        <p style="color: var(--wt-neutral-600); margin-bottom: 1rem;">AI-powered development orchestration platform</p>
+                        
+                        <div class="grid-demo">
+                            <div class="metric-card">
+                                <div class="metric-value">3</div>
+                                <div class="metric-label">Active Projects</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">12</div>
+                                <div class="metric-label">Active Phases</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">2</div>
+                                <div class="metric-label">Blocked Steps</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">89%</div>
+                                <div class="metric-label">Progress Rate</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Work Surfaces -->
+                    <h4 style="margin-bottom: 1rem; font-weight: 600;">Work Surfaces</h4>
+                    
+                    <div class="wt-work-surface">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                            <div style="width: 2.5rem; height: 2.5rem; background: rgba(59, 130, 246, 0.1); border-radius: var(--wt-radius-lg); display: flex; align-items: center; justify-content: center;">📋</div>
+                            <h5 style="font-weight: 600;">Plan</h5>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--wt-neutral-600); margin-bottom: 0.5rem;">Composer, phase setup, AI scaffold</p>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 0.875rem; color: var(--wt-neutral-500);">Active Phases</span>
+                            <span style="font-weight: 600;">12</span>
+                        </div>
+                    </div>
+
+                    <div class="wt-work-surface">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                            <div style="width: 2.5rem; height: 2.5rem; background: rgba(59, 130, 246, 0.1); border-radius: var(--wt-radius-lg); display: flex; align-items: center; justify-content: center;">🛡️</div>
+                            <h5 style="font-weight: 600;">Govern</h5>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--wt-neutral-600); margin-bottom: 0.5rem;">Logs, reviews, AI audit trails</p>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 0.875rem; color: var(--wt-neutral-500);">Governance Logs</span>
+                            <span style="font-weight: 600;">18</span>
+                        </div>
+                    </div>
+
+                    <!-- Current Sidebar Preview -->
+                    <h4 style="margin: 1.5rem 0 1rem 0; font-weight: 600;">Project Sidebar</h4>
+                    <div class="wt-sidebar">
+                        <div class="wt-nav-item active">
+                            <span>📋</span>
+                            <span>Plan</span>
+                        </div>
+                        <div class="wt-nav-item">
+                            <span>⚡</span>
+                            <span>Execute</span>
+                        </div>
+                        <div class="wt-nav-item">
+                            <span>📝</span>
+                            <span>Document</span>
+                        </div>
+                        <div class="wt-nav-item">
+                            <span>🛡️</span>
+                            <span>Govern</span>
+                        </div>
+                        <div class="wt-nav-item">
+                            <span>🧬</span>
+                            <span>Integrate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cosmic Enhanced Interface -->
+            <div class="comparison-panel">
+                <div class="panel-header cosmic">
+                    <h2 class="cosmic-text-gradient">Cosmic-Enhanced Wombat Track</h2>
+                    <p>Same functionality with orbital design elements and cosmic visual enhancements</p>
+                </div>
+                <div class="panel-content">
+                    <!-- Cosmic SubApp Dashboard Header -->
+                    <div class="cosmic-subapp-header">
+                        <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;" class="cosmic-text-gradient">Welcome to Orbis Forge</h3>
+                        <p style="color: var(--wt-neutral-600); margin-bottom: 1rem;">AI-powered development orchestration platform</p>
+                        
+                        <div class="grid-demo">
+                            <div class="metric-card cosmic">
+                                <div class="metric-value cosmic">3</div>
+                                <div class="metric-label">Active Projects</div>
+                            </div>
+                            <div class="metric-card cosmic">
+                                <div class="metric-value cosmic">12</div>
+                                <div class="metric-label">Active Phases</div>
+                            </div>
+                            <div class="metric-card cosmic">
+                                <div class="metric-value cosmic">2</div>
+                                <div class="metric-label">Blocked Steps</div>
+                            </div>
+                            <div class="metric-card cosmic">
+                                <div class="metric-value cosmic">89%</div>
+                                <div class="metric-label">Progress Rate</div>
+                            </div>
+                        </div>
+
+                        <!-- Orbital Elements -->
+                        <div class="orbital-path" style="width: 60px; height: 60px; top: 20px; right: 20px;"></div>
+                        <div class="orbital-element cosmic-pulse" style="top: 30px; right: 60px;"></div>
+                    </div>
+
+                    <!-- Cosmic Work Surfaces -->
+                    <h4 style="margin-bottom: 1rem; font-weight: 600;">Work Surfaces</h4>
+                    
+                    <div class="cosmic-work-surface">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                            <div style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1)); border-radius: var(--wt-radius-lg); display: flex; align-items: center; justify-content: center; box-shadow: var(--cosmic-subtle-glow);">📋</div>
+                            <h5 style="font-weight: 600;">Plan</h5>
+                            <div class="feature-tag">Cosmic Enhanced</div>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--wt-neutral-600); margin-bottom: 0.5rem;">Composer, phase setup, AI scaffold</p>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 0.875rem; color: var(--wt-neutral-500);">Active Phases</span>
+                            <span style="font-weight: 600;" class="cosmic-text-gradient">12</span>
+                        </div>
+                    </div>
+
+                    <div class="cosmic-work-surface">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                            <div style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1)); border-radius: var(--wt-radius-lg); display: flex; align-items: center; justify-content: center; box-shadow: var(--cosmic-subtle-glow);">🛡️</div>
+                            <h5 style="font-weight: 600;">Govern</h5>
+                            <div class="feature-tag">Orbital Flow</div>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--wt-neutral-600); margin-bottom: 0.5rem;">Logs, reviews, AI audit trails</p>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 0.875rem; color: var(--wt-neutral-500);">Governance Logs</span>
+                            <span style="font-weight: 600;" class="cosmic-text-gradient">18</span>
+                        </div>
+                    </div>
+
+                    <!-- Cosmic Sidebar Preview -->
+                    <h4 style="margin: 1.5rem 0 1rem 0; font-weight: 600;">Project Sidebar</h4>
+                    <div class="cosmic-sidebar">
+                        <div class="cosmic-nav-item active">
+                            <span>📋</span>
+                            <span>Plan</span>
+                        </div>
+                        <div class="cosmic-nav-item">
+                            <span>⚡</span>
+                            <span>Execute</span>
+                        </div>
+                        <div class="cosmic-nav-item">
+                            <span>📝</span>
+                            <span>Document</span>
+                        </div>
+                        <div class="cosmic-nav-item">
+                            <span>🛡️</span>
+                            <span>Govern</span>
+                        </div>
+                        <div class="cosmic-nav-item">
+                            <span>🧬</span>
+                            <span>Integrate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Integration Points Analysis -->
+        <div style="background: var(--wt-neutral-0); border-radius: var(--wt-radius-xl); padding: 2rem; box-shadow: var(--wt-shadow-lg); margin-bottom: 2rem;">
+            <h2 style="margin-bottom: 1.5rem; font-weight: 700;">Integration Points & Enhancement Strategy</h2>
+            
+            <div class="integration-demo">
+                <div class="integration-point">
+                    <h4 style="margin-bottom: 0.5rem; font-weight: 600;">Current Cards</h4>
+                    <div class="wt-card">
+                        <p style="font-size: 0.875rem;">Standard Wombat Track card with clean borders, subtle shadows, and hover states.</p>
+                    </div>
+                </div>
+                
+                <div class="integration-point cosmic">
+                    <h4 style="margin-bottom: 0.5rem; font-weight: 600;" class="cosmic-text-gradient">Cosmic Cards</h4>
+                    <div class="cosmic-card">
+                        <p style="font-size: 0.875rem;">Enhanced with gradient borders, cosmic glow effects, and orbital accent lines while maintaining readability.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="enhancement-note">
+                <h5 style="font-weight: 600; margin-bottom: 0.5rem;">🎯 Enhancement Approach</h5>
+                <ul style="margin-left: 1rem;">
+                    <li>Preserve all existing functionality and user interactions</li>
+                    <li>Add cosmic visual elements as progressive enhancements</li>
+                    <li>Maintain accessibility standards and contrast ratios</li>
+                    <li>Use CSS custom properties for easy theme switching</li>
+                </ul>
+            </div>
+
+            <div class="warning-note">
+                <h5 style="font-weight: 600; margin-bottom: 0.5rem;">⚠️ Implementation Considerations</h5>
+                <ul style="margin-left: 1rem;">
+                    <li>Ensure cosmic effects don't interfere with text readability</li>
+                    <li>Provide fallbacks for reduced motion preferences</li>
+                    <li>Test performance impact of animations and gradients</li>
+                    <li>Maintain component API compatibility</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Technical Integration Details -->
+        <div style="background: var(--wt-neutral-0); border-radius: var(--wt-radius-xl); padding: 2rem; box-shadow: var(--wt-shadow-lg);">
+            <h2 style="margin-bottom: 1.5rem; font-weight: 700;">Technical Integration Details</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div style="padding: 1rem; background: var(--wt-neutral-50); border-radius: var(--wt-radius-lg);">
+                    <h5 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--cosmic-primary);">🎨 CSS Variables</h5>
+                    <p style="font-size: 0.875rem;">Add cosmic color variables to existing design system without breaking current themes.</p>
+                </div>
+                
+                <div style="padding: 1rem; background: var(--wt-neutral-50); border-radius: var(--wt-radius-lg);">
+                    <h5 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--cosmic-primary);">🧩 Component Variants</h5>
+                    <p style="font-size: 0.875rem;">Create cosmic variants of existing components (Card, Button, etc.) alongside current versions.</p>
+                </div>
+                
+                <div style="padding: 1rem; background: var(--wt-neutral-50); border-radius: var(--wt-radius-lg);">
+                    <h5 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--cosmic-primary);">⚡ Performance</h5>
+                    <p style="font-size: 0.875rem;">Use CSS transforms and will-change for smooth animations without layout thrashing.</p>
+                </div>
+                
+                <div style="padding: 1rem; background: var(--wt-neutral-50); border-radius: var(--wt-radius-lg);">
+                    <h5 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--cosmic-primary);">🎯 User Choice</h5>
+                    <p style="font-size: 0.875rem;">Allow users to toggle between standard and cosmic themes via settings panel.</p>
+                </div>
+            </div>
+
+            <div class="annotation" style="margin-top: 2rem;">
+                <strong>Integration Philosophy:</strong> The cosmic enhancements serve as a visual overlay that enhances the existing Wombat Track experience without disrupting established workflows or user mental models. All current functionality remains intact while adding visual sophistication and brand differentiation for the Orbis Forge sub-application.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

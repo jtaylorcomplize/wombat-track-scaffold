@@ -4,7 +4,7 @@ import type { CreateDatabaseParameters } from '@notionhq/client/build/src/api-en
 export interface DatabaseSchema {
   name: string;
   description?: string;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
 }
 
 export class NotionDatabaseCreator {
@@ -460,7 +460,7 @@ export async function createWombatTrackDatabases(
   errors: string[];
 }> {
   const creator = new NotionDatabaseCreator(token, parentPageId);
-  const results: any = {};
+  const results: Record<string, unknown> = {};
   const errors: string[] = [];
 
   // Create Project Database
