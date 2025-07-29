@@ -3,7 +3,7 @@ import { createNotionClient } from './notionClient';
 export interface ConnectionTestResult {
   success: boolean;
   error?: string;
-  userInfo?: any;
+  userInfo?: Record<string, unknown>; // no-explicit-any fix
   accessibleDatabases?: Array<{
     id: string;
     title: string;
@@ -37,8 +37,8 @@ export async function testNotionConnection(token?: string): Promise<ConnectionTe
     console.log('\n📊 Fetching accessible databases...');
     const databasesResponse = await client.listDatabases();
     const databases = databasesResponse.results
-      .filter((item: any) => item.object === 'database')
-      .map((db: any) => ({
+      .filter((item: Record<string, unknown>) => item.object === 'database') // no-explicit-any fix
+      .map((db: Record<string, unknown>) => ({ // no-explicit-any fix
         id: db.id,
         title: db.title?.[0]?.plain_text || 'Untitled',
         url: db.url,

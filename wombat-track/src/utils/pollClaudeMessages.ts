@@ -27,7 +27,7 @@ export async function pollClaudeMessages() {
 
     for (const result of response.results) {
       const pageId = result.id;
-      const props = result.properties as any;
+      const props = result.properties as Record<string, unknown>; // no-explicit-any fix
       
       const threadId = props['Thread ID']?.rich_text?.[0]?.plain_text || 'no-thread';
       const message = props['Message']?.title?.[0]?.plain_text || '';

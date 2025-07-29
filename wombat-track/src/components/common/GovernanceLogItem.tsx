@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Calendar, User, FileText, Bot, ExternalLink, ChevronDown, ChevronRight } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
+import { User, FileText, Bot, ExternalLink, ChevronDown, ChevronRight } from 'lucide-react';
 
 export interface GovernanceLogEntry {
   id: string;
@@ -78,11 +78,13 @@ export const GovernanceLogItem: React.FC<GovernanceLogItemProps> = ({
   
   const typeStyle = ENTRY_TYPE_STYLES[entry.entryType];
   
-  const formatTimestamp = (timestamp: string) => {
+  // Format timestamp for tooltips and display
+  const formatTimestamp = useCallback((timestamp: string) => {
     return new Date(timestamp).toLocaleString();
-  };
+  }, []);
 
-  const getRelativeTime = (timestamp: string) => {
+  // Calculate relative time for entry timestamps
+  const getRelativeTime = useCallback((timestamp: string) => {
     const now = new Date();
     const entryTime = new Date(timestamp);
     const diffMs = now.getTime() - entryTime.getTime();
@@ -93,7 +95,7 @@ export const GovernanceLogItem: React.FC<GovernanceLogItemProps> = ({
     if (diffHours < 24) return `${diffHours}h ago`;
     if (diffDays < 7) return `${diffDays}d ago`;
     return formatTimestamp(timestamp);
-  };
+  }, [formatTimestamp]);
 
   return (
     <div

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { X, Plus } from 'lucide-react';
 import { RAGBadge } from './RAGBadge';
 import type { FeaturePlanRow, RAGStatus, AIActionType } from '../../types/feature';
@@ -70,7 +70,8 @@ export const AddFeatureModal: React.FC<AddFeatureModalProps> = ({
     onClose();
   };
 
-  const addDependency = () => {
+  // Add dependency with validation
+  const addDependency = useCallback(() => {
     if (dependencyInput.trim() && !formData.dependencies.includes(dependencyInput.trim())) {
       setFormData(prev => ({
         ...prev,
@@ -78,16 +79,18 @@ export const AddFeatureModal: React.FC<AddFeatureModalProps> = ({
       }));
       setDependencyInput('');
     }
-  };
+  }, [dependencyInput, formData.dependencies]);
 
-  const removeDependency = (index: number) => {
+  // Remove dependency by index
+  const removeDependency = useCallback((index: number) => {
     setFormData(prev => ({
       ...prev,
       dependencies: prev.dependencies.filter((_, i) => i !== index)
     }));
-  };
+  }, []);
 
-  const addLink = () => {
+  // Add artifact link with validation
+  const addLink = useCallback(() => {
     if (linkInput.trim() && !formData.artefactLinks.includes(linkInput.trim())) {
       setFormData(prev => ({
         ...prev,
@@ -95,14 +98,15 @@ export const AddFeatureModal: React.FC<AddFeatureModalProps> = ({
       }));
       setLinkInput('');
     }
-  };
+  }, [linkInput, formData.artefactLinks]);
 
-  const removeLink = (index: number) => {
+  // Remove artifact link by index
+  const removeLink = useCallback((index: number) => {
     setFormData(prev => ({
       ...prev,
       artefactLinks: prev.artefactLinks.filter((_, i) => i !== index)
     }));
-  };
+  }, []);
 
   if (!isOpen) return null;
 

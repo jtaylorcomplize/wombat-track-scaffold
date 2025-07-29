@@ -1,11 +1,12 @@
 import React from 'react';
 import { GizmoConsole } from '../GizmoConsole';
-import { handleAIPrompt, testDispatchers } from '../../lib/aiDispatchers';
+import { testDispatchers } from '../../lib/aiDispatchers';
 
 interface GizmoConsoleExampleProps {
   className?: string;
 }
 
+// Example component showcasing GizmoConsole with real-time dispatchers
 export const GizmoConsoleExample: React.FC<GizmoConsoleExampleProps> = ({ className = '' }) => {
   // Test dispatcher functionality
   const runDispatcherTest = async () => {

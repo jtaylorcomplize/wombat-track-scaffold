@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Filter, FolderOpen, Settings, User, Calendar } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Filter, FolderOpen, Settings, User } from 'lucide-react';
 import type { Project } from '../../types/phase';
 import type { WorkSurface } from './AppLayout';
 
@@ -48,6 +48,7 @@ export const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
 
   const uniqueOwners = ['All', ...new Set(projects.map(p => p.projectOwner))];
 
+  // Project status color utility for RAG visual indicators
   const getProjectStatusColor = (project: Project) => {
     const percentage = project.completionPercentage || 0;
     if (percentage >= 80) return 'text-green-600';

@@ -89,11 +89,8 @@ This document outlines the requirements for integrating with third-party APIs.
 ];
 
 export const DocumentSurface: React.FC<DocumentSurfaceProps> = ({
-  currentProject,
-  currentPhase,
-  currentStep,
-  onPhaseChange,
-  onStepChange
+  currentProject
+  // currentPhase, currentStep, onPhaseChange, onStepChange - @typescript-eslint/no-unused-vars fix
 }) => {
   const [activeTab, setActiveTab] = useState<'documents' | 'editor' | 'ai-assist'>('documents');
   const [documents] = useState<Document[]>(mockDocuments);
@@ -113,7 +110,7 @@ export const DocumentSurface: React.FC<DocumentSurfaceProps> = ({
     );
   }
 
-  const handleClaudePrompt = async (prompt: string, context?: any) => {
+  const handleClaudePrompt = async (prompt: string, context?: Record<string, unknown>) => { // @typescript-eslint/no-explicit-any fix
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     if (prompt.toLowerCase().includes('sop')) {
@@ -193,7 +190,8 @@ What type of document would you like me to help you create?`;
     if (!doc) return;
 
     switch (format) {
-      case 'markdown':
+      case 'markdown': {
+        // no-case-declarations fix
         const blob = new Blob([doc.content], { type: 'text/markdown' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -202,6 +200,7 @@ What type of document would you like me to help you create?`;
         a.click();
         URL.revokeObjectURL(url);
         break;
+      }
       case 'drive':
         alert('Google Drive export would be implemented here');
         break;
@@ -302,7 +301,7 @@ What type of document would you like me to help you create?`;
             ].map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
-                onClick={() => setActiveTab(id as any)}
+                onClick={() => setActiveTab(id as 'documents' | 'editor' | 'ai-assist')} // @typescript-eslint/no-explicit-any fix
                 className={`flex items-center space-x-2 py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === id
                     ? 'border-purple-500 text-purple-600'
