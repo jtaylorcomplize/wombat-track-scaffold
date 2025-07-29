@@ -39,7 +39,7 @@ export class NotionGovernanceHelper {
     }
   }
 
-  async createGovernanceEntry(entry: NotionGovernanceEntry): Promise<any> {
+  async createGovernanceEntry(entry: NotionGovernanceEntry): Promise<Record<string, unknown>> { // no-explicit-any fix
     try {
       // Get database info to understand the schema
       const response = await this.notionClient.queryDatabase({
@@ -50,7 +50,7 @@ export class NotionGovernanceHelper {
       console.log('Database properties available:', Object.keys(response.results[0]?.properties || {}));
 
       // Create a flexible property mapping based on common Notion property names
-      const properties: any = {};
+      const properties: Record<string, unknown> = {}; // no-explicit-any fix
 
       // Title property (required for all Notion pages)
       properties['Name'] = {
@@ -132,7 +132,7 @@ export class NotionGovernanceHelper {
     }
   }
 
-  async createFromGovernanceEvent(event: GovernanceEvent): Promise<any> {
+  async createFromGovernanceEvent(event: GovernanceEvent): Promise<Record<string, unknown>> { // no-explicit-any fix
     const entry: NotionGovernanceEntry = {
       title: `${event.eventType}: ${event.id}`,
       content: `Event: ${event.eventType}
@@ -160,7 +160,7 @@ Rollback Info: ${event.rollbackInfo ? JSON.stringify(event.rollbackInfo, null, 2
 export async function createNotionGovernanceEntry(
   entry: NotionGovernanceEntry,
   config: GovernanceEntryConfig
-): Promise<any> {
+): Promise<Record<string, unknown>> { // no-explicit-any fix
   const helper = new NotionGovernanceHelper(config);
   return helper.createGovernanceEntry(entry);
 }
@@ -169,7 +169,7 @@ export async function createNotionGovernanceEntry(
 export async function createGovernanceEntryFromEvent(
   event: GovernanceEvent,
   config: GovernanceEntryConfig
-): Promise<any> {
+): Promise<Record<string, unknown>> { // no-explicit-any fix
   const helper = new NotionGovernanceHelper(config);
   return helper.createFromGovernanceEvent(event);
 }

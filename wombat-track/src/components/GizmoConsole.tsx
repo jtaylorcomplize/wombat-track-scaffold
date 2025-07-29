@@ -21,7 +21,7 @@ export interface ConsoleMessage {
 
 export interface GizmoConsoleProps {
   className?: string;
-  onPrompt?: (prompt: string, agent: AIAgent, context?: any) => Promise<string>;
+  onPrompt?: (prompt: string, agent: AIAgent, context?: Record<string, unknown>) => Promise<string>; // no-explicit-any fix
   initialAgent?: AIAgent;
   placeholder?: string;
   maxHeight?: string;
@@ -152,7 +152,7 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
     }));
   };
 
-  const mockClaudeDispatcher = async (prompt: string): Promise<string> => {
+  const _mockClaudeDispatcher = async (prompt: string): Promise<string> => { // no-unused-vars fix
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
     
@@ -175,7 +175,7 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
     return baseResponse + details.slice(0, Math.floor(Math.random() * 3) + 1).join('');
   };
 
-  const mockGizmoDispatcher = async (prompt: string): Promise<string> => {
+  const _mockGizmoDispatcher = async (prompt: string): Promise<string> => { // no-unused-vars fix
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1500));
     

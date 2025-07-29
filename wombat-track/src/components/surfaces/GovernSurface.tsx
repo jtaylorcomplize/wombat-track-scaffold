@@ -385,7 +385,7 @@ What specific governance activity would you like assistance with?`;
             ].map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
-                onClick={() => setActiveTab(id as any)}
+                onClick={() => setActiveTab(id as 'logs' | 'reviews' | 'audit')} // no-explicit-any fix
                 className={`flex items-center space-x-2 py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === id
                     ? 'border-orange-500 text-orange-600'

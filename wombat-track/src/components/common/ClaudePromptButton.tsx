@@ -5,10 +5,10 @@ export interface ClaudePromptButtonProps {
   type: 'ask' | 'scaffold' | 'revise' | 'analyze';
   label?: string;
   prompt?: string;
-  context?: any;
+  context?: Record<string, unknown>; // no-explicit-any fix
   disabled?: boolean;
   loading?: boolean;
-  onPrompt: (prompt: string, context?: any) => Promise<string>;
+  onPrompt: (prompt: string, context?: Record<string, unknown>) => Promise<string>; // no-explicit-any fix
   onResponse?: (response: string) => void;
   className?: string;
   testId?: string;

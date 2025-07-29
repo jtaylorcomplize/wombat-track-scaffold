@@ -135,7 +135,7 @@ export class DriveMemorySync {
     const results = {
       imported: 0,
       exported: 0,
-      conflicts: [] as any[],
+      conflicts: [] as Array<Record<string, unknown>>, // no-explicit-any fix
     };
 
     // Get all Notion records
