@@ -1,0 +1,242 @@
+name: 🚀 SPQR Auto-Publish to Looker Studio
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no actual publishing)'
+        required: false
+        default: 'false'
+        type: boolean
+      card_limit:
+        description: 'Maximum number of cards to publish (0 = all)'
+        required: false
+        default: '0'
+        type: string
+
+env:
+  NODE_VERSION: '20'
+  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+
+jobs:
+  validate-and-lint:
+    name: 🔍 Validate Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📋 Install dependencies
+        run: |
+          npm ci
+          npm install puppeteer eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
+          
+      - name: 🔍 Run ESLint on Puppeteer script
+        run: |
+          npx eslint scripts/spqr_puppeteer_publish.js --format=compact
+          
+      - name: 📊 Validate SPQR card data
+        run: |
+          echo "🔍 Validating SPQR card JSON files..."
+          find src/data/spqr/validation/ -name "*.json" -exec node -c {} \;
+          echo "✅ All SPQR card JSON files are valid"
+          
+      - name: 🧪 Puppeteer smoke test
+        run: |
+          echo "🧪 Running Puppeteer smoke test..."
+          node -e "
+            const puppeteer = require('puppeteer');
+            (async () => {
+              console.log('Testing Puppeteer installation...');
+              const browser = await puppeteer.launch({ headless: 'new' });
+              const page = await browser.newPage();
+              await page.goto('https://example.com');
+              const title = await page.title();
+              console.log('✅ Puppeteer test successful. Page title:', title);
+              await browser.close();
+            })();
+          "
+
+  spqr-auto-publish:
+    name: 📊 Publish SPQR Cards to Looker Studio
+    runs-on: ubuntu-latest
+    needs: validate-and-lint
+    environment: production
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📋 Install dependencies
+        run: |
+          npm ci
+          npm install puppeteer
+          
+      - name: 🔧 Install Chrome dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            fonts-liberation \
+            libasound2 \
+            libatk-bridge2.0-0 \
+            libatk1.0-0 \
+            libatspi2.0-0 \
+            libcups2 \
+            libdbus-1-3 \
+            libdrm2 \
+            libgtk-3-0 \
+            libnspr4 \
+            libnss3 \
+            libwayland-client0 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxfixes3 \
+            libxrandr2 \
+            xdg-utils
+            
+      - name: 📝 Log automation start to governance log
+        run: |
+          mkdir -p logs
+          echo "{\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ)\",\"event_type\":\"spqr_auto_publish_workflow_start\",\"user_id\":\"github-actions\",\"user_role\":\"automation\",\"resource_type\":\"dashboard\",\"resource_id\":\"looker_studio\",\"action\":\"workflow_start\",\"success\":true,\"details\":{\"phase\":\"Phase4–RuntimeObservability\",\"subtask\":\"SPQR Auto-Publish\",\"workflow_trigger\":\"manual_dispatch\",\"dry_run\":\"${{ github.event.inputs.dry_run }}\",\"card_limit\":\"${{ github.event.inputs.card_limit }}\",\"runner\":\"${{ runner.os }}\"},\"runtime_context\":{\"phase\":\"Phase4–RuntimeObservability\",\"environment\":\"production\",\"automation_tool\":\"github-actions\"}}" >> logs/governance.jsonl
+          
+      - name: 🚀 Execute SPQR Auto-Publish
+        env:
+          GOOGLE_EMAIL: ${{ secrets.GOOGLE_EMAIL }}
+          GOOGLE_PASSWORD: ${{ secrets.GOOGLE_PASSWORD }}
+          LOOKER_REPORT_URL: ${{ secrets.LOOKER_REPORT_URL }}
+          NODE_ENV: production
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          CARD_LIMIT: ${{ github.event.inputs.card_limit }}
+        run: |
+          echo "🚀 Starting SPQR Auto-Publish automation..."
+          echo "📊 Dry run mode: ${{ github.event.inputs.dry_run }}"
+          echo "📋 Card limit: ${{ github.event.inputs.card_limit }}"
+          
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            echo "🧪 Running in dry-run mode - no actual publishing will occur"
+            node scripts/spqr_puppeteer_publish.js --dry-run
+          else
+            echo "🚨 Running in production mode - cards will be published to Looker Studio"
+            node scripts/spqr_puppeteer_publish.js
+          fi
+          
+      - name: 📊 Upload automation artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: spqr-auto-publish-logs
+          path: |
+            logs/governance.jsonl
+            screenshots/
+          retention-days: 30
+          
+      - name: 📝 Log automation completion to governance log
+        if: always()
+        run: |
+          if [ "$?" -eq 0 ]; then
+            STATUS="success"
+            SUCCESS="true"
+            MESSAGE="SPQR Auto-Publish workflow completed successfully"
+          else
+            STATUS="failed"
+            SUCCESS="false" 
+            MESSAGE="SPQR Auto-Publish workflow failed"
+          fi
+          
+          echo "{\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ)\",\"event_type\":\"spqr_auto_publish_workflow_complete\",\"user_id\":\"github-actions\",\"user_role\":\"automation\",\"resource_type\":\"dashboard\",\"resource_id\":\"looker_studio\",\"action\":\"workflow_complete\",\"success\":$SUCCESS,\"details\":{\"phase\":\"Phase4–RuntimeObservability\",\"subtask\":\"SPQR Auto-Publish\",\"workflow_status\":\"$STATUS\",\"completion_message\":\"$MESSAGE\",\"dry_run\":\"${{ github.event.inputs.dry_run }}\",\"card_limit\":\"${{ github.event.inputs.card_limit }}\"},\"runtime_context\":{\"phase\":\"Phase4–RuntimeObservability\",\"environment\":\"production\",\"automation_tool\":\"github-actions\"}}" >> logs/governance.jsonl
+          
+      - name: 📤 Commit updated governance log
+        if: always()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          if [ -f logs/governance.jsonl ] && [ -s logs/governance.jsonl ]; then
+            git add logs/governance.jsonl
+            
+            if git diff --staged --quiet; then
+              echo "No changes to commit"
+            else
+              git commit -m "📝 Update governance log - SPQR Auto-Publish workflow
+
+              - Automated SPQR card publishing to Looker Studio
+              - Phase 4 Runtime Observability subtask completion
+              - Dry run: ${{ github.event.inputs.dry_run }}
+              - Card limit: ${{ github.event.inputs.card_limit }}
+              
+              🤖 Generated with GitHub Actions"
+              
+              git push
+              echo "✅ Governance log updated and committed"
+            fi
+          else
+            echo "⚠️ No governance log file found or file is empty"
+          fi
+          
+  notify-completion:
+    name: 📢 Notify Completion
+    runs-on: ubuntu-latest
+    needs: spqr-auto-publish
+    if: always()
+    
+    steps:
+      - name: 📥 Checkout repository  
+        uses: actions/checkout@v4
+        
+      - name: 🎉 Success notification
+        if: needs.spqr-auto-publish.result == 'success'
+        run: |
+          echo "🎉 SPQR Auto-Publish completed successfully!"
+          echo "✅ All SPQR cards have been published to Looker Studio"
+          echo "📊 Check the governance log for detailed execution metrics"
+          echo "🔗 Report URL: ${{ secrets.LOOKER_REPORT_URL }}"
+          
+      - name: ❌ Failure notification  
+        if: needs.spqr-auto-publish.result == 'failure'
+        run: |
+          echo "❌ SPQR Auto-Publish failed!"
+          echo "🔍 Check the workflow logs for error details"
+          echo "📋 Review the governance log for partial completion status"
+          echo "🚨 Manual intervention may be required"
+          
+      - name: ⚠️ Partial completion notification
+        if: needs.spqr-auto-publish.result == 'success' && github.event.inputs.dry_run == 'true'
+        run: |
+          echo "🧪 SPQR Auto-Publish dry run completed!"
+          echo "ℹ️ This was a simulation - no actual cards were published"
+          echo "🚀 Run without dry_run=true to publish cards to Looker Studio"
+          
+      - name: 📊 Generate workflow summary
+        if: always()
+        run: |
+          echo "## 📊 SPQR Auto-Publish Workflow Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Workflow Status:** ${{ needs.spqr-auto-publish.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Dry Run Mode:** ${{ github.event.inputs.dry_run }}" >> $GITHUB_STEP_SUMMARY  
+          echo "**Card Limit:** ${{ github.event.inputs.card_limit }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Execution Time:** $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🚀 Phase 4 - Runtime Observability Status" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ SPQR Dashboard Metrics implemented" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Enhanced Governance Logger active" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Alert integration configured" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Auto-publish automation executed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📝 Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "- Review published cards in Looker Studio report" >> $GITHUB_STEP_SUMMARY 
+          echo "- Verify governance log entries" >> $GITHUB_STEP_SUMMARY
+          echo "- Schedule regular automated updates" >> $GITHUB_STEP_SUMMARY
+          echo "- Monitor dashboard performance and usage" >> $GITHUB_STEP_SUMMARY

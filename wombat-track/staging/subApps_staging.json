@@ -1,0 +1,20 @@
+[
+  {
+    "subAppName": "Orbis Forge",
+    "subAppId": "orbis-forge-001",
+    "owner": "Claude",
+    "purpose": "Cosmic enterprise interface for legal operations"
+  },
+  {
+    "subAppName": "SPQR Analytics",
+    "subAppId": "spqr-analytics-002",
+    "owner": "Gizmo",
+    "purpose": "Legal practice management dashboards"
+  },
+  {
+    "subAppName": "Agent Mesh",
+    "subAppId": "agent-mesh-003",
+    "owner": "Claude",
+    "purpose": "Runtime agent coordination and awareness"
+  }
+]

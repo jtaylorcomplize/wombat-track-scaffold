@@ -1,0 +1,20 @@
+[
+  {
+    "projectName": "WT-6.1 Runtime Agent Awareness",
+    "projectId": "wt-6-1",
+    "owner": "Claude",
+    "status": "Active"
+  },
+  {
+    "projectName": "WT-7.4 Lint Cleanup",
+    "projectId": "wt-7-4",
+    "owner": "Claude",
+    "status": "Completed"
+  },
+  {
+    "projectName": "SPQR Phase 3 Runtime",
+    "projectId": "spqr-phase-3",
+    "owner": "Gizmo",
+    "status": "Completed"
+  }
+]
