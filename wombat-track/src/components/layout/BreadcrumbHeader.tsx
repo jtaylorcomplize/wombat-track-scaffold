@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ChevronRight, Home, Folder, List, Play } from 'lucide-react';
 import type { Project, Phase, PhaseStep as Step } from '../../types/phase';
 import type { WorkSurface } from './AppLayout';
@@ -34,7 +34,8 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
   selectedSurface,
   onSurfaceChange
 }) => {
-  const getSurfaceLabel = (surface: WorkSurface) => {
+  // Surface label mapping for consistent UI display
+  const getSurfaceLabel = useMemo(() => {
     const labels: Record<WorkSurface, string> = {
       plan: 'Set Up',
       execute: 'Track Progress',
@@ -42,8 +43,8 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
       govern: 'Review & Audit',
       integrate: 'Connect Tools'
     };
-    return labels[surface];
-  };
+    return (surface: WorkSurface) => labels[surface];
+  }, []);
 
   const getStepStatusIcon = (status: string) => {
     switch (status) {
