@@ -30,22 +30,6 @@ interface GovernanceLogEntry {
     connection_type?: string;
     phase?: string;
     environment?: string;
-    page_type?: string;
-    mode?: string;
-  };
-  sdlc_context?: {
-    branch?: string;
-    commit_sha?: string;
-    ci_status?: 'pending' | 'running' | 'success' | 'failure';
-    phase_step?: 'Debug' | 'QA' | 'Governance' | 'Memory';
-    step_status?: 'pending' | 'in_progress' | 'completed' | 'blocked' | 'failed';
-    qa_evidence?: {
-      manual_qa_passed?: boolean;
-      screenshots_attached?: boolean;
-      test_results?: Record<string, unknown>;
-    };
-    merge_readiness?: boolean;
-    blocking_reasons?: string[];
   };
   rag_metrics?: {
     score: 'red' | 'amber' | 'green' | 'blue';
@@ -128,7 +112,6 @@ class GovernanceLogger {
   private observabilityConfig: RuntimeObservabilityConfig;
   private dashboardHealthCache: Map<string, DashboardHealthReport> = new Map();
   private metricsAggregationInterval: NodeJS.Timeout | null = null;
-  private readonly isBrowser: boolean = typeof window !== 'undefined';
 
   constructor() {
     this.observabilityConfig = {
@@ -300,7 +283,6 @@ class GovernanceLogger {
       performance_metrics: entry.performance_metrics,
       security_context: entry.security_context,
       runtime_context: entry.runtime_context || this.captureRuntimeContext(),
-      sdlc_context: entry.sdlc_context,
       rag_metrics: entry.rag_metrics
     };
 
@@ -450,59 +432,31 @@ class GovernanceLogger {
       await this.persistLogs(logsToFlush);
     } catch (error) {
       console.error('Failed to flush governance logs:', error);
-      // Don't re-add logs to buffer in browser to prevent infinite loops
-      if (!this.isBrowser) {
-        this.logBuffer = [...logsToFlush, ...this.logBuffer];
-      }
+      this.logBuffer = [...logsToFlush, ...this.logBuffer];
     }
   }
 
   private async persistLogs(logs: GovernanceLogEntry[]): Promise<void> {
-    if (this.isBrowser) {
-      // Browser mode: send logs to server API endpoint
-      try {
-        const response = await fetch('/api/governance/log', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ logs })
-        });
-        
-        if (!response.ok) {
-          throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
-        }
-        
-        console.log('✅ Governance logs sent to server:', logs.length, 'entries');
-      } catch (error) {
-        console.warn('⚠️ Failed to send governance logs to server:', error);
-        // In browser, just log to console as fallback - don't retry to prevent loops
-        console.log('📝 Governance logs (console fallback):', logs);
-      }
-    } else {
-      // Node.js mode: write directly to file
-      const logFilePath = './logs/governance.jsonl';
-      
-      try {
-        const fs = await import('fs/promises');
-        const logLines = logs.map(log => JSON.stringify(log)).join('\n') + '\n';
-        await fs.appendFile(logFilePath, logLines);
-      } catch (error) {
-        console.error('Error writing to governance log file:', error);
-      }
+    const logFilePath = './logs/governance.jsonl';
+    
+    try {
+      const fs = await import('fs/promises');
+      const logLines = logs.map(log => JSON.stringify(log)).join('\n') + '\n';
+      await fs.appendFile(logFilePath, logLines);
+    } catch (error) {
+      console.error('Error writing to governance log file:', error);
     }
 
     const phaseCompleteEntry = {
       timestamp: new Date().toISOString(),
-      phase: 'Phase5–GovernanceRefactor',
+      phase: 'Phase3–RuntimeEnablement',
       status: 'logging_active',
       log_entries_count: logs.length,
       unique_users: new Set(logs.map(l => l.user_id)).size,
-      unique_resources: new Set(logs.map(l => l.resource_id)).size,
-      environment: this.isBrowser ? 'browser' : 'server'
+      unique_resources: new Set(logs.map(l => l.resource_id)).size
     };
 
-    console.log('SPQR Phase 5 Logging Summary:', phaseCompleteEntry);
+    console.log('SPQR Phase 3 Logging Summary:', phaseCompleteEntry);
   }
 
   private checkAlerts(): void {
@@ -543,7 +497,7 @@ class GovernanceLogger {
       }
 
       if (this.evaluateCondition(metricValue, rule.condition)) {
-        this.triggerGovernanceAlert(rule, metricValue, recentLogs);
+        this.triggerAlert(rule, metricValue, recentLogs);
       }
     });
   }
@@ -559,7 +513,7 @@ class GovernanceLogger {
     }
   }
 
-  private triggerGovernanceAlert(rule: AlertRule, metricValue: number, recentLogs: GovernanceLogEntry[]): void {
+  private triggerAlert(rule: AlertRule, metricValue: number, recentLogs: GovernanceLogEntry[]): void {
     const alertEntry = {
       timestamp: new Date().toISOString(),
       alert_id: rule.rule_id,
@@ -674,630 +628,12 @@ class GovernanceLogger {
     return 'F';
   }
 
-  private captureRuntimeContext(): Record<string, unknown> {
-    if (typeof window === 'undefined') return {};
-
-    return {
-      browser: this.getBrowserInfo(),
-      viewport_size: {
-        width: window.innerWidth,
-        height: window.innerHeight
-      },
-      connection_type: (navigator as typeof navigator & { connection?: { effectiveType?: string } }).connection?.effectiveType || 'unknown',
-      phase: 'Phase4–RuntimeObservability',
-      environment: this.isBrowser ? (import.meta.env?.VITE_NODE_ENV || 'production') : (process.env?.NODE_ENV || 'production')
-    };
-  }
-
-  private getBrowserInfo(): string {
-    if (typeof navigator === 'undefined') return 'unknown';
-    
-    const ua = navigator.userAgent;
-    if (ua.includes('Chrome')) return 'Chrome';
-    if (ua.includes('Firefox')) return 'Firefox';
-    if (ua.includes('Safari')) return 'Safari';
-    if (ua.includes('Edge')) return 'Edge';
-    return 'Other';
-  }
-
-  private updateHealthMetrics(entry: GovernanceLogEntry): void {
-    if (!entry.rag_metrics) return;
-
-    const dashboardId = entry.resource_id;
-    const existingHealth = this.dashboardHealthCache.get(dashboardId);
-
-    if (!existingHealth || new Date(existingHealth.timestamp).getTime() < Date.now() - 300000) {
-      this.calculateAndCacheDashboardHealth(dashboardId);
-    }
-  }
-
-  private calculateAndCacheDashboardHealth(dashboardId: string): void {
-    const recentLogs = this.logBuffer.filter(log => 
-      log.resource_id === dashboardId && 
-      new Date(log.timestamp).getTime() > Date.now() - 3600000
-    );
-
-    if (recentLogs.length === 0) return;
-
-    const loadTimes = recentLogs
-      .filter(log => log.performance_metrics?.load_time_ms)
-      .map(log => log.performance_metrics!.load_time_ms!);
-    
-    const avgLoadTime = loadTimes.length > 0 
-      ? loadTimes.reduce((a, b) => a + b, 0) / loadTimes.length 
-      : 0;
-
-    const errorCount = recentLogs.filter(log => !log.success).length;
-    const errorRate = recentLogs.length > 0 ? errorCount / recentLogs.length : 0;
-
-    const interactionCount = recentLogs.filter(log => 
-      log.action !== 'view' && log.action !== 'load'
-    ).length;
-    const engagementScore = recentLogs.length > 0 ? interactionCount / recentLogs.length : 0;
-
-    const ragScores = recentLogs
-      .filter(log => log.rag_metrics?.score)
-      .map(log => log.rag_metrics!.score);
-    
-    const currentRagScore = this.calculateOverallRagScore(ragScores, errorRate, avgLoadTime);
-    const performanceGrade = this.getPerformanceGrade(avgLoadTime);
-
-    const healthReport: DashboardHealthReport = {
-      dashboard_id: dashboardId,
-      timestamp: new Date().toISOString(),
-      overall_health: this.calculateOverallHealth(errorRate, avgLoadTime, engagementScore),
-      rag_score: currentRagScore,
-      performance_grade: performanceGrade,
-      metrics: {
-        avg_load_time_ms: Math.round(avgLoadTime),
-        error_rate: Math.round(errorRate * 100) / 100,
-        user_engagement_score: Math.round(engagementScore * 100) / 100,
-        data_freshness_score: this.calculateDataFreshnessScore(recentLogs),
-        total_sessions: new Set(recentLogs.map(log => log.session_id)).size,
-        total_interactions: interactionCount
-      },
-      recommendations: this.generateHealthRecommendations(errorRate, avgLoadTime, engagementScore)
-    };
-
-    this.dashboardHealthCache.set(dashboardId, healthReport);
-    this.logDashboardHealth(healthReport);
-  }
-
-  private calculateOverallRagScore(scores: string[], errorRate: number, avgLoadTime: number): 'red' | 'amber' | 'green' | 'blue' {
-    const redCount = scores.filter(s => s === 'red').length;
-    const amberCount = scores.filter(s => s === 'amber').length;
-    
-    if (errorRate > 0.2 || avgLoadTime > 10000 || redCount > scores.length * 0.5) {
-      return 'red';
-    }
-    if (errorRate > 0.1 || avgLoadTime > 7000 || amberCount > scores.length * 0.5) {
-      return 'amber';
-    }
-    return 'green';
-  }
-
-  private calculateOverallHealth(errorRate: number, avgLoadTime: number, engagementScore: number): 'healthy' | 'degraded' | 'critical' {
-    if (errorRate > 0.2 || avgLoadTime > 10000 || engagementScore < 0.1) {
-      return 'critical';
-    }
-    if (errorRate > 0.1 || avgLoadTime > 5000 || engagementScore < 0.3) {
-      return 'degraded';
-    }
-    return 'healthy';
-  }
-
-  private calculateDataFreshnessScore(logs: GovernanceLogEntry[]): number {
-    const now = Date.now();
-    const recentDataCount = logs.filter(log => {
-      const logTime = new Date(log.timestamp).getTime();
-      return now - logTime < 300000;
-    }).length;
-    
-    return logs.length > 0 ? recentDataCount / logs.length : 0;
-  }
-
-  private generateHealthRecommendations(errorRate: number, avgLoadTime: number, engagementScore: number): string[] {
-    const recommendations: string[] = [];
-
-    if (errorRate > 0.1) {
-      recommendations.push('High error rate detected. Review error logs and fix critical issues.');
-    }
-    if (avgLoadTime > 5000) {
-      recommendations.push('Dashboard loading slowly. Consider optimizing queries and reducing data size.');
-    }
-    if (engagementScore < 0.3) {
-      recommendations.push('Low user engagement. Consider improving dashboard UX and adding interactive features.');
-    }
-    if (avgLoadTime > 10000) {
-      recommendations.push('Critical performance issues. Immediate optimization required.');
-    }
-
-    return recommendations;
-  }
-
-  private logDashboardHealth(health: DashboardHealthReport): void {
-    this.log({
-      event_type: 'dashboard_health_report',
-      user_id: 'system',
-      user_role: 'system',
-      resource_type: 'dashboard',
-      resource_id: health.dashboard_id,
-      action: 'health_check',
-      success: true,
-      details: health,
-      rag_metrics: {
-        score: health.rag_score,
-        performance_grade: health.performance_grade,
-        health_factors: {
-          load_performance: 1 - (health.metrics.avg_load_time_ms / 10000),
-          error_rate: 1 - health.metrics.error_rate,
-          user_engagement: health.metrics.user_engagement_score,
-          data_freshness: health.metrics.data_freshness_score
-        }
-      }
-    });
-  }
-
-  private async aggregateAndRecordMetrics(): Promise<void> {
-    const dashboardIds = new Set(this.logBuffer.map(log => log.resource_id));
-    
-    for (const dashboardId of dashboardIds) {
-      this.calculateAndCacheDashboardHealth(dashboardId);
-    }
-
-    const overallMetrics = this.getUsageMetrics('hour');
-    const phaseCompleteEntry = {
-      timestamp: new Date().toISOString(),
-      phase: 'Phase4–RuntimeObservability',
-      status: 'metrics_aggregated',
-      overall_metrics: overallMetrics,
-      dashboard_health_reports: Array.from(this.dashboardHealthCache.values())
-    };
-
-    this.log({
-      event_type: 'phase4_metrics_aggregation',
-      user_id: 'system',
-      user_role: 'system',
-      resource_type: 'dashboard',
-      resource_id: 'all',
-      action: 'aggregate_metrics',
-      success: true,
-      details: phaseCompleteEntry
-    });
-  }
-
-  async triggerAlert(rule: AlertRule, metricValue: number, context: Record<string, unknown>): Promise<void> {
-    for (const action of rule.actions) {
-      switch (action.type) {
-        case 'slack':
-          if (this.observabilityConfig.slackWebhookUrl) {
-            await this.sendSlackAlert(rule, metricValue, action);
-          }
-          break;
-        case 'email':
-          if (this.observabilityConfig.emailAlertRecipients) {
-            await this.sendEmailAlert(rule, metricValue, action);
-          }
-          break;
-        case 'webhook':
-          if (action.target) {
-            await this.sendWebhookAlert(rule, metricValue, action, context);
-          }
-          break;
-        case 'log':
-        default:
-          console.warn(`SPQR Alert [${action.severity}] - ${rule.name}:`, {
-            metric_value: metricValue,
-            threshold: rule.condition.threshold,
-            context
-          });
-      }
-    }
-  }
-
-  private async sendSlackAlert(rule: AlertRule, metricValue: number, action: { severity: string; target?: string }): Promise<void> {
-    try {
-      const message = {
-        text: `SPQR Alert: ${rule.name}`,
-        attachments: [{
-          color: action.severity === 'critical' ? 'danger' : action.severity === 'high' ? 'warning' : 'good',
-          fields: [
-            { title: 'Metric', value: rule.condition.metric, short: true },
-            { title: 'Value', value: metricValue.toString(), short: true },
-            { title: 'Threshold', value: rule.condition.threshold.toString(), short: true },
-            { title: 'Severity', value: action.severity, short: true }
-          ],
-          ts: Date.now() / 1000
-        }]
-      };
-      console.log('Slack alert would be sent:', message);
-    } catch (error) {
-      console.error('Failed to send Slack alert:', error);
-    }
-  }
-
-  private async sendEmailAlert(rule: AlertRule, metricValue: number, action: { severity: string; target?: string }): Promise<void> {
-    console.log('Email alert would be sent:', {
-      to: action.target,
-      subject: `SPQR Alert: ${rule.name}`,
-      severity: action.severity,
-      metric_value: metricValue,
-      threshold: rule.condition.threshold
-    });
-  }
-
-  private async sendWebhookAlert(rule: AlertRule, metricValue: number, action: { severity: string; target?: string }, context: Record<string, unknown>): Promise<void> {
-    console.log('Webhook alert would be sent:', {
-      url: action.target,
-      payload: {
-        alert_name: rule.name,
-        severity: action.severity,
-        metric_value: metricValue,
-        threshold: rule.condition.threshold,
-        timestamp: new Date().toISOString(),
-        context
-      }
-    });
-  }
-
-  getDashboardHealthReport(dashboardId: string): DashboardHealthReport | undefined {
-    return this.dashboardHealthCache.get(dashboardId);
-  }
-
-  getAllHealthReports(): DashboardHealthReport[] {
-    return Array.from(this.dashboardHealthCache.values());
-  }
-
-  setObservabilityConfig(config: Partial<RuntimeObservabilityConfig>): void {
-    this.observabilityConfig = { ...this.observabilityConfig, ...config };
-    
-    if (this.metricsAggregationInterval) {
-      clearInterval(this.metricsAggregationInterval);
-      this.startMetricsAggregation();
-    }
-  }
-
-  async generatePhase4CompleteReport(): Promise<Record<string, unknown>> {
-    const allHealthReports = this.getAllHealthReports();
-    const overallMetrics = this.getUsageMetrics('day');
-    
-    const report = {
-      timestamp: new Date().toISOString(),
-      phase: 'Phase4–RuntimeObservability',
-      status: 'Phase4–RuntimeObservabilityComplete',
-      completion_summary: {
-        dashboards_monitored: allHealthReports.length,
-        total_metrics_captured: this.logBuffer.length,
-        alerts_configured: this.alertRules.length,
-        health_reports_generated: allHealthReports.length,
-        average_performance_grade: this.calculateAverageGrade(allHealthReports),
-        overall_system_health: this.calculateSystemHealth(allHealthReports)
-      },
-      dashboard_health_summary: allHealthReports.map(report => ({
-        dashboard_id: report.dashboard_id,
-        health: report.overall_health,
-        rag_score: report.rag_score,
-        performance_grade: report.performance_grade,
-        key_metrics: report.metrics
-      })),
-      usage_metrics: overallMetrics,
-      recommendations: this.generateSystemRecommendations(allHealthReports)
-    };
-
-    this.log({
-      event_type: 'phase4_complete',
-      user_id: 'system',
-      user_role: 'system',
-      resource_type: 'dashboard',
-      resource_id: 'all',
-      action: 'phase_complete',
-      success: true,
-      details: report
-    });
-
-    console.log('SPQR Phase 4 Complete Report:', report);
-    return report;
-  }
-
-  private calculateAverageGrade(reports: DashboardHealthReport[]): string {
-    if (reports.length === 0) return 'N/A';
-    
-    const gradeValues = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1 };
-    const total = reports.reduce((sum, report) => 
-      sum + (gradeValues[report.performance_grade] || 0), 0
-    );
-    const avg = total / reports.length;
-    
-    if (avg >= 4.5) return 'A';
-    if (avg >= 3.5) return 'B';
-    if (avg >= 2.5) return 'C';
-    if (avg >= 1.5) return 'D';
-    return 'F';
-  }
-
-  private calculateSystemHealth(reports: DashboardHealthReport[]): 'healthy' | 'degraded' | 'critical' {
-    if (reports.length === 0) return 'healthy';
-    
-    const criticalCount = reports.filter(r => r.overall_health === 'critical').length;
-    const degradedCount = reports.filter(r => r.overall_health === 'degraded').length;
-    
-    if (criticalCount > reports.length * 0.3) return 'critical';
-    if (degradedCount > reports.length * 0.5) return 'degraded';
-    return 'healthy';
-  }
-
-  private generateSystemRecommendations(reports: DashboardHealthReport[]): string[] {
-    const recommendations: string[] = [];
-    const avgLoadTime = reports.reduce((sum, r) => sum + r.metrics.avg_load_time_ms, 0) / reports.length;
-    const avgErrorRate = reports.reduce((sum, r) => sum + r.metrics.error_rate, 0) / reports.length;
-    
-    if (avgLoadTime > 5000) {
-      recommendations.push('System-wide performance optimization needed. Consider caching strategies.');
-    }
-    if (avgErrorRate > 0.1) {
-      recommendations.push('High system error rate. Implement better error handling and monitoring.');
-    }
-    
-    const criticalDashboards = reports.filter(r => r.overall_health === 'critical');
-    if (criticalDashboards.length > 0) {
-      recommendations.push(`${criticalDashboards.length} dashboards in critical state require immediate attention.`);
-    }
-    
-    return recommendations;
-  }
-
-  // SDLC-specific logging methods
-  logSDLCPhaseStep(userId: string, userRole: string, branch: string, step: string, status: string, details: Record<string, unknown>): void {
-    this.log({
-      event_type: 'sdlc_phase_step',
-      user_id: userId,
-      user_role: userRole,
-      resource_type: 'dashboard',
-      resource_id: branch,
-      action: `${step.toLowerCase()}_${status}`,
-      success: status === 'completed',
-      details: {
-        ...details,
-        step,
-        status
-      },
-      sdlc_context: {
-        branch: branch,
-        phase_step: step as unknown,
-        step_status: status as unknown,
-        commit_sha: details.commit_sha as string,
-        ci_status: details.ci_status as unknown
-      }
-    });
-  }
-
-  logSDLCBranchCreated(userId: string, branch: string, commitSha: string): void {
-    this.log({
-      event_type: 'sdlc_branch_created',
-      user_id: userId,
-      user_role: 'developer',
-      resource_type: 'dashboard',
-      resource_id: branch,
-      action: 'branch_created',
-      success: true,
-      details: {
-        branch: branch,
-        commit_sha: commitSha,
-        trigger: 'git_hook'
-      },
-      sdlc_context: {
-        branch: branch,
-        commit_sha: commitSha,
-        phase_step: 'Debug',
-        step_status: 'in_progress'
-      }
-    });
-  }
-
-  logSDLCBuildCompleted(branch: string, buildId: string, status: 'success' | 'failure', details: Record<string, unknown>): void {
-    this.log({
-      event_type: 'sdlc_build_completed',
-      user_id: 'system',
-      user_role: 'ci',
-      resource_type: 'dashboard',
-      resource_id: branch,
-      action: 'build_completed',
-      success: status === 'success',
-      details: {
-        build_id: buildId,
-        status: status,
-        ...details
-      },
-      sdlc_context: {
-        branch: branch,
-        ci_status: status,
-        phase_step: 'Debug',
-        step_status: status === 'success' ? 'completed' : 'failed'
-      }
-    });
-  }
-
-  logSDLCQAResults(userId: string, branch: string, passed: boolean, evidence: { screenshots?: boolean; testResults?: Record<string, unknown> }): void {
-    this.log({
-      event_type: 'sdlc_qa_results',
-      user_id: userId,
-      user_role: 'qa',
-      resource_type: 'dashboard',
-      resource_id: branch,
-      action: 'qa_completed',
-      success: passed,
-      details: {
-        qa_passed: passed,
-        evidence: evidence
-      },
-      sdlc_context: {
-        branch: branch,
-        phase_step: 'QA',
-        step_status: passed ? 'completed' : 'failed',
-        qa_evidence: {
-          manual_qa_passed: passed,
-          screenshots_attached: !!evidence.screenshots,
-          test_results: evidence.testResults
-        }
-      }
-    });
-  }
-
-  logSDLCGovernanceEntry(userId: string, branch: string, summary: string, entryId: string): void {
-    this.log({
-      event_type: 'sdlc_governance_entry',
-      user_id: userId,
-      user_role: 'developer',
-      resource_type: 'dashboard',
-      resource_id: branch,
-      action: 'governance_logged',
-      success: true,
-      details: {
-        summary: summary,
-        entry_id: entryId,
-        branch: branch
-      },
-      sdlc_context: {
-        branch: branch,
-        phase_step: 'Governance',
-        step_status: 'completed'
-      }
-    });
-  }
-
-  logSDLCMemoryAnchor(branch: string, anchorId: string, status: 'created' | 'failed', details: Record<string, unknown>): void {
-    this.log({
-      event_type: 'sdlc_memory_anchor',
-      user_id: 'system',
-      user_role: 'agent',
-      resource_type: 'dashboard',
-      resource_id: branch,
-      action: 'memory_anchor_created',
-      success: status === 'created',
-      details: {
-        anchor_id: anchorId,
-        status: status,
-        ...details
-      },
-      sdlc_context: {
-        branch: branch,
-        phase_step: 'Memory',
-        step_status: status === 'created' ? 'completed' : 'failed'
-      }
-    });
-  }
-
-  logSDLCMergeAttempt(userId: string, branch: string, allowed: boolean, blockingReasons: string[]): void {
-    this.log({
-      event_type: 'sdlc_merge_attempt',
-      user_id: userId,
-      user_role: 'developer',
-      resource_type: 'dashboard',
-      resource_id: branch,
-      action: allowed ? 'merge_approved' : 'merge_blocked',
-      success: allowed,
-      details: {
-        merge_allowed: allowed,
-        blocking_reasons: blockingReasons
-      },
-      sdlc_context: {
-        branch: branch,
-        merge_readiness: allowed,
-        blocking_reasons: blockingReasons
-      }
-    });
-  }
-
-  generateSDLCReport(timeframe: 'day' | 'week' | 'month' = 'week'): {
-    timeframe: string;
-    branches_processed: number;
-    workflows_completed: number;
-    workflows_failed: number;
-    success_rate: number;
-    phase_breakdown: {
-      debug: { completed: number; failed: number };
-      qa: { completed: number; failed: number };
-      governance: { completed: number; failed: number };
-      memory: { completed: number; failed: number };
-    };
-    common_blocking_reasons: Array<{ reason: string; count: number }>;
-  } {
-    const windowMs = {
-      day: 24 * 60 * 60 * 1000,
-      week: 7 * 24 * 60 * 60 * 1000,
-      month: 30 * 24 * 60 * 60 * 1000
-    }[timeframe];
-
-    const cutoff = Date.now() - windowMs;
-    const sdlcLogs = this.logBuffer.filter(log => 
-      log.event_type.startsWith('sdlc_') && 
-      new Date(log.timestamp).getTime() >= cutoff
-    );
-
-    const branches = new Set(sdlcLogs.map(log => log.resource_id));
-    const completedWorkflows = sdlcLogs.filter(log => 
-      log.event_type === 'sdlc_memory_anchor' && log.success
-    ).length;
-    const failedWorkflows = branches.size - completedWorkflows;
-
-    const phaseBreakdown = {
-      debug: { completed: 0, failed: 0 },
-      qa: { completed: 0, failed: 0 },
-      governance: { completed: 0, failed: 0 },
-      memory: { completed: 0, failed: 0 }
-    };
-
-    sdlcLogs.forEach(log => {
-      const phaseStep = log.sdlc_context?.phase_step?.toLowerCase() as keyof typeof phaseBreakdown;
-      if (phaseStep && phaseBreakdown[phaseStep]) {
-        if (log.success) {
-          phaseBreakdown[phaseStep].completed++;
-        } else {
-          phaseBreakdown[phaseStep].failed++;
-        }
-      }
-    });
-
-    const blockingReasons = new Map<string, number>();
-    sdlcLogs
-      .filter(log => log.sdlc_context?.blocking_reasons)
-      .forEach(log => {
-        log.sdlc_context!.blocking_reasons!.forEach(reason => {
-          blockingReasons.set(reason, (blockingReasons.get(reason) || 0) + 1);
-        });
-      });
-
-    return {
-      timeframe,
-      branches_processed: branches.size,
-      workflows_completed: completedWorkflows,
-      workflows_failed: failedWorkflows,
-      success_rate: branches.size > 0 ? Math.round((completedWorkflows / branches.size) * 100) : 0,
-      phase_breakdown: phaseBreakdown,
-      common_blocking_reasons: Array.from(blockingReasons.entries())
-        .map(([reason, count]) => ({ reason, count }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 10)
-    };
-  }
-
   destroy(): void {
     if (this.flushInterval) {
       clearInterval(this.flushInterval);
     }
-    if (this.metricsAggregationInterval) {
-      clearInterval(this.metricsAggregationInterval);
-    }
     this.flushLogs();
-    this.generatePhase4CompleteReport();
   }
 }
 
-export { 
-  GovernanceLogger, 
-  type GovernanceLogEntry, 
-  type UsageMetrics, 
-  type AlertRule,
-  type DashboardHealthReport,
-  type RuntimeObservabilityConfig 
-};
+export { GovernanceLogger, type GovernanceLogEntry, type UsageMetrics, type AlertRule };
