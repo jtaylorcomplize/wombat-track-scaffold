@@ -54,10 +54,10 @@ export class NotionDatabaseCreator {
     }
   }
 
-  // Project Database Schema
+  // Project Database Schema - Updated for canonical format
   static getProjectSchema(): DatabaseSchema {
     return {
-      name: 'WT Projects',
+      name: 'wt-project-tracker', // Canonical name
       description: 'Wombat Track project registry and metadata',
       properties: {
         projectId: {
@@ -69,10 +69,32 @@ export class NotionDatabaseCreator {
         description: {
           rich_text: {},
         },
+        // New field: Goals (was 'Goals' in old schema)
+        goals: {
+          rich_text: {},
+        },
         owner: {
           rich_text: {},
         },
+        // Enhanced AI fields
         aiPromptLog: {
+          rich_text: {},
+        },
+        // New fields for WT-7.2 requirements
+        tooling: {
+          rich_text: {},
+        },
+        knownIssues: {
+          rich_text: {},
+        },
+        forwardGuidance: {
+          rich_text: {},
+        },
+        openQuestions: {
+          rich_text: {},
+        },
+        // Temporary field for phase links (will be relation later)
+        linkedPhaseIds: {
           rich_text: {},
         },
         status: {
@@ -82,7 +104,9 @@ export class NotionDatabaseCreator {
               { name: 'Active', color: 'green' },
               { name: 'On Hold', color: 'yellow' },
               { name: 'Completed', color: 'blue' },
+              { name: 'Complete', color: 'blue' }, // Support both variants
               { name: 'Archived', color: 'red' },
+              { name: 'Blocked', color: 'red' },
             ],
           },
         },
@@ -94,6 +118,8 @@ export class NotionDatabaseCreator {
               { name: 'Integration', color: 'green' },
               { name: 'Migration', color: 'orange' },
               { name: 'Testing', color: 'pink' },
+              { name: 'MemSync', color: 'purple' },
+              { name: 'Schema', color: 'gray' },
             ],
           },
         },
@@ -107,10 +133,10 @@ export class NotionDatabaseCreator {
     };
   }
 
-  // Phase Database Schema
+  // Phase Database Schema - Updated for canonical format
   static getPhaseSchema(projectDbId?: string): DatabaseSchema {
     const schema: DatabaseSchema = {
-      name: 'WT Phases',
+      name: 'wt-phase-tracker', // Canonical name
       description: 'Wombat Track phase planning and tracking',
       properties: {
         phaseId: {
@@ -122,13 +148,25 @@ export class NotionDatabaseCreator {
         description: {
           rich_text: {},
         },
+        // New fields for WT-7.2 requirements
+        goals: {
+          rich_text: {},
+        },
+        purpose: {
+          rich_text: {},
+        },
+        expectedOutcome: {
+          rich_text: {},
+        },
         status: {
           select: {
             options: [
               { name: 'Not Started', color: 'gray' },
               { name: 'In Progress', color: 'yellow' },
               { name: 'Completed', color: 'green' },
+              { name: 'Complete', color: 'green' }, // Support both variants
               { name: 'Blocked', color: 'red' },
+              { name: 'On Hold', color: 'orange' },
               { name: 'Review', color: 'purple' },
             ],
           },
@@ -197,7 +235,7 @@ export class NotionDatabaseCreator {
   // PhaseStep Database Schema
   static getPhaseStepSchema(projectDbId?: string): DatabaseSchema {
     const schema: DatabaseSchema = {
-      name: 'WT Phase Steps',
+      name: 'wt-phase-steps', // Canonical name
       description: 'Detailed step-by-step instructions for each phase',
       properties: {
         phaseStepId: {
@@ -244,7 +282,7 @@ export class NotionDatabaseCreator {
   // Enhanced Governance Log Schema with RAG support
   static getEnhancedGovernanceSchema(phaseStepDbId?: string): DatabaseSchema {
     const schema: DatabaseSchema = {
-      name: 'WT Governance Log (Enhanced)',
+      name: 'wt-governance-log', // Canonical name
       description: 'Enhanced governance log with RAG status and semantic memory support',
       properties: {
         'Event ID': {
@@ -332,6 +370,81 @@ export class NotionDatabaseCreator {
 
     return schema;
   }
+
+  // Recovery Log Database Schema - New for WT-7.2
+  static getRecoveryLogSchema(): DatabaseSchema {
+    return {
+      name: 'wt-recovery-log', // Canonical name
+      description: 'Recovery log for incomplete or dropped artefacts from Wombat Tracks chat archive',
+      properties: {
+        title: {
+          title: {},
+        },
+        chatTimestamp: {
+          date: {},
+        },
+        chatTitle: {
+          rich_text: {},
+        },
+        artefactType: {
+          select: {
+            options: [
+              { name: 'Project', color: 'blue' },
+              { name: 'Phase', color: 'green' },
+              { name: 'Feature', color: 'purple' },
+              { name: 'SideQuest', color: 'pink' },
+              { name: 'Document', color: 'gray' },
+              { name: 'Configuration', color: 'orange' },
+              { name: 'Other', color: 'default' },
+            ],
+          },
+        },
+        summary: {
+          rich_text: {},
+        },
+        status: {
+          select: {
+            options: [
+              { name: 'Cancelled', color: 'red' },
+              { name: 'Missing', color: 'orange' },
+              { name: 'Incomplete', color: 'yellow' },
+              { name: 'Unlogged', color: 'gray' },
+              { name: 'Complete', color: 'green' },
+              { name: 'Pending Validation', color: 'purple' },
+            ],
+          },
+        },
+        suggestedName: {
+          rich_text: {},
+        },
+        recoveryAction: {
+          select: {
+            options: [
+              { name: 'Log', color: 'blue' },
+              { name: 'Ignore', color: 'gray' },
+              { name: 'Rebuild', color: 'orange' },
+              { name: 'Archive', color: 'red' },
+            ],
+          },
+        },
+        notes: {
+          rich_text: {},
+        },
+        linkedCanonicalEntry: {
+          rich_text: {}, // Will store reference to existing entries
+        },
+        validationRequired: {
+          checkbox: {},
+        },
+        createdAt: {
+          created_time: {},
+        },
+        updatedAt: {
+          last_edited_time: {},
+        },
+      },
+    };
+  }
 }
 
 // Utility function to create all databases
@@ -343,6 +456,7 @@ export async function createWombatTrackDatabases(
   phaseDb?: { id: string; url: string };
   phaseStepDb?: { id: string; url: string };
   governanceDb?: { id: string; url: string };
+  recoveryLogDb?: { id: string; url: string };
   errors: string[];
 }> {
   const creator = new NotionDatabaseCreator(token, parentPageId);
@@ -413,6 +527,21 @@ export async function createWombatTrackDatabases(
     } else {
       errors.push(`Governance DB: ${govResult.error}`);
     }
+  }
+
+  // Create Recovery Log Database (new for WT-7.2)
+  console.log('📊 Creating Recovery Log database...');
+  const recoveryResult = await creator.createDatabase(
+    NotionDatabaseCreator.getRecoveryLogSchema()
+  );
+  if (recoveryResult.success) {
+    results.recoveryLogDb = {
+      id: recoveryResult.databaseId!,
+      url: recoveryResult.url!,
+    };
+    console.log(`✅ Recovery Log database created: ${recoveryResult.databaseId}`);
+  } else {
+    errors.push(`Recovery Log DB: ${recoveryResult.error}`);
   }
 
   results.errors = errors;
