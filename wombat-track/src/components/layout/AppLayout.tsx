@@ -98,8 +98,7 @@ const mockProjects: Project[] = [
 ];
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProjects }) => {
-  const [projects] = useState<Project[]>(initialProjects);
-  const [currentProject, setCurrentProject] = useState<Project | null>(projects[0] || null);
+  const [currentProject, setCurrentProject] = useState<Project | null>(initialProjects[0] || null);
   const [currentSubApp, setCurrentSubApp] = useState<string>(mockPrograms[0]?.id || 'prog-orbis-001');
   const [showSubAppDashboard, setShowSubAppDashboard] = useState<boolean>(true);
   const [selectedSurface, setSelectedSurface] = useState<WorkSurface>('plan');
@@ -175,7 +174,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
     >
       {/* Enhanced Sidebar with Sub-App Support */}
       <EnhancedProjectSidebar
-        projects={projects}
+        projects={initialProjects}
         currentProject={currentProject}
         selectedSurface={selectedSurface}
         collapsed={sidebarCollapsed}
