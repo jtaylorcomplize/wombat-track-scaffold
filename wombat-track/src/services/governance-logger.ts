@@ -628,12 +628,395 @@ class GovernanceLogger {
     return 'F';
   }
 
+  private captureRuntimeContext(): Record<string, unknown> {
+    if (typeof window === 'undefined') return {};
+
+    return {
+      browser: this.getBrowserInfo(),
+      viewport_size: {
+        width: window.innerWidth,
+        height: window.innerHeight
+      },
+      connection_type: (navigator as any).connection?.effectiveType || 'unknown',
+      phase: 'Phase4–RuntimeObservability',
+      environment: process.env.NODE_ENV || 'production'
+    };
+  }
+
+  private getBrowserInfo(): string {
+    if (typeof navigator === 'undefined') return 'unknown';
+    
+    const ua = navigator.userAgent;
+    if (ua.includes('Chrome')) return 'Chrome';
+    if (ua.includes('Firefox')) return 'Firefox';
+    if (ua.includes('Safari')) return 'Safari';
+    if (ua.includes('Edge')) return 'Edge';
+    return 'Other';
+  }
+
+  private updateHealthMetrics(entry: GovernanceLogEntry): void {
+    if (!entry.rag_metrics) return;
+
+    const dashboardId = entry.resource_id;
+    const existingHealth = this.dashboardHealthCache.get(dashboardId);
+
+    if (!existingHealth || new Date(existingHealth.timestamp).getTime() < Date.now() - 300000) {
+      this.calculateAndCacheDashboardHealth(dashboardId);
+    }
+  }
+
+  private calculateAndCacheDashboardHealth(dashboardId: string): void {
+    const recentLogs = this.logBuffer.filter(log => 
+      log.resource_id === dashboardId && 
+      new Date(log.timestamp).getTime() > Date.now() - 3600000
+    );
+
+    if (recentLogs.length === 0) return;
+
+    const loadTimes = recentLogs
+      .filter(log => log.performance_metrics?.load_time_ms)
+      .map(log => log.performance_metrics!.load_time_ms!);
+    
+    const avgLoadTime = loadTimes.length > 0 
+      ? loadTimes.reduce((a, b) => a + b, 0) / loadTimes.length 
+      : 0;
+
+    const errorCount = recentLogs.filter(log => !log.success).length;
+    const errorRate = recentLogs.length > 0 ? errorCount / recentLogs.length : 0;
+
+    const interactionCount = recentLogs.filter(log => 
+      log.action !== 'view' && log.action !== 'load'
+    ).length;
+    const engagementScore = recentLogs.length > 0 ? interactionCount / recentLogs.length : 0;
+
+    const ragScores = recentLogs
+      .filter(log => log.rag_metrics?.score)
+      .map(log => log.rag_metrics!.score);
+    
+    const currentRagScore = this.calculateOverallRagScore(ragScores, errorRate, avgLoadTime);
+    const performanceGrade = this.getPerformanceGrade(avgLoadTime);
+
+    const healthReport: DashboardHealthReport = {
+      dashboard_id: dashboardId,
+      timestamp: new Date().toISOString(),
+      overall_health: this.calculateOverallHealth(errorRate, avgLoadTime, engagementScore),
+      rag_score: currentRagScore,
+      performance_grade: performanceGrade,
+      metrics: {
+        avg_load_time_ms: Math.round(avgLoadTime),
+        error_rate: Math.round(errorRate * 100) / 100,
+        user_engagement_score: Math.round(engagementScore * 100) / 100,
+        data_freshness_score: this.calculateDataFreshnessScore(recentLogs),
+        total_sessions: new Set(recentLogs.map(log => log.session_id)).size,
+        total_interactions: interactionCount
+      },
+      recommendations: this.generateHealthRecommendations(errorRate, avgLoadTime, engagementScore)
+    };
+
+    this.dashboardHealthCache.set(dashboardId, healthReport);
+    this.logDashboardHealth(healthReport);
+  }
+
+  private calculateOverallRagScore(scores: string[], errorRate: number, avgLoadTime: number): 'red' | 'amber' | 'green' | 'blue' {
+    const redCount = scores.filter(s => s === 'red').length;
+    const amberCount = scores.filter(s => s === 'amber').length;
+    
+    if (errorRate > 0.2 || avgLoadTime > 10000 || redCount > scores.length * 0.5) {
+      return 'red';
+    }
+    if (errorRate > 0.1 || avgLoadTime > 7000 || amberCount > scores.length * 0.5) {
+      return 'amber';
+    }
+    return 'green';
+  }
+
+  private calculateOverallHealth(errorRate: number, avgLoadTime: number, engagementScore: number): 'healthy' | 'degraded' | 'critical' {
+    if (errorRate > 0.2 || avgLoadTime > 10000 || engagementScore < 0.1) {
+      return 'critical';
+    }
+    if (errorRate > 0.1 || avgLoadTime > 5000 || engagementScore < 0.3) {
+      return 'degraded';
+    }
+    return 'healthy';
+  }
+
+  private calculateDataFreshnessScore(logs: GovernanceLogEntry[]): number {
+    const now = Date.now();
+    const recentDataCount = logs.filter(log => {
+      const logTime = new Date(log.timestamp).getTime();
+      return now - logTime < 300000;
+    }).length;
+    
+    return logs.length > 0 ? recentDataCount / logs.length : 0;
+  }
+
+  private generateHealthRecommendations(errorRate: number, avgLoadTime: number, engagementScore: number): string[] {
+    const recommendations: string[] = [];
+
+    if (errorRate > 0.1) {
+      recommendations.push('High error rate detected. Review error logs and fix critical issues.');
+    }
+    if (avgLoadTime > 5000) {
+      recommendations.push('Dashboard loading slowly. Consider optimizing queries and reducing data size.');
+    }
+    if (engagementScore < 0.3) {
+      recommendations.push('Low user engagement. Consider improving dashboard UX and adding interactive features.');
+    }
+    if (avgLoadTime > 10000) {
+      recommendations.push('Critical performance issues. Immediate optimization required.');
+    }
+
+    return recommendations;
+  }
+
+  private logDashboardHealth(health: DashboardHealthReport): void {
+    this.log({
+      event_type: 'dashboard_health_report',
+      user_id: 'system',
+      user_role: 'system',
+      resource_type: 'dashboard',
+      resource_id: health.dashboard_id,
+      action: 'health_check',
+      success: true,
+      details: health,
+      rag_metrics: {
+        score: health.rag_score,
+        performance_grade: health.performance_grade,
+        health_factors: {
+          load_performance: 1 - (health.metrics.avg_load_time_ms / 10000),
+          error_rate: 1 - health.metrics.error_rate,
+          user_engagement: health.metrics.user_engagement_score,
+          data_freshness: health.metrics.data_freshness_score
+        }
+      }
+    });
+  }
+
+  private async aggregateAndRecordMetrics(): Promise<void> {
+    const dashboardIds = new Set(this.logBuffer.map(log => log.resource_id));
+    
+    for (const dashboardId of dashboardIds) {
+      this.calculateAndCacheDashboardHealth(dashboardId);
+    }
+
+    const overallMetrics = this.getUsageMetrics('hour');
+    const phaseCompleteEntry = {
+      timestamp: new Date().toISOString(),
+      phase: 'Phase4–RuntimeObservability',
+      status: 'metrics_aggregated',
+      overall_metrics: overallMetrics,
+      dashboard_health_reports: Array.from(this.dashboardHealthCache.values())
+    };
+
+    this.log({
+      event_type: 'phase4_metrics_aggregation',
+      user_id: 'system',
+      user_role: 'system',
+      resource_type: 'dashboard',
+      resource_id: 'all',
+      action: 'aggregate_metrics',
+      success: true,
+      details: phaseCompleteEntry
+    });
+  }
+
+  async triggerAlert(rule: AlertRule, metricValue: number, context: Record<string, unknown>): Promise<void> {
+    for (const action of rule.actions) {
+      switch (action.type) {
+        case 'slack':
+          if (this.observabilityConfig.slackWebhookUrl) {
+            await this.sendSlackAlert(rule, metricValue, action, context);
+          }
+          break;
+        case 'email':
+          if (this.observabilityConfig.emailAlertRecipients) {
+            await this.sendEmailAlert(rule, metricValue, action, context);
+          }
+          break;
+        case 'webhook':
+          if (action.target) {
+            await this.sendWebhookAlert(rule, metricValue, action, context);
+          }
+          break;
+        case 'log':
+        default:
+          console.warn(`SPQR Alert [${action.severity}] - ${rule.name}:`, {
+            metric_value: metricValue,
+            threshold: rule.condition.threshold,
+            context
+          });
+      }
+    }
+  }
+
+  private async sendSlackAlert(rule: AlertRule, metricValue: number, action: any, context: Record<string, unknown>): Promise<void> {
+    try {
+      const message = {
+        text: `SPQR Alert: ${rule.name}`,
+        attachments: [{
+          color: action.severity === 'critical' ? 'danger' : action.severity === 'high' ? 'warning' : 'good',
+          fields: [
+            { title: 'Metric', value: rule.condition.metric, short: true },
+            { title: 'Value', value: metricValue.toString(), short: true },
+            { title: 'Threshold', value: rule.condition.threshold.toString(), short: true },
+            { title: 'Severity', value: action.severity, short: true }
+          ],
+          ts: Date.now() / 1000
+        }]
+      };
+      console.log('Slack alert would be sent:', message);
+    } catch (error) {
+      console.error('Failed to send Slack alert:', error);
+    }
+  }
+
+  private async sendEmailAlert(rule: AlertRule, metricValue: number, action: any, context: Record<string, unknown>): Promise<void> {
+    console.log('Email alert would be sent:', {
+      to: action.target,
+      subject: `SPQR Alert: ${rule.name}`,
+      severity: action.severity,
+      metric_value: metricValue,
+      threshold: rule.condition.threshold
+    });
+  }
+
+  private async sendWebhookAlert(rule: AlertRule, metricValue: number, action: any, context: Record<string, unknown>): Promise<void> {
+    console.log('Webhook alert would be sent:', {
+      url: action.target,
+      payload: {
+        alert_name: rule.name,
+        severity: action.severity,
+        metric_value: metricValue,
+        threshold: rule.condition.threshold,
+        timestamp: new Date().toISOString(),
+        context
+      }
+    });
+  }
+
+  getDashboardHealthReport(dashboardId: string): DashboardHealthReport | undefined {
+    return this.dashboardHealthCache.get(dashboardId);
+  }
+
+  getAllHealthReports(): DashboardHealthReport[] {
+    return Array.from(this.dashboardHealthCache.values());
+  }
+
+  setObservabilityConfig(config: Partial<RuntimeObservabilityConfig>): void {
+    this.observabilityConfig = { ...this.observabilityConfig, ...config };
+    
+    if (this.metricsAggregationInterval) {
+      clearInterval(this.metricsAggregationInterval);
+      this.startMetricsAggregation();
+    }
+  }
+
+  async generatePhase4CompleteReport(): Promise<Record<string, unknown>> {
+    const allHealthReports = this.getAllHealthReports();
+    const overallMetrics = this.getUsageMetrics('day');
+    
+    const report = {
+      timestamp: new Date().toISOString(),
+      phase: 'Phase4–RuntimeObservability',
+      status: 'Phase4–RuntimeObservabilityComplete',
+      completion_summary: {
+        dashboards_monitored: allHealthReports.length,
+        total_metrics_captured: this.logBuffer.length,
+        alerts_configured: this.alertRules.length,
+        health_reports_generated: allHealthReports.length,
+        average_performance_grade: this.calculateAverageGrade(allHealthReports),
+        overall_system_health: this.calculateSystemHealth(allHealthReports)
+      },
+      dashboard_health_summary: allHealthReports.map(report => ({
+        dashboard_id: report.dashboard_id,
+        health: report.overall_health,
+        rag_score: report.rag_score,
+        performance_grade: report.performance_grade,
+        key_metrics: report.metrics
+      })),
+      usage_metrics: overallMetrics,
+      recommendations: this.generateSystemRecommendations(allHealthReports)
+    };
+
+    this.log({
+      event_type: 'phase4_complete',
+      user_id: 'system',
+      user_role: 'system',
+      resource_type: 'dashboard',
+      resource_id: 'all',
+      action: 'phase_complete',
+      success: true,
+      details: report
+    });
+
+    console.log('SPQR Phase 4 Complete Report:', report);
+    return report;
+  }
+
+  private calculateAverageGrade(reports: DashboardHealthReport[]): string {
+    if (reports.length === 0) return 'N/A';
+    
+    const gradeValues = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1 };
+    const total = reports.reduce((sum, report) => 
+      sum + (gradeValues[report.performance_grade] || 0), 0
+    );
+    const avg = total / reports.length;
+    
+    if (avg >= 4.5) return 'A';
+    if (avg >= 3.5) return 'B';
+    if (avg >= 2.5) return 'C';
+    if (avg >= 1.5) return 'D';
+    return 'F';
+  }
+
+  private calculateSystemHealth(reports: DashboardHealthReport[]): 'healthy' | 'degraded' | 'critical' {
+    if (reports.length === 0) return 'healthy';
+    
+    const criticalCount = reports.filter(r => r.overall_health === 'critical').length;
+    const degradedCount = reports.filter(r => r.overall_health === 'degraded').length;
+    
+    if (criticalCount > reports.length * 0.3) return 'critical';
+    if (degradedCount > reports.length * 0.5) return 'degraded';
+    return 'healthy';
+  }
+
+  private generateSystemRecommendations(reports: DashboardHealthReport[]): string[] {
+    const recommendations: string[] = [];
+    const avgLoadTime = reports.reduce((sum, r) => sum + r.metrics.avg_load_time_ms, 0) / reports.length;
+    const avgErrorRate = reports.reduce((sum, r) => sum + r.metrics.error_rate, 0) / reports.length;
+    
+    if (avgLoadTime > 5000) {
+      recommendations.push('System-wide performance optimization needed. Consider caching strategies.');
+    }
+    if (avgErrorRate > 0.1) {
+      recommendations.push('High system error rate. Implement better error handling and monitoring.');
+    }
+    
+    const criticalDashboards = reports.filter(r => r.overall_health === 'critical');
+    if (criticalDashboards.length > 0) {
+      recommendations.push(`${criticalDashboards.length} dashboards in critical state require immediate attention.`);
+    }
+    
+    return recommendations;
+  }
+
   destroy(): void {
     if (this.flushInterval) {
       clearInterval(this.flushInterval);
     }
+    if (this.metricsAggregationInterval) {
+      clearInterval(this.metricsAggregationInterval);
+    }
     this.flushLogs();
+    this.generatePhase4CompleteReport();
   }
 }
 
-export { GovernanceLogger, type GovernanceLogEntry, type UsageMetrics, type AlertRule };
+export { 
+  GovernanceLogger, 
+  type GovernanceLogEntry, 
+  type UsageMetrics, 
+  type AlertRule,
+  type DashboardHealthReport,
+  type RuntimeObservabilityConfig 
+};
