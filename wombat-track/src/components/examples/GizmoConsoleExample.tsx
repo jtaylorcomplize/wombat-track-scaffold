@@ -1,6 +1,6 @@
 import React from 'react';
 import { GizmoConsole } from '../GizmoConsole';
-import { handleAIPrompt, testDispatchers } from '../../lib/aiDispatchers';
+import { testDispatchers } from '../../lib/aiDispatchers';
 
 interface GizmoConsoleExampleProps {
   className?: string;

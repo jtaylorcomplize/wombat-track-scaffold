@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useProjectContext } from '../contexts/ProjectContext';
 import { Clock, User, FileText, Filter } from 'lucide-react';
-import type { GovernanceEventType, GovernanceEvent } from '../types/governance';
+import type { GovernanceEventType } from '../types/governance';
 
 interface GovernanceLogViewerProps {
   projectFilter?: string;

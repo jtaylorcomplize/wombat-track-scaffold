@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, User, FileText, Bot, ExternalLink, ChevronDown, ChevronRight } from 'lucide-react';
+import { User, FileText, Bot, ExternalLink, ChevronDown, ChevronRight } from 'lucide-react';
 
 export interface GovernanceLogEntry {
   id: string;

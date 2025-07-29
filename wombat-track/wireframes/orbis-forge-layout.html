@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbis Forge - Vertical Layout Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'obsidian': '#0C0C0E',
+                        'obsidian-light': '#1A1A1E',
+                        'solar-copper': '#D77B28',
+                        'copper-ember': '#E97D47',
+                        'molten-orange': '#FF8C42',
+                        'lumen-cream': '#F2F0E6',
+                        'orbit-gray': '#4A4A4E',
+                        'forge-gray': '#6B6B70',
+                        'depth-1': '#141418',
+                        'depth-2': '#1E1E22',
+                        'depth-3': '#28282C'
+                    },
+                    fontFamily: {
+                        'space': ['Space Grotesk', 'system-ui', 'sans-serif'],
+                        'inter': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Component: Asymmetrical Molten Loop Animation */
+        .molten-loop {
+            animation: asymmetric-molten 6s ease-in-out infinite;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+        @keyframes asymmetric-molten {
+            0% { 
+                transform: rotate(0deg) scaleX(1) scaleY(1); 
+                border-color: #D77B28;
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+            20% { 
+                transform: rotate(45deg) scaleX(1.1) scaleY(0.9); 
+                border-color: #E97D47;
+                border-radius: 40% 60% 70% 30% / 40% 70% 30% 60%;
+            }
+            40% { 
+                transform: rotate(120deg) scaleX(0.9) scaleY(1.2); 
+                border-color: #FF8C42;
+                border-radius: 70% 30% 40% 60% / 30% 40% 60% 70%;
+            }
+            60% { 
+                transform: rotate(200deg) scaleX(1.2) scaleY(0.8); 
+                border-color: #E97D47;
+                border-radius: 30% 70% 60% 40% / 70% 60% 40% 30%;
+            }
+            80% { 
+                transform: rotate(300deg) scaleX(0.8) scaleY(1.1); 
+                border-color: #D77B28;
+                border-radius: 50% 50% 50% 50% / 80% 20% 80% 20%;
+            }
+            100% { 
+                transform: rotate(360deg) scaleX(1) scaleY(1); 
+                border-color: #D77B28;
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+        }
+        
+        /* Component: Asymmetrical Geometric Pulse */
+        .geometric-pulse {
+            animation: asymmetric-geo-pulse 3s ease-in-out infinite;
+            clip-path: polygon(40% 0%, 100% 30%, 80% 100%, 0% 70%);
+        }
+        @keyframes asymmetric-geo-pulse {
+            0%, 100% { 
+                clip-path: polygon(40% 0%, 100% 30%, 80% 100%, 0% 70%);
+                opacity: 0.7;
+                transform: scale(1);
+            }
+            25% { 
+                clip-path: polygon(20% 10%, 90% 20%, 85% 90%, 10% 80%);
+                opacity: 0.9;
+                transform: scale(1.05);
+            }
+            50% { 
+                clip-path: polygon(60% 5%, 95% 40%, 75% 95%, 5% 60%);
+                opacity: 1;
+                transform: scale(1.1);
+            }
+            75% { 
+                clip-path: polygon(30% 15%, 85% 25%, 90% 85%, 15% 75%);
+                opacity: 0.9;
+                transform: scale(1.05);
+            }
+        }
+        
+        /* Component: Molten Progress */
+        .molten-progress {
+            background: linear-gradient(90deg, 
+                #D77B28 0%, 
+                #E97D47 calc(var(--progress, 0%) / 2), 
+                #FF8C42 var(--progress, 0%), 
+                transparent var(--progress, 0%));
+        }
+        
+        /* Component: Forge Gradient (No Teal) */
+        .forge-gradient {
+            background: linear-gradient(135deg, #D77B28 0%, #E97D47 50%, #FF8C42 100%);
+        }
+        
+        /* Component: Molten Core Gradient */
+        .molten-core {
+            background: radial-gradient(circle at center, #FF8C42 0%, #E97D47 40%, #D77B28 100%);
+        }
+        
+        /* Component: Trace Animation */
+        .trace-flow {
+            animation: trace-flow 3s linear infinite;
+        }
+        @keyframes trace-flow {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="depth-0 text-lumen-cream font-space min-h-screen flex flex-col">
+    
+    <!-- Component: Forge Header with Logo -->
+    <header class="depth-1 p-6" data-testid="forge-header">
+        <div class="max-w-md mx-auto">
+            <!-- Component: Orbis Forge Logo -->
+            <div class="flex items-center justify-center mb-6" data-testid="forge-logo">
+                <div class="relative">
+                    <!-- Slashed O with intertwined loops -->
+                    <div class="w-16 h-16 relative">
+                        <!-- Main O shape -->
+                        <div class="absolute inset-0 rounded-full border-4 border-solar-copper molten-loop"></div>
+                        <!-- Inner loop -->
+                        <div class="absolute inset-3 rounded-full border-2 border-forge-teal opacity-70"></div>
+                        <!-- Slash through -->
+                        <div class="absolute top-2 left-2 right-2 bottom-2 border-l-2 border-copper-ember transform rotate-45"></div>
+                        <!-- Geometric center -->
+                        <div class="absolute inset-6 forge-gradient geometric-pulse"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold tracking-wider mb-2">ORBIS FORGE</h1>
+                <p class="text-orbit-gray text-sm">Igniting intelligent coordination</p>
+            </div>
+            
+            <!-- Component: Color Swatches -->
+            <div class="flex justify-center gap-3 mb-8" data-testid="color-swatches">
+                <div class="w-6 h-6 rounded-full bg-obsidian border border-orbit-gray" title="Obsidian Black"></div>
+                <div class="w-6 h-6 rounded-full bg-solar-copper" title="Solar Copper"></div>
+                <div class="w-6 h-6 rounded-full bg-copper-ember" title="Copper Ember"></div>
+                <div class="w-6 h-6 rounded-full bg-molten-orange" title="Molten Orange"></div>
+                <div class="w-6 h-6 rounded-full bg-lumen-cream" title="Lumen Cream"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Component: Main Vertical Card Layout -->
+    <main class="flex-1 px-6 pb-6" data-testid="forge-main">
+        <div class="max-w-md mx-auto space-y-6">
+            
+            <!-- Component: Core Module Summary -->
+            <div class="depth-1 rounded-xl p-6 border border-solar-copper/30" data-testid="core-module-card">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-bold">Core Module</h2>
+                    <div class="px-3 py-1 forge-gradient rounded-full text-xs font-bold">
+                        ACTIVE
+                    </div>
+                </div>
+                
+                <!-- Component: Animated Loop Graphic -->
+                <div class="flex justify-center mb-6" data-testid="core-animation">
+                    <div class="relative w-32 h-32">
+                        <!-- Outer asymmetrical molten ring -->
+                        <div class="absolute inset-0 border-4 border-solar-copper/50 molten-loop"></div>
+                        <!-- Inner processing core -->
+                        <div class="absolute inset-6 border-2 border-copper-ember/60" style="border-radius: 70% 30% 60% 40% / 30% 60% 40% 70%;"></div>
+                        <!-- Central nucleus -->
+                        <div class="absolute inset-10 molten-core flex items-center justify-center geometric-pulse">
+                            <span class="text-sm font-bold text-obsidian">CORE</span>
+                        </div>
+                        
+                        <!-- Asymmetric node indicators -->
+                        <div class="absolute top-3 left-2/3 w-3 h-2 bg-molten-orange animate-ping" style="border-radius: 60% 40% 30% 70%;"></div>
+                        <div class="absolute bottom-6 right-4 w-2 h-3 bg-copper-ember" style="border-radius: 40% 60% 70% 30%;"></div>
+                        <div class="absolute left-2 top-2/3 w-2 h-2 bg-solar-copper animate-pulse"></div>
+                    </div>
+                </div>
+                
+                <!-- Component: Active Nodes Count -->
+                <div class="text-center" data-testid="active-nodes-count">
+                    <div class="text-3xl font-bold forge-gradient bg-clip-text text-transparent mb-1">
+                        847
+                    </div>
+                    <div class="text-orbit-gray text-sm">ACTIVE NODES</div>
+                </div>
+            </div>
+
+            <!-- Component: Prompt Console -->
+            <div class="depth-1 rounded-xl p-6 border border-copper-ember/30" data-testid="prompt-console-card">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-bold">Prompt Console</h2>
+                    <div class="w-2 h-2 bg-molten-orange animate-pulse" style="border-radius: 70% 30% 60% 40%;"></div>
+                </div>
+                
+                <!-- Component: Console Input -->
+                <div class="depth-2 rounded-lg p-4 mb-4 font-mono text-sm" data-testid="console-input">
+                    <div class="text-molten-orange mb-2">$ invoke</div>
+                    <div class="text-lumen-cream">core.process(trace)</div>
+                    <div class="flex items-center mt-2">
+                        <div class="w-2 h-4 bg-copper-ember mr-2 animate-pulse" style="border-radius: 60% 40% 30% 70%;"></div>
+                        <span class="text-forge-gray">executing...</span>
+                    </div>
+                </div>
+                
+                <!-- Component: Output Metadata -->
+                <div class="space-y-3" data-testid="output-metadata">
+                    <div class="flex justify-between items-center">
+                        <span class="text-orbit-gray text-sm">Trace ID</span>
+                        <span class="font-mono text-xs text-copper-ember">forge-2025-001-7f3a</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-forge-gray text-sm">Status</span>
+                        <div class="px-2 py-1 bg-molten-orange/20 text-molten-orange rounded text-xs font-semibold">
+                            PROCESSING
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-orbit-gray text-sm">Duration</span>
+                        <span class="text-sm font-mono">2.47s</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-forge-gray text-sm">Agent</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 forge-gradient" style="border-radius: 40% 60% 70% 30%;"></div>
+                            <span class="text-sm">Gizmo</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Component: Trace Visualization -->
+                <div class="mt-4 pt-4 border-t border-forge-gray/20" data-testid="trace-visualization">
+                    <div class="text-xs text-forge-gray mb-2">Execution Trace</div>
+                    <div class="relative depth-2 rounded h-3 overflow-hidden" style="border-radius: 60% 40% 60% 40%;">
+                        <div class="absolute inset-0 forge-gradient opacity-30"></div>
+                        <div class="absolute top-0 left-0 w-8 h-full molten-core trace-flow opacity-80"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Component: Bottom Toolbar -->
+    <footer class="depth-1 p-6 border-t border-orbit-gray/20" data-testid="forge-toolbar">
+        <div class="max-w-md mx-auto flex gap-4">
+            
+            <!-- Component: Stack View Toggle -->
+            <button class="flex-1 depth-2 hover:depth-3 rounded-lg p-4 transition-all duration-200 border border-forge-gray/30" data-testid="stack-view-toggle">
+                <div class="flex items-center justify-center gap-2">
+                    <div class="w-4 h-4 border border-forge-gray" style="border-radius: 20% 80% 30% 70%;"></div>
+                    <div class="w-4 h-4 border border-forge-gray opacity-70" style="border-radius: 70% 30% 60% 40%;"></div>
+                    <div class="w-4 h-4 border border-forge-gray opacity-40" style="border-radius: 40% 60% 80% 20%;"></div>
+                </div>
+                <div class="text-xs text-forge-gray mt-2 text-center">Stack View</div>
+            </button>
+            
+            <!-- Component: Ignite Button -->
+            <button class="flex-1 forge-gradient hover:opacity-90 rounded-lg p-4 transition-all duration-200 relative overflow-hidden" data-testid="ignite-button">
+                <div class="relative z-10">
+                    <div class="flex items-center justify-center mb-2">
+                        <div class="w-6 h-6 border-2 border-obsidian geometric-pulse" style="border-radius: 40% 60% 70% 30%;"></div>
+                    </div>
+                    <div class="text-xs text-obsidian font-bold text-center">IGNITE</div>
+                </div>
+                
+                <!-- Component: Molten Progress Bar -->
+                <div class="absolute bottom-0 left-0 right-0 h-1 depth-2" data-testid="ignite-progress">
+                    <div class="h-full molten-progress" style="--progress: 65%; border-radius: 60% 40% 60% 40%;"></div>
+                </div>
+            </button>
+        </div>
+        
+        <!-- Component: Agent Status Footer -->
+        <div class="max-w-md mx-auto mt-4 pt-4 border-t border-forge-gray/20">
+            <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2 text-forge-gray">
+                    <span>Forge Mode</span>
+                    <span>→</span>
+                    <span>Core Process</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-1">
+                        <div class="w-2 h-2 bg-orbit-gray opacity-50" style="border-radius: 60% 40% 30% 70%;"></div>
+                        <span class="text-orbit-gray opacity-70">Claude Idle</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <div class="w-2 h-2 forge-gradient animate-pulse" style="border-radius: 40% 60% 70% 30%;"></div>
+                        <span class="text-solar-copper">Gizmo Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
