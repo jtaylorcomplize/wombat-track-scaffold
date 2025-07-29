@@ -30,6 +30,8 @@ interface GovernanceLogEntry {
     connection_type?: string;
     phase?: string;
     environment?: string;
+    page_type?: string;
+    mode?: string;
   };
   rag_metrics?: {
     score: 'red' | 'amber' | 'green' | 'blue';
@@ -497,7 +499,7 @@ class GovernanceLogger {
       }
 
       if (this.evaluateCondition(metricValue, rule.condition)) {
-        this.triggerAlert(rule, metricValue, recentLogs);
+        this.triggerGovernanceAlert(rule, metricValue, recentLogs);
       }
     });
   }
@@ -513,7 +515,7 @@ class GovernanceLogger {
     }
   }
 
-  private triggerAlert(rule: AlertRule, metricValue: number, recentLogs: GovernanceLogEntry[]): void {
+  private triggerGovernanceAlert(rule: AlertRule, metricValue: number, recentLogs: GovernanceLogEntry[]): void {
     const alertEntry = {
       timestamp: new Date().toISOString(),
       alert_id: rule.rule_id,
