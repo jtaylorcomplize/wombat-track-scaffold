@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import type { Project, Phase, PhaseStep } from '../types/phase';
 
 interface GovernanceEvent {
@@ -8,7 +9,7 @@ interface GovernanceEvent {
   triggeredBy: string;
   eventType: 'StepStatusUpdated' | 'StepAdded' | 'StepRemoved' | 'PhaseUpdated';
   timestamp: string;
-  details?: any;
+  details?: Record<string, unknown>;
 }
 
 interface ProjectContextType {

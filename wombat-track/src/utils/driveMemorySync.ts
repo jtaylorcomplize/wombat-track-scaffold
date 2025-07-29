@@ -1,5 +1,5 @@
 import { createNotionClient } from './notionClient';
-import type { GovernanceEvent } from '../types/governance';
+// Type definitions for DriveMemory sync operations
 
 // Retry utility with exponential backoff for QA robustness
 async function withRetry<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
@@ -27,7 +27,7 @@ export interface SyncMetadata {
 export interface DriveMemoryRecord {
   id: string;
   type: 'governance' | 'project' | 'phase' | 'step';
-  content: any;
+  content: Record<string, unknown>; // @typescript-eslint/no-explicit-any fix
   metadata: SyncMetadata;
   tags?: string[];
 }
@@ -54,7 +54,7 @@ export class DriveMemorySync {
   // Sync from Notion to DriveMemory format
   async exportFromNotion(
     databaseId: string,
-    filters?: any
+    filters?: Record<string, unknown> // @typescript-eslint/no-explicit-any fix
   ): Promise<DriveMemoryRecord[]> {
     try {
       const response = await withRetry(() => 
@@ -92,11 +92,11 @@ export class DriveMemorySync {
   async importToNotion(
     records: DriveMemoryRecord[],
     databaseId: string
-  ): Promise<{ success: number; failed: number; errors: any[] }> {
+  ): Promise<{ success: number; failed: number; errors: Array<Record<string, unknown>> }> { // @typescript-eslint/no-explicit-any fix
     const results = {
       success: 0,
       failed: 0,
-      errors: [] as any[],
+      errors: [] as Array<Record<string, unknown>>, // @typescript-eslint/no-explicit-any fix
     };
 
     for (const record of records) {
@@ -130,12 +130,12 @@ export class DriveMemorySync {
   ): Promise<{
     imported: number;
     exported: number;
-    conflicts: any[];
+    conflicts: Array<Record<string, unknown>>; // @typescript-eslint/no-explicit-any fix
   }> {
     const results = {
       imported: 0,
       exported: 0,
-      conflicts: [] as any[],
+      conflicts: [] as Array<Record<string, unknown>>, // no-explicit-any fix
     };
 
     // Get all Notion records
@@ -166,7 +166,7 @@ export class DriveMemorySync {
     }
 
     // Export new Notion records
-    for (const [id, notionRecord] of notionMap) {
+    for (const [id] of notionMap) { // @typescript-eslint/no-unused-vars fix
       if (!driveMap.has(id)) {
         results.exported++;
       }
@@ -186,8 +186,8 @@ export class DriveMemorySync {
     return 'governance'; // default
   }
 
-  private extractPageContent(page: any): any {
-    const content: any = {};
+  private extractPageContent(page: Record<string, unknown>): Record<string, unknown> { // @typescript-eslint/no-explicit-any fix
+    const content: Record<string, unknown> = {}; // @typescript-eslint/no-explicit-any fix
     
     for (const [key, value] of Object.entries(page.properties)) {
       content[key] = this.extractPropertyValue(value);
@@ -196,18 +196,18 @@ export class DriveMemorySync {
     return content;
   }
 
-  private extractPropertyValue(property: any): any {
+  private extractPropertyValue(property: Record<string, unknown>): unknown { // @typescript-eslint/no-explicit-any fix
     if (property.title) {
-      return property.title.map((t: any) => t.plain_text).join('');
+      return (property.title as Array<{plain_text: string}>).map(t => t.plain_text).join(''); // @typescript-eslint/no-explicit-any fix
     }
     if (property.rich_text) {
-      return property.rich_text.map((t: any) => t.plain_text).join('');
+      return (property.rich_text as Array<{plain_text: string}>).map(t => t.plain_text).join(''); // @typescript-eslint/no-explicit-any fix
     }
     if (property.select) {
       return property.select.name;
     }
     if (property.multi_select) {
-      return property.multi_select.map((s: any) => s.name);
+      return (property.multi_select as Array<{name: string}>).map(s => s.name); // @typescript-eslint/no-explicit-any fix
     }
     if (property.date) {
       return property.date.start;
@@ -224,21 +224,23 @@ export class DriveMemorySync {
     return null;
   }
 
-  private extractTags(page: any): string[] {
+  private extractTags(page: Record<string, unknown>): string[] { // @typescript-eslint/no-explicit-any fix
     const tags: string[] = [];
     
     // Extract from multi_select properties
-    for (const [key, value] of Object.entries(page.properties)) {
+    for (const [, value] of Object.entries(page.properties)) { // @typescript-eslint/no-unused-vars fix
       if (value.multi_select) {
-        tags.push(...value.multi_select.map((s: any) => s.name));
+        tags.push(...(value.multi_select as Array<{name: string}>).map(s => s.name)); // @typescript-eslint/no-explicit-any fix
       }
     }
     
     return tags;
   }
 
-  private mapToNotionProperties(record: DriveMemoryRecord, databaseId: string): any {
-    const properties: any = {};
+  private mapToNotionProperties(
+    record: DriveMemoryRecord, 
+    _databaseId: string // eslint-disable-line @typescript-eslint/no-unused-vars
+  ): Record<string, unknown> {
     
     // Map based on record type
     switch (record.type) {
@@ -255,7 +257,7 @@ export class DriveMemorySync {
     }
   }
 
-  private mapGovernanceProperties(record: DriveMemoryRecord): any {
+  private mapGovernanceProperties(record: DriveMemoryRecord): Record<string, unknown> { // @typescript-eslint/no-explicit-any fix
     const content = record.content;
     return {
       'Event ID': {
@@ -276,7 +278,7 @@ export class DriveMemorySync {
     };
   }
 
-  private mapProjectProperties(record: DriveMemoryRecord): any {
+  private mapProjectProperties(record: DriveMemoryRecord): Record<string, unknown> { // @typescript-eslint/no-explicit-any fix
     const content = record.content;
     return {
       projectId: {
@@ -294,7 +296,7 @@ export class DriveMemorySync {
     };
   }
 
-  private mapPhaseProperties(record: DriveMemoryRecord): any {
+  private mapPhaseProperties(record: DriveMemoryRecord): Record<string, unknown> { // @typescript-eslint/no-explicit-any fix
     const content = record.content;
     return {
       phaseId: {
@@ -312,7 +314,7 @@ export class DriveMemorySync {
     };
   }
 
-  private mapStepProperties(record: DriveMemoryRecord): any {
+  private mapStepProperties(record: DriveMemoryRecord): Record<string, unknown> { // @typescript-eslint/no-explicit-any fix
     const content = record.content;
     return {
       phaseStepId: {
@@ -327,7 +329,7 @@ export class DriveMemorySync {
     };
   }
 
-  private mapGenericProperties(record: DriveMemoryRecord): any {
+  private mapGenericProperties(record: DriveMemoryRecord): Record<string, unknown> { // @typescript-eslint/no-explicit-any fix
     return {
       id: {
         title: [{ text: { content: record.id } }],

@@ -6,7 +6,7 @@ import { PhasePlanView } from '../components/PhasePlanView';
 import { GovernanceLogViewer } from '../components/GovernanceLogViewer';
 import ProjectSidebarSimple from '../components/ProjectSidebarSimple';
 import { ProjectProvider, useProjectContext } from '../contexts/ProjectContext';
-import type { Project, PhaseStep } from '../types/phase';
+import type { Project } from '../types/phase'; // removed unused PhaseStep
 
 // Mock project data for dashboard demonstration
 const mockProjects: Project[] = [

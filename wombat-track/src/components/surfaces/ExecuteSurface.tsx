@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Pause, CheckCircle, AlertTriangle, Clock, Flag, Activity } from 'lucide-react';
+import { Play, CheckCircle, AlertTriangle, Clock, Flag, Activity } from 'lucide-react'; // removed unused Pause
 import { StatusCard } from '../common/StatusCard';
 import { ClaudePromptButton } from '../common/ClaudePromptButton';
 import { PhaseBreadcrumb } from '../common/PhaseBreadcrumb';
@@ -69,7 +69,7 @@ export const ExecuteSurface: React.FC<ExecuteSurfaceProps> = ({
     );
   }
 
-  const handleClaudePrompt = async (prompt: string, context?: any) => {
+  const handleClaudePrompt = async (prompt: string, _context?: Record<string, unknown>) => { // eslint-disable-line @typescript-eslint/no-unused-vars
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     if (prompt.toLowerCase().includes('blocker')) {
@@ -269,7 +269,7 @@ What specific aspect would you like me to help you with?`;
             ].map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
-                onClick={() => setActiveTab(id as any)}
+                onClick={() => setActiveTab(id as 'tracking' | 'steps' | 'blockers')}
                 className={`flex items-center space-x-2 py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === id
                     ? 'border-green-500 text-green-600'

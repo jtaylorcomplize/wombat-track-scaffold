@@ -1,0 +1,96 @@
+{
+  "id": "act_005",
+  "name": "Time Entry Dashboard",
+  "description": "Time tracking and billable hours analysis",
+  "category": "workforce_planning",
+  "data_source": {
+    "primary_table": "actionstep_workforce_planning",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "fee_earner_id",
+        "display_name": "Fee Earner ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "fee_earner_name",
+        "display_name": "Fee Earner Name",
+        "data_type": "string"
+      },
+      {
+        "field_name": "entry_date",
+        "display_name": "Entry Date",
+        "data_type": "date",
+        "format": "YYYY-MM-DD"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "billable_hours",
+        "display_name": "Billable Hours",
+        "data_type": "decimal",
+        "aggregation": "count"
+      },
+      {
+        "field_name": "non_billable_hours",
+        "display_name": "Non-Billable Hours",
+        "data_type": "decimal",
+        "aggregation": "count"
+      },
+      {
+        "field_name": "hourly_rate",
+        "display_name": "Hourly Rate",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [
+      {
+        "field_name": "entry_date",
+        "operator": "equals",
+        "value": "last_30_days"
+      }
+    ],
+    "available_filters": [
+      {
+        "field_name": "entry_date",
+        "display_name": "Entry Date",
+        "filter_type": "date_range",
+        "options": [
+          "\"today"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "line_chart",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "analyst",
+      "admin"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.231Z",
+    "last_modified": "2025-07-29T02:54:05.231Z",
+    "version": "2.2",
+    "tags": [
+      "workforce planning",
+      "medium",
+      "workforce_planning"
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "name": "Time Entry Dashboard",
+  "dataSource": {
+    "name": "Time Entry Dashboard Data Source",
+    "type": "BIGQUERY",
+    "config": {
+      "query": "\n        SELECT \n          p.participant_id as fee_earner_id,\n          p.display_name as fee_earner_name,\n          SUM(te.billable_hours) as billable_hours,\n          SUM(te.non_billable_hours) as non_billable_hours,\n          te.entry_date,\n          p.standard_rate as hourly_rate,\n          (SUM(te.billable_hours) / p.target_hours * 100) as utilization_rate,\n          p.target_hours,\n          (SUM(te.billable_hours) + SUM(te.non_billable_hours)) as actual_hours,\n          p.department,\n          SUM(te.billable_amount) as monthly_billings,\n          (SUM(collected_amount) / SUM(te.billable_amount) * 100) as realization_rate,\n          COUNT(DISTINCT CASE WHEN p.originating_partner_id = p.participant_id THEN c.client_id END) as client_origination\n        FROM participants p\n        LEFT JOIN time_entries te ON p.participant_id = te.fee_earner_id\n        LEFT JOIN matters m ON te.matter_id = m.matter_id\n        LEFT JOIN participants c ON m.client_id = c.participant_id\n        WHERE p.participant_type IN ('partner', 'associate', 'paralegal')\n        GROUP BY p.participant_id, te.entry_date\n      ",
+      "dataset": "actionstep_analytics",
+      "project": "law-firm-analytics"
+    }
+  },
+  "fields": [
+    {
+      "name": "fee_earner_id",
+      "type": "TEXT",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "fee_earner_name",
+      "type": "TEXT",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "entry_date",
+      "type": "DATE",
+      "aggregation": "NONE"
+    },
+    {
+      "name": "billable_hours",
+      "type": "NUMBER",
+      "aggregation": "COUNT"
+    },
+    {
+      "name": "non_billable_hours",
+      "type": "NUMBER",
+      "aggregation": "COUNT"
+    },
+    {
+      "name": "hourly_rate",
+      "type": "NUMBER",
+      "aggregation": "SUM"
+    }
+  ],
+  "filters": [
+    {
+      "field": "entry_date",
+      "type": "DATE_RANGE",
+      "defaultValue": "last_30_days",
+      "allowMultiple": false,
+      "options": [
+        "\"today"
+      ]
+    }
+  ],
+  "visualization": {
+    "type": "LINE_CHART",
+    "config": {
+      "dimensions": [
+        "fee_earner_id",
+        "fee_earner_name",
+        "entry_date"
+      ],
+      "metrics": [
+        "billable_hours",
+        "non_billable_hours",
+        "hourly_rate"
+      ],
+      "colorScheme": "blue_actionstep_theme",
+      "showDataLabels": true
+    }
+  },
+  "permissions": {
+    "viewRoles": [
+      "analyst",
+      "admin"
+    ],
+    "editRoles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "embedConfig": {
+    "allowExternalEmbed": false,
+    "domains": []
+  }
+}

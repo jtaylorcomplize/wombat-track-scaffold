@@ -37,7 +37,7 @@ export const SendToGitHubButton: React.FC<SendToGitHubButtonProps> = ({
         setStatus('error');
         setErrorMessage(data.error || 'Failed to trigger workflow');
       }
-    } catch (error) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       setStatus('error');
       setErrorMessage('Network error: Unable to connect');
     }

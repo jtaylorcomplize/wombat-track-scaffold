@@ -21,7 +21,7 @@ export interface ConsoleMessage {
 
 export interface GizmoConsoleProps {
   className?: string;
-  onPrompt?: (prompt: string, agent: AIAgent, context?: any) => Promise<string>;
+  onPrompt?: (prompt: string, agent: AIAgent, context?: Record<string, unknown>) => Promise<string>; // no-explicit-any fix
   initialAgent?: AIAgent;
   placeholder?: string;
   maxHeight?: string;
@@ -152,35 +152,7 @@ export const GizmoConsole: React.FC<GizmoConsoleProps> = ({
     }));
   };
 
-  const mockClaudeDispatcher = async (prompt: string): Promise<string> => {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
-    
-    // Mock Claude-like responses
-    const responses = [
-      `I understand you're asking about: "${prompt.slice(0, 50)}${prompt.length > 50 ? '...' : ''}"\n\nHere's my analysis and recommendations for your Wombat Track project:`,
-      `Based on your input, I can help you with this task. Let me break this down:`,
-      `I'd be happy to assist with that. Here's what I recommend:`,
-      `That's an interesting question about your project. Let me provide some insights:`
-    ];
-    
-    const baseResponse = responses[Math.floor(Math.random() * responses.length)];
-    const details = [
-      '\n\n• This aligns well with your current Phase 3 MetaProject Activation',
-      '\n• Consider the integration with your AgentMesh architecture',
-      '\n• This could enhance your governance logging capabilities',
-      '\n• I recommend documenting this in your project metadata'
-    ];
-    
-    return baseResponse + details.slice(0, Math.floor(Math.random() * 3) + 1).join('');
-  };
-
-  const mockGizmoDispatcher = async (prompt: string): Promise<string> => {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1500));
-    
-    return `🔧 Gizmo Analysis:\n\nPrompt processed: "${prompt}"\n\n⚡ Quick Actions Available:\n• Code scaffolding\n• Template generation\n• Workflow automation\n\n🔮 This integration is coming soon in Phase WT-5.4!`;
-  };
+  // Mock dispatchers removed - unused legacy code
 
   const handleSubmit = async () => {
     if (!inputValue.trim() || isLoading) return;

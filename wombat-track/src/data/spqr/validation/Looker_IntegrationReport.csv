@@ -1,0 +1,22 @@
+Card Name,View Matched,Missing Fields,Filter Issues,Notes
+Active Matters Overview,v_actionstep_matter_management,None,None,"All fields validated successfully; All filters validated successfully; Card contains only dimensions, no metrics defined"
+Billing Rate Analysis,v_actionstep_financials,dimension: fee_earner_id; dimension: fee_earner_name; dimension: practice_area; dimension: seniority_level; metric: standard_rate; metric: effective_rate,available filter field not found: practice_area; available filter field not found: seniority_level,
+Client Communication Log,v_actionstep_performance,dimension: communication_date; dimension: communication_type; dimension: fee_earner_name; metric: response_time_hours,available filter field not found: communication_type,
+Client Revenue Summary,v_actionstep_financials,None,None,All fields validated successfully; All filters validated successfully
+Client Satisfaction Metrics,v_actionstep_performance,dimension: client_name; dimension: survey_date; dimension: feedback_category,available filter field not found: feedback_category,
+Conflict Check Dashboard,v_actionstep_matter_management,dimension: conflict_status; dimension: check_date; dimension: checked_by,available filter field not found: conflict_status,"Card contains only dimensions, no metrics defined"
+Court Appearance Calendar,v_actionstep_matter_management,dimension: court_date; dimension: court_name; dimension: hearing_type; dimension: attending_counsel,default filter field not found: court_date; available filter field not found: court_date; available filter field not found: hearing_type,"Card contains only dimensions, no metrics defined"
+Deadline Tracker,v_actionstep_matter_management,None,None,"All fields validated successfully; All filters validated successfully; Card contains only dimensions, no metrics defined"
+Disbursement Tracking,v_actionstep_financials,dimension: disbursement_id; dimension: disbursement_type; dimension: reimbursement_status; dimension: matter_name; metric: disbursement_amount,available filter field not found: disbursement_type; available filter field not found: reimbursement_status,
+Document Production Status,v_actionstep_matter_management,dimension: production_status; dimension: due_date; metric: document_count; metric: reviewed_count,available filter field not found: production_status,
+Fee Earner Performance,v_actionstep_performance,dimension: fee_earner_id; dimension: fee_earner_name; metric: monthly_billings; metric: billable_hours; metric: realization_rate; metric: client_origination,None,All filters validated successfully
+Invoice Status Tracker,v_actionstep_financials,dimension: invoice_id; dimension: invoice_date; dimension: payment_status; metric: days_outstanding,available filter field not found: payment_status,
+Matter Budget Variance,v_actionstep_financials,dimension: matter_id; dimension: budget_status; metric: budgeted_amount; metric: actual_amount; metric: variance_percentage,available filter field not found: budget_status,
+Matter Profitability Analysis,v_actionstep_financials,dimension: matter_id; dimension: matter_name; dimension: practice_area,available filter field not found: practice_area,
+Matter Type Distribution,v_actionstep_matter_management,metric: matter_count; metric: total_revenue; metric: avg_matter_value,None,All filters validated successfully
+Practice Area Revenue,v_actionstep_financials,dimension: practice_area; metric: revenue_amount; metric: avg_matter_value; metric: growth_rate,available filter field not found: practice_area,
+Staff Utilization Report,NONE,Cannot validate - no matching view found,Cannot validate - no matching view found,No matching ActionStep view found
+Task Completion Metrics,v_actionstep_performance,dimension: fee_earner_id; metric: tasks_pending; metric: avg_completion_time,None,All filters validated successfully
+Time Entry Dashboard,NONE,Cannot validate - no matching view found,Cannot validate - no matching view found,No matching ActionStep view found
+Trust Account Reconciliation,v_actionstep_financials,dimension: trust_account_id; dimension: last_reconciled; dimension: reconciliation_status; metric: account_balance,available filter field not found: reconciliation_status,
+WIP Aging Report,v_actionstep_financials,dimension: matter_id; dimension: aging_bucket; dimension: matter_name; dimension: responsible_partner; metric: wip_amount,available filter field not found: aging_bucket,

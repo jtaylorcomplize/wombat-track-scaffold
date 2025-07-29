@@ -1,0 +1,79 @@
+field_name,display_name,data_type,description,validation_rules,business_definition,source_system,calculation_logic
+matter_id,Matter ID,string,Unique identifier for legal matter,"alphanumeric, max 20 chars",Unique identifier for each legal matter in the firm,ACTIONSTEP,matter.matter_number
+matter_name,Matter Name,string,Display name of the legal matter,"max 200 chars",Human-readable name describing the legal matter,ACTIONSTEP,matter.matter_name
+client_name,Client Name,string,Name of the client,"max 200 chars",Full name of the client or organization,ACTIONSTEP,participant.display_name where participant_type = 'client'
+matter_status,Matter Status,string,Current status of the matter,"one of: Active, Closed, On Hold, Archived",Current lifecycle status of the legal matter,ACTIONSTEP,matter.matter_status
+date_opened,Date Opened,date,Date when the matter was opened,"format: YYYY-MM-DD, not future date",Calendar date when the legal matter was created,ACTIONSTEP,matter.date_opened
+responsible_partner,Responsible Partner,string,Partner responsible for the matter,"max 100 chars",Partner with primary responsibility for matter oversight,ACTIONSTEP,matter.responsible_participant where participant_type = 'partner'
+deadline_date,Deadline Date,date,Due date for task or milestone,"format: YYYY-MM-DD",Critical deadline or due date for matter-related task,ACTIONSTEP,task.due_date or milestone.deadline_date
+deadline_type,Deadline Type,string,Category of deadline,"one of predefined types",Classification of the type of deadline or milestone,ACTIONSTEP,task.task_type or milestone.milestone_type
+assigned_fee_earner,Assigned Fee Earner,string,Fee earner assigned to task,"max 100 chars",Legal professional assigned responsibility for the task,ACTIONSTEP,task.assigned_participant
+priority_level,Priority Level,string,Priority level of task or matter,"one of: High, Medium, Low",Business priority level for scheduling and resource allocation,ACTIONSTEP,task.priority or matter.priority
+client_id,Client ID,string,Unique identifier for client,"alphanumeric, max 20 chars",Unique identifier for client in the system,ACTIONSTEP,participant.participant_id where participant_type = 'client'
+total_revenue,Total Revenue,decimal,Total revenue from client,"> 0, max 12 digits",Sum of all revenue generated from client relationship,ACTIONSTEP,sum(invoice.total_amount) where status = 'paid'
+billing_period,Billing Period,string,Time period for billing analysis,"one of predefined periods",Time frame for revenue and billing calculations,ACTIONSTEP,calculated based on invoice.invoice_date
+matter_count,Matter Count,integer,Number of matters for client,">= 0",Count of legal matters associated with the client,ACTIONSTEP,count(matters) where client_id = participant.participant_id
+outstanding_balance,Outstanding Balance,decimal,Amount owed by client,">= 0, max 12 digits",Total unpaid invoice amount for the client,ACTIONSTEP,sum(invoice.total_amount) where status != 'paid'
+total_fees,Total Fees,decimal,Total fees charged for matter,"> 0, max 12 digits",Sum of all professional fees charged to the matter,ACTIONSTEP,sum(time_entry.billable_amount) + sum(disbursement.amount)
+total_costs,Total Costs,decimal,Total costs incurred for matter,">= 0, max 12 digits",Sum of all costs and expenses for the matter,ACTIONSTEP,sum(disbursement.cost_amount) + allocated_overhead
+profit_margin,Profit Margin,decimal,Profit margin percentage for matter,"0-100, 2 decimal places",Calculated profit margin as percentage of fees minus costs,ACTIONSTEP,(total_fees - total_costs) / total_fees * 100
+practice_area,Practice Area,string,Legal practice area,"one of predefined areas",Classification of legal practice area or specialty,ACTIONSTEP,matter.practice_area or matter_type.category
+fee_earner_id,Fee Earner ID,string,Unique identifier for fee earner,"alphanumeric, max 20 chars",Unique identifier for legal professional in the system,ACTIONSTEP,participant.participant_id where participant_type in ('partner', 'associate', 'paralegal')
+fee_earner_name,Fee Earner Name,string,Name of the fee earner,"max 100 chars",Full name of the legal professional,ACTIONSTEP,participant.display_name
+billable_hours,Billable Hours,decimal,Number of billable hours,">= 0, max 4 decimal places",Hours that can be charged to clients for legal work,ACTIONSTEP,sum(time_entry.billable_hours)
+non_billable_hours,Non-Billable Hours,decimal,Number of non-billable hours,">= 0, max 4 decimal places",Hours spent on administrative or pro bono work,ACTIONSTEP,sum(time_entry.non_billable_hours)
+entry_date,Entry Date,date,Date of time entry,"format: YYYY-MM-DD, not future date",Calendar date when time was recorded,ACTIONSTEP,time_entry.entry_date
+hourly_rate,Hourly Rate,decimal,Billing rate per hour,"> 0, max 6 digits",Standard hourly billing rate for the fee earner,ACTIONSTEP,participant.standard_rate
+utilization_rate,Utilization Rate,decimal,Percentage of time utilized,"0-100, 2 decimal places",Percentage of available time spent on billable work,ACTIONSTEP,billable_hours / total_available_hours * 100
+target_hours,Target Hours,decimal,Target billable hours,"> 0, max 4 decimal places",Expected or target number of billable hours,ACTIONSTEP,participant.target_hours or firm_standards.target_hours
+actual_hours,Actual Hours,decimal,Actual hours worked,">= 0, max 4 decimal places",Total hours actually worked including billable and non-billable,ACTIONSTEP,sum(time_entry.total_hours)
+department,Department,string,Department or practice group,"max 100 chars",Organizational department within the law firm,ACTIONSTEP,participant.department or practice_group.name
+trust_account_id,Trust Account ID,string,Unique identifier for trust account,"alphanumeric, max 20 chars",Unique identifier for client trust account,ACTIONSTEP,trust_account.account_id
+account_balance,Account Balance,decimal,Current balance in trust account,">= 0, max 12 digits",Current monetary balance in the client trust account,ACTIONSTEP,trust_account.current_balance
+last_reconciled,Last Reconciled,date,Date of last reconciliation,"format: YYYY-MM-DD",Most recent date when trust account was reconciled,ACTIONSTEP,trust_account.last_reconciliation_date
+reconciliation_status,Reconciliation Status,string,Status of account reconciliation,"one of predefined statuses",Current status of trust account reconciliation process,ACTIONSTEP,trust_account.reconciliation_status
+invoice_id,Invoice ID,string,Unique identifier for invoice,"alphanumeric, max 20 chars",Unique identifier for client invoice,ACTIONSTEP,invoice.invoice_id
+invoice_amount,Invoice Amount,decimal,Total amount of invoice,"> 0, max 12 digits",Total monetary amount of the invoice including fees and costs,ACTIONSTEP,invoice.total_amount
+invoice_date,Invoice Date,date,Date invoice was issued,"format: YYYY-MM-DD, not future date",Calendar date when invoice was created and sent,ACTIONSTEP,invoice.invoice_date
+payment_status,Payment Status,string,Current payment status of invoice,"one of predefined statuses",Status indicating whether invoice has been paid,ACTIONSTEP,invoice.payment_status
+days_outstanding,Days Outstanding,integer,Number of days invoice is outstanding,">= 0",Number of days since invoice was issued without payment,ACTIONSTEP,current_date - invoice.invoice_date where payment_status != 'paid'
+document_count,Document Count,integer,Total number of documents,">= 0",Count of documents in matter or document review,ACTIONSTEP,count(documents) for matter
+reviewed_count,Reviewed Count,integer,Number of documents reviewed,">= 0",Count of documents that have been reviewed,ACTIONSTEP,count(documents) where review_status = 'reviewed'
+production_status,Production Status,string,Status of document production,"one of predefined statuses",Current status of document production process,ACTIONSTEP,document_production.status
+due_date,Due Date,date,Due date for task or production,"format: YYYY-MM-DD",Deadline for completion of task or document production,ACTIONSTEP,task.due_date or production.due_date
+standard_rate,Standard Rate,decimal,Standard billing rate,"> 0, max 6 digits",Standard hourly rate for the fee earner,ACTIONSTEP,participant.standard_rate
+effective_rate,Effective Rate,decimal,Effective billing rate after adjustments,"> 0, max 6 digits",Actual rate achieved after discounts and adjustments,ACTIONSTEP,total_billed_amount / total_billable_hours
+seniority_level,Seniority Level,string,Professional seniority level,"one of predefined levels",Professional level within the law firm hierarchy,ACTIONSTEP,participant.seniority_level
+court_date,Court Date,date,Date of court appearance,"format: YYYY-MM-DD",Scheduled date for court hearing or appearance,ACTIONSTEP,court_appearance.appearance_date
+court_name,Court Name,string,Name of the court,"max 200 chars",Official name of the court or tribunal,ACTIONSTEP,court_appearance.court_name
+hearing_type,Hearing Type,string,Type of court hearing,"one of predefined types",Classification of the type of court proceeding,ACTIONSTEP,court_appearance.hearing_type
+attending_counsel,Attending Counsel,string,Counsel attending court,"max 100 chars",Name of legal professional attending the court hearing,ACTIONSTEP,court_appearance.attending_participant
+conflict_status,Conflict Status,string,Status of conflict check,"one of predefined statuses",Result of conflict of interest check,ACTIONSTEP,conflict_check.status
+check_date,Check Date,date,Date conflict check was performed,"format: YYYY-MM-DD, not future date",Calendar date when conflict check was conducted,ACTIONSTEP,conflict_check.check_date
+checked_by,Checked By,string,Person who performed conflict check,"max 100 chars",Name of person who conducted the conflict check,ACTIONSTEP,conflict_check.checked_by_participant
+wip_amount,WIP Amount,decimal,Work in progress amount,">= 0, max 12 digits",Monetary value of unbilled work in progress,ACTIONSTEP,sum(time_entry.billable_amount) where invoice_id is null
+aging_bucket,Aging Bucket,string,Age category for WIP,"one of predefined buckets",Time-based category for aging work in progress,ACTIONSTEP,calculated based on time_entry.entry_date
+tasks_completed,Tasks Completed,integer,Number of completed tasks,">= 0",Count of tasks that have been completed,ACTIONSTEP,count(tasks) where status = 'completed'
+tasks_pending,Tasks Pending,integer,Number of pending tasks,">= 0",Count of tasks that are still pending completion,ACTIONSTEP,count(tasks) where status in ('pending', 'in_progress')
+completion_rate,Completion Rate,decimal,Percentage of tasks completed,"0-100, 2 decimal places",Percentage of assigned tasks that have been completed,ACTIONSTEP,tasks_completed / (tasks_completed + tasks_pending) * 100
+avg_completion_time,Average Completion Time,decimal,Average time to complete tasks,">= 0, 2 decimal places",Average number of days to complete assigned tasks,ACTIONSTEP,avg(completion_date - assignment_date) in days
+communication_date,Communication Date,date,Date of client communication,"format: YYYY-MM-DD, not future date",Calendar date when communication with client occurred,ACTIONSTEP,communication.communication_date
+communication_type,Communication Type,string,Type of communication,"one of predefined types",Method or type of client communication,ACTIONSTEP,communication.communication_type
+response_time_hours,Response Time (Hours),decimal,Response time in hours,">= 0, 2 decimal places",Number of hours between client inquiry and response,ACTIONSTEP,response_date - inquiry_date in hours
+monthly_billings,Monthly Billings,decimal,Total monthly billings,">= 0, max 12 digits",Total amount billed by fee earner in the month,ACTIONSTEP,sum(time_entry.billable_amount) for month
+realization_rate,Realization Rate,decimal,Percentage of time entries collected,"0-100, 2 decimal places",Percentage of billed time that has been collected,ACTIONSTEP,collected_amount / billed_amount * 100
+client_origination,Client Origination,integer,Number of clients originated,">= 0",Count of new clients brought in by the fee earner,ACTIONSTEP,count(distinct client_id) where originating_partner = fee_earner_id
+budgeted_amount,Budgeted Amount,decimal,Budgeted amount for matter,"> 0, max 12 digits",Approved budget amount for the legal matter,ACTIONSTEP,matter_budget.budgeted_amount
+actual_amount,Actual Amount,decimal,Actual amount spent on matter,">= 0, max 12 digits",Actual amount of fees and costs incurred for matter,ACTIONSTEP,sum(time_entries.amount) + sum(disbursements.amount)
+variance_percentage,Variance %,decimal,Budget variance percentage,"-100 to unlimited, 2 decimal places",Percentage difference between actual and budgeted amounts,ACTIONSTEP,(actual_amount - budgeted_amount) / budgeted_amount * 100
+budget_status,Budget Status,string,Status relative to budget,"one of predefined statuses",Indicator of whether matter is over or under budget,ACTIONSTEP,calculated based on variance_percentage
+disbursement_id,Disbursement ID,string,Unique identifier for disbursement,"alphanumeric, max 20 chars",Unique identifier for expense or disbursement record,ACTIONSTEP,disbursement.disbursement_id
+disbursement_amount,Disbursement Amount,decimal,Amount of disbursement,"> 0, max 10 digits",Monetary amount of the expense or disbursement,ACTIONSTEP,disbursement.amount
+disbursement_type,Disbursement Type,string,Type of disbursement,"one of predefined types",Category or type of expense incurred,ACTIONSTEP,disbursement.disbursement_type
+reimbursement_status,Reimbursement Status,string,Status of reimbursement,"one of predefined statuses",Current status of expense reimbursement process,ACTIONSTEP,disbursement.reimbursement_status
+revenue_amount,Revenue Amount,decimal,Total revenue amount,"> 0, max 12 digits",Total revenue generated from practice area,ACTIONSTEP,sum(invoice.total_amount) where status = 'paid'
+avg_matter_value,Average Matter Value,decimal,Average value per matter,">= 0, max 12 digits",Average revenue generated per matter in practice area,ACTIONSTEP,total_revenue / matter_count
+growth_rate,Growth Rate,decimal,Revenue growth rate percentage,"-100 to unlimited, 2 decimal places",Year-over-year growth rate for practice area revenue,ACTIONSTEP,(current_year_revenue - prior_year_revenue) / prior_year_revenue * 100
+satisfaction_score,Satisfaction Score,decimal,Client satisfaction rating,"1-10, 2 decimal places",Client satisfaction score from surveys and feedback,ACTIONSTEP,avg(client_survey.satisfaction_rating)
+survey_date,Survey Date,date,Date of satisfaction survey,"format: YYYY-MM-DD, not future date",Calendar date when client satisfaction survey was conducted,ACTIONSTEP,client_survey.survey_date
+feedback_category,Feedback Category,string,Category of client feedback,"one of predefined categories",Classification of the type of client feedback received,ACTIONSTEP,client_survey.feedback_category

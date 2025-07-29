@@ -1,7 +1,7 @@
 // Phase status computation utilities
 // Restored from sidebar-recovery-branch commit 64a589c
 
-import type { Phase, PhaseStep } from '../types/models';
+import type { Phase } from '../types/models'; // no-unused-vars fix
 
 export type ComputedPhaseStatus = 'not_started' | 'in_progress' | 'complete' | 'blocked';
 

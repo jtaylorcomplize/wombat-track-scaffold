@@ -1,0 +1,116 @@
+{
+  "id": "act_002",
+  "name": "Deadline Tracker",
+  "description": "Critical deadlines and upcoming due dates across all matters",
+  "category": "matter_management",
+  "data_source": {
+    "primary_table": "actionstep_matter_management",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "matter_id",
+        "display_name": "Matter ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "deadline_date",
+        "display_name": "Deadline Date",
+        "data_type": "date",
+        "format": "YYYY-MM-DD"
+      },
+      {
+        "field_name": "deadline_type",
+        "display_name": "Deadline Type",
+        "data_type": "string"
+      },
+      {
+        "field_name": "matter_name",
+        "display_name": "Matter Name",
+        "data_type": "string"
+      },
+      {
+        "field_name": "assigned_fee_earner",
+        "display_name": "Assigned Fee Earner",
+        "data_type": "string"
+      },
+      {
+        "field_name": "priority_level",
+        "display_name": "Priority Level",
+        "data_type": "string"
+      }
+    ],
+    "metrics": []
+  },
+  "filters": {
+    "default_filters": [
+      {
+        "field_name": "deadline_date",
+        "operator": "equals",
+        "value": "next_30_days"
+      }
+    ],
+    "available_filters": [
+      {
+        "field_name": "deadline_date",
+        "display_name": "Deadline Date",
+        "filter_type": "date_range",
+        "options": [
+          "\"next_7_days"
+        ]
+      },
+      {
+        "field_name": "deadline_type",
+        "display_name": "Deadline Type",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Court Filing"
+        ]
+      },
+      {
+        "field_name": "priority_level",
+        "display_name": "Priority Level",
+        "filter_type": "dropdown",
+        "options": [
+          "\"High"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "bar_chart",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "all_users"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.227Z",
+    "last_modified": "2025-07-29T02:54:05.227Z",
+    "version": "2.2",
+    "tags": [
+      "matter management",
+      "high",
+      "matter_management"
+    ]
+  },
+  "validation": {
+    "matched_view": "v_actionstep_matter_management",
+    "missing_fields": [],
+    "filter_issues": [],
+    "notes": [
+      "All fields validated successfully",
+      "All filters validated successfully",
+      "Card contains only dimensions, no metrics defined"
+    ]
+  }
+}

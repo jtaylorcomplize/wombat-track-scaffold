@@ -1,0 +1,1528 @@
+{
+  "parentPageId": "23ce1901-e36e-805b-bf5e-e42eb1204a13",
+  "parentPageUrl": "https://www.notion.so/roammigrationlaw/Canonical-Notion-WT-App-23ce1901e36e805bbf5ee42eb1204a13",
+  "scannedAt": "2025-07-29T03:32:42.801Z",
+  "databases": [
+    {
+      "id": "09b2779e-09b2-4588-a0f6-962e7fc700e8",
+      "title": "Wombat_Track_Phase_Plan_Template",
+      "url": "https://www.notion.so/09b2779e09b24588a0f6962e7fc700e8",
+      "fields": [
+        {
+          "name": "Reviewed",
+          "type": "checkbox",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Estimated Work Blocks",
+          "type": "number",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Template Used",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Dependencies",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 2,
+          "totalRecords": 5
+        },
+        {
+          "name": "Step Name",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Status",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Step Number",
+          "type": "number",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Notes",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Driver",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5,
+          "options": [
+            "Gizmo",
+            "User"
+          ]
+        },
+        {
+          "name": "Phase",
+          "type": "title",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        }
+      ],
+      "recordCount": 5,
+      "emptyFieldAnalysis": [
+        {
+          "fieldName": "Dependencies",
+          "emptyCount": 2,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (2/5 empty)"
+        }
+      ]
+    },
+    {
+      "id": "216e1901-e36e-80ee-aa95-cfba6f83fc99",
+      "title": "Wombat_Track_Phase_Plan_Template",
+      "url": "https://www.notion.so/216e1901e36e80eeaa95cfba6f83fc99",
+      "fields": [
+        {
+          "name": "Est Work Blocks",
+          "type": "number",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Reviewed",
+          "type": "checkbox",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Driver",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5,
+          "options": [
+            "Gizmo",
+            "User"
+          ]
+        },
+        {
+          "name": "Step Number",
+          "type": "number",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Phase",
+          "type": "number",
+          "required": false,
+          "emptyCount": 2,
+          "totalRecords": 5
+        },
+        {
+          "name": "Template Used",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Dependencies",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 2,
+          "totalRecords": 5
+        },
+        {
+          "name": "Notes",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "Status",
+          "type": "status",
+          "required": false,
+          "emptyCount": 5,
+          "totalRecords": 5
+        },
+        {
+          "name": "Step Name",
+          "type": "title",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        }
+      ],
+      "recordCount": 5,
+      "emptyFieldAnalysis": [
+        {
+          "fieldName": "Phase",
+          "emptyCount": 2,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "Dependencies",
+          "emptyCount": 2,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (2/5 empty)"
+        },
+        {
+          "fieldName": "Status",
+          "emptyCount": 5,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (5/5 empty)"
+        }
+      ]
+    },
+    {
+      "id": "23de1901-e36e-8172-9dad-cbec537f6d0d",
+      "title": "WT Docs Artefact",
+      "url": "https://www.notion.so/23de1901e36e81729dadcbec537f6d0d",
+      "fields": [
+        {
+          "name": "Status",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 1,
+          "options": [
+            "Draft",
+            "Review",
+            "Approved",
+            "Archived"
+          ]
+        },
+        {
+          "name": "Type",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 1,
+          "options": [
+            "Draft Instruction",
+            "Policy Document",
+            "Summary",
+            "Template",
+            "Diagram"
+          ]
+        },
+        {
+          "name": "Created",
+          "type": "date",
+          "required": false,
+          "emptyCount": 1,
+          "totalRecords": 1
+        },
+        {
+          "name": "Content",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 1
+        },
+        {
+          "name": "Title",
+          "type": "title",
+          "required": true,
+          "emptyCount": 0,
+          "totalRecords": 1
+        }
+      ],
+      "recordCount": 1,
+      "emptyFieldAnalysis": [
+        {
+          "fieldName": "Created",
+          "emptyCount": 1,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (1/1 empty)"
+        }
+      ]
+    },
+    {
+      "id": "23ce1901-e36e-81be-b6b8-e576174024e5",
+      "title": "WT Phase Database",
+      "url": "https://www.notion.so/23ce1901e36e81beb6b8e576174024e5",
+      "fields": [
+        {
+          "name": "startDate",
+          "type": "date",
+          "required": false,
+          "emptyCount": 34,
+          "totalRecords": 37
+        },
+        {
+          "name": "WT Projects 1",
+          "type": "relation",
+          "required": false,
+          "emptyCount": 3,
+          "totalRecords": 37
+        },
+        {
+          "name": "endDate",
+          "type": "date",
+          "required": false,
+          "emptyCount": 34,
+          "totalRecords": 37
+        },
+        {
+          "name": "RAG",
+          "type": "select",
+          "required": false,
+          "emptyCount": 32,
+          "totalRecords": 37,
+          "options": [
+            "Red",
+            "Amber",
+            "Green"
+          ]
+        },
+        {
+          "name": "phaseid",
+          "type": "rich_text",
+          "required": true,
+          "emptyCount": 6,
+          "totalRecords": 37
+        },
+        {
+          "name": "projectId",
+          "type": "rich_text",
+          "required": true,
+          "emptyCount": 33,
+          "totalRecords": 37
+        },
+        {
+          "name": "notes",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 4,
+          "totalRecords": 37
+        },
+        {
+          "name": "WT Projects",
+          "type": "relation",
+          "required": false,
+          "emptyCount": 4,
+          "totalRecords": 37
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": false,
+          "emptyCount": 5,
+          "totalRecords": 37,
+          "options": [
+            "Planned",
+            "In Progress",
+            "Complete",
+            "Done"
+          ]
+        },
+        {
+          "name": "phasename",
+          "type": "title",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 37
+        }
+      ],
+      "recordCount": 37,
+      "emptyFieldAnalysis": [
+        {
+          "fieldName": "startDate",
+          "emptyCount": 34,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (34/37 empty)"
+        },
+        {
+          "fieldName": "WT Projects 1",
+          "emptyCount": 3,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "endDate",
+          "emptyCount": 34,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (34/37 empty)"
+        },
+        {
+          "fieldName": "RAG",
+          "emptyCount": 32,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (32/37 empty)"
+        },
+        {
+          "fieldName": "phaseid",
+          "emptyCount": 6,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "projectId",
+          "emptyCount": 33,
+          "fillable": true,
+          "confidenceLevel": "medium",
+          "suggestedValue": "AUTO-1753759903956",
+          "reasoning": "Generate unique project identifier based on timestamp"
+        },
+        {
+          "fieldName": "notes",
+          "emptyCount": 4,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (4/37 empty)"
+        },
+        {
+          "fieldName": "WT Projects",
+          "emptyCount": 4,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "status",
+          "emptyCount": 5,
+          "fillable": true,
+          "confidenceLevel": "high",
+          "suggestedValue": "Active",
+          "reasoning": "Default status for new records based on database type"
+        }
+      ]
+    },
+    {
+      "id": "23ce1901-e36e-814e-997c-defb8b71667a",
+      "title": "WT PhaseStep Database",
+      "url": "https://www.notion.so/23ce1901e36e814e997cdefb8b71667a",
+      "fields": [
+        {
+          "name": "notes",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 8
+        },
+        {
+          "name": "linkedPhase",
+          "type": "relation",
+          "required": false,
+          "emptyCount": 4,
+          "totalRecords": 8
+        },
+        {
+          "name": "stepNumber",
+          "type": "number",
+          "required": false,
+          "emptyCount": 8,
+          "totalRecords": 8
+        },
+        {
+          "name": "artefacts",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 2,
+          "totalRecords": 8
+        },
+        {
+          "name": "WT Projects",
+          "type": "relation",
+          "required": false,
+          "emptyCount": 8,
+          "totalRecords": 8
+        },
+        {
+          "name": "completionStatus",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 8,
+          "options": [
+            "Planned",
+            "In Progress",
+            "Done"
+          ]
+        },
+        {
+          "name": "chatLink",
+          "type": "url",
+          "required": false,
+          "emptyCount": 8,
+          "totalRecords": 8
+        },
+        {
+          "name": "linkedFeature",
+          "type": "multi_select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 8,
+          "options": [
+            "GizmoConsole",
+            "GovernanceLog",
+            "LiveDispatch",
+            "SlashCommand"
+          ]
+        },
+        {
+          "name": "aiSuggestedTemplateIds",
+          "type": "rich_text",
+          "required": true,
+          "emptyCount": 8,
+          "totalRecords": 8
+        },
+        {
+          "name": "stepName",
+          "type": "title",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 8
+        }
+      ],
+      "recordCount": 8,
+      "emptyFieldAnalysis": [
+        {
+          "fieldName": "linkedPhase",
+          "emptyCount": 4,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "stepNumber",
+          "emptyCount": 8,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (8/8 empty)"
+        },
+        {
+          "fieldName": "artefacts",
+          "emptyCount": 2,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (2/8 empty)"
+        },
+        {
+          "fieldName": "WT Projects",
+          "emptyCount": 8,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "chatLink",
+          "emptyCount": 8,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "aiSuggestedTemplateIds",
+          "emptyCount": 8,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (8/8 empty)"
+        }
+      ]
+    },
+    {
+      "id": "23ce1901-e36e-811b-946b-c3e7d764c335",
+      "title": "WT Projects",
+      "url": "https://www.notion.so/23ce1901e36e811b946bc3e7d764c335",
+      "fields": [
+        {
+          "name": "createdAt",
+          "type": "created_time",
+          "required": false,
+          "emptyCount": 16,
+          "totalRecords": 16
+        },
+        {
+          "name": "StepProgress",
+          "type": "relation",
+          "required": false,
+          "emptyCount": 16,
+          "totalRecords": 16
+        },
+        {
+          "name": "aiPromptLog",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 15,
+          "totalRecords": 16
+        },
+        {
+          "name": "CheckpointReview",
+          "type": "relation",
+          "required": false,
+          "emptyCount": 16,
+          "totalRecords": 16
+        },
+        {
+          "name": "Phase",
+          "type": "relation",
+          "required": false,
+          "emptyCount": 7,
+          "totalRecords": 16
+        },
+        {
+          "name": "GovLog",
+          "type": "relation",
+          "required": false,
+          "emptyCount": 12,
+          "totalRecords": 16
+        },
+        {
+          "name": "projectID",
+          "type": "rich_text",
+          "required": true,
+          "emptyCount": 16,
+          "totalRecords": 16
+        },
+        {
+          "name": "updatedAt",
+          "type": "last_edited_time",
+          "required": false,
+          "emptyCount": 16,
+          "totalRecords": 16
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 16,
+          "options": [
+            "Planning",
+            "Active",
+            "On Hold",
+            "Completed",
+            "Archived"
+          ]
+        },
+        {
+          "name": "owner",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 16,
+          "totalRecords": 16
+        },
+        {
+          "name": "scopeNotes",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 1,
+          "totalRecords": 16
+        },
+        {
+          "name": "claude-gizmo-exchange",
+          "type": "relation",
+          "required": false,
+          "emptyCount": 16,
+          "totalRecords": 16
+        },
+        {
+          "name": "keyTasks",
+          "type": "multi_select",
+          "required": false,
+          "emptyCount": 16,
+          "totalRecords": 16,
+          "options": [
+            "Analysis",
+            "Design",
+            "Implementation",
+            "Testing",
+            "Deployment",
+            "Documentation"
+          ]
+        },
+        {
+          "name": "goals",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 16
+        },
+        {
+          "name": "description",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 6,
+          "totalRecords": 16
+        },
+        {
+          "name": "MeetingLog",
+          "type": "relation",
+          "required": false,
+          "emptyCount": 16,
+          "totalRecords": 16
+        },
+        {
+          "name": "WT PhaseStep Database",
+          "type": "relation",
+          "required": false,
+          "emptyCount": 16,
+          "totalRecords": 16
+        },
+        {
+          "name": "tags",
+          "type": "multi_select",
+          "required": false,
+          "emptyCount": 11,
+          "totalRecords": 16,
+          "options": [
+            "AI-Enhanced",
+            "Governance",
+            "Integration",
+            "Migration",
+            "Testing",
+            "Strategy",
+            "SDLC"
+          ]
+        },
+        {
+          "name": "Title",
+          "type": "title",
+          "required": true,
+          "emptyCount": 0,
+          "totalRecords": 16
+        }
+      ],
+      "recordCount": 16,
+      "emptyFieldAnalysis": [
+        {
+          "fieldName": "createdAt",
+          "emptyCount": 16,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (16/16 empty)"
+        },
+        {
+          "fieldName": "StepProgress",
+          "emptyCount": 16,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "aiPromptLog",
+          "emptyCount": 15,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "CheckpointReview",
+          "emptyCount": 16,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (16/16 empty)"
+        },
+        {
+          "fieldName": "Phase",
+          "emptyCount": 7,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "GovLog",
+          "emptyCount": 12,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (12/16 empty)"
+        },
+        {
+          "fieldName": "projectID",
+          "emptyCount": 16,
+          "fillable": true,
+          "confidenceLevel": "medium",
+          "suggestedValue": "AUTO-1753759877283",
+          "reasoning": "Generate unique project identifier based on timestamp"
+        },
+        {
+          "fieldName": "updatedAt",
+          "emptyCount": 16,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (16/16 empty)"
+        },
+        {
+          "fieldName": "owner",
+          "emptyCount": 16,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Ownership assignment requires business judgment - manual review needed"
+        },
+        {
+          "fieldName": "scopeNotes",
+          "emptyCount": 1,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (1/16 empty)"
+        },
+        {
+          "fieldName": "claude-gizmo-exchange",
+          "emptyCount": 16,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (16/16 empty)"
+        },
+        {
+          "fieldName": "keyTasks",
+          "emptyCount": 16,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (16/16 empty)"
+        },
+        {
+          "fieldName": "description",
+          "emptyCount": 6,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (6/16 empty)"
+        },
+        {
+          "fieldName": "MeetingLog",
+          "emptyCount": 16,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (16/16 empty)"
+        },
+        {
+          "fieldName": "WT PhaseStep Database",
+          "emptyCount": 16,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "tags",
+          "emptyCount": 11,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (11/16 empty)"
+        }
+      ]
+    },
+    {
+      "id": "23ce1901-e36e-81fa-b001-efdbd198c559",
+      "title": "WT Projects",
+      "url": "https://www.notion.so/23ce1901e36e81fab001efdbd198c559",
+      "fields": [
+        {
+          "name": "owner",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 0
+        },
+        {
+          "name": "updatedAt",
+          "type": "last_edited_time",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 0
+        },
+        {
+          "name": "tags",
+          "type": "multi_select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 0,
+          "options": [
+            "AI-Enhanced",
+            "Governance",
+            "Integration",
+            "Migration",
+            "Testing"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 0,
+          "options": [
+            "Planning",
+            "Active",
+            "On Hold",
+            "Completed",
+            "Archived"
+          ]
+        },
+        {
+          "name": "createdAt",
+          "type": "created_time",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 0
+        },
+        {
+          "name": "aiPromptLog",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 0
+        },
+        {
+          "name": "title",
+          "type": "rich_text",
+          "required": true,
+          "emptyCount": 0,
+          "totalRecords": 0
+        },
+        {
+          "name": "description",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 0
+        },
+        {
+          "name": "projectId",
+          "type": "title",
+          "required": true,
+          "emptyCount": 0,
+          "totalRecords": 0
+        }
+      ],
+      "recordCount": 0,
+      "emptyFieldAnalysis": []
+    },
+    {
+      "id": "23fe1901-e36e-8182-a7ab-dbf4441d82f0",
+      "title": "wt-backfill-task-tracker",
+      "url": "https://www.notion.so/23fe1901e36e8182a7abdbf4441d82f0",
+      "fields": [
+        {
+          "name": "category",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5,
+          "options": [
+            "Data Quality",
+            "Relationships",
+            "Governance",
+            "Migration"
+          ]
+        },
+        {
+          "name": "estimatedEffort",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5,
+          "options": [
+            "<30min",
+            "1-2 hours",
+            "1+ days",
+            "Automated"
+          ]
+        },
+        {
+          "name": "assignee",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "priority",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5,
+          "options": [
+            "High",
+            "Medium",
+            "Low"
+          ]
+        },
+        {
+          "name": "notes",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "recordsAffected",
+          "type": "number",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "suggestedFix",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "updatedAt",
+          "type": "last_edited_time",
+          "required": false,
+          "emptyCount": 5,
+          "totalRecords": 5
+        },
+        {
+          "name": "databaseName",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5,
+          "options": [
+            "wt-project-tracker",
+            "wt-claude-gizmo-comm",
+            "wt-tech-debt-register",
+            "wt-schema-sync-report",
+            "Multiple Databases"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5,
+          "options": [
+            "Open",
+            "In Progress",
+            "Resolved",
+            "Deferred",
+            "Blocked"
+          ]
+        },
+        {
+          "name": "linkedPhase",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 1,
+          "totalRecords": 5
+        },
+        {
+          "name": "issueType",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5,
+          "options": [
+            "Missing Field",
+            "Orphaned Entry",
+            "Relationship Mismatch",
+            "Invalid Value",
+            "Data Quality"
+          ]
+        },
+        {
+          "name": "createdAt",
+          "type": "created_time",
+          "required": false,
+          "emptyCount": 5,
+          "totalRecords": 5
+        },
+        {
+          "name": "taskTitle",
+          "type": "title",
+          "required": true,
+          "emptyCount": 0,
+          "totalRecords": 5
+        }
+      ],
+      "recordCount": 5,
+      "emptyFieldAnalysis": [
+        {
+          "fieldName": "updatedAt",
+          "emptyCount": 5,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (5/5 empty)"
+        },
+        {
+          "fieldName": "linkedPhase",
+          "emptyCount": 1,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "createdAt",
+          "emptyCount": 5,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (5/5 empty)"
+        }
+      ]
+    },
+    {
+      "id": "23de1901-e36e-810b-8e56-c59721bcb3e1",
+      "title": "wt-governance-memory",
+      "url": "https://www.notion.so/23de1901e36e810b8e56c59721bcb3e1",
+      "fields": [
+        {
+          "name": "confidence",
+          "type": "select",
+          "required": true,
+          "emptyCount": 0,
+          "totalRecords": 1,
+          "options": [
+            "High",
+            "Medium",
+            "Low"
+          ]
+        },
+        {
+          "name": "agent",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 1,
+          "options": [
+            "Claude",
+            "Gizmo",
+            "Human"
+          ]
+        },
+        {
+          "name": "decision",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 1
+        },
+        {
+          "name": "projectId",
+          "type": "relation",
+          "required": true,
+          "emptyCount": 1,
+          "totalRecords": 1
+        },
+        {
+          "name": "RAG",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 1,
+          "options": [
+            "Red",
+            "Amber",
+            "Green"
+          ]
+        },
+        {
+          "name": "phaseId",
+          "type": "relation",
+          "required": true,
+          "emptyCount": 1,
+          "totalRecords": 1
+        },
+        {
+          "name": "timestamp",
+          "type": "date",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 1
+        },
+        {
+          "name": "eventType",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 1,
+          "options": [
+            "Decision",
+            "PhaseUpdate",
+            "StatusChange",
+            "RiskAssessment",
+            "Approval"
+          ]
+        },
+        {
+          "name": "eventId",
+          "type": "title",
+          "required": true,
+          "emptyCount": 0,
+          "totalRecords": 1
+        }
+      ],
+      "recordCount": 1,
+      "emptyFieldAnalysis": [
+        {
+          "fieldName": "projectId",
+          "emptyCount": 1,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "phaseId",
+          "emptyCount": 1,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        }
+      ]
+    },
+    {
+      "id": "23de1901-e36e-812e-986e-c3dac934e20e",
+      "title": "wt-project-tracker",
+      "url": "https://www.notion.so/23de1901e36e812e986ec3dac934e20e",
+      "fields": [
+        {
+          "name": "status",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 2,
+          "options": [
+            "Planning",
+            "Active",
+            "On Hold",
+            "Completed",
+            "Cancelled"
+          ]
+        },
+        {
+          "name": "currentPhase",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 2
+        },
+        {
+          "name": "lastUpdated",
+          "type": "date",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 2
+        },
+        {
+          "name": "projectName",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 2
+        },
+        {
+          "name": "owner",
+          "type": "people",
+          "required": false,
+          "emptyCount": 2,
+          "totalRecords": 2
+        },
+        {
+          "name": "projectId",
+          "type": "title",
+          "required": true,
+          "emptyCount": 0,
+          "totalRecords": 2
+        }
+      ],
+      "recordCount": 2,
+      "emptyFieldAnalysis": [
+        {
+          "fieldName": "owner",
+          "emptyCount": 2,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Ownership assignment requires business judgment - manual review needed"
+        }
+      ]
+    },
+    {
+      "id": "23fe1901-e36e-819a-8dc3-dd45deaae36e",
+      "title": "wt-schema-sync-report",
+      "url": "https://www.notion.so/23fe1901e36e819a8dc3dd45deaae36e",
+      "fields": [
+        {
+          "name": "createdAt",
+          "type": "created_time",
+          "required": false,
+          "emptyCount": 5,
+          "totalRecords": 5
+        },
+        {
+          "name": "canonicalSource",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "resolution",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5,
+          "options": [
+            "Map",
+            "Add",
+            "Ignore",
+            "Deprecate"
+          ]
+        },
+        {
+          "name": "fieldName",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5,
+          "options": [
+            "Open",
+            "In Progress",
+            "Resolved",
+            "Deferred"
+          ]
+        },
+        {
+          "name": "issueType",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5,
+          "options": [
+            "Missing",
+            "Renamed",
+            "Deprecated",
+            "Type Mismatch",
+            "Extra Field"
+          ]
+        },
+        {
+          "name": "updatedAt",
+          "type": "last_edited_time",
+          "required": false,
+          "emptyCount": 5,
+          "totalRecords": 5
+        },
+        {
+          "name": "linkedPhase",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "notes",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        },
+        {
+          "name": "tableName",
+          "type": "title",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 5
+        }
+      ],
+      "recordCount": 5,
+      "emptyFieldAnalysis": [
+        {
+          "fieldName": "createdAt",
+          "emptyCount": 5,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (5/5 empty)"
+        },
+        {
+          "fieldName": "updatedAt",
+          "emptyCount": 5,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (5/5 empty)"
+        }
+      ]
+    },
+    {
+      "id": "23fe1901-e36e-815b-890e-d32337b3ca8b",
+      "title": "wt-tech-debt-register",
+      "url": "https://www.notion.so/23fe1901e36e815b890ed32337b3ca8b",
+      "fields": [
+        {
+          "name": "status",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 20,
+          "options": [
+            "Open",
+            "Suppressed",
+            "Fixed",
+            "Deferred"
+          ]
+        },
+        {
+          "name": "notes",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 20
+        },
+        {
+          "name": "canonicalUse",
+          "type": "checkbox",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 20
+        },
+        {
+          "name": "lineReference",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 20
+        },
+        {
+          "name": "originFile",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 20
+        },
+        {
+          "name": "priority",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 20,
+          "options": [
+            "High",
+            "Medium",
+            "Low"
+          ]
+        },
+        {
+          "name": "linkedPR",
+          "type": "url",
+          "required": false,
+          "emptyCount": 20,
+          "totalRecords": 20
+        },
+        {
+          "name": "effortEstimate",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 20
+        },
+        {
+          "name": "linkedPhase",
+          "type": "rich_text",
+          "required": false,
+          "emptyCount": 20,
+          "totalRecords": 20
+        },
+        {
+          "name": "updatedAt",
+          "type": "last_edited_time",
+          "required": false,
+          "emptyCount": 20,
+          "totalRecords": 20
+        },
+        {
+          "name": "category",
+          "type": "select",
+          "required": false,
+          "emptyCount": 0,
+          "totalRecords": 20,
+          "options": [
+            "Lint",
+            "Dead Code",
+            "Structural",
+            "Design Debt",
+            "Legacy"
+          ]
+        },
+        {
+          "name": "createdAt",
+          "type": "created_time",
+          "required": false,
+          "emptyCount": 20,
+          "totalRecords": 20
+        },
+        {
+          "name": "title",
+          "type": "title",
+          "required": true,
+          "emptyCount": 0,
+          "totalRecords": 20
+        }
+      ],
+      "recordCount": 20,
+      "emptyFieldAnalysis": [
+        {
+          "fieldName": "linkedPR",
+          "emptyCount": 20,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "linkedPhase",
+          "emptyCount": 20,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Relationship or reference field requires contextual knowledge - manual review needed"
+        },
+        {
+          "fieldName": "updatedAt",
+          "emptyCount": 20,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (20/20 empty)"
+        },
+        {
+          "fieldName": "createdAt",
+          "emptyCount": 20,
+          "fillable": false,
+          "confidenceLevel": "low",
+          "reasoning": "Unknown field pattern - requires manual review (20/20 empty)"
+        }
+      ]
+    }
+  ],
+  "totalDatabases": 12,
+  "totalRecords": 105,
+  "fillableFields": 3
+}

@@ -1,0 +1,98 @@
+{
+  "id": "act_015",
+  "name": "WIP Aging Report",
+  "description": "Work in progress aging and realization tracking",
+  "category": "financials",
+  "data_source": {
+    "primary_table": "actionstep_financials",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "matter_id",
+        "display_name": "Matter ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "aging_bucket",
+        "display_name": "Aging Bucket",
+        "data_type": "string"
+      },
+      {
+        "field_name": "matter_name",
+        "display_name": "Matter Name",
+        "data_type": "string"
+      },
+      {
+        "field_name": "responsible_partner",
+        "display_name": "Responsible Partner",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "wip_amount",
+        "display_name": "WIP Amount",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "aging_bucket",
+        "display_name": "Aging Bucket",
+        "filter_type": "dropdown",
+        "options": [
+          "\"0-30 days"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "bar_chart",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "analyst",
+      "admin"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.248Z",
+    "last_modified": "2025-07-29T02:54:05.248Z",
+    "version": "2.2",
+    "tags": [
+      "financials",
+      "high",
+      "financials"
+    ]
+  },
+  "validation": {
+    "matched_view": "v_actionstep_financials",
+    "missing_fields": [
+      "dimension: matter_id",
+      "dimension: aging_bucket",
+      "dimension: matter_name",
+      "dimension: responsible_partner",
+      "metric: wip_amount"
+    ],
+    "filter_issues": [
+      "available filter field not found: aging_bucket"
+    ],
+    "notes": [
+      "Validation completed"
+    ]
+  }
+}

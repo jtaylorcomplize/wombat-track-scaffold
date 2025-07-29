@@ -1,0 +1,114 @@
+card_id,card_name,field_name,field_display_name,field_type,data_type,card_tag,is_required,default_filter,filter_options
+act_001,Active Matters Overview,matter_id,Matter ID,dimension,string,@id_field,true,none,
+act_001,Active Matters Overview,matter_name,Matter Name,dimension,string,@category_field,true,none,
+act_001,Active Matters Overview,client_name,Client Name,dimension,string,@category_field,true,none,
+act_001,Active Matters Overview,matter_status,Matter Status,dimension,string,@status_field,false,Active,"Active,Closed,On Hold,Archived"
+act_001,Active Matters Overview,date_opened,Date Opened,dimension,date,@date_field,false,none,
+act_001,Active Matters Overview,responsible_partner,Responsible Partner,dimension,string,@category_field,false,none,
+act_002,Deadline Tracker,matter_id,Matter ID,dimension,string,@id_field,true,none,
+act_002,Deadline Tracker,deadline_date,Deadline Date,dimension,date,@date_field,true,next_30_days,"next_7_days,next_30_days,next_90_days"
+act_002,Deadline Tracker,deadline_type,Deadline Type,dimension,string,@category_field,true,none,"Court Filing,Client Response,Document Review,Payment Due"
+act_002,Deadline Tracker,matter_name,Matter Name,dimension,string,@category_field,true,none,
+act_002,Deadline Tracker,assigned_fee_earner,Assigned Fee Earner,dimension,string,@category_field,false,none,
+act_002,Deadline Tracker,priority_level,Priority Level,dimension,string,@status_field,false,none,"High,Medium,Low"
+act_003,Client Revenue Summary,client_id,Client ID,dimension,string,@id_field,true,none,
+act_003,Client Revenue Summary,client_name,Client Name,dimension,string,@category_field,true,none,
+act_003,Client Revenue Summary,total_revenue,Total Revenue,metric,decimal,@financial_amount,true,none,
+act_003,Client Revenue Summary,billing_period,Billing Period,dimension,string,@category_field,false,current_month,"current_month,last_3_months,ytd,last_year"
+act_003,Client Revenue Summary,matter_count,Matter Count,metric,integer,@count_field,false,none,
+act_003,Client Revenue Summary,outstanding_balance,Outstanding Balance,metric,decimal,@financial_amount,false,none,
+act_004,Matter Profitability Analysis,matter_id,Matter ID,dimension,string,@id_field,true,none,
+act_004,Matter Profitability Analysis,matter_name,Matter Name,dimension,string,@category_field,true,none,
+act_004,Matter Profitability Analysis,total_fees,Total Fees,metric,decimal,@financial_amount,true,none,
+act_004,Matter Profitability Analysis,total_costs,Total Costs,metric,decimal,@financial_amount,true,none,
+act_004,Matter Profitability Analysis,profit_margin,Profit Margin,metric,decimal,@percentage_field,false,none,
+act_004,Matter Profitability Analysis,practice_area,Practice Area,dimension,string,@category_field,false,none,"Litigation,Corporate,Real Estate,Family,Criminal,Tax"
+act_005,Time Entry Dashboard,fee_earner_id,Fee Earner ID,dimension,string,@id_field,true,none,
+act_005,Time Entry Dashboard,fee_earner_name,Fee Earner Name,dimension,string,@category_field,true,none,
+act_005,Time Entry Dashboard,billable_hours,Billable Hours,metric,decimal,@count_field,true,none,
+act_005,Time Entry Dashboard,non_billable_hours,Non-Billable Hours,metric,decimal,@count_field,false,none,
+act_005,Time Entry Dashboard,entry_date,Entry Date,dimension,date,@date_field,true,last_30_days,"today,last_7_days,last_30_days,last_90_days"
+act_005,Time Entry Dashboard,hourly_rate,Hourly Rate,metric,decimal,@financial_amount,false,none,
+act_006,Staff Utilization Report,fee_earner_id,Fee Earner ID,dimension,string,@id_field,true,none,
+act_006,Staff Utilization Report,fee_earner_name,Fee Earner Name,dimension,string,@category_field,true,none,
+act_006,Staff Utilization Report,utilization_rate,Utilization Rate,metric,decimal,@percentage_field,true,none,
+act_006,Staff Utilization Report,target_hours,Target Hours,metric,decimal,@count_field,false,none,
+act_006,Staff Utilization Report,actual_hours,Actual Hours,metric,decimal,@count_field,true,none,
+act_006,Staff Utilization Report,department,Department,dimension,string,@category_field,false,none,"Litigation,Corporate,Real Estate,Family,Administration"
+act_007,Trust Account Reconciliation,trust_account_id,Trust Account ID,dimension,string,@id_field,true,none,
+act_007,Trust Account Reconciliation,account_balance,Account Balance,metric,decimal,@financial_amount,true,none,
+act_007,Trust Account Reconciliation,last_reconciled,Last Reconciled,dimension,date,@date_field,true,none,
+act_007,Trust Account Reconciliation,reconciliation_status,Reconciliation Status,dimension,string,@status_field,false,none,"Reconciled,Pending,Discrepancy"
+act_007,Trust Account Reconciliation,client_name,Client Name,dimension,string,@category_field,false,none,
+act_008,Invoice Status Tracker,invoice_id,Invoice ID,dimension,string,@id_field,true,none,
+act_008,Invoice Status Tracker,invoice_amount,Invoice Amount,metric,decimal,@financial_amount,true,none,
+act_008,Invoice Status Tracker,invoice_date,Invoice Date,dimension,date,@date_field,true,none,
+act_008,Invoice Status Tracker,payment_status,Payment Status,dimension,string,@status_field,false,none,"Paid,Partial,Outstanding,Overdue"
+act_008,Invoice Status Tracker,client_name,Client Name,dimension,string,@category_field,true,none,
+act_008,Invoice Status Tracker,days_outstanding,Days Outstanding,metric,integer,@count_field,false,none,
+act_009,Matter Type Distribution,practice_area,Practice Area,dimension,string,@category_field,true,none,"Litigation,Corporate,Real Estate,Family,Criminal,Tax,Employment,IP"
+act_009,Matter Type Distribution,matter_count,Matter Count,metric,integer,@count_field,true,none,
+act_009,Matter Type Distribution,total_revenue,Total Revenue,metric,decimal,@financial_amount,false,none,
+act_009,Matter Type Distribution,avg_matter_value,Average Matter Value,metric,decimal,@financial_amount,false,none,
+act_010,Client Satisfaction Metrics,client_id,Client ID,dimension,string,@id_field,true,none,
+act_010,Client Satisfaction Metrics,client_name,Client Name,dimension,string,@category_field,true,none,
+act_010,Client Satisfaction Metrics,satisfaction_score,Satisfaction Score,metric,decimal,@percentage_field,true,none,
+act_010,Client Satisfaction Metrics,survey_date,Survey Date,dimension,date,@date_field,false,none,
+act_010,Client Satisfaction Metrics,feedback_category,Feedback Category,dimension,string,@category_field,false,none,"Service Quality,Communication,Timeliness,Value for Money"
+act_011,Document Production Status,matter_id,Matter ID,dimension,string,@id_field,true,none,
+act_011,Document Production Status,document_count,Document Count,metric,integer,@count_field,true,none,
+act_011,Document Production Status,reviewed_count,Reviewed Count,metric,integer,@count_field,true,none,
+act_011,Document Production Status,production_status,Production Status,dimension,string,@status_field,false,none,"Not Started,In Progress,Review Complete,Produced"
+act_011,Document Production Status,due_date,Due Date,dimension,date,@date_field,false,none,
+act_012,Billing Rate Analysis,fee_earner_id,Fee Earner ID,dimension,string,@id_field,true,none,
+act_012,Billing Rate Analysis,fee_earner_name,Fee Earner Name,dimension,string,@category_field,true,none,
+act_012,Billing Rate Analysis,standard_rate,Standard Rate,metric,decimal,@financial_amount,true,none,
+act_012,Billing Rate Analysis,effective_rate,Effective Rate,metric,decimal,@financial_amount,false,none,
+act_012,Billing Rate Analysis,practice_area,Practice Area,dimension,string,@category_field,false,none,"Litigation,Corporate,Real Estate,Family,Criminal,Tax"
+act_012,Billing Rate Analysis,seniority_level,Seniority Level,dimension,string,@category_field,false,none,"Partner,Senior Associate,Associate,Junior,Paralegal"
+act_013,Court Appearance Calendar,matter_id,Matter ID,dimension,string,@id_field,true,none,
+act_013,Court Appearance Calendar,court_date,Court Date,dimension,date,@date_field,true,next_30_days,"today,next_7_days,next_30_days,next_90_days"
+act_013,Court Appearance Calendar,court_name,Court Name,dimension,string,@category_field,true,none,
+act_013,Court Appearance Calendar,hearing_type,Hearing Type,dimension,string,@category_field,false,none,"Directions,Trial,Motion,Settlement Conference,Case Management"
+act_013,Court Appearance Calendar,attending_counsel,Attending Counsel,dimension,string,@category_field,false,none,
+act_014,Conflict Check Dashboard,matter_id,Matter ID,dimension,string,@id_field,true,none,
+act_014,Conflict Check Dashboard,client_name,Client Name,dimension,string,@category_field,true,none,
+act_014,Conflict Check Dashboard,conflict_status,Conflict Status,dimension,string,@status_field,false,none,"Clear,Potential Conflict,Conflict Identified,Waived"
+act_014,Conflict Check Dashboard,check_date,Check Date,dimension,date,@date_field,true,none,
+act_014,Conflict Check Dashboard,checked_by,Checked By,dimension,string,@category_field,false,none,
+act_015,WIP Aging Report,matter_id,Matter ID,dimension,string,@id_field,true,none,
+act_015,WIP Aging Report,wip_amount,WIP Amount,metric,decimal,@financial_amount,true,none,
+act_015,WIP Aging Report,aging_bucket,Aging Bucket,dimension,string,@category_field,true,none,"0-30 days,31-60 days,61-90 days,90+ days"
+act_015,WIP Aging Report,matter_name,Matter Name,dimension,string,@category_field,true,none,
+act_015,WIP Aging Report,responsible_partner,Responsible Partner,dimension,string,@category_field,false,none,
+act_016,Task Completion Metrics,fee_earner_id,Fee Earner ID,dimension,string,@id_field,true,none,
+act_016,Task Completion Metrics,tasks_completed,Tasks Completed,metric,integer,@count_field,true,none,
+act_016,Task Completion Metrics,tasks_pending,Tasks Pending,metric,integer,@count_field,true,none,
+act_016,Task Completion Metrics,completion_rate,Completion Rate,metric,decimal,@percentage_field,false,none,
+act_016,Task Completion Metrics,avg_completion_time,Average Completion Time,metric,decimal,@count_field,false,none,
+act_017,Client Communication Log,client_id,Client ID,dimension,string,@id_field,true,none,
+act_017,Client Communication Log,communication_date,Communication Date,dimension,date,@date_field,true,none,
+act_017,Client Communication Log,communication_type,Communication Type,dimension,string,@category_field,false,none,"Email,Phone,Meeting,Letter"
+act_017,Client Communication Log,response_time_hours,Response Time (Hours),metric,decimal,@count_field,false,none,
+act_017,Client Communication Log,fee_earner_name,Fee Earner Name,dimension,string,@category_field,false,none,
+act_018,Fee Earner Performance,fee_earner_id,Fee Earner ID,dimension,string,@id_field,true,none,
+act_018,Fee Earner Performance,fee_earner_name,Fee Earner Name,dimension,string,@category_field,true,none,
+act_018,Fee Earner Performance,monthly_billings,Monthly Billings,metric,decimal,@financial_amount,true,none,
+act_018,Fee Earner Performance,billable_hours,Billable Hours,metric,decimal,@count_field,true,none,
+act_018,Fee Earner Performance,realization_rate,Realization Rate,metric,decimal,@percentage_field,false,none,
+act_018,Fee Earner Performance,client_origination,Client Origination,metric,integer,@count_field,false,none,
+act_019,Matter Budget Variance,matter_id,Matter ID,dimension,string,@id_field,true,none,
+act_019,Matter Budget Variance,budgeted_amount,Budgeted Amount,metric,decimal,@financial_amount,true,none,
+act_019,Matter Budget Variance,actual_amount,Actual Amount,metric,decimal,@financial_amount,true,none,
+act_019,Matter Budget Variance,variance_percentage,Variance %,metric,decimal,@percentage_field,false,none,
+act_019,Matter Budget Variance,budget_status,Budget Status,dimension,string,@status_field,false,none,"Under Budget,On Budget,Over Budget"
+act_020,Disbursement Tracking,disbursement_id,Disbursement ID,dimension,string,@id_field,true,none,
+act_020,Disbursement Tracking,disbursement_amount,Disbursement Amount,metric,decimal,@financial_amount,true,none,
+act_020,Disbursement Tracking,disbursement_type,Disbursement Type,dimension,string,@category_field,false,none,"Court Fees,Travel,Expert Witness,Filing Fees,Other"
+act_020,Disbursement Tracking,reimbursement_status,Reimbursement Status,dimension,string,@status_field,false,none,"Pending,Approved,Reimbursed,Rejected"
+act_020,Disbursement Tracking,matter_name,Matter Name,dimension,string,@category_field,true,none,
+act_021,Practice Area Revenue,practice_area,Practice Area,dimension,string,@category_field,true,none,"Litigation,Corporate,Real Estate,Family,Criminal,Tax,Employment,IP"
+act_021,Practice Area Revenue,revenue_amount,Revenue Amount,metric,decimal,@financial_amount,true,none,
+act_021,Practice Area Revenue,matter_count,Matter Count,metric,integer,@count_field,false,none,
+act_021,Practice Area Revenue,avg_matter_value,Average Matter Value,metric,decimal,@financial_amount,false,none,
+act_021,Practice Area Revenue,growth_rate,Growth Rate,metric,decimal,@percentage_field,false,none,

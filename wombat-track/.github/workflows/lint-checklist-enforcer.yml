@@ -1,0 +1,26 @@
+name: Enforce Lint Compliance Checklist
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  check-lint-checklist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR Checklist
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+
+            const body = pr.data.body.toLowerCase();
+            const override = pr.data.labels.some(l => l.name === 'lint-override:approved');
+
+            if (!override && (!body.includes('✅') || !body.includes('🔧') || !body.includes('🧹') || !body.includes('🧠'))) {
+              core.setFailed("❌ Lint compliance checklist not complete. Add ✅, 🔧, 🧹, and 🧠 confirmations or apply override label.");
+            }

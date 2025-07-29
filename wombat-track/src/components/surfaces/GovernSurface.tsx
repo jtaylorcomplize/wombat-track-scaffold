@@ -175,10 +175,10 @@ None identified
 
 export const GovernSurface: React.FC<GovernSurfaceProps> = ({
   currentProject,
-  currentPhase,
-  currentStep,
-  onPhaseChange,
-  onStepChange
+  currentPhase: _currentPhase, // eslint-disable-line @typescript-eslint/no-unused-vars
+  currentStep: _currentStep, // eslint-disable-line @typescript-eslint/no-unused-vars
+  onPhaseChange: _onPhaseChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+  onStepChange: _onStepChange // eslint-disable-line @typescript-eslint/no-unused-vars
 }) => {
   const [activeTab, setActiveTab] = useState<'logs' | 'reviews' | 'audit'>('logs');
   const [governanceEntries] = useState<GovernanceLogEntry[]>(mockGovernanceEntries);
@@ -197,7 +197,7 @@ export const GovernSurface: React.FC<GovernSurfaceProps> = ({
     );
   }
 
-  const handleClaudePrompt = async (prompt: string, context?: any) => {
+  const handleClaudePrompt = async (prompt: string, _context?: Record<string, unknown>) => { // eslint-disable-line @typescript-eslint/no-unused-vars
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     if (prompt.toLowerCase().includes('audit')) {
@@ -388,7 +388,7 @@ What specific governance activity would you like assistance with?`;
             ].map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
-                onClick={() => setActiveTab(id as any)}
+                onClick={() => setActiveTab(id as 'logs' | 'reviews' | 'audit')}
                 className={`flex items-center space-x-2 py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === id
                     ? 'border-orange-500 text-orange-600'

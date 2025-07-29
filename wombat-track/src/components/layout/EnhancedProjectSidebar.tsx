@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Filter, FolderOpen, Settings, User, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Filter, FolderOpen, Settings, Plus } from 'lucide-react';
 import type { Project } from '../../types/phase';
 import type { WorkSurface } from './AppLayout';
 import { SubAppSelector } from './SubAppSelector';
@@ -36,7 +36,7 @@ const RAG_STATUS_OPTIONS = ['All', 'Red', 'Amber', 'Green'];
 const STATUS_OPTIONS = ['All', 'Active', 'On Hold', 'Completed'];
 
 export const EnhancedProjectSidebar: React.FC<EnhancedProjectSidebarProps> = ({
-  projects,
+  _projects, // eslint-disable-line @typescript-eslint/no-unused-vars
   currentProject,
   selectedSurface,
   collapsed,
@@ -73,12 +73,7 @@ export const EnhancedProjectSidebar: React.FC<EnhancedProjectSidebarProps> = ({
   const currentProgram = mockPrograms.find(p => p.id === currentSubApp);
   const uniqueOwners = ['All', ...new Set(filteredProjects.map(p => p.projectOwner))];
 
-  const getProjectStatusColor = (project: Project) => {
-    const percentage = project.completionPercentage || 0;
-    if (percentage >= 80) return 'text-green-600';
-    if (percentage >= 50) return 'text-amber-600';
-    return 'text-red-600';
-  };
+  // Project status color utility removed - unused in this component
 
   const getProjectRAGStatus = (project: Project) => {
     const percentage = project.completionPercentage || 0;

@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbis Forge - Cosmic Enterprise Platform Wireframes</title>
+    <style>
+        /* ================================
+           ORBIS FORGE COSMIC DESIGN SYSTEM
+           Deep Space Aesthetics + Enterprise Functionality
+           ================================ */
+
+        :root {
+            /* Cosmic Color Palette */
+            --cosmic-void: #0A0A0F;           /* Deep space background */
+            --cosmic-depth: #16161E;          /* Secondary background */
+            --cosmic-surface: #1E1E2A;        /* Card surfaces */
+            --cosmic-border: #2A2A3A;         /* Subtle borders */
+            
+            /* Orbital Copper Accents */
+            --orbital-copper: #D77B28;        /* Primary accent */
+            --orbital-warm: #E97D47;          /* Interactive states */
+            --orbital-glow: #F4A261;          /* Hover/focus states */
+            --orbital-dim: #B8621F;           /* Disabled states */
+            
+            /* Nebula Blue */
+            --nebula-blue: #2d609f;           /* Secondary accent */
+            --nebula-light: #4A90C2;          /* Light interactions */
+            --nebula-glow: #6BB6FF;           /* Active states */
+            
+            /* Cream Typography */
+            --cosmic-cream: #F2F0E6;          /* Primary text */
+            --cosmic-cream-dim: #D4D2C7;      /* Secondary text */
+            --cosmic-cream-faint: #B8B6AB;    /* Tertiary text */
+            
+            /* Status Colors */
+            --status-success: #22C55E;        /* Green for success */
+            --status-warning: #F59E0B;        /* Amber for warnings */
+            --status-error: #EF4444;          /* Red for errors */
+            --status-info: var(--nebula-blue); /* Blue for info */
+            
+            /* Typography */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+            
+            /* Orbital Ring Gradients */
+            --orbital-ring: linear-gradient(135deg, var(--orbital-copper) 0%, var(--orbital-warm) 100%);
+            --nebula-ring: linear-gradient(135deg, var(--nebula-blue) 0%, var(--nebula-light) 100%);
+            
+            /* Cosmic Animations */
+            --cosmic-pulse: cosmic-pulse 2s ease-in-out infinite;
+            --orbital-drift: orbital-drift 20s linear infinite;
+            --nebula-float: nebula-float 15s ease-in-out infinite;
+        }
+
+        /* Cosmic Animations */
+        @keyframes cosmic-pulse {
+            0%, 100% { 
+                opacity: 0.6; 
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes orbital-drift {
+            0% { transform: rotate(0deg) translateX(100px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+        }
+
+        @keyframes nebula-float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            25% { transform: translateY(-10px) translateX(5px); }
+            50% { transform: translateY(0px) translateX(10px); }
+            75% { transform: translateY(10px) translateX(5px); }
+        }
+
+        @keyframes lifeforce-pulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(215, 123, 40, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(215, 123, 40, 0.6), 0 0 60px rgba(215, 123, 40, 0.3);
+            }
+        }
+
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--cosmic-void);
+            color: var(--cosmic-cream);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Cosmic Background with Nebula Drift */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(45, 96, 159, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(215, 123, 40, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(116, 116, 140, 0.05) 0%, transparent 70%);
+            animation: var(--nebula-float);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Wireframe Container */
+        .wireframe-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Wireframe Section */
+        .wireframe-section {
+            margin-bottom: 4rem;
+            background: var(--cosmic-surface);
+            border: 1px solid var(--cosmic-border);
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wireframe-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--orbital-ring);
+        }
+
+        .wireframe-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cosmic-cream);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .wireframe-subtitle {
+            color: var(--cosmic-cream-dim);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Orbital Ring Icon */
+        .orbital-icon {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--orbital-copper);
+            border-radius: 50%;
+            position: relative;
+            display: inline-block;
+        }
+
+        .orbital-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: var(--orbital-copper);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: var(--cosmic-pulse);
+        }
+
+        /* Layout Grid */
+        .cosmic-layout {
+            display: flex;
+            min-height: 800px;
+            border: 1px dashed var(--cosmic-border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--cosmic-depth);
+        }
+
+        /* Enhanced Project Sidebar */
+        .cosmic-sidebar {
+            width: 320px;
+            background: var(--cosmic-surface);
+            border-right: 1px solid var(--cosmic-border);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .cosmic-sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--orbital-copper) 0%, transparent 50%, var(--nebula-blue) 100%);
+            opacity: 0.3;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--cosmic-border);
+            background: linear-gradient(135deg, var(--cosmic-surface) 0%, var(--cosmic-depth) 100%);
+        }
+
+        .platform-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--cosmic-cream);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .platform-subtitle {
+            font-size: 0.75rem;
+            color: var(--cosmic-cream-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Sub-App Selector */
+        .subapp-selector {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--cosmic-border);
+        }
+
+        .subapp-label {
+            font-size: 0.75rem;
+            color: var(--cosmic-cream-faint);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .subapp-dropdown {
+            background: var(--cosmic-depth);
+            border: 1px solid var(--cosmic-border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            color: var(--cosmic-cream);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subapp-dropdown:hover {
+            border-color: var(--orbital-copper);
+            box-shadow: 0 0 20px rgba(215, 123, 40, 0.2);
+        }
+
+        .subapp-dropdown::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--orbital-ring);
+        }
+
+        /* Project Selector */
+        .project-selector {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--cosmic-border);
+        }
+
+        .project-card {
+            background: var(--cosmic-depth);
+            border: 1px solid var(--cosmic-border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            border-color: var(--nebula-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(45, 96, 159, 0.15);
+        }
+
+        .project-name {
+            font-weight: 600;
+            color: var(--cosmic-cream);
+            margin-bottom: 0.25rem;
+        }
+
+        .project-type {
+            font-size: 0.85rem;
+            color: var(--cosmic-cream-dim);
+        }
+
+        .project-rag {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: var(--cosmic-pulse);
+        }
+
+        .rag-green { background: var(--status-success); }
+        .rag-amber { background: var(--status-warning); }
+        .rag-red { background: var(--status-error); }
+
+        /* Work Surfaces Navigation */
+        .work-surfaces {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--cosmic-border);
+        }
+
+        .surface-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .surface-button {
+            background: transparent;
+            border: 1px solid var(--cosmic-border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            color: var(--cosmic-cream-dim);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .surface-button:hover {
+            border-color: var(--orbital-copper);
+            color: var(--cosmic-cream);
+            background: rgba(215, 123, 40, 0.1);
+        }
+
+        .surface-button.active {
+            border-color: var(--orbital-copper);
+            background: var(--orbital-ring);
+            color: var(--cosmic-void);
+            font-weight: 600;
+        }
+
+        .surface-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .surface-details {
+            flex: 1;
+        }
+
+        .surface-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .surface-description {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        /* Main Content Area */
+        .cosmic-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--cosmic-depth);
+        }
+
+        /* Breadcrumb Header */
+        .cosmic-breadcrumb {
+            background: var(--cosmic-surface);
+            border-bottom: 1px solid var(--cosmic-border);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .cosmic-breadcrumb::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--orbital-copper), var(--nebula-blue), var(--orbital-copper));
+            opacity: 0.3;
+        }
+
+        .breadcrumb-surfaces {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb-tab {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--cosmic-border);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--cosmic-cream-dim);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb-tab.active {
+            background: var(--orbital-ring);
+            color: var(--cosmic-void);
+            border-color: var(--orbital-copper);
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--cosmic-cream-dim);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-separator {
+            color: var(--cosmic-cream-faint);
+        }
+
+        .breadcrumb-current {
+            color: var(--orbital-copper);
+            font-weight: 600;
+        }
+
+        /* Work Surface Content */
+        .cosmic-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .cosmic-card {
+            background: var(--cosmic-surface);
+            border: 1px solid var(--cosmic-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cosmic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--orbital-ring);
+        }
+
+        .cosmic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(215, 123, 40, 0.15);
+            border-color: var(--orbital-copper);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--cosmic-cream);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-metric {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--orbital-copper);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--cosmic-cream-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Governance Panel (WT-8.0.1) */
+        .governance-panel {
+            background: var(--cosmic-surface);
+            border: 1px solid var(--cosmic-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .governance-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--cosmic-border);
+        }
+
+        .governance-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--cosmic-cream);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .shield-icon {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--nebula-blue);
+            border-radius: 4px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .shield-icon::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            background: var(--nebula-blue);
+            border-radius: 2px;
+            opacity: 0.3;
+            animation: var(--cosmic-pulse);
+        }
+
+        /* Risk Scores */
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .risk-score {
+            background: var(--cosmic-depth);
+            border: 1px solid var(--cosmic-border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .risk-label {
+            font-size: 0.85rem;
+            color: var(--cosmic-cream-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .risk-low { color: var(--status-success); }
+        .risk-medium { color: var(--status-warning); }
+        .risk-high { color: var(--status-error); }
+
+        /* Confidence Meter with Lifeforce Pulse */
+        .confidence-meter {
+            background: var(--cosmic-depth);
+            border: 1px solid var(--cosmic-border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .confidence-label {
+            font-size: 0.85rem;
+            color: var(--cosmic-cream-dim);
+            margin-bottom: 0.75rem;
+        }
+
+        .confidence-bar {
+            height: 8px;
+            background: var(--cosmic-border);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: var(--orbital-ring);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            animation: lifeforce-pulse 2s ease-in-out infinite;
+        }
+
+        .confidence-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--orbital-copper);
+            margin-top: 0.5rem;
+        }
+
+        /* Enforcement History */
+        .enforcement-log {
+            background: var(--cosmic-depth);
+            border: 1px solid var(--cosmic-border);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .log-entry {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--cosmic-border);
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-icon {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: var(--cosmic-pulse);
+        }
+
+        .log-success { background: var(--status-success); }
+        .log-warning { background: var(--status-warning); }
+        .log-error { background: var(--status-error); }
+
+        .log-message {
+            flex: 1;
+            color: var(--cosmic-cream-dim);
+            font-size: 0.9rem;
+        }
+
+        .log-time {
+            color: var(--cosmic-cream-faint);
+            font-size: 0.8rem;
+        }
+
+        /* Mobile Responsive Layout */
+        .mobile-view {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .cosmic-layout {
+                flex-direction: column;
+                min-height: 600px;
+            }
+
+            .cosmic-sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--cosmic-border);
+            }
+
+            .mobile-view {
+                display: block;
+            }
+
+            .desktop-view {
+                display: none;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .risk-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Annotation Styles */
+        .annotation {
+            position: absolute;
+            background: var(--cosmic-surface);
+            border: 1px solid var(--orbital-copper);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+            color: var(--cosmic-cream);
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .annotation::before {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 1rem;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid var(--orbital-copper);
+        }
+
+        /* Demo Buttons */
+        .demo-controls {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .demo-button {
+            background: var(--orbital-ring);
+            color: var(--cosmic-void);
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(215, 123, 40, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Controls -->
+    <div class="demo-controls">
+        <button class="demo-button" onclick="showView('desktop')">Desktop View</button>
+        <button class="demo-button" onclick="showView('governance')">Governance Detail</button>
+        <button class="demo-button" onclick="showView('mobile')">Mobile View</button>
+    </div>
+
+    <div class="wireframe-container">
+        <!-- Header -->
+        <div class="wireframe-section">
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--cosmic-cream); margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem;">
+                <div class="orbital-icon" style="width: 36px; height: 36px;"></div>
+                Orbis Forge - Cosmic Enterprise Platform
+            </h1>
+            <p style="font-size: 1.1rem; color: var(--cosmic-cream-dim); margin-bottom: 2rem;">
+                Comprehensive wireframes showcasing the cosmic branding aesthetic applied to Wombat Track's enterprise SDLC platform.
+                Deep space backgrounds, orbital copper accents, and sophisticated minimalism inspired by Dune and Foundation.
+            </p>
+            
+            <!-- Cosmic Design Elements Legend -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 2rem;">
+                <div style="background: var(--cosmic-depth); border: 1px solid var(--cosmic-border); border-radius: 8px; padding: 1rem;">
+                    <h4 style="color: var(--orbital-copper); margin-bottom: 0.5rem;">🌌 Deep Space Backgrounds</h4>
+                    <p style="font-size: 0.9rem; color: var(--cosmic-cream-dim);">Void (#0A0A0F) and depth (#16161E) create professional enterprise atmosphere</p>
+                </div>
+                <div style="background: var(--cosmic-depth); border: 1px solid var(--cosmic-border); border-radius: 8px; padding: 1rem;">
+                    <h4 style="color: var(--orbital-copper); margin-bottom: 0.5rem;">⭕ Orbital Copper Accents</h4>
+                    <p style="font-size: 0.9rem; color: var(--cosmic-cream-dim);">Warm copper (#D77B28) for primary actions and brand elements</p>
+                </div>
+                <div style="background: var(--cosmic-depth); border: 1px solid var(--cosmic-border); border-radius: 8px; padding: 1rem;">
+                    <h4 style="color: var(--nebula-blue); margin-bottom: 0.5rem;">💫 Nebula Blue States</h4>
+                    <p style="font-size: 0.9rem; color: var(--cosmic-cream-dim);">Interactive states (#2d609f) for secondary actions and navigation</p>
+                </div>
+                <div style="background: var(--cosmic-depth); border: 1px solid var(--cosmic-border); border-radius: 8px; padding: 1rem;">
+                    <h4 style="color: var(--cosmic-cream); margin-bottom: 0.5rem;">✨ Lifeforce Pulse System</h4>
+                    <p style="font-size: 0.9rem; color: var(--cosmic-cream-dim);">Organic pulsing animations for confidence meters and status indicators</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Wireframe -->
+        <div class="wireframe-section" id="desktop-view">
+            <div class="wireframe-title">
+                <div class="orbital-icon"></div>
+                Main Dashboard Interface
+            </div>
+            <div class="wireframe-subtitle">
+                Desktop view showing EnhancedProjectSidebar, SubAppDashboard, BreadcrumbHeader, and work surface cards with cosmic aesthetic
+            </div>
+
+            <div class="cosmic-layout">
+                <!-- Enhanced Project Sidebar -->
+                <div class="cosmic-sidebar">
+                    <!-- Platform Header -->
+                    <div class="sidebar-header">
+                        <div class="platform-title">
+                            <div class="orbital-icon" style="width: 20px; height: 20px;"></div>
+                            Orbis Platform
+                        </div>
+                        <div class="platform-subtitle">Enterprise SDLC</div>
+                    </div>
+
+                    <!-- Sub-App Selector -->
+                    <div class="subapp-selector">
+                        <div class="subapp-label">Current Program</div>
+                        <div class="subapp-dropdown">
+                            <div style="font-weight: 600;">Orbis Forge</div>
+                            <div style="font-size: 0.85rem; color: var(--cosmic-cream-dim); margin-top: 0.25rem;">
+                                Enterprise Platform Development
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Selector -->
+                    <div class="project-selector">
+                        <div class="subapp-label" style="margin-bottom: 0.75rem;">Projects</div>
+                        <div class="project-card">
+                            <div class="project-rag rag-green"></div>
+                            <div class="project-name">Cosmic UI Framework</div>
+                            <div class="project-type">Development • Phase 2</div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-rag rag-amber"></div>
+                            <div class="project-name">SDLC Visibility Layer</div>
+                            <div class="project-type">Integration • Phase 1</div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-rag rag-green"></div>
+                            <div class="project-name">Governance Engine</div>
+                            <div class="project-type">Platform • Phase 3</div>
+                        </div>
+                    </div>
+
+                    <!-- Work Surfaces Navigation -->
+                    <div class="work-surfaces">
+                        <div class="subapp-label" style="margin-bottom: 0.75rem;">Work Surfaces</div>
+                        <div class="surface-nav">
+                            <button class="surface-button active">
+                                <div class="surface-icon">📋</div>
+                                <div class="surface-details">
+                                    <div class="surface-name">Plan</div>
+                                    <div class="surface-description">Composer, phase setup, AI scaffold</div>
+                                </div>
+                            </button>
+                            <button class="surface-button">
+                                <div class="surface-icon">⚡</div>
+                                <div class="surface-details">
+                                    <div class="surface-name">Execute</div>
+                                    <div class="surface-description">Track phases, trigger steps, flag blockers</div>
+                                </div>
+                            </button>
+                            <button class="surface-button">
+                                <div class="surface-icon">📝</div>
+                                <div class="surface-details">
+                                    <div class="surface-name">Document</div>
+                                    <div class="surface-description">Rich-text SOP + AI</div>
+                                </div>
+                            </button>
+                            <button class="surface-button">
+                                <div class="surface-icon">🛡️</div>
+                                <div class="surface-details">
+                                    <div class="surface-name">Govern</div>
+                                    <div class="surface-description">Logs, reviews, AI audit trails</div>
+                                </div>
+                            </button>
+                            <button class="surface-button">
+                                <div class="surface-icon">🧬</div>
+                                <div class="surface-details">
+                                    <div class="surface-name">Integrate</div>
+                                    <div class="surface-description">Integration health monitoring</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area -->
+                <div class="cosmic-main">
+                    <!-- Breadcrumb Header -->
+                    <div class="cosmic-breadcrumb">
+                        <div class="breadcrumb-surfaces">
+                            <button class="breadcrumb-tab active">Set Up</button>
+                            <button class="breadcrumb-tab">Track Progress</button>
+                            <button class="breadcrumb-tab">Create Records</button>
+                            <button class="breadcrumb-tab">Review & Audit</button>
+                            <button class="breadcrumb-tab">Connect Tools</button>
+                        </div>
+                        <div class="breadcrumb-nav">
+                            <span>🏠 Cosmic UI Framework</span>
+                            <span class="breadcrumb-separator">›</span>
+                            <span>📁 Phase 2 - Implementation</span>
+                            <span class="breadcrumb-separator">›</span>
+                            <span class="breadcrumb-current">Component Development</span>
+                        </div>
+                    </div>
+
+                    <!-- Work Surface Content -->
+                    <div class="cosmic-content">
+                        <!-- Dashboard Cards -->
+                        <div class="dashboard-grid">
+                            <div class="cosmic-card">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <span style="font-size: 1.2rem;">📋</span>
+                                        Active Phases
+                                    </div>
+                                </div>
+                                <div class="card-metric">12</div>
+                                <div class="card-description">3 blocked steps need attention</div>
+                            </div>
+
+                            <div class="cosmic-card">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <div class="shield-icon"></div>
+                                        Governance Logs
+                                    </div>
+                                </div>
+                                <div class="card-metric">47</div>
+                                <div class="card-description">3 pending reviews this week</div>
+                            </div>
+
+                            <div class="cosmic-card">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <span style="font-size: 1.2rem;">📝</span>
+                                        Documents
+                                    </div>
+                                </div>
+                                <div class="card-metric">156</div>
+                                <div class="card-description">85% completion rate</div>
+                            </div>
+
+                            <div class="cosmic-card">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <span style="font-size: 1.2rem;">🧬</span>
+                                        Integrations
+                                    </div>
+                                </div>
+                                <div class="card-metric">24</div>
+                                <div class="card-description">All systems operational</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Annotations -->
+            <div class="annotation" style="top: 100px; left: 50px;">
+                Orbital ring design elements create sophisticated brand cohesion
+            </div>
+            <div class="annotation" style="top: 200px; right: 50px;">
+                Nebula drift background adds organic movement without distraction
+            </div>
+            <div class="annotation" style="bottom: 100px; left: 200px;">
+                Copper accent gradients maintain enterprise professionalism
+            </div>
+        </div>
+
+        <!-- Governance Detail View (WT-8.0.1) -->
+        <div class="wireframe-section" id="governance-view" style="display: none;">
+            <div class="wireframe-title">
+                <div class="shield-icon"></div>
+                SDLC Visibility Layer - Governance Detail
+            </div>
+            <div class="wireframe-subtitle">
+                WT-8.0.1 integration showing governance panels, technical risk scores, enforcement history, and confidence meters with lifeforce pulse system
+            </div>
+
+            <div class="cosmic-layout" style="min-height: 900px;">
+                <!-- Compact Sidebar for Detail View -->
+                <div class="cosmic-sidebar" style="width: 280px;">
+                    <div class="sidebar-header">
+                        <div class="platform-title">
+                            <div class="orbital-icon" style="width: 16px; height: 16px;"></div>
+                            Governance
+                        </div>
+                        <div class="platform-subtitle">SDLC Visibility</div>
+                    </div>
+
+                    <!-- Quick Navigation -->
+                    <div class="work-surfaces">
+                        <div class="surface-nav">
+                            <button class="surface-button active">
+                                <div class="shield-icon" style="width: 16px; height: 16px;"></div>
+                                <div class="surface-details">
+                                    <div class="surface-name">Risk Assessment</div>
+                                </div>
+                            </button>
+                            <button class="surface-button">
+                                <div class="surface-icon">📊</div>
+                                <div class="surface-details">
+                                    <div class="surface-name">Compliance Dashboard</div>
+                                </div>
+                            </button>
+                            <button class="surface-button">
+                                <div class="surface-icon">🔍</div>
+                                <div class="surface-details">
+                                    <div class="surface-name">Audit Trail</div>
+                                </div>
+                            </button>
+                            <button class="surface-button">
+                                <div class="surface-icon">⚠️</div>
+                                <div class="surface-details">
+                                    <div class="surface-name">Enforcement Log</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Governance Content -->
+                <div class="cosmic-main">
+                    <div class="cosmic-breadcrumb">
+                        <div class="breadcrumb-nav">
+                            <span>🛡️ Governance</span>
+                            <span class="breadcrumb-separator">›</span>
+                            <span>📊 Risk Assessment</span>
+                            <span class="breadcrumb-separator">›</span>
+                            <span class="breadcrumb-current">Cosmic UI Framework</span>
+                        </div>
+                    </div>
+
+                    <div class="cosmic-content">
+                        <!-- Governance Panel -->
+                        <div class="governance-panel">
+                            <div class="governance-header">
+                                <div class="governance-title">
+                                    <div class="shield-icon"></div>
+                                    SDLC Visibility & Risk Management
+                                </div>
+                            </div>
+
+                            <!-- Technical Risk Scores -->
+                            <div style="margin-bottom: 2rem;">
+                                <h3 style="color: var(--cosmic-cream); margin-bottom: 1rem; font-size: 1.1rem;">Technical Risk Scores</h3>
+                                <div class="risk-grid">
+                                    <div class="risk-score">
+                                        <div class="risk-label">Code Quality</div>
+                                        <div class="risk-value risk-low">92%</div>
+                                        <div style="font-size: 0.75rem; color: var(--cosmic-cream-faint);">Low Risk</div>
+                                    </div>
+                                    <div class="risk-score">
+                                        <div class="risk-label">Security Posture</div>
+                                        <div class="risk-value risk-medium">78%</div>
+                                        <div style="font-size: 0.75rem; color: var(--cosmic-cream-faint);">Medium Risk</div>
+                                    </div>
+                                    <div class="risk-score">
+                                        <div class="risk-label">Compliance</div>
+                                        <div class="risk-value risk-low">95%</div>
+                                        <div style="font-size: 0.75rem; color: var(--cosmic-cream-faint);">Low Risk</div>
+                                    </div>
+                                    <div class="risk-score">
+                                        <div class="risk-label">Performance</div>
+                                        <div class="risk-value risk-high">45%</div>
+                                        <div style="font-size: 0.75rem; color: var(--cosmic-cream-faint);">High Risk</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Confidence Meters with Lifeforce Pulse -->
+                            <div style="margin-bottom: 2rem;">
+                                <h3 style="color: var(--cosmic-cream); margin-bottom: 1rem; font-size: 1.1rem;">Confidence Meters</h3>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                                    <div class="confidence-meter">
+                                        <div class="confidence-label">Deployment Readiness</div>
+                                        <div class="confidence-bar">
+                                            <div class="confidence-fill" style="width: 85%;"></div>
+                                        </div>
+                                        <div class="confidence-value">85% Ready</div>
+                                    </div>
+                                    <div class="confidence-meter">
+                                        <div class="confidence-label">Quality Gate Pass Rate</div>
+                                        <div class="confidence-bar">
+                                            <div class="confidence-fill" style="width: 92%;"></div>
+                                        </div>
+                                        <div class="confidence-value">92% Pass Rate</div>
+                                    </div>
+                                    <div class="confidence-meter">
+                                        <div class="confidence-label">Risk Mitigation</div>
+                                        <div class="confidence-bar">
+                                            <div class="confidence-fill" style="width: 67%;"></div>
+                                        </div>
+                                        <div class="confidence-value">67% Mitigated</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Enforcement History -->
+                            <div>
+                                <h3 style="color: var(--cosmic-cream); margin-bottom: 1rem; font-size: 1.1rem;">Enforcement History</h3>
+                                <div class="enforcement-log">
+                                    <div class="log-entry">
+                                        <div class="log-icon log-success"></div>
+                                        <div class="log-message">Quality gate passed: Unit test coverage above 85%</div>
+                                        <div class="log-time">2 hours ago</div>
+                                    </div>
+                                    <div class="log-entry">
+                                        <div class="log-icon log-warning"></div>
+                                        <div class="log-message">Security scan detected 3 medium-severity vulnerabilities</div>
+                                        <div class="log-time">6 hours ago</div>
+                                    </div>
+                                    <div class="log-entry">
+                                        <div class="log-icon log-error"></div>
+                                        <div class="log-message">Performance threshold exceeded: API response time > 500ms</div>
+                                        <div class="log-time">12 hours ago</div>
+                                    </div>
+                                    <div class="log-entry">
+                                        <div class="log-icon log-success"></div>
+                                        <div class="log-message">Code review completed: 2 approvals received</div>
+                                        <div class="log-time">1 day ago</div>
+                                    </div>
+                                    <div class="log-entry">
+                                        <div class="log-icon log-success"></div>
+                                        <div class="log-message">Compliance check passed: GDPR data handling verified</div>
+                                        <div class="log-time">2 days ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Governance Annotations -->
+            <div class="annotation" style="top: 150px; left: 300px;">
+                Lifeforce pulse system provides organic feedback for confidence levels
+            </div>
+            <div class="annotation" style="top: 300px; right: 50px;">
+                Real-time risk scoring with cosmic color coding (green/amber/red)
+            </div>
+            <div class="annotation" style="bottom: 150px; left: 100px;">
+                Enforcement history with pulsing status indicators
+            </div>
+        </div>
+
+        <!-- Mobile Responsive Layout -->
+        <div class="wireframe-section" id="mobile-view" style="display: none;">
+            <div class="wireframe-title">
+                <div class="orbital-icon"></div>
+                Mobile Responsive Layout
+            </div>
+            <div class="wireframe-subtitle">
+                Cosmic aesthetic adapted for mobile devices with touch-friendly interactions and stacked navigation
+            </div>
+
+            <div style="max-width: 375px; margin: 0 auto; background: var(--cosmic-void); border: 2px solid var(--cosmic-border); border-radius: 24px; overflow: hidden;">
+                <!-- Mobile Header -->
+                <div style="background: var(--cosmic-surface); padding: 1rem; border-bottom: 1px solid var(--cosmic-border);">
+                    <div style="display: flex; align-items: center; justify-content: between; margin-bottom: 0.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div class="orbital-icon" style="width: 16px; height: 16px;"></div>
+                            <span style="font-weight: 700; color: var(--cosmic-cream);">Orbis</span>
+                        </div>
+                        <button style="background: none; border: none; color: var(--cosmic-cream); font-size: 1.2rem;">☰</button>
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--cosmic-cream-dim);">Cosmic UI Framework</div>
+                </div>
+
+                <!-- Mobile Surface Tabs -->
+                <div style="background: var(--cosmic-depth); padding: 0.5rem; border-bottom: 1px solid var(--cosmic-border); overflow-x: auto;">
+                    <div style="display: flex; gap: 0.5rem; min-width: max-content;">
+                        <button style="background: var(--orbital-ring); color: var(--cosmic-void); border: none; border-radius: 4px; padding: 0.5rem 0.75rem; font-size: 0.8rem; white-space: nowrap;">Plan</button>
+                        <button style="background: transparent; color: var(--cosmic-cream-dim); border: 1px solid var(--cosmic-border); border-radius: 4px; padding: 0.5rem 0.75rem; font-size: 0.8rem; white-space: nowrap;">Execute</button>
+                        <button style="background: transparent; color: var(--cosmic-cream-dim); border: 1px solid var(--cosmic-border); border-radius: 4px; padding: 0.5rem 0.75rem; font-size: 0.8rem; white-space: nowrap;">Document</button>
+                        <button style="background: transparent; color: var(--cosmic-cream-dim); border: 1px solid var(--cosmic-border); border-radius: 4px; padding: 0.5rem 0.75rem; font-size: 0.8rem; white-space: nowrap;">Govern</button>
+                    </div>
+                </div>
+
+                <!-- Mobile Content -->
+                <div style="padding: 1rem; min-height: 500px;">
+                    <!-- Mobile Dashboard Cards -->
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="cosmic-card" style="padding: 1rem;">
+                            <div style="display: flex; align-items: center; justify-content: between; margin-bottom: 0.75rem;">
+                                <span style="font-size: 1rem;">📋 Active Phases</span>
+                                <span style="font-size: 1.5rem; font-weight: 700; color: var(--orbital-copper);">12</span>
+                            </div>
+                            <div style="font-size: 0.85rem; color: var(--cosmic-cream-dim);">3 blocked steps need attention</div>
+                        </div>
+
+                        <div class="cosmic-card" style="padding: 1rem;">
+                            <div style="display: flex; align-items: center; justify-content: between; margin-bottom: 0.75rem;">
+                                <span style="font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <div class="shield-icon" style="width: 16px; height: 16px;"></div>
+                                    Governance
+                                </span>
+                                <span style="font-size: 1.5rem; font-weight: 700; color: var(--orbital-copper);">47</span>
+                            </div>
+                            <div style="font-size: 0.85rem; color: var(--cosmic-cream-dim);">3 pending reviews</div>
+                        </div>
+
+                        <!-- Mobile Confidence Meter -->
+                        <div class="confidence-meter">
+                            <div class="confidence-label">Project Health</div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: 78%;"></div>
+                            </div>
+                            <div class="confidence-value">78% Healthy</div>
+                        </div>
+
+                        <!-- Mobile Recent Activity -->
+                        <div style="background: var(--cosmic-surface); border: 1px solid var(--cosmic-border); border-radius: 8px; padding: 1rem;">
+                            <h4 style="color: var(--cosmic-cream); margin-bottom: 0.75rem; font-size: 0.95rem;">Recent Activity</h4>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div class="log-icon log-success" style="width: 6px; height: 6px;"></div>
+                                    <span style="font-size: 0.85rem; color: var(--cosmic-cream-dim);">Quality gate passed</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div class="log-icon log-warning" style="width: 6px; height: 6px;"></div>
+                                    <span style="font-size: 0.85rem; color: var(--cosmic-cream-dim);">Review pending</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div class="log-icon log-success" style="width: 6px; height: 6px;"></div>
+                                    <span style="font-size: 0.85rem; color: var(--cosmic-cream-dim);">Deploy completed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Bottom Navigation -->
+                <div style="background: var(--cosmic-surface); border-top: 1px solid var(--cosmic-border); padding: 0.75rem;">
+                    <div style="display: flex; justify-content: space-around;">
+                        <button style="background: none; border: none; color: var(--orbital-copper); display: flex; flex-direction: column; align-items: center; gap: 0.25rem; font-size: 0.75rem;">
+                            <span style="font-size: 1.2rem;">🏠</span>
+                            Dashboard
+                        </button>
+                        <button style="background: none; border: none; color: var(--cosmic-cream-dim); display: flex; flex-direction: column; align-items: center; gap: 0.25rem; font-size: 0.75rem;">
+                            <span style="font-size: 1.2rem;">📊</span>
+                            Projects
+                        </button>
+                        <button style="background: none; border: none; color: var(--cosmic-cream-dim); display: flex; flex-direction: column; align-items: center; gap: 0.25rem; font-size: 0.75rem;">
+                            <span style="font-size: 1.2rem;">🛡️</span>
+                            Govern
+                        </button>
+                        <button style="background: none; border: none; color: var(--cosmic-cream-dim); display: flex; flex-direction: column; align-items: center; gap: 0.25rem; font-size: 0.75rem;">
+                            <span style="font-size: 1.2rem;">⚙️</span>
+                            Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Annotations -->
+            <div class="annotation" style="top: 50px; right: 50px;">
+                Touch-friendly navigation with cosmic aesthetic maintained
+            </div>
+            <div class="annotation" style="bottom: 100px; left: 50px;">
+                Stacked cards optimize vertical space while preserving design hierarchy
+            </div>
+        </div>
+
+        <!-- Design System Summary -->
+        <div class="wireframe-section">
+            <div class="wireframe-title">
+                <div class="orbital-icon"></div>
+                Cosmic Design System Implementation
+            </div>
+            <div class="wireframe-subtitle">
+                How the sophisticated cosmic aesthetic enhances enterprise functionality while maintaining professional usability
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <!-- Color System -->
+                <div style="background: var(--cosmic-surface); border: 1px solid var(--cosmic-border); border-radius: 12px; padding: 1.5rem;">
+                    <h3 style="color: var(--orbital-copper); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="orbital-icon" style="width: 16px; height: 16px;"></div>
+                        Cosmic Color Hierarchy
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 20px; height: 20px; background: var(--cosmic-void); border: 1px solid var(--cosmic-border); border-radius: 4px;"></div>
+                            <span style="font-size: 0.9rem; color: var(--cosmic-cream-dim);">Deep Space (#0A0A0F) - Primary background</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 20px; height: 20px; background: var(--orbital-copper); border-radius: 4px;"></div>
+                            <span style="font-size: 0.9rem; color: var(--cosmic-cream-dim);">Orbital Copper (#D77B28) - Primary actions</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 20px; height: 20px; background: var(--nebula-blue); border-radius: 4px;"></div>
+                            <span style="font-size: 0.9rem; color: var(--cosmic-cream-dim);">Nebula Blue (#2d609f) - Secondary actions</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 20px; height: 20px; background: var(--cosmic-cream); border-radius: 4px;"></div>
+                            <span style="font-size: 0.9rem; color: var(--cosmic-cream-dim);">Cosmic Cream (#F2F0E6) - Typography</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Animation System -->
+                <div style="background: var(--cosmic-surface); border: 1px solid var(--cosmic-border); border-radius: 12px; padding: 1.5rem;">
+                    <h3 style="color: var(--orbital-copper); margin-bottom: 1rem;">Lifeforce Animation System</h3>
+                    <ul style="color: var(--cosmic-cream-dim); font-size: 0.9rem; line-height: 1.6;">
+                        <li>• <strong>Cosmic Pulse:</strong> Organic breathing for status indicators</li>
+                        <li>• <strong>Orbital Drift:</strong> Subtle background nebula movement</li>
+                        <li>• <strong>Lifeforce Pulse:</strong> Confidence meter glow effects</li>
+                        <li>• <strong>Hover States:</strong> Copper glow on interaction</li>
+                    </ul>
+                </div>
+
+                <!-- Enterprise Features -->
+                <div style="background: var(--cosmic-surface); border: 1px solid var(--cosmic-border); border-radius: 12px; padding: 1.5rem;">
+                    <h3 style="color: var(--orbital-copper); margin-bottom: 1rem;">Enterprise Integration</h3>
+                    <ul style="color: var(--cosmic-cream-dim); font-size: 0.9rem; line-height: 1.6;">
+                        <li>• <strong>SDLC Visibility:</strong> Real-time governance dashboards</li>
+                        <li>• <strong>Risk Management:</strong> Technical score monitoring</li>
+                        <li>• <strong>Compliance:</strong> Automated audit trails</li>
+                        <li>• <strong>Performance:</strong> Quality gate enforcement</li>
+                    </ul>
+                </div>
+
+                <!-- Accessibility -->
+                <div style="background: var(--cosmic-surface); border: 1px solid var(--cosmic-border); border-radius: 12px; padding: 1.5rem;">
+                    <h3 style="color: var(--orbital-copper); margin-bottom: 1rem;">Professional Usability</h3>
+                    <ul style="color: var(--cosmic-cream-dim); font-size: 0.9rem; line-height: 1.6;">
+                        <li>• <strong>Contrast:</strong> WCAG AA compliant color ratios</li>
+                        <li>• <strong>Typography:</strong> Clear hierarchy with cream on dark</li>
+                        <li>• <strong>Navigation:</strong> Familiar patterns with cosmic styling</li>
+                        <li>• <strong>Responsive:</strong> Touch-friendly mobile adaptation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showView(viewType) {
+            // Hide all views
+            document.getElementById('desktop-view').style.display = 'none';
+            document.getElementById('governance-view').style.display = 'none';
+            document.getElementById('mobile-view').style.display = 'none';
+
+            // Show selected view
+            switch(viewType) {
+                case 'desktop':
+                    document.getElementById('desktop-view').style.display = 'block';
+                    break;
+                case 'governance':
+                    document.getElementById('governance-view').style.display = 'block';
+                    break;
+                case 'mobile':
+                    document.getElementById('mobile-view').style.display = 'block';
+                    break;
+            }
+        }
+
+        // Show desktop view by default
+        showView('desktop');
+    </script>
+</body>
+</html>

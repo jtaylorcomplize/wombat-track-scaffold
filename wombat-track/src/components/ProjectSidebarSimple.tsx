@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { ChevronRight, Folder, FolderOpen, CheckCircle, Clock, Circle, AlertCircle } from 'lucide-react';
-import type { Phase, PhaseStep } from '../types/models';
+import type { Phase } from '../types/models'; // no-unused-vars fix
 import { getPhaseStatus } from '../utils/phaseStatus';
 
 // FIXME: Temporarily using mock data structure until real project data is available

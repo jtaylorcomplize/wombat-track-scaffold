@@ -1,0 +1,83 @@
+{
+  "id": "act_010",
+  "name": "Client Satisfaction Metrics",
+  "description": "Client feedback and satisfaction scores",
+  "category": "performance",
+  "data_source": {
+    "primary_table": "actionstep_performance",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "client_id",
+        "display_name": "Client ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "client_name",
+        "display_name": "Client Name",
+        "data_type": "string"
+      },
+      {
+        "field_name": "survey_date",
+        "display_name": "Survey Date",
+        "data_type": "date",
+        "format": "YYYY-MM-DD"
+      },
+      {
+        "field_name": "feedback_category",
+        "display_name": "Feedback Category",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "satisfaction_score",
+        "display_name": "Satisfaction Score",
+        "data_type": "decimal",
+        "aggregation": "avg",
+        "format": "0.00%"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "feedback_category",
+        "display_name": "Feedback Category",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Service Quality"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "line_chart",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "partner",
+      "senior_associate"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.242Z",
+    "last_modified": "2025-07-29T02:54:05.242Z",
+    "version": "2.2",
+    "tags": [
+      "performance",
+      "medium",
+      "performance"
+    ]
+  }
+}

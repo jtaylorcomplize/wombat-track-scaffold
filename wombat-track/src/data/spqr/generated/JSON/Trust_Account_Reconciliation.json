@@ -1,0 +1,83 @@
+{
+  "id": "act_007",
+  "name": "Trust Account Reconciliation",
+  "description": "Trust account balances and reconciliation status",
+  "category": "financials",
+  "data_source": {
+    "primary_table": "actionstep_financials",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "trust_account_id",
+        "display_name": "Trust Account ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "last_reconciled",
+        "display_name": "Last Reconciled",
+        "data_type": "date",
+        "format": "YYYY-MM-DD"
+      },
+      {
+        "field_name": "reconciliation_status",
+        "display_name": "Reconciliation Status",
+        "data_type": "string"
+      },
+      {
+        "field_name": "client_name",
+        "display_name": "Client Name",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "account_balance",
+        "display_name": "Account Balance",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "reconciliation_status",
+        "display_name": "Reconciliation Status",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Reconciled"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "kpi",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "analyst",
+      "admin"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.233Z",
+    "last_modified": "2025-07-29T02:54:05.233Z",
+    "version": "2.2",
+    "tags": [
+      "financials",
+      "high",
+      "financials"
+    ]
+  }
+}

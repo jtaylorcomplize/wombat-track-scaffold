@@ -1,0 +1,96 @@
+{
+  "id": "act_003",
+  "name": "Client Revenue Summary",
+  "description": "Revenue breakdown by client with billing summaries",
+  "category": "financials",
+  "data_source": {
+    "primary_table": "actionstep_financials",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "client_id",
+        "display_name": "Client ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "client_name",
+        "display_name": "Client Name",
+        "data_type": "string"
+      },
+      {
+        "field_name": "billing_period",
+        "display_name": "Billing Period",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "total_revenue",
+        "display_name": "Total Revenue",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      },
+      {
+        "field_name": "matter_count",
+        "display_name": "Matter Count",
+        "data_type": "integer",
+        "aggregation": "count"
+      },
+      {
+        "field_name": "outstanding_balance",
+        "display_name": "Outstanding Balance",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [
+      {
+        "field_name": "billing_period",
+        "operator": "equals",
+        "value": "current_month"
+      }
+    ],
+    "available_filters": [
+      {
+        "field_name": "billing_period",
+        "display_name": "Billing Period",
+        "filter_type": "dropdown",
+        "options": [
+          "\"current_month"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "bar_chart",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "partner",
+      "senior_associate"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.228Z",
+    "last_modified": "2025-07-29T02:54:05.228Z",
+    "version": "2.2",
+    "tags": [
+      "financials",
+      "high",
+      "financials"
+    ]
+  }
+}

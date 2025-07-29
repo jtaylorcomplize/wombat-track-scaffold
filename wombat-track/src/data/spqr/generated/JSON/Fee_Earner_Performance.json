@@ -1,0 +1,82 @@
+{
+  "id": "act_018",
+  "name": "Fee Earner Performance",
+  "description": "Individual fee earner productivity and billing metrics",
+  "category": "performance",
+  "data_source": {
+    "primary_table": "actionstep_performance",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "fee_earner_id",
+        "display_name": "Fee Earner ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "fee_earner_name",
+        "display_name": "Fee Earner Name",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "monthly_billings",
+        "display_name": "Monthly Billings",
+        "data_type": "decimal",
+        "aggregation": "sum",
+        "format": "$#,##0.00"
+      },
+      {
+        "field_name": "billable_hours",
+        "display_name": "Billable Hours",
+        "data_type": "decimal",
+        "aggregation": "count"
+      },
+      {
+        "field_name": "realization_rate",
+        "display_name": "Realization Rate",
+        "data_type": "decimal",
+        "aggregation": "avg",
+        "format": "0.00%"
+      },
+      {
+        "field_name": "client_origination",
+        "display_name": "Client Origination",
+        "data_type": "integer",
+        "aggregation": "count"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": []
+  },
+  "visualization": {
+    "chart_type": "table",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "partner",
+      "senior_associate"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.271Z",
+    "last_modified": "2025-07-29T02:54:05.271Z",
+    "version": "2.2",
+    "tags": [
+      "performance",
+      "medium",
+      "performance"
+    ]
+  }
+}

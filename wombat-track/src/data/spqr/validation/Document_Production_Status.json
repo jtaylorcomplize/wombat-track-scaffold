@@ -1,0 +1,97 @@
+{
+  "id": "act_011",
+  "name": "Document Production Status",
+  "description": "Status of document reviews and productions",
+  "category": "matter_management",
+  "data_source": {
+    "primary_table": "actionstep_matter_management",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "matter_id",
+        "display_name": "Matter ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "production_status",
+        "display_name": "Production Status",
+        "data_type": "string"
+      },
+      {
+        "field_name": "due_date",
+        "display_name": "Due Date",
+        "data_type": "date",
+        "format": "YYYY-MM-DD"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "document_count",
+        "display_name": "Document Count",
+        "data_type": "integer",
+        "aggregation": "count"
+      },
+      {
+        "field_name": "reviewed_count",
+        "display_name": "Reviewed Count",
+        "data_type": "integer",
+        "aggregation": "count"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": [
+      {
+        "field_name": "production_status",
+        "display_name": "Production Status",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Not Started"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "bar_chart",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "all_users"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.243Z",
+    "last_modified": "2025-07-29T02:54:05.243Z",
+    "version": "2.2",
+    "tags": [
+      "matter management",
+      "medium",
+      "matter_management"
+    ]
+  },
+  "validation": {
+    "matched_view": "v_actionstep_matter_management",
+    "missing_fields": [
+      "dimension: production_status",
+      "dimension: due_date",
+      "metric: document_count",
+      "metric: reviewed_count"
+    ],
+    "filter_issues": [
+      "available filter field not found: production_status"
+    ],
+    "notes": [
+      "Validation completed"
+    ]
+  }
+}

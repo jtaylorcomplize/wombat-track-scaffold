@@ -1,0 +1,76 @@
+{
+  "id": "act_016",
+  "name": "Task Completion Metrics",
+  "description": "Task completion rates and efficiency metrics",
+  "category": "performance",
+  "data_source": {
+    "primary_table": "actionstep_performance",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "fee_earner_id",
+        "display_name": "Fee Earner ID",
+        "data_type": "string"
+      }
+    ],
+    "metrics": [
+      {
+        "field_name": "tasks_completed",
+        "display_name": "Tasks Completed",
+        "data_type": "integer",
+        "aggregation": "count"
+      },
+      {
+        "field_name": "tasks_pending",
+        "display_name": "Tasks Pending",
+        "data_type": "integer",
+        "aggregation": "count"
+      },
+      {
+        "field_name": "completion_rate",
+        "display_name": "Completion Rate",
+        "data_type": "decimal",
+        "aggregation": "avg",
+        "format": "0.00%"
+      },
+      {
+        "field_name": "avg_completion_time",
+        "display_name": "Average Completion Time",
+        "data_type": "decimal",
+        "aggregation": "count"
+      }
+    ]
+  },
+  "filters": {
+    "default_filters": [],
+    "available_filters": []
+  },
+  "visualization": {
+    "chart_type": "line_chart",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "partner",
+      "senior_associate"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.248Z",
+    "last_modified": "2025-07-29T02:54:05.248Z",
+    "version": "2.2",
+    "tags": [
+      "performance",
+      "medium",
+      "performance"
+    ]
+  }
+}

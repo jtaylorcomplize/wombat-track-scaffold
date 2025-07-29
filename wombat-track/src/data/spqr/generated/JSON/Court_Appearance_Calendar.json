@@ -1,0 +1,93 @@
+{
+  "id": "act_013",
+  "name": "Court Appearance Calendar",
+  "description": "Upcoming court dates and hearing schedules",
+  "category": "matter_management",
+  "data_source": {
+    "primary_table": "actionstep_matter_management",
+    "join_tables": [],
+    "connection_type": "actionstep_api"
+  },
+  "fields": {
+    "dimensions": [
+      {
+        "field_name": "matter_id",
+        "display_name": "Matter ID",
+        "data_type": "string"
+      },
+      {
+        "field_name": "court_date",
+        "display_name": "Court Date",
+        "data_type": "date",
+        "format": "YYYY-MM-DD"
+      },
+      {
+        "field_name": "court_name",
+        "display_name": "Court Name",
+        "data_type": "string"
+      },
+      {
+        "field_name": "hearing_type",
+        "display_name": "Hearing Type",
+        "data_type": "string"
+      },
+      {
+        "field_name": "attending_counsel",
+        "display_name": "Attending Counsel",
+        "data_type": "string"
+      }
+    ],
+    "metrics": []
+  },
+  "filters": {
+    "default_filters": [
+      {
+        "field_name": "court_date",
+        "operator": "equals",
+        "value": "next_30_days"
+      }
+    ],
+    "available_filters": [
+      {
+        "field_name": "court_date",
+        "display_name": "Court Date",
+        "filter_type": "date_range",
+        "options": [
+          "\"today"
+        ]
+      },
+      {
+        "field_name": "hearing_type",
+        "display_name": "Hearing Type",
+        "filter_type": "dropdown",
+        "options": [
+          "\"Directions"
+        ]
+      }
+    ]
+  },
+  "visualization": {
+    "chart_type": "table",
+    "color_scheme": "blue_actionstep_theme"
+  },
+  "permissions": {
+    "view_roles": [
+      "all_users"
+    ],
+    "edit_roles": [
+      "admin",
+      "partner"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude SPQR Generator",
+    "created_date": "2025-07-29T02:54:05.245Z",
+    "last_modified": "2025-07-29T02:54:05.245Z",
+    "version": "2.2",
+    "tags": [
+      "matter management",
+      "high",
+      "matter_management"
+    ]
+  }
+}

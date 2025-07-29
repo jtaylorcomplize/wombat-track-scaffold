@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Typography from '@tiptap/extension-typography';
 import { 
-  Bold, Italic, Underline, Code, Heading1, Heading2, 
+  Bold, Italic, Code, Heading1, Heading2, 
   List, Quote, Save, Download, Sparkles, Clock,
   Check, AlertCircle, Loader2, Tag, Link2, FileText
 } from 'lucide-react';
@@ -28,7 +28,7 @@ export const DocsEditor: React.FC<DocsEditorProps> = ({
   // Metadata state
   const [title, setTitle] = useState(initialDoc?.title || '');
   const [docType, setDocType] = useState<DocType>(initialDoc?.docType || 'SOP');
-  const [relatedFeatureId, setRelatedFeatureId] = useState(initialDoc?.relatedFeatureId || '');
+  const [_relatedFeatureId] = useState(initialDoc?.relatedFeatureId || '');
   const [relatedPhaseId, setRelatedPhaseId] = useState(initialDoc?.relatedPhaseId || '');
   const [relatedProjectId, setRelatedProjectId] = useState(initialDoc?.relatedProjectId || '');
   const [tags, setTags] = useState<string[]>(initialDoc?.tags || []);
@@ -55,7 +55,7 @@ export const DocsEditor: React.FC<DocsEditorProps> = ({
       Typography
     ],
     content: initialDoc?.content || '<p></p>',
-    onUpdate: ({ editor }) => {
+    onUpdate: ({ editor }) => { // eslint-disable-line @typescript-eslint/no-unused-vars
       setSaveStatus('unsaved');
       // Trigger autosave after 2 seconds of inactivity
       clearTimeout(window.autoSaveTimeout);
@@ -81,7 +81,7 @@ export const DocsEditor: React.FC<DocsEditorProps> = ({
       title,
       docType,
       content: editor.getHTML(),
-      relatedFeatureId: relatedFeatureId || undefined,
+      relatedFeatureId: _relatedFeatureId || undefined,
       relatedPhaseId: relatedPhaseId || undefined,
       relatedProjectId: relatedProjectId || undefined,
       memoryAnchorId: initialDoc?.memoryAnchorId,
@@ -114,7 +114,7 @@ export const DocsEditor: React.FC<DocsEditorProps> = ({
       setSaveStatus('failed');
       console.error('Failed to save document:', error);
     }
-  }, [editor, title, docType, relatedFeatureId, relatedPhaseId, relatedProjectId, tags, initialDoc, onSave, logGovernanceEvent]);
+  }, [editor, title, docType, _relatedFeatureId, relatedPhaseId, relatedProjectId, tags, initialDoc, onSave, logGovernanceEvent, saveStatus]);
 
   // Toolbar actions
   const toolbarActions = [
