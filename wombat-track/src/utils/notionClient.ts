@@ -12,27 +12,27 @@ export interface NotionClientConfig {
 
 export interface DatabaseQueryParams {
   database_id: string;
-  filter?: any;
-  sorts?: any[];
+  filter?: Record<string, unknown>; // @typescript-eslint/no-explicit-any fix
+  sorts?: Array<Record<string, unknown>>; // @typescript-eslint/no-explicit-any fix
   start_cursor?: string;
   page_size?: number;
 }
 
 export interface WritePageParams {
   parent: { database_id: string } | { page_id: string };
-  properties: Record<string, any>;
-  children?: any[];
+  properties: Record<string, unknown>; // @typescript-eslint/no-explicit-any fix
+  children?: Array<Record<string, unknown>>; // @typescript-eslint/no-explicit-any fix
 }
 
 export interface AppendPageParams {
   page_id: string;
-  children: any[];
+  children: Array<Record<string, unknown>>; // @typescript-eslint/no-explicit-any fix
 }
 
 export interface UpdatePageParams {
   page_id: string;
-  properties?: Record<string, any>;
-  children?: any[];
+  properties?: Record<string, unknown>; // @typescript-eslint/no-explicit-any fix
+  children?: Array<Record<string, unknown>>; // @typescript-eslint/no-explicit-any fix
   replace_content?: boolean;
 }
 
@@ -84,7 +84,7 @@ export class NotionClient {
     }
   }
 
-  async listDatabases(): Promise<any> {
+  async listDatabases(): Promise<Record<string, unknown>> { // @typescript-eslint/no-explicit-any fix
     try {
       const response = await this.client.search({
         filter: {
@@ -98,7 +98,7 @@ export class NotionClient {
     }
   }
 
-  async updatePage(params: UpdatePageParams): Promise<any> {
+  async updatePage(params: UpdatePageParams): Promise<Record<string, unknown>> { // @typescript-eslint/no-explicit-any fix
     try {
       // Update page properties if provided
       let updateResponse = null;
@@ -138,7 +138,7 @@ export class NotionClient {
     }
   }
 
-  async getUser(): Promise<any> {
+  async getUser(): Promise<Record<string, unknown>> { // @typescript-eslint/no-explicit-any fix
     try {
       const response = await this.client.users.me({});
       return response;
