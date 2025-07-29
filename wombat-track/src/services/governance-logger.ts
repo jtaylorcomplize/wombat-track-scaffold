@@ -7,7 +7,7 @@ interface GovernanceLogEntry {
   resource_id: string;
   action: string;
   success: boolean;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
   session_id?: string;
   ip_address?: string;
   user_agent?: string;
@@ -56,7 +56,7 @@ interface AlertRule {
 class GovernanceLogger {
   private static instance: GovernanceLogger;
   private logBuffer: GovernanceLogEntry[] = [];
-  private sessionMetrics: Map<string, any> = new Map();
+  private sessionMetrics: Map<string, Record<string, unknown>> = new Map();
   private alertRules: AlertRule[] = [];
   private flushInterval: NodeJS.Timeout | null = null;
 
@@ -186,7 +186,7 @@ class GovernanceLogger {
     });
   }
 
-  logUserAction(userId: string, userRole: string, cardId: string, action: string, details: any, sessionId?: string): void {
+  logUserAction(userId: string, userRole: string, cardId: string, action: string, details: Record<string, unknown>, sessionId?: string): void {
     this.log({
       event_type: 'user_action',
       user_id: userId,
@@ -200,7 +200,7 @@ class GovernanceLogger {
     });
   }
 
-  logFilterChange(userId: string, userRole: string, cardId: string, filters: any, sessionId?: string): void {
+  logFilterChange(userId: string, userRole: string, cardId: string, filters: Record<string, unknown>, sessionId?: string): void {
     this.log({
       event_type: 'filter_change',
       user_id: userId,
@@ -237,7 +237,7 @@ class GovernanceLogger {
     });
   }
 
-  logError(userId: string, userRole: string, resourceId: string, error: Error, context?: any): void {
+  logError(userId: string, userRole: string, resourceId: string, error: Error, context?: Record<string, unknown>): void {
     this.log({
       event_type: 'error',
       user_id: userId,
@@ -342,13 +342,13 @@ class GovernanceLogger {
       let metricValue = 0;
 
       switch (rule.condition.metric) {
-        case 'error_rate':
+        case 'error_rate': {
           const totalLogs = recentLogs.length;
           const errorLogs = recentLogs.filter(log => !log.success).length;
           metricValue = totalLogs > 0 ? errorLogs / totalLogs : 0;
           break;
-
-        case 'avg_load_time':
+        }
+        case 'avg_load_time': {
           const loadTimes = recentLogs
             .filter(log => log.performance_metrics?.load_time_ms)
             .map(log => log.performance_metrics!.load_time_ms!);
@@ -356,12 +356,13 @@ class GovernanceLogger {
             ? loadTimes.reduce((a, b) => a + b, 0) / loadTimes.length 
             : 0;
           break;
-
-        case 'auth_failures':
+        }
+        case 'auth_failures': {
           metricValue = recentLogs.filter(log => 
             log.event_type === 'auth_attempt' && !log.success
           ).length;
           break;
+        }
       }
 
       if (this.evaluateCondition(metricValue, rule.condition)) {
@@ -370,7 +371,7 @@ class GovernanceLogger {
     });
   }
 
-  private evaluateCondition(value: number, condition: any): boolean {
+  private evaluateCondition(value: number, condition: { operator: string; threshold: number }): boolean {
     switch (condition.operator) {
       case 'gt': return value > condition.threshold;
       case 'lt': return value < condition.threshold;
@@ -420,7 +421,6 @@ class GovernanceLogger {
     );
 
     const sessions = new Set(recentLogs.map(log => log.session_id));
-    const users = new Set(recentLogs.map(log => log.user_id));
     const pageviews = recentLogs.filter(log => log.action === 'view').length;
     const queries = recentLogs.filter(log => log.action === 'query').length;
     const errors = recentLogs.filter(log => !log.success).length;
@@ -454,7 +454,7 @@ class GovernanceLogger {
     };
   }
 
-  async generatePhaseCompleteReport(): Promise<any> {
+  async generatePhaseCompleteReport(): Promise<Record<string, unknown>> {
     const metrics = this.getUsageMetrics('day');
     
     const report = {

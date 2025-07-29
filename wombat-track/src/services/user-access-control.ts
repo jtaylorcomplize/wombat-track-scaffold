@@ -6,7 +6,7 @@ interface UserProfile {
   permissions: string[];
   practice_areas?: string[];
   client_access?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface AccessRule {
@@ -21,7 +21,7 @@ interface AccessCondition {
   type: 'department' | 'practice_area' | 'client_access' | 'custom';
   field: string;
   operator: 'equals' | 'in' | 'not_in' | 'contains';
-  value: any;
+  value: unknown;
 }
 
 interface DataRowLevelSecurity {
@@ -154,7 +154,7 @@ class UserAccessControlService {
         }
       }
 
-      const restrictions = this.getDataRestrictions(user, resourceId);
+      const restrictions = this.getDataRestrictions(user);
       
       return {
         granted: true,
@@ -208,7 +208,7 @@ class UserAccessControlService {
     return { granted: true };
   }
 
-  private getUserFieldValue(user: UserProfile, field: string): any {
+  private getUserFieldValue(user: UserProfile, field: string): unknown {
     switch (field) {
       case 'department':
         return user.department;
@@ -221,7 +221,7 @@ class UserAccessControlService {
     }
   }
 
-  private evaluateCondition(userValue: any, condition: AccessCondition): boolean {
+  private evaluateCondition(userValue: unknown, condition: AccessCondition): boolean {
     switch (condition.operator) {
       case 'equals':
         return userValue === condition.value;
@@ -252,7 +252,7 @@ class UserAccessControlService {
     }
   }
 
-  private getDataRestrictions(user: UserProfile, resourceId: string): DataRowLevelSecurity[] {
+  private getDataRestrictions(user: UserProfile): DataRowLevelSecurity[] {
     const restrictions: DataRowLevelSecurity[] = [];
 
     switch (user.role) {
@@ -313,14 +313,14 @@ class UserAccessControlService {
     return restrictions;
   }
 
-  getPermittedCards(user: UserProfile, allCards: any[]): any[] {
+  getPermittedCards(user: UserProfile, allCards: Array<{ id: string }>): Array<{ id: string }> {
     return allCards.filter(card => {
       const access = this.canAccessResource(user, 'card', card.id);
       return access.granted;
     });
   }
 
-  applyDataRestrictions(user: UserProfile, query: any, resourceId: string): any {
+  applyDataRestrictions(user: UserProfile, query: Record<string, unknown>, resourceId: string): Record<string, unknown> {
     const access = this.canAccessResource(user, 'data', resourceId);
     
     if (!access.granted) {

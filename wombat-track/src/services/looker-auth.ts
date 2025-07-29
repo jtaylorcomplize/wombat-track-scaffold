@@ -20,7 +20,7 @@ interface EmbedUrlRequest {
   models: string[];
   group_ids?: number[];
   external_group_id?: string;
-  user_attributes?: Record<string, any>;
+  user_attributes?: Record<string, unknown>;
   session_length?: number;
   force_logout_login?: boolean;
 }
@@ -119,8 +119,8 @@ class LookerAuthService {
     };
   }
 
-  getUserAttributesForRole(userRole: string): Record<string, any> {
-    const attributes: Record<string, any> = {
+  getUserAttributesForRole(userRole: string): Record<string, unknown> {
+    const attributes: Record<string, unknown> = {
       user_role: userRole,
       can_see_sensitive_data: ['partner', 'admin'].includes(userRole) ? 'yes' : 'no'
     };
