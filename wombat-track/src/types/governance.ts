@@ -16,7 +16,7 @@ export interface GovernanceEvent {
   triggeredBy: string;
   eventType: GovernanceEventType;
   timestamp: string;
-  details?: any;
+  details?: Record<string, unknown>;
   // Self-management enhancements
   linkedProject?: string; // Project ID for filtering
   linkedPhase?: string; // Phase ID for context

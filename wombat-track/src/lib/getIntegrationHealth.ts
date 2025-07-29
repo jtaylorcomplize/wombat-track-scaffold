@@ -8,7 +8,7 @@ export interface IntegrationHealth {
   logUrl?: string;
   responseTime?: number; // in milliseconds
   uptime?: number; // percentage
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // In-memory store for health data (in production, this would be a database)

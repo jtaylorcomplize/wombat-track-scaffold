@@ -7,7 +7,7 @@ export interface AIMessage {
   to: 'Claude' | 'Gizmo';
   timestamp: string;
   message: string;
-  context?: any;
+  context?: Record<string, unknown>;
   status: 'pending' | 'read' | 'responded';
   responseId?: string;
 }

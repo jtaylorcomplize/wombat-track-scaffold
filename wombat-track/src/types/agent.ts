@@ -11,7 +11,7 @@ export interface Agent {
   currentStatus: AgentStatus;
   version?: string;
   endpoint?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: string;
   lastActiveAt?: string;
 }
@@ -31,7 +31,7 @@ export interface AgentConnection {
   bandwidth?: number;
   latency?: number;
   lastHealthCheck?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: string;
 }
 
@@ -49,7 +49,7 @@ export interface ExternalService {
   provider?: string;
   region?: string;
   dependencies?: string[]; // Other service IDs
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: string;
   lastStatusUpdate?: string;
 }

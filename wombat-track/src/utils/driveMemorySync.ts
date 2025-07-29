@@ -237,7 +237,10 @@ export class DriveMemorySync {
     return tags;
   }
 
-  private mapToNotionProperties(record: DriveMemoryRecord, _databaseId: string): Record<string, unknown> { // @typescript-eslint/no-explicit-any fix, @typescript-eslint/no-unused-vars fix
+  private mapToNotionProperties(
+    record: DriveMemoryRecord, 
+    _databaseId: string // eslint-disable-line @typescript-eslint/no-unused-vars
+  ): Record<string, unknown> {
     
     // Map based on record type
     switch (record.type) {

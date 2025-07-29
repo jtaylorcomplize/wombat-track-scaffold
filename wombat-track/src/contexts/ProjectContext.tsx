@@ -9,7 +9,7 @@ interface GovernanceEvent {
   triggeredBy: string;
   eventType: 'StepStatusUpdated' | 'StepAdded' | 'StepRemoved' | 'PhaseUpdated';
   timestamp: string;
-  details?: any;
+  details?: Record<string, unknown>;
 }
 
 interface ProjectContextType {

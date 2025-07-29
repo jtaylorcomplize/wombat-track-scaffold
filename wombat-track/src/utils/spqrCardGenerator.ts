@@ -93,13 +93,13 @@ export interface ValidationIssue {
 }
 
 // Utility functions for parsing CSV data
-export function parseCSV(csvContent: string): any[] {
+export function parseCSV(csvContent: string): Record<string, string>[] {
   const lines = csvContent.trim().split('\n');
   const headers = lines[0].split(',');
   
   return lines.slice(1).map(line => {
     const values = line.split(',');
-    const obj: any = {};
+    const obj: Record<string, string> = {};
     headers.forEach((header, index) => {
       obj[header] = values[index] || '';
     });
@@ -245,7 +245,7 @@ export function generateSpecCard(
   const metrics: CardFieldSpec[] = cardFields
     .filter(cf => cf.field_type === 'metric')
     .map(cf => {
-      const dictEntry = fieldDictionary.find(fd => fd.field_name === cf.field_name);
+      const dictEntry = fieldDictionary.find(fd => fd.field_name === cf.field_name); // eslint-disable-line @typescript-eslint/no-unused-vars
       return {
         field_name: cf.field_name,
         display_name: cf.field_display_name,
@@ -337,7 +337,7 @@ export function generateAllSpecCards(): { specCards: SpecCard[]; issues: Validat
 }
 
 // Create MCP Issue Table entry
-export function createMCPIssueEntry(issue: ValidationIssue): any {
+export function createMCPIssueEntry(issue: ValidationIssue): Record<string, unknown> {
   return {
     id: `issue_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     timestamp: new Date().toISOString(),

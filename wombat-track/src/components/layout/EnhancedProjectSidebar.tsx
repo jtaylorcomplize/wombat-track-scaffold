@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Filter, FolderOpen, Settings, Plus } from 'lucide-react'; // removed unused User
+import { ChevronLeft, ChevronRight, Filter, FolderOpen, Settings, Plus } from 'lucide-react';
 import type { Project } from '../../types/phase';
 import type { WorkSurface } from './AppLayout';
 import { SubAppSelector } from './SubAppSelector';
@@ -36,7 +36,7 @@ const RAG_STATUS_OPTIONS = ['All', 'Red', 'Amber', 'Green'];
 const STATUS_OPTIONS = ['All', 'Active', 'On Hold', 'Completed'];
 
 export const EnhancedProjectSidebar: React.FC<EnhancedProjectSidebarProps> = ({
-  _projects, // unused in this component
+  _projects, // eslint-disable-line @typescript-eslint/no-unused-vars
   currentProject,
   selectedSurface,
   collapsed,

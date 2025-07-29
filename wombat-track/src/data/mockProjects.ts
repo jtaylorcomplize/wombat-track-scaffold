@@ -5,7 +5,7 @@ interface MockProject extends Partial<Project> {
   id: string;
   title: string;
   linkedProgramId: string;
-  phaseSteps?: any[];
+  phaseSteps?: Array<{ id: string; stepNumber: number; stepInstruction: string }>;
 }
 
 export const mockProjects: MockProject[] = [
