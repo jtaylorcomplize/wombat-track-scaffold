@@ -1,0 +1,32 @@
+[
+  {
+    "phasename": "Phase 1: UI Component Creation",
+    "phaseid": "wt-6-1-phase-1",
+    "WT Projects": "wt-6-1",
+    "status": "Active",
+    "notes": "Agent status widget implementation",
+    "startDate": "2025-07-29",
+    "endDate": "2025-08-05",
+    "RAG": "Green"
+  },
+  {
+    "phasename": "Phase 2: Backend Integration",
+    "phaseid": "wt-6-1-phase-2",
+    "WT Projects": "wt-6-1",
+    "status": "Planned",
+    "notes": "Agent state tracking hooks",
+    "startDate": "2025-08-06",
+    "endDate": "2025-08-12",
+    "RAG": "Yellow"
+  },
+  {
+    "phasename": "Final Lint Pass",
+    "phaseid": "wt-7-4-final",
+    "WT Projects": "wt-7-4",
+    "status": "Completed",
+    "notes": "Zero ESLint errors achieved",
+    "startDate": "2025-07-28",
+    "endDate": "2025-07-29",
+    "RAG": "Green"
+  }
+]

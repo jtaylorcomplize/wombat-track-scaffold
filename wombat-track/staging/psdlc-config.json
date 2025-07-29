@@ -1,0 +1,24 @@
+{
+  "enabled": true,
+  "mode": "non-destructive",
+  "watchComponents": [
+    "oApp DB",
+    "Notion DBs"
+  ],
+  "syncSchedule": "nightly",
+  "governanceLogging": true,
+  "reconciliation": {
+    "enabled": true,
+    "preserveNotion": true,
+    "conflictResolution": "notion-primary"
+  },
+  "monitoring": {
+    "changeDetection": true,
+    "alerting": true,
+    "metrics": [
+      "sync_success",
+      "data_integrity",
+      "performance"
+    ]
+  }
+}

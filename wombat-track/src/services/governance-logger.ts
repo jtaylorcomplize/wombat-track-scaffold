@@ -16,11 +16,30 @@ interface GovernanceLogEntry {
     query_time_ms?: number;
     data_size_bytes?: number;
     error_count?: number;
+    memory_usage_mb?: number;
+    cpu_usage_percent?: number;
   };
   security_context?: {
     auth_method: string;
     permissions_checked: string[];
     access_restrictions: string[];
+  };
+  runtime_context?: {
+    browser?: string;
+    viewport_size?: { width: number; height: number };
+    connection_type?: string;
+    phase?: string;
+    environment?: string;
+  };
+  rag_metrics?: {
+    score: 'red' | 'amber' | 'green' | 'blue';
+    performance_grade: 'A' | 'B' | 'C' | 'D' | 'F';
+    health_factors: {
+      load_performance: number;
+      error_rate: number;
+      user_engagement: number;
+      data_freshness: number;
+    };
   };
 }
 
@@ -46,11 +65,42 @@ interface AlertRule {
     time_window_minutes: number;
   };
   actions: Array<{
-    type: 'email' | 'webhook' | 'log';
+    type: 'email' | 'webhook' | 'log' | 'slack';
     target: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
   }>;
   enabled: boolean;
+}
+
+interface DashboardHealthReport {
+  dashboard_id: string;
+  timestamp: string;
+  overall_health: 'healthy' | 'degraded' | 'critical';
+  rag_score: 'red' | 'amber' | 'green' | 'blue';
+  performance_grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  metrics: {
+    avg_load_time_ms: number;
+    error_rate: number;
+    user_engagement_score: number;
+    data_freshness_score: number;
+    total_sessions: number;
+    total_interactions: number;
+  };
+  recommendations: string[];
+}
+
+interface RuntimeObservabilityConfig {
+  enableAutoMetrics: boolean;
+  metricsInterval: number;
+  alertWebhookUrl?: string;
+  slackWebhookUrl?: string;
+  emailAlertRecipients?: string[];
+  performanceThresholds: {
+    loadTimeWarningMs: number;
+    loadTimeCriticalMs: number;
+    errorRateWarning: number;
+    errorRateCritical: number;
+  };
 }
 
 class GovernanceLogger {
@@ -59,10 +109,24 @@ class GovernanceLogger {
   private sessionMetrics: Map<string, Record<string, unknown>> = new Map();
   private alertRules: AlertRule[] = [];
   private flushInterval: NodeJS.Timeout | null = null;
+  private observabilityConfig: RuntimeObservabilityConfig;
+  private dashboardHealthCache: Map<string, DashboardHealthReport> = new Map();
+  private metricsAggregationInterval: NodeJS.Timeout | null = null;
 
   constructor() {
+    this.observabilityConfig = {
+      enableAutoMetrics: true,
+      metricsInterval: 60000,
+      performanceThresholds: {
+        loadTimeWarningMs: 5000,
+        loadTimeCriticalMs: 10000,
+        errorRateWarning: 0.1,
+        errorRateCritical: 0.2
+      }
+    };
     this.initializeAlertRules();
     this.startPeriodicFlush();
+    this.startMetricsAggregation();
   }
 
   static getInstance(): GovernanceLogger {
@@ -88,6 +152,11 @@ class GovernanceLogger {
             type: 'log',
             target: 'error',
             severity: 'high'
+          },
+          {
+            type: 'slack',
+            target: '#spqr-alerts',
+            severity: 'high'
           }
         ],
         enabled: true
@@ -105,6 +174,11 @@ class GovernanceLogger {
           {
             type: 'log',
             target: 'performance',
+            severity: 'medium'
+          },
+          {
+            type: 'webhook',
+            target: this.observabilityConfig.alertWebhookUrl || '',
             severity: 'medium'
           }
         ],
@@ -124,6 +198,52 @@ class GovernanceLogger {
             type: 'log',
             target: 'security',
             severity: 'critical'
+          },
+          {
+            type: 'email',
+            target: 'security@example.com',
+            severity: 'critical'
+          }
+        ],
+        enabled: true
+      },
+      {
+        rule_id: 'rag_score_degradation',
+        name: 'RAG Score Degradation',
+        condition: {
+          metric: 'rag_score_red_count',
+          operator: 'gt',
+          threshold: 3,
+          time_window_minutes: 15
+        },
+        actions: [
+          {
+            type: 'log',
+            target: 'health',
+            severity: 'high'
+          },
+          {
+            type: 'slack',
+            target: '#spqr-health',
+            severity: 'high'
+          }
+        ],
+        enabled: true
+      },
+      {
+        rule_id: 'low_user_engagement',
+        name: 'Low User Engagement',
+        condition: {
+          metric: 'engagement_score',
+          operator: 'lt',
+          threshold: 0.3,
+          time_window_minutes: 60
+        },
+        actions: [
+          {
+            type: 'log',
+            target: 'engagement',
+            severity: 'medium'
           }
         ],
         enabled: true
@@ -136,6 +256,14 @@ class GovernanceLogger {
       this.flushLogs();
       this.checkAlerts();
     }, 30000);
+  }
+
+  private startMetricsAggregation() {
+    if (!this.observabilityConfig.enableAutoMetrics) return;
+
+    this.metricsAggregationInterval = setInterval(() => {
+      this.aggregateAndRecordMetrics();
+    }, this.observabilityConfig.metricsInterval);
   }
 
   log(entry: Partial<GovernanceLogEntry>): void {
@@ -151,13 +279,16 @@ class GovernanceLogger {
       details: entry.details || {},
       session_id: entry.session_id || this.generateSessionId(),
       ip_address: entry.ip_address,
-      user_agent: entry.user_agent,
+      user_agent: entry.user_agent || (typeof navigator !== 'undefined' ? navigator.userAgent : undefined),
       performance_metrics: entry.performance_metrics,
-      security_context: entry.security_context
+      security_context: entry.security_context,
+      runtime_context: entry.runtime_context || this.captureRuntimeContext(),
+      rag_metrics: entry.rag_metrics
     };
 
     this.logBuffer.push(fullEntry);
     this.updateSessionMetrics(fullEntry);
+    this.updateHealthMetrics(fullEntry);
 
     console.log('SPQR Governance Log:', fullEntry);
 
