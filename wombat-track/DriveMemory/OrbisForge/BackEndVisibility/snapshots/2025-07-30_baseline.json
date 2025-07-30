@@ -1,0 +1,103 @@
+{
+  "snapshot_metadata": {
+    "timestamp": "2025-07-30T22:40:00.000Z",
+    "project": "OF-BEV",
+    "phase": "1.0",
+    "operation": "Baseline Data Snapshot",
+    "data_source": "oApp production database",
+    "snapshot_type": "canonical_baseline"
+  },
+  "table_extracts": {
+    "projects": {
+      "source_file": "cleaned-projects-snapshot.csv",
+      "total_records": 92,
+      "canonical_projects": 15,
+      "archive_candidates": 63,
+      "data_quality": "68.5% require archival",
+      "issues": [
+        "88% projects lack phases",
+        "97% projects lack owners",
+        "Legacy RECON-* identifiers present",
+        "Fragmented migration artifacts"
+      ]
+    },
+    "phases": {
+      "source_file": "cleaned-phases-snapshot.csv", 
+      "total_records": 257,
+      "orphaned_phases": 31,
+      "linked_phases": 226,
+      "data_quality": "Moderate - orphan records detected",
+      "issues": [
+        "31 phases without valid project references",
+        "Inconsistent naming conventions",
+        "Missing RAG status data"
+      ]
+    },
+    "governance_logs": {
+      "source_file": "logs/governance.jsonl", 
+      "total_entries": 60,
+      "recent_operations": [
+        "WT-DBM-1.2 audit completion",
+        "SPQR runtime hotfix",
+        "OF-BEV project initialization"
+      ],
+      "data_quality": "Good - comprehensive audit trail",
+      "coverage": "Complete for recent operations"
+    },
+    "sub_apps": {
+      "source_file": "Sub-Apps CSV files",
+      "total_records": 4,
+      "data_quality": "Good - minimal orphan records",
+      "integration_status": "Ready for import"
+    }
+  },
+  "orphaned_data_analysis": {
+    "missing_foreign_keys": {
+      "phases_without_projects": 31,
+      "projects_without_phases": 81,
+      "governance_logs_without_context": 0
+    },
+    "duplicate_records": {
+      "potential_project_duplicates": 2,
+      "phase_name_conflicts": 5,
+      "governance_entry_duplicates": 0
+    },
+    "blank_critical_fields": {
+      "projects_without_owners": 89,
+      "projects_without_status": 0,
+      "phases_without_rag": 180
+    }
+  },
+  "canonical_baseline_summary": {
+    "primary_canonical": "WT-UX14 (Score: 63)",
+    "tier_1_projects": 4,
+    "tier_2_projects": 3,
+    "development_candidates": 8,
+    "total_recommended": 15,
+    "archive_required": 63,
+    "data_integrity_score": "32% (Critical - Emergency intervention required)"
+  },
+  "next_phase_requirements": {
+    "immediate_fixes": [
+      "Archive 63 low-quality projects",
+      "Assign owners to 15 canonical projects", 
+      "Link 31 orphaned phases",
+      "Import clean CSV data to production"
+    ],
+    "phase_2_prep": [
+      "React Admin data explorer UI",
+      "Backend API endpoints for table management",
+      "CSV import pipeline automation",
+      "Orphan data cleanup workflows"
+    ]
+  },
+  "memoryplugin_references": {
+    "current_anchors": [
+      "wt_db_migration_1.2_complete",
+      "of-bev-project-init-20250730",
+      "SPQR-Phase5-ArchiveSummary"
+    ],
+    "baseline_classification": "project_initialization_baseline",
+    "drivememory_integration": "Complete"
+  }
+}

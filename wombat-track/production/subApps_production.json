@@ -1,0 +1,26 @@
+[
+  {
+    "subAppName": "MetaPlatform",
+    "subAppId": "MetaPlatform",
+    "owner": "GitHub",
+    "purpose": "Universal platform integration and workflow orchestration system"
+  },
+  {
+    "subAppName": "Complize",
+    "subAppId": "Complize",
+    "owner": "DriveMemory",
+    "purpose": "Immigration compliance and case management platform"
+  },
+  {
+    "subAppName": "Orbis",
+    "subAppId": "Orbis",
+    "owner": "GitHub",
+    "purpose": "Core governance and coordination platform for AI-human collaboration"
+  },
+  {
+    "subAppName": "Roam",
+    "subAppId": "Roam",
+    "owner": "",
+    "purpose": ""
+  }
+]

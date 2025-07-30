@@ -16,7 +16,8 @@ const SURFACE_ICONS: Record<WorkSurface, React.ReactNode> = {
   execute: <Play className="w-4 h-4" />,
   document: <span className="text-sm">📝</span>,
   govern: <span className="text-sm">🛡️</span>,
-  integrate: <span className="text-sm">🧬</span>
+  integrate: <span className="text-sm">🧬</span>,
+  'spqr-runtime': <span className="text-sm">📊</span>
 };
 
 const SURFACE_STYLES: Record<WorkSurface, { background: string; color: string; border: string }> = {
@@ -24,7 +25,8 @@ const SURFACE_STYLES: Record<WorkSurface, { background: string; color: string; b
   execute: { background: 'var(--wt-success-50)', color: 'var(--wt-success-700)', border: 'var(--wt-success-200)' },
   document: { background: 'var(--wt-primary-50)', color: 'var(--wt-primary-700)', border: 'var(--wt-primary-200)' },
   govern: { background: 'var(--wt-warning-50)', color: 'var(--wt-warning-700)', border: 'var(--wt-warning-200)' },
-  integrate: { background: 'var(--wt-primary-50)', color: 'var(--wt-primary-700)', border: 'var(--wt-primary-200)' }
+  integrate: { background: 'var(--wt-primary-50)', color: 'var(--wt-primary-700)', border: 'var(--wt-primary-200)' },
+  'spqr-runtime': { background: 'var(--wt-success-50)', color: 'var(--wt-success-700)', border: 'var(--wt-success-200)' }
 };
 
 export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
@@ -41,7 +43,8 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
       execute: 'Track Progress',
       document: 'Create Records',
       govern: 'Review & Audit',
-      integrate: 'Connect Tools'
+      integrate: 'Connect Tools',
+      'spqr-runtime': 'SPQR Runtime'
     };
     return (surface: WorkSurface) => labels[surface];
   }, []);
@@ -91,9 +94,9 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
             className="inline-flex items-center rounded-lg border wt-caption"
             style={{
               padding: 'var(--wt-space-3) var(--wt-space-4)',
-              background: SURFACE_STYLES[selectedSurface].background,
-              color: SURFACE_STYLES[selectedSurface].color,
-              borderColor: SURFACE_STYLES[selectedSurface].border
+              background: SURFACE_STYLES[selectedSurface]?.background || 'var(--wt-primary-50)',
+              color: SURFACE_STYLES[selectedSurface]?.color || 'var(--wt-primary-700)',
+              borderColor: SURFACE_STYLES[selectedSurface]?.border || 'var(--wt-primary-200)'
             }}
           >
             {SURFACE_ICONS[selectedSurface]}
@@ -107,9 +110,9 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
                 onClick={() => onSurfaceChange(surface)}
                 style={selectedSurface === surface ? {
                   padding: 'var(--wt-space-2) var(--wt-space-3)',
-                  background: SURFACE_STYLES[surface].background,
-                  color: SURFACE_STYLES[surface].color,
-                  borderColor: SURFACE_STYLES[surface].border,
+                  background: SURFACE_STYLES[surface]?.background || 'var(--wt-primary-50)',
+                  color: SURFACE_STYLES[surface]?.color || 'var(--wt-primary-700)',
+                  borderColor: SURFACE_STYLES[surface]?.border || 'var(--wt-primary-200)',
                   border: '1px solid'
                 } : {
                   padding: 'var(--wt-space-2) var(--wt-space-3)',
