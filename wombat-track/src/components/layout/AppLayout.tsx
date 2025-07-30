@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EnhancedProjectSidebar } from './EnhancedProjectSidebar';
 import { BreadcrumbHeader } from './BreadcrumbHeader';
 import { PlanSurface } from '../surfaces/PlanSurface';
@@ -10,6 +10,7 @@ import { SPQRRuntimeDashboard } from '../SPQR/SPQRRuntimeDashboard';
 import { SubAppDashboard } from '../SubAppDashboard';
 import type { Project, Phase, PhaseStep as Step } from '../../types/phase';
 import { mockPrograms } from '../../data/mockPrograms';
+import { fetchProjectsFromOApp } from '../../services/oappAPI';
 
 export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate' | 'spqr-runtime';
 
@@ -99,10 +100,13 @@ const mockProjects: Project[] = [
 ];
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProjects }) => {
+  const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [currentProject, setCurrentProject] = useState<Project | null>(initialProjects[0] || null);
   const [currentSubApp, setCurrentSubApp] = useState<string>(mockPrograms[0]?.id || 'prog-orbis-001');
   const [showSubAppDashboard, setShowSubAppDashboard] = useState<boolean>(true);
   const [selectedSurface, setSelectedSurface] = useState<WorkSurface>('plan');
+  const [loadingProjects, setLoadingProjects] = useState(false);
+  const [dataSource, setDataSource] = useState<'mock' | 'oapp'>('mock');
   const [currentPhase, setCurrentPhase] = useState<Phase | null>(
     currentProject?.phases.find(p => p.status === 'in_progress') || currentProject?.phases[0] || null
   );
@@ -111,6 +115,78 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
   );
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  // Load projects from oApp on mount
+  useEffect(() => {
+    const loadOAppProjects = async () => {
+      console.log('🔍 Loading projects from oApp production database...');
+      setLoadingProjects(true);
+      
+      try {
+        const oappProjects = await fetchProjectsFromOApp();
+        console.log(`✅ Successfully loaded ${oappProjects.length} projects from oApp`);
+        
+        setProjects(oappProjects);
+        setDataSource('oapp');
+        
+        // Set first project as current if no current project
+        if (!currentProject && oappProjects.length > 0) {
+          setCurrentProject(oappProjects[0]);
+        }
+        
+        // Log to governance for observability
+        const governanceEntry = {
+          timestamp: new Date().toISOString(),
+          event_type: 'dev-server-fix',
+          user_id: 'system',
+          user_role: 'system',
+          resource_type: 'development_environment',
+          resource_id: 'wombat-track-dev-server',
+          action: 'connect_to_oapp',
+          success: true,
+          details: {
+            operation: 'Dev Server oApp Connection',
+            projects_loaded: oappProjects.length,
+            data_source: 'oApp production DB',
+            status: 'projects_visible',
+            previousDataSource: 'mock',
+            newDataSource: 'oapp'
+          }
+        };
+        
+        console.log('📝 Dev Server Fix - oApp Connection:', governanceEntry);
+        
+      } catch (error) {
+        console.error('❌ Failed to load projects from oApp:', error);
+        console.log('🔄 Continuing with mock data for offline development');
+        setDataSource('mock');
+        
+        // Log governance entry for fallback
+        const fallbackEntry = {
+          timestamp: new Date().toISOString(),
+          event_type: 'dev-server-fallback',
+          user_id: 'system',
+          user_role: 'system',
+          resource_type: 'development_environment',
+          resource_id: 'wombat-track-dev-server',
+          action: 'fallback_to_mock',
+          success: false,
+          details: {
+            operation: 'Dev Server oApp Connection',
+            error: error instanceof Error ? error.message : 'Unknown error',
+            fallback_used: 'mock data',
+            projects_count: initialProjects.length
+          }
+        };
+        
+        console.log('📝 Dev Server Fallback:', fallbackEntry);
+      } finally {
+        setLoadingProjects(false);
+      }
+    };
+
+    loadOAppProjects();
+  }, [currentProject, initialProjects.length]);
 
   const handleProjectChange = (project: Project) => {
     setCurrentProject(project);
@@ -177,7 +253,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
     >
       {/* Enhanced Sidebar with Sub-App Support */}
       <EnhancedProjectSidebar
-        projects={initialProjects}
+        projects={projects}
         currentProject={currentProject}
         selectedSurface={selectedSurface}
         collapsed={sidebarCollapsed}
@@ -210,6 +286,32 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
           selectedSurface={selectedSurface}
           onSurfaceChange={setSelectedSurface}
         />
+
+        {/* Data Source Indicator */}
+        {(loadingProjects || dataSource === 'oapp') && (
+          <div className="bg-blue-50 border-b border-blue-200 px-4 py-2">
+            <div className="flex items-center justify-between max-w-7xl mx-auto">
+              <div className="flex items-center space-x-2">
+                {loadingProjects ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                    <span className="text-sm text-blue-700">Loading projects from oApp database...</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                    <span className="text-sm text-blue-700">
+                      Connected to oApp production database ({projects.length} projects)
+                    </span>
+                  </>
+                )}
+              </div>
+              <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                Data Source: {dataSource === 'oapp' ? 'oApp Production' : 'Mock Data'}
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* Work Surface Content or Sub-App Dashboard */}
         <main 

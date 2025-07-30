@@ -1,0 +1,18 @@
+Table,Total_Records,Canonical_Records,Archive_Records,Orphaned_Records,Data_Quality,Critical_Issues,Manual_Review_Required
+Projects,92,15,63,81,Poor (32%),"88% lack phases; 97% lack owners; Legacy RECON-* artifacts",Yes - Archive 63 projects
+Phases,257,226,0,31,Moderate (88%),"31 orphaned phases; Missing RAG status",Yes - Link orphaned phases
+Governance_Logs,60,60,0,0,Good (100%),"Complete audit trail for recent operations",No - Quality baseline established
+Sub_Apps,4,4,0,0,Good (100%),"Minimal records; Ready for integration",No - Clean data structure
+Step_Progress,0,0,0,0,Unknown,"No data extracted - Table may be empty",Yes - Requires investigation
+Checkpoint_Review,0,0,0,0,Unknown,"No data extracted - Table may be empty",Yes - Requires investigation
+Meeting_Log,0,0,0,0,Unknown,"No data extracted - Table may be empty",Yes - Requires investigation
+Template,0,0,0,0,Unknown,"No data extracted - Table may be empty",Yes - Requires investigation
+
+Summary:
+Total_Records_Analyzed,413
+Canonical_Quality_Records,305 (74%)
+Archive_Required_Records,63 (15%)
+Orphaned_Records_Requiring_Fix,112 (27%)
+Overall_Data_Integrity,Moderate - Emergency intervention required for Projects table
+Immediate_Action_Required,"Archive 63 projects, Link 31 orphaned phases, Assign owners to canonical projects"
+Phase_2_Prerequisites,"React Admin UI, API endpoints, CSV import pipeline, Orphan cleanup workflows"
