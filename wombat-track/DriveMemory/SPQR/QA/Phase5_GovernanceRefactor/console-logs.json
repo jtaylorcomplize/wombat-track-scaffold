@@ -1,0 +1,22 @@
+[
+  {
+    "timestamp": "2025-07-30T13:12:15.613Z",
+    "type": "debug",
+    "text": "[vite] connecting..."
+  },
+  {
+    "timestamp": "2025-07-30T13:12:16.160Z",
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  },
+  {
+    "timestamp": "2025-07-30T13:12:16.326Z",
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+    "timestamp": "2025-07-30T13:12:16.403Z",
+    "type": "debug",
+    "text": "[vite] connected."
+  }
+]

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { SPQRDashboardContainer } from './SPQRDashboardContainer';
 import { SPQRDashboardMetrics } from './SPQRDashboardMetrics';
 import { SPQRDashboardAlerts } from './SPQRDashboardAlerts';
@@ -72,7 +72,7 @@ interface UsageSummary {
 }
 
 export const SPQRRuntimeDashboard: React.FC = () => {
-  const governanceLogger = GovernanceLogger.getInstance();
+  const governanceLogger = useMemo(() => GovernanceLogger.getInstance(), []);
   
   const [selectedRole, setSelectedRole] = useState<string>('senior-manager');
   const [selectedCard, setSelectedCard] = useState<string>('revenue-analytics');
@@ -81,8 +81,12 @@ export const SPQRRuntimeDashboard: React.FC = () => {
   const [usageSummaries, setUsageSummaries] = useState<UsageSummary[]>([]);
   const [showUATPanel, setShowUATPanel] = useState(true);
   const [initialized, setInitialized] = useState(false);
+  
+  // Refs to prevent infinite loops
+  const initializationRef = useRef(false);
+  const healthIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const userRoles: UserRole[] = [
+  const userRoles: UserRole[] = useMemo(() => [
     {
       id: 'partner',
       name: 'Partner',
@@ -115,7 +119,7 @@ export const SPQRRuntimeDashboard: React.FC = () => {
     }
   ];
 
-  const spqrCards: SPQRCard[] = [
+  const spqrCards: SPQRCard[] = useMemo(() => [
     {
       id: 'revenue-analytics',
       name: 'Revenue Analytics Dashboard',
@@ -207,7 +211,7 @@ export const SPQRRuntimeDashboard: React.FC = () => {
         ]
       }
     }
-  ];
+  ], []);
 
   const getCurrentUser = useCallback(() => ({
     id: `uat-user-${Date.now()}`,
@@ -347,24 +351,48 @@ export const SPQRRuntimeDashboard: React.FC = () => {
     }
   }, []);
 
+  // Initialization effect - runs once on mount
   useEffect(() => {
-    if (!initialized) {
-      initializeUATSession();         // logs governance + sets metrics
+    if (!initializationRef.current) {
+      initializationRef.current = true;
+      initializeUATSession();
       loadUsageSummaries();
-      setInitialized(true);           // prevents repeated effect
+      setInitialized(true);
     }
+  }, [initializeUATSession, loadUsageSummaries]);
+  
+  // Health reports polling - separate effect with stable dependencies
+  useEffect(() => {
+    if (!initialized) return;
     
-    const interval = setInterval(() => {
-      const allReports = governanceLogger.getAllHealthReports();
-      const reportMap = new Map<string, DashboardHealthReport>();
-      allReports.forEach(report => {
-        reportMap.set(report.dashboard_id, report);
-      });
-      setHealthReports(reportMap);
-    }, 5000);
+    const startHealthPolling = () => {
+      if (healthIntervalRef.current) {
+        clearInterval(healthIntervalRef.current);
+      }
+      
+      healthIntervalRef.current = setInterval(() => {
+        const allReports = governanceLogger.getAllHealthReports();
+        const reportMap = new Map<string, DashboardHealthReport>();
+        allReports.forEach(report => {
+          reportMap.set(report.dashboard_id, report);
+        });
+        setHealthReports(reportMap);
+      }, 5000);
+    };
+    
+    startHealthPolling();
 
     return () => {
-      clearInterval(interval);
+      if (healthIntervalRef.current) {
+        clearInterval(healthIntervalRef.current);
+        healthIntervalRef.current = null;
+      }
+    };
+  }, [initialized, governanceLogger]);
+  
+  // Session cleanup effect
+  useEffect(() => {
+    return () => {
       if (uatSession) {
         logUATInteraction('session_end', 'uat_session', {
           session_duration_ms: Date.now() - new Date(uatSession.startTime).getTime(),
@@ -372,7 +400,7 @@ export const SPQRRuntimeDashboard: React.FC = () => {
         });
       }
     };
-  }, [initialized, initializeUATSession, loadUsageSummaries, governanceLogger, uatSession, logUATInteraction]);
+  }, [uatSession, logUATInteraction]);
 
   const getFilteredCards = useCallback(() => {
     const userPermissions = userRoles.find(r => r.id === selectedRole)?.permissions || [];

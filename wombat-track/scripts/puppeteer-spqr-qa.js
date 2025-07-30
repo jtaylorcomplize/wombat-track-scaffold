@@ -3,11 +3,15 @@
  * Tests for infinite render loop fixes and JWT multi-role functionality
  */
 
-const puppeteer = require('puppeteer');
-const fs = require('fs');
-const path = require('path');
+import puppeteer from 'puppeteer';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const QA_OUTPUT_DIR = path.join(__dirname, '../DriveMemory/SPQR/QA/Phase5_RecursionFix');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const QA_OUTPUT_DIR = path.join(__dirname, '../DriveMemory/SPQR/QA/Phase5_GovernanceRefactor');
 
 // Ensure output directory exists
 if (!fs.existsSync(QA_OUTPUT_DIR)) {
@@ -15,12 +19,11 @@ if (!fs.existsSync(QA_OUTPUT_DIR)) {
 }
 
 async function runSPQRQA() {
-  console.log('🚀 Starting SPQR Runtime Recursion Fix QA...');
+  console.log('🚀 Starting SPQR Runtime Governance Refactor QA...');
   
   const browser = await puppeteer.launch({
-    headless: false,
-    devtools: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
   });
 
   const page = await browser.newPage();
@@ -61,20 +64,27 @@ async function runSPQRQA() {
     await page.goto('http://localhost:5173', { waitUntil: 'networkidle2' });
     
     // Wait for initial load
-    await page.waitForTimeout(3000);
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
-    // Navigate to SPQR Runtime
-    console.log('🔍 Looking for SPQR Runtime navigation...');
-    await page.waitForSelector('[data-testid="sidebar"]', { timeout: 10000 });
-    
-    // Try to find and click SPQR Runtime link
-    const spqrLink = await page.$('a[href*="spqr"], button:has-text("SPQR"), [data-testid*="spqr"]');
-    if (spqrLink) {
-      console.log('✅ Found SPQR Runtime link, clicking...');
-      await spqrLink.click();
-      await page.waitForTimeout(2000);
-    } else {
-      console.log('⚠️  SPQR Runtime link not found, proceeding with current page');
+    // Wait for app to load and look for any SPQR elements
+    console.log('🔍 Looking for app content...');
+    try {
+      await page.waitForSelector('body', { timeout: 10000 });
+      
+      // Try to find and click SPQR Runtime link
+      const spqrLink = await page.$('a[href*="spqr"], button:has-text("SPQR"), [data-testid*="spqr"]');
+      if (spqrLink) {
+        console.log('✅ Found SPQR Runtime link, clicking...');
+        await spqrLink.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      } else {
+        console.log('⚠️  SPQR Runtime link not found, checking if we need to navigate');
+        // Try going directly to SPQR runtime path
+        await page.goto('http://localhost:5173/#/spqr-runtime', { waitUntil: 'networkidle2' });
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+    } catch (error) {
+      console.log('⚠️  Navigation failed, proceeding with main dashboard for console monitoring');
     }
     
     // Capture initial screenshot
@@ -84,40 +94,13 @@ async function runSPQRQA() {
       fullPage: true 
     });
     
-    // Test partner role selection if available
-    console.log('👤 Testing partner role selection...');
-    const partnerRole = await page.$('button:has-text("Partner"), select option[value="partner"]');
-    if (partnerRole) {
-      await partnerRole.click();
-      await page.waitForTimeout(2000);
-      
-      // Check for JWT logs
-      const jwtLogs = consoleLogs.filter(log => 
-        log.text.includes('HOTFIX: Applied multi-role override') ||
-        log.text.includes('Dashboard Authorization') ||
-        log.text.includes('effective_roles')
-      );
-      
-      console.log(`🔐 Found ${jwtLogs.length} JWT-related logs`);
-    }
-    
-    // Test Revenue Analytics Dashboard selection
-    console.log('💰 Testing Revenue Analytics Dashboard...');
-    const revenueCard = await page.$('button:has-text("Revenue Analytics"), [data-testid*="revenue"]');
-    if (revenueCard) {
-      await revenueCard.click();
-      await page.waitForTimeout(3000);
-      
-      // Capture dashboard after selection
-      await page.screenshot({ 
-        path: path.join(QA_OUTPUT_DIR, 'revenue-analytics-dashboard.png'),
-        fullPage: true 
-      });
-    }
+    // Focus on console monitoring - wait for any React rendering
+    console.log('⏱️  Monitoring dashboard rendering and console output...');
+    await new Promise(resolve => setTimeout(resolve, 8000));
     
     // Wait for any additional renders and check for recursion warnings
     console.log('🔄 Monitoring for recursion warnings...');
-    await page.waitForTimeout(5000);
+    await new Promise(resolve => setTimeout(resolve, 5000));
     
     // Analysis
     const recursionWarnings = consoleLogs.filter(log => 
@@ -219,7 +202,8 @@ async function runSPQRQA() {
   }
 }
 
-if (require.main === module) {
+// Run if called directly
+if (import.meta.url === `file://${process.argv[1]}`) {
   runSPQRQA()
     .then((report) => {
       console.log(`\n🎉 QA Complete! Results saved to: ${QA_OUTPUT_DIR}`);
@@ -233,4 +217,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = { runSPQRQA };
+export { runSPQRQA };

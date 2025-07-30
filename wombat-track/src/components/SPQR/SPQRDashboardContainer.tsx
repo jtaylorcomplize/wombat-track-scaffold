@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SPQRDashboardEmbed } from './SPQRDashboardEmbed';
 import { LookerAuthService, type EmbedUrlRequest } from '../../services/looker-auth';
 
@@ -55,12 +55,16 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
   const [dashboardId, setDashboardId] = useState<string>('');
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [authError, setAuthError] = useState<string | null>(null);
-  const [logFired, setLogFired] = useState(false);
   const [usageMetrics, setUsageMetrics] = useState<UsageMetrics>({
     loadTime: 0,
     userActions: [],
     sessionStart: new Date().toISOString()
   });
+
+  // Use refs to prevent infinite loops
+  const initializedRef = useRef(false);
+  const loggedRef = useRef(false);
+  const lastCardDataRef = useRef<string>('');
 
   const lookerAuth = new LookerAuthService({
     clientId: import.meta.env.VITE_LOOKER_CLIENT_ID || '',
@@ -69,11 +73,22 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
   });
 
   useEffect(() => {
-    initializeDashboard();
+    // Prevent infinite loops by checking if already initialized
+    const cardDataKey = JSON.stringify({ id: cardData.id, role: userRole });
+    if (lastCardDataRef.current !== cardDataKey) {
+      lastCardDataRef.current = cardDataKey;\n      initializedRef.current = false; // Reset for new card/role combination
+      initializeDashboard();
+    }
   }, [cardData, userRole]);
 
   const initializeDashboard = async () => {
+    // Guard against repeated initialization
+    if (initializedRef.current) {
+      return;
+    }
+    
     try {
+      initializedRef.current = true;
       setAuthError(null);
       
       const permissionCheck = await lookerAuth.validateEmbedPermissions(userRole, cardData.permissions, cardData.name);
@@ -131,6 +146,9 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
         card_id: cardData.id,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
+      
+      // Reset initialization flag on error so it can be retried
+      initializedRef.current = false;
     }
   };
 
@@ -205,9 +223,9 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
   };
 
   const logGovernanceEntryOnce = (eventType: string, details: Record<string, unknown>) => {
-    if (!logFired) {
+    if (!loggedRef.current) {
       logGovernanceEntry(eventType, details);
-      setLogFired(true);
+      loggedRef.current = true;
     }
   };
 
