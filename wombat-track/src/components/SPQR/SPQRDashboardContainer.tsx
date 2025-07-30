@@ -76,7 +76,8 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
     // Prevent infinite loops by checking if already initialized
     const cardDataKey = JSON.stringify({ id: cardData.id, role: userRole });
     if (lastCardDataRef.current !== cardDataKey) {
-      lastCardDataRef.current = cardDataKey;\n      initializedRef.current = false; // Reset for new card/role combination
+      lastCardDataRef.current = cardDataKey;
+      initializedRef.current = false; // Reset for new card/role combination
       initializeDashboard();
     }
   }, [cardData, userRole]);

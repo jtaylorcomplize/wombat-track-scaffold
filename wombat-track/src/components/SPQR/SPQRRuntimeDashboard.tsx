@@ -117,7 +117,7 @@ export const SPQRRuntimeDashboard: React.FC = () => {
       permissions: ['system_admin', 'view_all', 'edit_all'],
       description: 'System administration and full dashboard access'
     }
-  ];
+  ], []);
 
   const spqrCards: SPQRCard[] = useMemo(() => [
     {
