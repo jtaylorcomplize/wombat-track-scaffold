@@ -80,6 +80,7 @@ export const SPQRRuntimeDashboard: React.FC = () => {
   const [uatSession, setUatSession] = useState<UATSession | null>(null);
   const [usageSummaries, setUsageSummaries] = useState<UsageSummary[]>([]);
   const [showUATPanel, setShowUATPanel] = useState(true);
+  const [initialized, setInitialized] = useState(false);
 
   const userRoles: UserRole[] = [
     {
@@ -347,8 +348,11 @@ export const SPQRRuntimeDashboard: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    initializeUATSession();
-    loadUsageSummaries();
+    if (!initialized) {
+      initializeUATSession();         // logs governance + sets metrics
+      loadUsageSummaries();
+      setInitialized(true);           // prevents repeated effect
+    }
     
     const interval = setInterval(() => {
       const allReports = governanceLogger.getAllHealthReports();
@@ -368,7 +372,7 @@ export const SPQRRuntimeDashboard: React.FC = () => {
         });
       }
     };
-  }, []);
+  }, [initialized, initializeUATSession, loadUsageSummaries, governanceLogger, uatSession, logUATInteraction]);
 
   const getFilteredCards = useCallback(() => {
     const userPermissions = userRoles.find(r => r.id === selectedRole)?.permissions || [];

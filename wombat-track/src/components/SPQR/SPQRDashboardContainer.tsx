@@ -55,6 +55,7 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
   const [dashboardId, setDashboardId] = useState<string>('');
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [logFired, setLogFired] = useState(false);
   const [usageMetrics, setUsageMetrics] = useState<UsageMetrics>({
     loadTime: 0,
     userActions: [],
@@ -110,7 +111,7 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
 
       await lookerAuth.createEmbedUrl(embedRequest);
 
-      logGovernanceEntry('dashboard_authorized', {
+      logGovernanceEntryOnce('dashboard_authorized', {
         card_id: cardData.id,
         card_name: cardData.name,
         dashboard_id: targetDashboardId,
@@ -126,7 +127,7 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
       setAuthError(error instanceof Error ? error.message : 'Unknown authorization error');
       setIsAuthorized(false);
 
-      logGovernanceEntry('dashboard_auth_failed', {
+      logGovernanceEntryOnce('dashboard_auth_failed', {
         card_id: cardData.id,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
@@ -200,6 +201,13 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
 
     if (onGovernanceLog) {
       onGovernanceLog(entry);
+    }
+  };
+
+  const logGovernanceEntryOnce = (eventType: string, details: Record<string, unknown>) => {
+    if (!logFired) {
+      logGovernanceEntry(eventType, details);
+      setLogFired(true);
     }
   };
 

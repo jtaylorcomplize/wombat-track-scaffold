@@ -34,8 +34,7 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
   cardId,
   userId,
   userRole,
-  onMetricsUpdate,
-  captureInterval = 30000
+  onMetricsUpdate
 }) => {
   const governanceLogger = GovernanceLogger.getInstance();
   const sessionStartRef = useRef(Date.now());
@@ -245,17 +244,12 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
   }, [dashboardId, cardId, userId, userRole, metrics, onMetricsUpdate, governanceLogger]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (isCapturing) {
-        flushMetricsBuffer();
-      }
-    }, captureInterval);
+    const intervalId = setInterval(() => {
+      flushMetricsBuffer();           // existing metrics fetch
+    }, 60000);                        // Fixed 60-second interval
 
-    return () => {
-      clearInterval(interval);
-      flushMetricsBuffer();
-    };
-  }, [captureInterval, isCapturing, flushMetricsBuffer]);
+    return () => clearInterval(intervalId);
+  }, []);                             // ✅ runs once on mount
 
   useEffect(() => {
     const handleWindowError = (event: ErrorEvent) => {

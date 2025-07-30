@@ -1,0 +1,74 @@
+[
+  {
+    "Entry": "Claude-Gizmo SDLC Clarification",
+    "Tags": "Governance",
+    "DestinationDB": "SDLC",
+    "Notes": "Claude"
+  },
+  {
+    "Entry": "WT-5.6 Live Dispatch Payload",
+    "Tags": "Project Execution",
+    "DestinationDB": "WT-5.6",
+    "Notes": "DriveMemory"
+  },
+  {
+    "Entry": "WT-5.4 Console Integration",
+    "Tags": "Project Execution",
+    "DestinationDB": "WT-5.4",
+    "Notes": "GizmoConsole"
+  },
+  {
+    "Entry": "WT-5.5 GovernanceLog Hook",
+    "Tags": "Governance",
+    "DestinationDB": "WT-5.5",
+    "Notes": "AI Logging"
+  },
+  {
+    "Entry": "WT SDLC Protocol (Markdown)",
+    "Tags": "Governance",
+    "DestinationDB": "Process",
+    "Notes": "Strategy"
+  },
+  {
+    "Entry": "WT Docs Module Feature List",
+    "Tags": "Strategy",
+    "DestinationDB": "Planning",
+    "Notes": "DocsModule"
+  },
+  {
+    "Entry": "Claude Thread Reflections",
+    "Tags": "Comms",
+    "DestinationDB": "Claude",
+    "Notes": "Backlog"
+  },
+  {
+    "Entry": "MetaPlatform Vision",
+    "Tags": "Strategy",
+    "DestinationDB": "AI Philosophy",
+    "Notes": "Recursive Design"
+  },
+  {
+    "Entry": "Slash Command Design",
+    "Tags": "Governance",
+    "DestinationDB": "Planning",
+    "Notes": "WT-5.7"
+  },
+  {
+    "Entry": "RAG Dashboard Goals",
+    "Tags": "Strategy",
+    "DestinationDB": "Planning",
+    "Notes": "UX"
+  },
+  {
+    "Entry": "Execution Metrics Schema Plan",
+    "Tags": "Governance",
+    "DestinationDB": "Planning",
+    "Notes": "Schema"
+  },
+  {
+    "Entry": "Claude-Gizmo Messaging Loop",
+    "Tags": "Comms",
+    "DestinationDB": "Agent Protocol",
+    "Notes": "Runtime"
+  }
+]
