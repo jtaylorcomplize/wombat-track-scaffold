@@ -1,0 +1,57 @@
+{
+  "sessionId": "uat-session-{timestamp}-{random}",
+  "userId": "uat-user-{role}",
+  "userRole": "{role}",
+  "testScenario": "Phase 5 - Live Runtime Surface UAT",
+  "startTime": "{ISO_timestamp}",
+  "endTime": null,
+  "status": "in_progress",
+  "testCriteria": [
+    {
+      "id": "tc-01",
+      "description": "SPQR dashboards visible & interactive in Orbis Forge",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "tc-02", 
+      "description": "Role-based filtering and RAG health indicators functional",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "tc-03",
+      "description": "Usage and alerts surfaced in UI and logged to GovernanceLog",
+      "status": "pending", 
+      "notes": ""
+    },
+    {
+      "id": "tc-04",
+      "description": "UAT interactions recorded and ready for Go-Live sign-off",
+      "status": "pending",
+      "notes": ""
+    }
+  ],
+  "interactions": [],
+  "feedback": {
+    "overallRating": null,
+    "usabilityRating": null,
+    "performanceRating": null,
+    "comments": "",
+    "issues": [],
+    "recommendations": []
+  },
+  "technicalMetrics": {
+    "totalInteractions": 0,
+    "avgResponseTime": 0,
+    "errorsEncountered": 0,
+    "pagesVisited": [],
+    "featuresUsed": []
+  },
+  "goLiveReadiness": {
+    "approved": false,
+    "approver": null,
+    "approvalDate": null,
+    "conditions": []
+  }
+}
