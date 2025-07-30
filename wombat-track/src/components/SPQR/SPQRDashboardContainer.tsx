@@ -62,9 +62,9 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
   });
 
   const lookerAuth = new LookerAuthService({
-    clientId: process.env.REACT_APP_LOOKER_CLIENT_ID || '',
-    clientSecret: process.env.REACT_APP_LOOKER_CLIENT_SECRET || '',
-    host: process.env.REACT_APP_LOOKER_HOST || 'actionstep.looker.com'
+    clientId: import.meta.env.VITE_LOOKER_CLIENT_ID || '',
+    clientSecret: import.meta.env.VITE_LOOKER_CLIENT_SECRET || '',
+    host: import.meta.env.VITE_LOOKER_HOST || 'actionstep.looker.com'
   });
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
 
       setIsAuthorized(true);
       
-      const targetDashboardId = process.env.REACT_APP_LOOKER_DASHBOARD_ID || 'b13a3784-7e6d-4e6b-acb5-4dae3202fd74';
+      const targetDashboardId = import.meta.env.VITE_LOOKER_DASHBOARD_ID || 'b13a3784-7e6d-4e6b-acb5-4dae3202fd74';
       setDashboardId(targetDashboardId);
 
       const embedRequest: EmbedUrlRequest = {
