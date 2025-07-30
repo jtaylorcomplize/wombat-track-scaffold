@@ -1,0 +1,127 @@
+[
+  {
+    "timestamp": "2025-07-30T12:34:03.430Z",
+    "type": "debug",
+    "text": "[vite] connecting..."
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.472Z",
+    "type": "debug",
+    "text": "[vite] connected."
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.878Z",
+    "type": "info",
+    "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.947Z",
+    "type": "log",
+    "text": "✅ App is being rendered"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.948Z",
+    "type": "log",
+    "text": "✅ main.tsx starting render"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.949Z",
+    "type": "log",
+    "text": "🔎 Document root: JSHandle@node"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.127Z",
+    "type": "log",
+    "text": "🔍 Loading projects from oApp production database..."
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.130Z",
+    "type": "log",
+    "text": "🔍 Attempting to fetch from API endpoint..."
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.135Z",
+    "type": "log",
+    "text": "🔍 Loading projects from oApp production database..."
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.135Z",
+    "type": "log",
+    "text": "🔍 Attempting to fetch from API endpoint..."
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.194Z",
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.208Z",
+    "type": "log",
+    "text": "📝 API Response preview: <!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$Refres"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.209Z",
+    "type": "warn",
+    "text": "⚠️ API response is not valid JSON, response preview: <!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } "
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.209Z",
+    "type": "warn",
+    "text": "JSON parse error: JSHandle@error"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.210Z",
+    "type": "log",
+    "text": "🔄 API unavailable, fetching CSV directly..."
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.211Z",
+    "type": "log",
+    "text": "📝 API Response preview: <!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$Refres"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.212Z",
+    "type": "warn",
+    "text": "⚠️ API response is not valid JSON, response preview: <!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } "
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.212Z",
+    "type": "warn",
+    "text": "JSON parse error: JSHandle@error"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.213Z",
+    "type": "log",
+    "text": "🔄 API unavailable, fetching CSV directly..."
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.271Z",
+    "type": "log",
+    "text": "📊 CSV: Loaded 92 projects from oApp production data"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.272Z",
+    "type": "log",
+    "text": "✅ Successfully loaded 92 projects from oApp"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.273Z",
+    "type": "log",
+    "text": "📝 Dev Server Fix - oApp Connection: JSHandle@object"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.289Z",
+    "type": "log",
+    "text": "📊 CSV: Loaded 92 projects from oApp production data"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.289Z",
+    "type": "log",
+    "text": "✅ Successfully loaded 92 projects from oApp"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.290Z",
+    "type": "log",
+    "text": "📝 Dev Server Fix - oApp Connection: JSHandle@object"
+  }
+]

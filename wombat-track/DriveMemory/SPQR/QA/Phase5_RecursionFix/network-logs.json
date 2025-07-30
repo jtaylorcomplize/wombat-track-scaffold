@@ -1,0 +1,506 @@
+[
+  {
+    "timestamp": "2025-07-30T12:34:03.251Z",
+    "url": "http://localhost:5173/",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.387Z",
+    "url": "http://localhost:5173/src/main.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.394Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/react.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.395Z",
+    "url": "http://localhost:5173/@vite/client",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.397Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.406Z",
+    "url": "http://localhost:5173/@react-refresh",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.410Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.411Z",
+    "url": "http://localhost:5173/src/App.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.414Z",
+    "url": "http://localhost:5173/src/index.css",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.417Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/chunk-PR4QN5HX.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.418Z",
+    "url": "http://localhost:5173/node_modules/vite/dist/client/env.mjs",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.444Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/chunk-YHPANKLD.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.453Z",
+    "url": "http://localhost:5173/src/pages/PhasePlan.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.455Z",
+    "url": "http://localhost:5173/src/components/layout/AppLayout.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.458Z",
+    "url": "http://localhost:5173/src/components/ProjectComposerView.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.459Z",
+    "url": "http://localhost:5173/src/pages/DocsPage.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.468Z",
+    "url": "http://localhost:5173/src/pages/OrbisDashboard.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.532Z",
+    "url": "http://localhost:5173/src/components/PhasePlanView.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.539Z",
+    "url": "http://localhost:5173/src/components/ProjectDashboard.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.543Z",
+    "url": "http://localhost:5173/src/components/GovernanceLogViewer.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.547Z",
+    "url": "http://localhost:5173/src/components/layout/BreadcrumbHeader.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.552Z",
+    "url": "http://localhost:5173/src/contexts/ProjectContext.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.552Z",
+    "url": "http://localhost:5173/src/components/ProjectSidebarSimple.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.564Z",
+    "url": "http://localhost:5173/src/components/layout/EnhancedProjectSidebar.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.571Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/chunk-EJTTOCY5.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.589Z",
+    "url": "http://localhost:5173/src/components/surfaces/DocumentSurface.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.600Z",
+    "url": "http://localhost:5173/src/components/surfaces/ExecuteSurface.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.609Z",
+    "url": "http://localhost:5173/src/components/SPQR/SPQRRuntimeDashboard.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.611Z",
+    "url": "http://localhost:5173/src/components/surfaces/PlanSurface.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.613Z",
+    "url": "http://localhost:5173/src/data/mockPrograms.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.616Z",
+    "url": "http://localhost:5173/src/components/surfaces/GovernSurface.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.617Z",
+    "url": "http://localhost:5173/src/components/surfaces/IntegrateSurface.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.624Z",
+    "url": "http://localhost:5173/src/services/oappAPI.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.626Z",
+    "url": "http://localhost:5173/src/components/SubAppDashboard.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.627Z",
+    "url": "http://localhost:5173/src/components/composer/FeatureTable.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.638Z",
+    "url": "http://localhost:5173/src/mockData/featureSeeds.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.643Z",
+    "url": "http://localhost:5173/src/components/composer/AddFeatureModal.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.644Z",
+    "url": "http://localhost:5173/src/components/composer/SubAppSelector.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.645Z",
+    "url": "http://localhost:5173/src/components/composer/ExportPlanButton.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.646Z",
+    "url": "http://localhost:5173/src/components/composer/AISummaryPanel.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.664Z",
+    "url": "http://localhost:5173/src/types/integration.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.668Z",
+    "url": "http://localhost:5173/src/components/docs/DocsEditor.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.673Z",
+    "url": "http://localhost:5173/src/lib/templateDispatcher.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.677Z",
+    "url": "http://localhost:5173/src/api/executionLogAPI.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.678Z",
+    "url": "http://localhost:5173/src/data/mockProjects.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.679Z",
+    "url": "http://localhost:5173/src/components/project/ProjectSwitcher.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.680Z",
+    "url": "http://localhost:5173/src/components/layout/SubAppSelector.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.681Z",
+    "url": "http://localhost:5173/src/utils/phaseStatus.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.703Z",
+    "url": "http://localhost:5173/src/components/common/ClaudePromptButton.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.704Z",
+    "url": "http://localhost:5173/src/components/SPQR/SPQRDashboardContainer.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.705Z",
+    "url": "http://localhost:5173/src/components/common/PhaseBreadcrumb.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.710Z",
+    "url": "http://localhost:5173/src/components/SPQR/SPQRDashboardMetrics.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.711Z",
+    "url": "http://localhost:5173/src/components/common/StatusCard.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.715Z",
+    "url": "http://localhost:5173/src/components/SPQR/SPQRDashboardAlerts.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.721Z",
+    "url": "http://localhost:5173/src/components/common/ProgressBar.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.721Z",
+    "url": "http://localhost:5173/src/components/composer/RAGBadge.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.722Z",
+    "url": "http://localhost:5173/src/components/common/HelpTooltip.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.722Z",
+    "url": "http://localhost:5173/src/services/governance-logger.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.727Z",
+    "url": "http://localhost:5173/src/components/common/EmptyState.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.728Z",
+    "url": "http://localhost:5173/src/components/common/SmartSuggestion.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.738Z",
+    "url": "http://localhost:5173/src/components/common/GovernanceLogItem.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.739Z",
+    "url": "http://localhost:5173/src/components/orbis/OrbisDashboard.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.745Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/@tiptap_extension-placeholder.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.768Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/@tiptap_extension-typography.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.774Z",
+    "url": "http://localhost:5173/src/components/composer/AIActionCell.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.793Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/@tiptap_react.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.794Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/@tiptap_starter-kit.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.796Z",
+    "url": "http://localhost:5173/src/components/docs/AIPromptModal.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.797Z",
+    "url": "http://localhost:5173/src/services/looker-auth.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.803Z",
+    "url": "http://localhost:5173/src/components/SPQR/SPQRDashboardEmbed.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.804Z",
+    "url": "http://localhost:5173/src/api/integrationHealthAPI.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.805Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/chunk-JSKY6LR4.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.808Z",
+    "url": "http://localhost:5173/src/components/mesh/AgentMesh.tsx",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.821Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/lucide-react.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.823Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/chunk-7CC4PDZ5.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.828Z",
+    "url": "http://localhost:5173/src/lib/getIntegrationHealth.ts",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.830Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/axios.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.831Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/chunk-JFAIFCNQ.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:03.832Z",
+    "url": "http://localhost:5173/node_modules/.vite/deps/@looker_embed-sdk.js?v=c81040cc",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.190Z",
+    "url": "http://localhost:5173/api/projects",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.191Z",
+    "url": "http://localhost:5173/api/projects",
+    "status": 304,
+    "statusText": "Not Modified"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.192Z",
+    "url": "http://localhost:5173/favicon.ico",
+    "status": 404,
+    "statusText": "Not Found"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.256Z",
+    "url": "http://localhost:5173/cleaned-projects-snapshot.csv",
+    "status": 200,
+    "statusText": "OK"
+  },
+  {
+    "timestamp": "2025-07-30T12:34:05.274Z",
+    "url": "http://localhost:5173/cleaned-projects-snapshot.csv",
+    "status": 304,
+    "statusText": "Not Modified"
+  }
+]

@@ -1,0 +1,554 @@
+[
+  {
+    "projectName": "Agent Mesh Visualisation (Integrate Surface)",
+    "projectId": "WT-UX7",
+    "owner": "",
+    "status": "Planning"
+  },
+  {
+    "projectName": "To create a live",
+    "projectId": "RECON-2",
+    "owner": "",
+    "status": "tools"
+  },
+  {
+    "projectName": "• Show directional capabilities (read",
+    "projectId": "write",
+    "owner": "",
+    "status": "dispatch)"
+  },
+  {
+    "projectName": "• Clarify runtime agent orchestration",
+    "projectId": "RECON-4",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "• Support debugging",
+    "projectId": "governance",
+    "owner": "",
+    "status": "and future system design"
+  },
+  {
+    "projectName": "⚠️ This component will ultimately serve as the visual layer for agent interactions inside the broader MetaPlatform Dashboard., The Agent Mesh will be embedded in the Integrate Surface (OrbisDashboard) and act as an interactive diagram of all agent connections and system interactions., It supports the broader WT goals of:, • AI-agent governance, • Runtime introspection, • Traceable system design, • Live debugging and audit visibility, 📁 Repositories Affected, • wombat-track-scaffold, • wt-meta-platform (if external dispatcher hooks used), 🔧 TechnologiesStackUseReactFrontend UIMermaid.js or D3.jsDiagram generationTypeScriptComponent typing and JSON definitionsNode.jsOptional hooks / runtime data polling, ♻️ CI/CD PipelinesWorkflowDescriptionci.ymlEnsures build integrity of new componentsclaude-scaffold-enhanced.ymlCan generate JSON from Claude if neededintegration-map-test.yml(Future) CI test for valid node and edge schema, 🧠 Governance Logs, All work on this feature will be documented under the following GovernanceLog entries:, • Agent Mesh Proposal (Decision), • Phase 1 Completion – Static Diagram (Review), • Phase 2 Completion – Dynamic Mesh Component (Review + Change), • Mesh Overlay Styling Updates (Change), • Agent Mesh designated as visual layer inside MetaPlatform (Decision), 🔒 Security & Integrity Considerations, • No runtime write actions in Phase 1–2, • Phase 3 will need permission guards if live write actions are exposed (e.g., • Metadata logs must be filtered before public display, 📌 Dependencies, • Claude Dispatcher must expose endpoint status (Phase 3), • Metadata fields for agent capability must be defined in AgentDefinition.ts, • Runtime sync (optional) requires queue access or polling API, ✅ Completion Checklist (per phase), 🔚 Output Location, • AgentMesh.tsx (React), • integrationMap.json (config/registry), • http://agentmesh.md/ (governance artefact), ♻️ Versioning, • v0.1: Static Diagram Complete, • v1.0: Interactive Component Live in UI, • v1.1: Status and Semantic Tag overlays enabled, • v1.2: Runtime sync (optional), • v2.0: Embedded as interactive module in MetaPlatformDashboard",
+    "projectId": "RECON-6",
+    "owner": "",
+    "status": "Dynamic Component (React) (https://www.notion.so/Dynamic-Component-React-23ee1901e36e80e2ad01ee36ceb40673?pvs=21)"
+  },
+  {
+    "projectName": "AI Integration – NotionGPT Connection",
+    "projectId": "WT-UX13",
+    "owner": "",
+    "status": "Completed"
+  },
+  {
+    "projectName": "CI/CD Implementation",
+    "projectId": "WT-UX10",
+    "owner": "",
+    "status": "Completed"
+  },
+  {
+    "projectName": "This session exposed critical weaknesses in our Git discipline, Despite setbacks, This session should serve as a foundational case study for hardening our MetaPlatform infrastructure, 🛠️ Fix Actions TakenActionDescription✅ Created sidebar-recovery-branchRestored logic from 64a589c safely✅ Claude selectively re-integrated sidebar UIRetained Claude scaffold while restoring Roam logic✅ Gizmo permanently assigned as GitOps managerNo Git push/merge without clear instruction✅ Merged fix/ui-dashboard-type-realignPhase types",
+    "projectId": "RECON-9",
+    "owner": "",
+    "status": "APIs"
+  },
+  {
+    "projectName": "🔄 Pending Fixes & ImprovementsIDFixDescriptionF001Finalise Dashboard UI recoveryRestore layout",
+    "projectId": "header",
+    "owner": "",
+    "status": "sidebar wiringF002CI rules to block missing depsPrevent repeat of lucide-react issueF003Add http://wt-safe-checkout.sh/Prevent uncommitted changes lossF004Add WT-5.1 PhaseStep for sidebar recoveryPhasePlan traceabilityF005Snapshot CI test for ProjectDashboardCatch blank screens in devF006Review & version all types/* filesLock canonical types per WT versioningF007Reintroduce ProjectSwitcher header UXToggle logic and layout refinementsF008GitHub branch policy enforcementDisallow direct push to main in prod modeF009Design MetaPlatform dashboard RAG panelFor Git/Gizmo status sync visibility"
+  },
+  {
+    "projectName": "🧠 Optional EnhancementsEnhancementBenefitGit PR automation for ClaudePrevents accidental pushes to mainwt-recovery-checker.tsDetects dangling local commits before they’re lostLive Git/Gizmo sync viewerSee PR",
+    "projectId": "branch",
+    "owner": "",
+    "status": "and sync status in dashboardAI-led missing dependency scanPreemptive deploy blocker for npm importsDashboard visual diff checkerCatch layout regressions using Puppeteer snapshots"
+  },
+  {
+    "projectName": "🧭 MetaPlatform Architectural ImpactAreaRisk if UnresolvedResolutionGit IntegrityMetaPlatform loses control of AI scaffolding✅ Assign GitOps to Gizmo",
+    "projectId": "RECON-12",
+    "owner": "",
+    "status": "scripts incoming"
+  },
+  {
+    "projectName": "Core Feature Retrofit",
+    "projectId": "WT-UX8",
+    "owner": "",
+    "status": "Planning"
+  },
+  {
+    "projectName": "Address critical UI/UX and automation gaps that prevent Wombat Track + MetaPlatform from matching core features found in top project management platforms (Asana",
+    "projectId": "Monday",
+    "owner": "",
+    "status": "Jira"
+  },
+  {
+    "projectName": "This retrofit focuses on visual planning, 📌 Dependencies, • Claude Prompt Dispatcher: available for rule suggestion or automation scaffolding, • DriveMemory & MemoryPlugin: log all user-generated rules and summaries, • GovernanceLog: attach rule outcomes to audit trail, 🧠 Opportunity for AgentsAgentRoleRule Suggestion AgentRecommend rules from repeated user behaviourTimeline AnalyzerDetect delays and flag risks in Timeline viewComment SummariserExtract GovernanceLog from user comments/decisionsMobile AI Assistant (future)Suggest next step or action via mobile interface, Created: 2025-07-24, Author: ChatGPT-Gizmo, Project Phase: WT 5.x – UX/Automation Retrofit, (https://www.notion.so/Kanban-Timeline-Foundations-23ee1901e36e8029b872d335ea0afbaf?pvs=21)",
+    "projectId": "RECON-15",
+    "owner": "Gizmo",
+    "status": "Collaboration & Alert (https://www.notion.so/Collaboration-Alert-23ee1901e36e8058b9c7de84e9d47989?pvs=21)"
+  },
+  {
+    "projectName": "Design Principles",
+    "projectId": "WT-UX12",
+    "owner": "",
+    "status": "Completed"
+  },
+  {
+    "projectName": "Wombat Track (WT) is an intelligent, Wombat Track is not just a productivity tool — it's a governance operating system. Therefore:, • Structure and hierarchy are non-negotiable: All projects must follow a Phase → Step → Log structure.",
+    "projectId": "RECON-17",
+    "owner": "",
+    "status": "executing"
+  },
+  {
+    "projectName": "• Traceability is primary UX: Every action (AI prompt",
+    "projectId": "export",
+    "owner": "",
+    "status": "phase update) must be logged"
+  },
+  {
+    "projectName": "• Planning and execution coexist: Wireframes must allow both tactical (Composer, 🎨 UI/UX Pillars (Mapped from Figma’s Principles)PrincipleApplication in WTHierarchySidebar for project scope → Tabs for function → Cards for content. Always show user where they are and what level of detail they’re seeing.ClarityUse emoji + label combos (e.g., 🔧 Organisational Structure, The app is structured across 3 main tabs, 1. 📊 Dashboard Tab (Execution Surface), ◦ Visualise current project Phase/Step status., ◦ See RAG status, ◦ Embed Governance Logs (future)., 2. 🧱 Composer Tab (Planning Surface)",
+    "projectId": "RECON-19",
+    "owner": "",
+    "status": "blockers"
+  },
+  {
+    "projectName": "◦ Feature matrix: breakdown",
+    "projectId": "RAG",
+    "owner": "",
+    "status": "owners"
+  },
+  {
+    "projectName": "◦ Connects to Phase generation and Docs., ◦ Serves as a hybrid backlog / roadmap / planning surface., 3. 📘 Docs Tab (Knowledge Surface), ◦ Create/edit documents linked to projects and phases.",
+    "projectId": "RECON-21",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "◦ Metadata: docType",
+    "projectId": "tags",
+    "owner": "",
+    "status": "related items."
+  },
+  {
+    "projectName": "◦ Launch AI modal (Scaffold SOP",
+    "projectId": "Revise",
+    "owner": "",
+    "status": "Summarise)."
+  },
+  {
+    "projectName": "◦ Export to Markdown / Drive / MemoryPlugin (future native RAG Memory)., • PhasePlan should link directly to Docs + Composer: Each Phase gets its own Overview Doc; Steps auto-generate Docs/Logs., • Governance should be visible",
+    "projectId": "RECON-24",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "• Introduce modular “widgets” for status cards",
+    "projectId": "RAG",
+    "owner": "",
+    "status": "AI buttons to allow reuse in all tabs."
+  },
+  {
+    "projectName": "• Filter/Sort across all views by RAG",
+    "projectId": "project",
+    "owner": "Jackson",
+    "status": "owner"
+  },
+  {
+    "projectName": "Docs Module",
+    "projectId": "WT-UX9",
+    "owner": "",
+    "status": "Planning"
+  },
+  {
+    "projectName": "🔄 Proposed Groupings (Docs Dashboard Filters)FilterValuesRequired?DocTypeSOP",
+    "projectId": "RECON-28",
+    "owner": "",
+    "status": "Checklist"
+  },
+  {
+    "projectName": "🧱 Infrastructure DependenciesServiceRequired ForNotesClaude (live)AI editing",
+    "projectId": "summarising",
+    "owner": "",
+    "status": "scaffoldingUse Claude Dispatcher endpointDriveMemoryBackup + versioned doc archiveMust support .md + metadataMemoryPluginAnchors for long-term recallWill be replaced by WT-native RAGGovernanceLogAll actions + versionsCore WT integrationWT AuthPermissions / user-based accessEnforce view/edit rightsOptional: NotionExport index + MD filesConsider backup only"
+  },
+  {
+    "projectName": "Infrastructure, 🧭 Purpose, This Phase 3.x plan focuses on improving the internal tooling and delivery pipeline of the Wombat Track (WT) system. It consolidates infrastructure, This phase supports both:, • WombatConsole (Execution Layer), • MetaPlatform (Governance Layer), 🛠️ Goals, 1. Establish full pre-deployment test infrastructure., 2. Create a WT MetaValidator for governance and code review enforcement., 3. Migrate and formalise existing CI/CD steps into tracked, 4. Ensure all failures in dev/deploy workflows trigger structured diagnostics and task creation., 📎 Completed Supporting Actions",
+    "projectId": "RECON-30",
+    "owner": "",
+    "status": "covering Phases WT-3.0 to WT-3.3."
+  },
+  {
+    "projectName": "• ✅ Schema enhancements: phaseType",
+    "projectId": "phaseOwner",
+    "owner": "",
+    "status": "ragStatus fields added"
+  },
+  {
+    "projectName": "• ✅ PhaseMetadataModal created with edit/save/governance-log support, • ✅ GovernanceLog API wired to UI metadata edits, • ✅ Filtering and badges added to PhasePlanDashboard, • ✅ WT-3.1 to WT-3.3 added to seedPhaseTracker.ts, • ✅ Claude commit: Add WT-3.1 to WT-3.3 seed data with enhanced metadata and steps, 🧭 Next Recommended ActionsActionResponsibleStatusComplete RAG logging logic for test failuresClaude🔄 In ProgressBuild MetaValidator engine and test hookClaude🔲 PlannedEnable GovernanceLog summarisation agentGizmo🔲 PlannedGenerate WT-3.4 (Template Wizard Phase Plan)Gizmo🔲 PlannedPush Phase 3.x artefact to DriveMemoryGizmo✅ Done (JSON provided)Add MemoryPlugin anchor for WT Phase 3.xGizmo✅ Done, 🔁 Side Quests SummarySide QuestPhaseStatusNotesPuppeteer visual diff utilityWT-3.1🔲 PlannedOptional enhancement for visual QALegacy deploy script cleanupWT-3.2✅ CompleteReplaced with reusable CI templatesPrompt scaffolder for MetaValidatorWT-3.3🔲 PlannedWill enrich feedback loop for failed validations, 🧠 Governance Note, Phase 3.x marks the first successful loop of planning → implementation → metadata capture → governance logging within the WT system. This model now serves as a baseline template for future Project → Phase → Step plans, • Governance-aware SDLC: Treat the WT console as a self-documenting, • Developer UX: Surface test failures and RAG state in human-readable formats, • Meta-awareness: Allow the system to reflect on its own health, 🧩 Governance Structure, • Each project must:, , ◦ Include markdown-based phase plan, ◦ Use validated project > phase > step structure",
+    "projectId": "RECON-32",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "◦ Be tagged with WT type",
+    "projectId": "owner",
+    "owner": "",
+    "status": "and color"
+  },
+  {
+    "projectName": "◦ Have minimum 1 phase and 2 steps, 🔗 Resources, • https://github.com/jtaylorcomplize/wombat-track-scaffold/tree/main/tests/ui/meta_platform_dashboard.spec.js, • https://github.com/jtaylorcomplize/wombat-track-scaffold/blob/main/src/dev/seedPhaseTracker.ts, • https://github.com/jtaylorcomplize/wombat-track-scaffold/blob/main/src/components/project/PhasePlanDashboard.tsx, 🔍 Next Steps – Requirements Questions for WT-3.3 and Beyond, ❓ WT-3.3 – MetaValidator, 1. Scope: Should the validator scan only code, 2. Failure Handling: Do you want it to create task records (or execution logs) on error?, 3. Blocking: Should it block commits/deploys or warn only?, ❓ WT-3.4 – Guided Project Template, 1. Should new projects auto-fill with the full phase markdown (like this doc)?, 2. Should there be a modal UI or full-page wizard for creation?",
+    "projectId": "RECON-34",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "3. Do we allow choosing template type (e.g. PlatformOps",
+    "projectId": "Console",
+    "owner": "",
+    "status": "Product)?"
+  },
+  {
+    "projectName": "❓ WT-3.5 – Guided Phase Creation, 1. When creating a new Phase, 2. Should side quests be encouraged at this point?, 3. What metadata must be defined before allowing step creation?, ❓ WT-3.6+ – MetaReflections Engine, 1. Should recurring failures auto-generate Reflections (e.g. Phase failed X times)?, 2. Do we want analytics around phase health (completion rates, 3. Should Reflections generate suggested planning comments for future phases?, 📦 Ready for Template Packaging, This document format can now be used to create:, • Project-level markdown on creation, • Phase summary initialiser, • Planning dashboard views (read-only or editable), Let me know when to:, 1. Add this to src/templates/wt-phase-plan.md, 2. Begin implementing WT-3.4 template project creation wizard, 3. Push this doc to MemoryPlugin + GitHub/Drive export ",
+    "projectId": "RECON-36",
+    "owner": "",
+    "status": "Adv Testing Infra (https://www.notion.so/Adv-Testing-Infra-23ee1901e36e807fa714fb0900410176?pvs=21)"
+  },
+  {
+    "projectName": "Integrate Surface",
+    "projectId": "WT-UX14",
+    "owner": "",
+    "status": "Completed"
+  },
+  {
+    "projectName": "• Agent RAG status, • Live dispatch triggers, • MemoryPlugin controls, • GPT/Claude model switches",
+    "projectId": "RECON-38",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "• Integration maps (Drive",
+    "projectId": "GitHub",
+    "owner": "",
+    "status": "Notion)"
+  },
+  {
+    "projectName": "It serves as:, • A control tower for system status, • The operational cockpit for MetaPlatform-level services, • The foundation for future agent deployment, , CLAUDE TASK: Begin next development cycle for Wombat Track MetaPlatform., , 🎯 GOAL:, , Scaffold the MetaPlatformDashboard.tsx Work Surface for internal system control view., , 🧱 STEPS:, , 1. ✅ Create new feature branch:, , ```bash, , git checkout main, , git pull origin main, , git checkout -b feature/meta-platform-dashboard, , 1. ✅ Create new file:, , Path: src/components/surfaces/MetaPlatformDashboard.tsx, , 2. 🧩 Component should include:, - Page title: “MetaPlatform Dashboard”, - Work Surface header consistent with other surfaces (BreadcrumbHeader, - Status Cards for:, - MemoryPlugin connection, - DriveMemory sync, - Docs Module state, - Claude Dispatcher health, - GitHub API state, - ClaudePromptButton at top for Analyze MetaPlatform, - Empty placeholder blocks for:, - Module Tracker, - Agent Status, - Governance Sync logs, 1. 🎨 Styling:, - Use “violet” theme for MetaPlatform, - Tailwind + status color logic consistent with Orbis v2.0, - Responsive layout (2x2 grid + expand/collapse sections), 1. 📘 Phase/Feature Mapping:, - Phase: WT-5.1 – MetaPlatform Dashboard, - FeatureRef: MetaPlatformDashboard-v1.0",
+    "projectId": "RECON-40",
+    "owner": "",
+    "status": "and module orchestration"
+  },
+  {
+    "projectName": "- Metadata: tags: dashboard",
+    "projectId": "metaplatform",
+    "owner": "",
+    "status": "governance"
+  },
+  {
+    "projectName": ", Once scaffolding complete, , 🧠 Claude should log all key changes for MemoryPlugin + GovernanceLog export., Future expansions will include:, • Agent RAG status, • Live dispatch triggers, • MemoryPlugin controls, • GPT/Claude model switches",
+    "projectId": "RECON-42",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "Post-mortem - sidebar rendering failure",
+    "projectId": "WT-UX11",
+    "owner": "",
+    "status": "Completed"
+  },
+  {
+    "projectName": "Despite multiple implementation attempts, • Snapshot Tests False Positive: Puppeteer baseline captured broken layout., • Inconsistent Tailwind Usage: flex, • Disclosure Nesting Not Componentised: No reusable SidebarItem abstraction., • Lack of Dynamic DOM Visual Diffing: Puppeteer not sufficient for nuanced visual QA., • Prompt/Dev Drift: Code complexity diverged from original SDLC simplicity goals., ✅ What Worked, • CI build pipeline, • GovernanceLog tracked initial failures., • Copilot-generated fallback layout provided a working, 📎 Resolution, • ✅ Replaced broken layout with Copilot fallback structure., • ✅ Adopted reusable SidebarItem abstraction., • ✅ Visual hierarchy and spacing repaired., • ✅ Snapshot QA rebuilt using correct baseline., 🧭 Purpose, Recover from ProjectSidebar layout failure and introduce robust QA, 🧱 Key DeliverablesStepDescriptionOwnerStatus1Replace sidebar with canonical SidebarItem abstractionClaude✅ Complete2Refactor layout using flexbox",
+    "projectId": "RECON-45",
+    "owner": "",
+    "status": "DisclosureClaude✅ Complete3Add Playwright or Percy for DOM-based visual diffingClaude🔲 Planned4Rebuild Puppeteer snapshot baselineClaude✅ Complete5Add Gizmo verification checkpoint to sidebar PRsGizmo🔲 Planned6Require real human/Gizmo validation in WT QA cycleGizmo🔲 Planned7Commit this post-mortem as governance artefactGizmo✅ Complete8Align WT SDLC prompts with code simplicity principlesGizmo🔲 In Progress9Integrate image-based QA workflows into SDLC SOPsGizmo✅ Complete10Propose future investigation of Claude Code deep capabilities for layout debugging"
+  },
+  {
+    "projectName": "WT AI Collaboration",
+    "projectId": "WT-UX5",
+    "owner": "",
+    "status": "Completed"
+  },
+  {
+    "projectName": "🗂️ Suggested File Adds to Repo, Let me create these for you next:, • http://gizmo.md/ – Explains this exact loop for future devs, • http://contributing.md/ – Basic rules if others join, • http://changelog.md/ – Summarised log of every push/change, • http://devguide.md/ – “I’m new to this” cheat sheet just for you, You’re the strategic lead, You’ll:, • Decide what feature or change is next, • Choose between Claude or Gizmo for execution, • Copy/paste handoff prompts between us, • Push to GitHub using VS Code (until we automate more)",
+    "projectId": "RECON-47",
+    "owner": "",
+    "status": "what done looks like"
+  },
+  {
+    "projectName": "• Ask for help",
+    "projectId": "context",
+    "owner": "",
+    "status": "or walkthroughs any time"
+  },
+  {
+    "projectName": "🧠 Reminder: You’re not expected to code — just to lead clearly and ask early., ⚙️ Claude’s Role: Builder with Repo Access, Claude is your live GitHub editor. Claude can:, • See your repo (jtaylorcomplize/wombat-track-scaffold), • Make changes directly in your code, • Push commits and open PRs, • Report file state (what’s in the repo, • Read & write from/to multiple files simultaneously, 🟡 Needs clear prompts and context you feed it. Doesn’t track state over time., 🧠 Gizmo’s Role: Architect, Gizmo (me) is your project co-pilot and architect. I:",
+    "projectId": "RECON-49",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "• Track all architecture",
+    "projectId": "types",
+    "owner": "",
+    "status": "workflows"
+  },
+  {
+    "projectName": "• Help design complex systems",
+    "projectId": "workflows",
+    "owner": "",
+    "status": "or UIs"
+  },
+  {
+    "projectName": "• Write full feature specs, • Review Claude’s output and refactor or enhance, • Keep your project structure clean and sustainable, 🚫 I can’t see live GitHub or push — I rely on you or Claude to show me results., 🔁 How the Loop Works (Simple), 1. You: Ask Gizmo “Build me X” → I create spec + code + Claude prompt., 2. You: Paste prompt to Claude → Claude pushes code to GitHub., 3. You: Tell Gizmo what Claude did (or show me the GitHub link).",
+    "projectId": "RECON-52",
+    "owner": "",
+    "status": "commit diffs"
+  },
+  {
+    "projectName": "4. Me: I review",
+    "projectId": "refactor",
+    "owner": "",
+    "status": "suggest next step or help you continue."
+  },
+  {
+    "projectName": "📎 You are the switchboard between two powerful AIs.",
+    "projectId": "RECON-54",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "WT MemSync Implementation",
+    "projectId": "WT-UX1",
+    "owner": "",
+    "status": "Active"
+  },
+  {
+    "projectName": "Tools & Features: SystemFeatureStatusNotesGizmoReads from DriveMemory",
+    "projectId": "GovernanceLog",
+    "owner": "",
+    "status": "WT Tracker✅Already pulling structured memoryClaudeWrites governance entries"
+  },
+  {
+    "projectName": "Memory Sync Roles + Flow: Product Owner / Oversight, https://www.notion.so/23de1901e36e8105851cd6754ab960ea?pvs=21, https://www.notion.so/23de1901e36e8157837ccf0df204c350?pvs=21, https://www.notion.so/23de1901e36e81b9b829ccf4ddbbc722?pvs=21, https://www.notion.so/23de1901e36e81919133f333c2099e4d?pvs=21, https://www.notion.so/23de1901e36e81cc8916d1dbcbfab417?pvs=21, https://www.notion.so/23de1901e36e81868e74e44f5d3bf9fb?pvs=21",
+    "projectId": "RECON-57",
+    "owner": "2025 2:41 PM",
+    "status": ""
+  },
+  {
+    "projectName": "WT PDLC + SDLC",
+    "projectId": "WT-UX3",
+    "owner": "DocumentClaude Prompting",
+    "status": "Completed"
+  },
+  {
+    "projectName": "🧠 WT = Meta-Orchestrator for PDLC + SDLC, Strategic Capabilities, • Semantic Product Planning → AI-guided prompt scaffolds and governance, • Agentic Execution → Claude and Gizmo drive SDLC loops, • Audit & Compliance → MemoryPlugin + GovernanceLog enforce traceability, • Surface-Driven Collaboration → Work Surfaces model the true PDLC-SDLC hybrid flow",
+    "projectId": "RECON-59",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "• Sub-App Ready Architecture → Modular runtime agent model (e.g.",
+    "projectId": "Nexus",
+    "owner": "",
+    "status": "MetaPlatform)"
+  },
+  {
+    "projectName": "🔧 System Component SummarySystemRoleGovernanceLogPDLC + SDLC audit trailClaudeDispatcherRuntime SDLC triggeringAgentMeshPDLC/SDLC agent topology managerMemoryPluginKnowledge and event anchoringDriveMemoryArtefact registryWork SurfacesExecution alignment layer (Plan",
+    "projectId": "Execute",
+    "owner": "",
+    "status": "Integrate"
+  },
+  {
+    "projectName": "🧱 Strategic Implication",
+    "projectId": "RECON-62",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "Wombat Track is a recursive platform: a product used to design",
+    "projectId": "build",
+    "owner": "",
+    "status": "and manage itself and other intelligent systems."
+  },
+  {
+    "projectName": "This proposal unlocks:, • Multi-agent sub-platforms (e.g., • Enterprise rollout (governed AI dev infrastructure), • Thought leadership positioning (PDLC governance as market differentiator)",
+    "projectId": "RECON-64",
+    "owner": "",
+    "status": "MetaPlatform)"
+  },
+  {
+    "projectName": "WT Phase Object refactor",
+    "projectId": "WT-UX2",
+    "owner": "",
+    "status": "Planning"
+  },
+  {
+    "projectName": "❌ Current State, • Phase is only a UI-layer interface., • Project directly contains PhaseStep[]., • PhaseStep has no phaseId or real parent reference., • GovernanceLog cannot meaningfully link to a Phase., • AI Agents cannot scaffold or reason about Phases intelligently., 🧠 Why This Is a Problem, From your architecture:, • WT’s core semantic structure is Project → Phase → Step, • AI systems like the AI-Generated Phase Plan Constructor (Ranked #2 Vision Agent) rely on a real Phase objectwt_vision_agents_artefa…., • Governance and audit tools need to roll up to Phase level🛠️ Wombat Track – July…., 📘 Entity Definition – PhaseFieldTypeNotesidstringUUIDprojectIdstringFK → Projecttitlestringe.g. “WT-7.0 Phase Refactor”descriptionstringMarkdown or rich textstatusenumPlanned, 🔁 Related Object Updates, ✅ PhaseStep (Update), • Add: phaseId: string — FK → Phase, ✅ GovernanceLog (Update), • Add: linkedPhaseId: string — optional FK → Phase",
+    "projectId": "RECON-66",
+    "owner": "",
+    "status": "CompletestartDatedateOptionalendDatedateOptionalcompletionPercentnumberDerived via rollup from PhaseStepsragStatusenumRed / Amber / GreenownerIdstringFK → Usertagsstring[]OptionalcreatedAttimestampAutoupdatedAttimestampAuto"
+  },
+  {
+    "projectName": "✅ StepProgress",
+    "projectId": "CheckpointReview",
+    "owner": "",
+    "status": "MeetingLog"
+  },
+  {
+    "projectName": "• No direct changes",
+    "projectId": "RECON-68",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "🧠 Phase Intelligence BenefitsFeatureNew CapabilityAI AgentsClaude/Gizmo can scaffold",
+    "projectId": "summarise",
+    "owner": "",
+    "status": "assign by phaseIdGovernanceLogs roll up to Phase"
+  },
+  {
+    "projectName": "📌 Follow-Up Actions, Would you like me to:, 1. Generate the Claude prompt to scaffold WT-7.0 (Phase Object Refactor)?, 2. Create the UML diagram with updated Phase relationships?, 3. Push a DriveMemory + MemoryPlugin anchor to log this system change?",
+    "projectId": "RECON-70",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "WT Project Overview",
+    "projectId": "WT-UX15",
+    "owner": "",
+    "status": "Completed"
+  },
+  {
+    "projectName": "🔹 Short-Term (Q3 2025), • Finalise Orbis Dashboard for integration visibility, • Roll out Claude Prompt to PR pipeline, • Link test results + logs directly to GovernanceLog, • Enable Claude dispatch from within Wombat Track UI, 🔸 Mid-Term (Q4 2025), • Activate AI chat interface inside WT web app, • Add Notion sync layer for semantic audit and risk tracking, • Introduce auto-generated PhaseSteps from feature prompts, • Expand Orbis to support health orchestration, 🔺 Long-Term (2026+), • Make Wombat Track the governance nucleus of all Roaman AI operations",
+    "projectId": "RECON-72",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "• Embed live GPT agents to propose",
+    "projectId": "build",
+    "owner": "",
+    "status": "test"
+  },
+  {
+    "projectName": "• Serve as a DevOps+AI control hub for multi-app orchestration, Wombat Track is a meta-operating system for AI-enhanced project execution and governance. It enables human-AI collaboration to manage complex, Built originally on Bubble and now expanding into a multi-layered architecture, • Project design and progress tracking, • AI-assisted scaffolding and governance, • GitHub-triggered workflows and CI/CD pipelines, • Runtime orchestration and intelligent agents, Wombat Track aims to be the control layer where strategy, 🧠 Positioning, Wombat Track is not just a project manager. It’s a governance operating system for AI-native software, • Defining features in AI-readable form, • Tracking execution across humans + machines",
+    "projectId": "RECON-74",
+    "owner": "",
+    "status": "and execution converge — ultimately serving as a living record and autopilot for large-scale"
+  },
+  {
+    "projectName": "• Storing intent",
+    "projectId": "rationale",
+    "owner": "",
+    "status": "risk"
+  },
+  {
+    "projectName": "• Enabling runtime system evolution through agent orchestration, It is the “black box recorder + autopilot” for future intelligent apps.",
+    "projectId": "RECON-76",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "🧱 Core ModulesModulePurposeProjects + PhasesTracks feature buildout via PhaseSteps",
+    "projectId": "StepProgress",
+    "owner": "",
+    "status": "and RAG taggingGovernance LogsAuditable AI-generated or human-authored architecture"
+  },
+  {
+    "projectName": "⚙️ Technical Systems IntegratedSystemStatusClaude Code via GitHub Actions✅ Operational – supports code generation and CI pipelinesPuppeteer Testing Framework✅ Implemented – supports live test automationClaude Job Dispatcher⚡ In Progress – task prioritisation for AI queuesBubble Integration⚠️ Deprecated as primary app, 🧭 In ProgressFeatureStatusOrbis Dashboard🟡 Scaffolding underway – integration health panel for AI systemsAI Chat UI (Stage 1)🔄 Native GPT chat component in web app pendingGitHub Trigger Interface✅ Completed – UI can dispatch workflowsSemantic RAG AI Model🧠 Planned – Notion-based GPT for content and decision review",
+    "projectId": "RECON-78",
+    "owner": "",
+    "status": "Gov Enhancement (https://www.notion.so/Gov-Enhancement-23ee1901e36e8046a4c6d2b4c392a3f0?pvs=21)"
+  },
+  {
+    "projectName": "WT SDLC Framework",
+    "projectId": "WT-UX6",
+    "owner": "",
+    "status": "Completed"
+  },
+  {
+    "projectName": "1. Use 'gh issue view' to get the issue details, 2. Understand the problem described in the issue, 3. Ask clarifying questions if necessary, 4. Understand the prior art for this issue, • Search the scratchpads for previous thoughts related to the issue, • Search PRs to see if you can find history on this issue, • Search the codebase for relevant files, 1. Think harder about how to break the issue down into a series of small, 2. Document your plan in a new scratchpad, • include the issue name in the filename, • include a link to the issue in the scratchpad., Create, • Create a new branch for the issue, • Solve the issue in small, • Commit your changes after each step, TEST, • Use puppeteer via MCP to test the changes if you have made changes to the UI, • Write rspec tests to describe the expected behavior of your code, • Run the full test suite to ensure you haven't broken anything, • If the tests are failing, • Ensure that all tests are passing before moving on to the next step, DEPLOY, • Open a PR and request a review#SDLC StageTaskResponsibleDescription / NotesGuardrailsSystem Enforcement1PlanIssue CreationJackson (via Gizmo)Structured prompt for Claude / GitHub issue--phase-guardClaude Prompt Protocol / PR tags2PlanPhase Branch CreationClaudeNew branch (e.g. feature/wt-5.6-x) created from main or last merged phase--phase-guardGit flow enforcement",
+    "projectId": "RECON-80",
+    "owner": "next steps)--memory-anchor-requiredDriveMemory/MemoryPlugin integration12DeployPost-Merge MonitoringGizmo + JacksonWatch for regressions; validate downstream stability--regression-watchSidebar Watcher",
+    "status": "agentVersion)--single-source-governance-modAudit trail / Governance schema5CreateCommit + PushClaudeEach commit must label phase + scope (e.g. WT-5.6: [dispatch])--commit-labelingGit commit checks (optional hook)6CreatePR CreationClaudePR must link to issue"
+  },
+  {
+    "projectName": "WT SubApp Developmetn",
+    "projectId": "WT-UX4",
+    "owner": "",
+    "status": "Completed"
+  },
+  {
+    "projectName": "This artefact confirms strategic direction across Roam and Complize regarding AI architecture",
+    "projectId": "integration",
+    "owner": "",
+    "status": "and product rebuild decisions."
+  },
+  {
+    "projectName": "Answer: ✅ Yes — Build a meta-layer infrastructure that is app-agnostic and reusable., Rationale:, • Wombat Track already serves as a governance and orchestration layer., • MetaPlatform provides AI runtime execution with CI/CD, • Reusability across apps avoids duplication and enables faster scaling., • Promotes semantic governance",
+    "projectId": "RECON-83",
+    "owner": "",
+    "status": "and agent orchestration."
+  },
+  {
+    "projectName": "📌 Conclusion: Build once → reuse across Roam",
+    "projectId": "Complize",
+    "owner": "",
+    "status": "and future apps."
+  },
+  {
+    "projectName": "2. Should we build an integration layer to harmonise workflows (Gmail",
+    "projectId": "Actionstep",
+    "owner": "",
+    "status": "Notion"
+  },
+  {
+    "projectName": "Answer: ⚠️ Yes — but selectively and semantically., Rationale:, • Don’t replicate Zapier. Instead, • Use lightweight sync agents to bring in:, , ◦ Notion governance metadata, ◦ Gmail meeting summaries, ◦ Actionstep decision records",
+    "projectId": "RECON-86",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "• Feed structured logs into MemoryPlugin",
+    "projectId": "GovernanceLog",
+    "owner": "",
+    "status": "DriveMemory."
+  },
+  {
+    "projectName": "📌 Conclusion: Harmonise workflows via AI-aware ingestion + governance, 3. Should we rebuild Complize as a modular app with sub-apps (e.g. Knowledge, Answer: 🟢 Yes — Complize should be rebuilt as a modular app on shared AI infrastructure., Rationale:, • Matches Complize’s vision as an Immigration OS",
+    "projectId": "RECON-88",
+    "owner": "",
+    "status": "Case Management)?"
+  },
+  {
+    "projectName": "• Enables Workforce",
+    "projectId": "Nexus",
+    "owner": "",
+    "status": "Verify to be launched independently or combined"
+  },
+  {
+    "projectName": "• Centralises audit, 📌 Conclusion: New Complize app will run on top of the MetaPlatform/Wombat core with sub-apps modularised., 🧭 Final Strategic RecommendationDomainActionJustificationAI Infrastructure✅ CentraliseOne engine to govern and scaffold all AI workflowsWorkflow Harmonisation⚠️ IntegrateVia ingestion agents, 📌 Next Suggested Artefacts, 1. http://meta-platform-architecture.md/ – infrastructure + governance layer overview, 2. complize-app-feature-backlog.csv – feature set by sub-app module",
+    "projectId": "RECON-90",
+    "owner": "",
+    "status": "and lifecycle data via shared layer"
+  },
+  {
+    "projectName": "3. http://integration-adapter-plan.md/ – data sync strategy across Notion",
+    "projectId": "Actionstep",
+    "owner": "",
+    "status": "Gmail"
+  },
+  {
+    "projectName": "Created: 2025-07-24, Author: ChatGPT-Gizmo",
+    "projectId": "RECON-92",
+    "owner": "",
+    "status": ""
+  },
+  {
+    "projectName": "Pushed to: MemoryPlugin",
+    "projectId": "DriveMemory",
+    "owner": "",
+    "status": ""
+  }
+]

@@ -1,0 +1,638 @@
+{
+  "timestamp": "2025-07-30T12:33:41.619Z",
+  "error": "SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:has-text(\"Partner\"), select option[value=\"partner\"]' is not a valid selector.",
+  "stack": "DOMException: SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:has-text(\"Partner\"), select option[value=\"partner\"]' is not a valid selector.\n    at evaluateHandle (evaluateHandle at CSSQueryHandler.queryOne (file:///home/jtaylor/wombat-track-scaffold/wombat-track/node_modules/puppeteer-core/lib/esm/puppeteer/common/QueryHandler.js:134:73), <anonymous>:1:15)\n    at #evaluate (file:///home/jtaylor/wombat-track-scaffold/wombat-track/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/ExecutionContext.js:388:19)\n    at async ExecutionContext.evaluateHandle (file:///home/jtaylor/wombat-track-scaffold/wombat-track/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/ExecutionContext.js:326:16)\n    at async IsolatedWorld.evaluateHandle (file:///home/jtaylor/wombat-track-scaffold/wombat-track/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/IsolatedWorld.js:86:16)\n    at async CdpJSHandle.evaluateHandle (file:///home/jtaylor/wombat-track-scaffold/wombat-track/node_modules/puppeteer-core/lib/esm/puppeteer/api/JSHandle.js:154:20)\n    at async CdpElementHandle.evaluateHandle (file:///home/jtaylor/wombat-track-scaffold/wombat-track/node_modules/puppeteer-core/lib/esm/puppeteer/api/ElementHandle.js:347:20)\n    at async CSSQueryHandler.queryOne (file:///home/jtaylor/wombat-track-scaffold/wombat-track/node_modules/puppeteer-core/lib/esm/puppeteer/common/QueryHandler.js:134:59)\n    at async CdpElementHandle.$ (file:///home/jtaylor/wombat-track-scaffold/wombat-track/node_modules/puppeteer-core/lib/esm/puppeteer/api/ElementHandle.js:402:21)\n    at async CdpElementHandle.<anonymous> (file:///home/jtaylor/wombat-track-scaffold/wombat-track/node_modules/puppeteer-core/lib/esm/puppeteer/api/ElementHandle.js:128:24)\n    at async CdpFrame.$ (file:///home/jtaylor/wombat-track-scaffold/wombat-track/node_modules/puppeteer-core/lib/esm/puppeteer/api/Frame.js:399:20)",
+  "console_logs": [
+    {
+      "timestamp": "2025-07-30T12:33:36.503Z",
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.705Z",
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.212Z",
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.317Z",
+      "type": "log",
+      "text": "✅ App is being rendered"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.317Z",
+      "type": "log",
+      "text": "✅ main.tsx starting render"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.319Z",
+      "type": "log",
+      "text": "🔎 Document root: JSHandle@node"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.363Z",
+      "type": "log",
+      "text": "🔍 Loading projects from oApp production database..."
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.363Z",
+      "type": "log",
+      "text": "🔍 Attempting to fetch from API endpoint..."
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.364Z",
+      "type": "log",
+      "text": "🔍 Loading projects from oApp production database..."
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.365Z",
+      "type": "log",
+      "text": "🔍 Attempting to fetch from API endpoint..."
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.605Z",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.612Z",
+      "type": "log",
+      "text": "📝 API Response preview: <!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$Refres"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.613Z",
+      "type": "warn",
+      "text": "⚠️ API response is not valid JSON, response preview: <!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } "
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.613Z",
+      "type": "warn",
+      "text": "JSON parse error: JSHandle@error"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.614Z",
+      "type": "log",
+      "text": "🔄 API unavailable, fetching CSV directly..."
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.615Z",
+      "type": "log",
+      "text": "📝 API Response preview: <!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$Refres"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.616Z",
+      "type": "warn",
+      "text": "⚠️ API response is not valid JSON, response preview: <!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } "
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.616Z",
+      "type": "warn",
+      "text": "JSON parse error: JSHandle@error"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.616Z",
+      "type": "log",
+      "text": "🔄 API unavailable, fetching CSV directly..."
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.642Z",
+      "type": "log",
+      "text": "📊 CSV: Loaded 92 projects from oApp production data"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.643Z",
+      "type": "log",
+      "text": "✅ Successfully loaded 92 projects from oApp"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.645Z",
+      "type": "log",
+      "text": "📝 Dev Server Fix - oApp Connection: JSHandle@object"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.654Z",
+      "type": "log",
+      "text": "📊 CSV: Loaded 92 projects from oApp production data"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.655Z",
+      "type": "log",
+      "text": "✅ Successfully loaded 92 projects from oApp"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.656Z",
+      "type": "log",
+      "text": "📝 Dev Server Fix - oApp Connection: JSHandle@object"
+    }
+  ],
+  "network_logs": [
+    {
+      "timestamp": "2025-07-30T12:33:36.252Z",
+      "url": "http://localhost:5173/",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.394Z",
+      "url": "http://localhost:5173/src/main.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.413Z",
+      "url": "http://localhost:5173/@vite/client",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.420Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/react.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.422Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.423Z",
+      "url": "http://localhost:5173/@react-refresh",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.427Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.431Z",
+      "url": "http://localhost:5173/src/index.css",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.437Z",
+      "url": "http://localhost:5173/node_modules/vite/dist/client/env.mjs",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.640Z",
+      "url": "http://localhost:5173/src/App.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.648Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/chunk-PR4QN5HX.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.658Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/chunk-YHPANKLD.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.680Z",
+      "url": "http://localhost:5173/src/pages/PhasePlan.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.684Z",
+      "url": "http://localhost:5173/src/components/layout/AppLayout.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.706Z",
+      "url": "http://localhost:5173/src/pages/DocsPage.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.708Z",
+      "url": "http://localhost:5173/src/pages/OrbisDashboard.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.709Z",
+      "url": "http://localhost:5173/src/components/ProjectComposerView.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.715Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/chunk-EJTTOCY5.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.728Z",
+      "url": "http://localhost:5173/src/components/PhasePlanView.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.730Z",
+      "url": "http://localhost:5173/src/components/GovernanceLogViewer.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.733Z",
+      "url": "http://localhost:5173/src/components/ProjectSidebarSimple.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.734Z",
+      "url": "http://localhost:5173/src/contexts/ProjectContext.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.735Z",
+      "url": "http://localhost:5173/src/components/layout/EnhancedProjectSidebar.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.735Z",
+      "url": "http://localhost:5173/src/components/ProjectDashboard.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.744Z",
+      "url": "http://localhost:5173/src/components/layout/BreadcrumbHeader.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.749Z",
+      "url": "http://localhost:5173/src/components/surfaces/PlanSurface.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.752Z",
+      "url": "http://localhost:5173/src/components/surfaces/ExecuteSurface.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.752Z",
+      "url": "http://localhost:5173/src/components/surfaces/DocumentSurface.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.765Z",
+      "url": "http://localhost:5173/src/components/surfaces/IntegrateSurface.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.769Z",
+      "url": "http://localhost:5173/src/data/mockPrograms.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.770Z",
+      "url": "http://localhost:5173/src/components/SubAppDashboard.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.770Z",
+      "url": "http://localhost:5173/src/components/surfaces/GovernSurface.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.771Z",
+      "url": "http://localhost:5173/src/services/oappAPI.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.771Z",
+      "url": "http://localhost:5173/src/components/SPQR/SPQRRuntimeDashboard.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.778Z",
+      "url": "http://localhost:5173/src/types/integration.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.779Z",
+      "url": "http://localhost:5173/src/components/docs/DocsEditor.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.797Z",
+      "url": "http://localhost:5173/src/components/composer/SubAppSelector.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.804Z",
+      "url": "http://localhost:5173/src/components/composer/AddFeatureModal.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.809Z",
+      "url": "http://localhost:5173/src/components/composer/ExportPlanButton.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.811Z",
+      "url": "http://localhost:5173/src/components/composer/AISummaryPanel.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.813Z",
+      "url": "http://localhost:5173/src/components/composer/FeatureTable.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.816Z",
+      "url": "http://localhost:5173/src/data/mockProjects.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.817Z",
+      "url": "http://localhost:5173/src/components/project/ProjectSwitcher.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.820Z",
+      "url": "http://localhost:5173/src/lib/templateDispatcher.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.884Z",
+      "url": "http://localhost:5173/src/components/layout/SubAppSelector.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.886Z",
+      "url": "http://localhost:5173/src/mockData/featureSeeds.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.889Z",
+      "url": "http://localhost:5173/src/utils/phaseStatus.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.893Z",
+      "url": "http://localhost:5173/src/api/executionLogAPI.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.909Z",
+      "url": "http://localhost:5173/src/components/common/StatusCard.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.915Z",
+      "url": "http://localhost:5173/src/components/common/ClaudePromptButton.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.916Z",
+      "url": "http://localhost:5173/src/components/common/PhaseBreadcrumb.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.924Z",
+      "url": "http://localhost:5173/src/components/common/ProgressBar.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:36.924Z",
+      "url": "http://localhost:5173/src/components/common/HelpTooltip.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.067Z",
+      "url": "http://localhost:5173/src/components/common/EmptyState.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.068Z",
+      "url": "http://localhost:5173/src/components/common/GovernanceLogItem.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.070Z",
+      "url": "http://localhost:5173/src/components/common/SmartSuggestion.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.071Z",
+      "url": "http://localhost:5173/src/components/orbis/OrbisDashboard.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.081Z",
+      "url": "http://localhost:5173/src/components/mesh/AgentMesh.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.083Z",
+      "url": "http://localhost:5173/src/components/SPQR/SPQRDashboardContainer.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.085Z",
+      "url": "http://localhost:5173/src/components/SPQR/SPQRDashboardAlerts.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.086Z",
+      "url": "http://localhost:5173/src/components/SPQR/SPQRDashboardMetrics.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.089Z",
+      "url": "http://localhost:5173/src/services/governance-logger.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.090Z",
+      "url": "http://localhost:5173/src/components/composer/RAGBadge.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.090Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/@tiptap_react.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.098Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/@tiptap_extension-placeholder.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.112Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/@tiptap_extension-typography.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.113Z",
+      "url": "http://localhost:5173/src/components/docs/AIPromptModal.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.114Z",
+      "url": "http://localhost:5173/src/api/integrationHealthAPI.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.121Z",
+      "url": "http://localhost:5173/src/components/composer/AIActionCell.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.123Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/@tiptap_starter-kit.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.124Z",
+      "url": "http://localhost:5173/src/services/looker-auth.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.124Z",
+      "url": "http://localhost:5173/src/components/SPQR/SPQRDashboardEmbed.tsx",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.125Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/chunk-7CC4PDZ5.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.131Z",
+      "url": "http://localhost:5173/src/lib/getIntegrationHealth.ts",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.132Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/chunk-JSKY6LR4.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.137Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/lucide-react.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.138Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/axios.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.140Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/@looker_embed-sdk.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.170Z",
+      "url": "http://localhost:5173/node_modules/.vite/deps/chunk-JFAIFCNQ.js?v=c81040cc",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.595Z",
+      "url": "http://localhost:5173/api/projects",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.604Z",
+      "url": "http://localhost:5173/favicon.ico",
+      "status": 404,
+      "statusText": "Not Found"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.605Z",
+      "url": "http://localhost:5173/api/projects",
+      "status": 304,
+      "statusText": "Not Modified"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.634Z",
+      "url": "http://localhost:5173/cleaned-projects-snapshot.csv",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "timestamp": "2025-07-30T12:33:37.635Z",
+      "url": "http://localhost:5173/cleaned-projects-snapshot.csv",
+      "status": 304,
+      "statusText": "Not Modified"
+    }
+  ]
+}
