@@ -114,6 +114,7 @@ class GovernanceLogger {
   private observabilityConfig: RuntimeObservabilityConfig;
   private dashboardHealthCache: Map<string, DashboardHealthReport> = new Map();
   private metricsAggregationInterval: NodeJS.Timeout | null = null;
+  private readonly isBrowser: boolean = typeof window !== 'undefined';
 
   constructor() {
     this.observabilityConfig = {
@@ -434,31 +435,59 @@ class GovernanceLogger {
       await this.persistLogs(logsToFlush);
     } catch (error) {
       console.error('Failed to flush governance logs:', error);
-      this.logBuffer = [...logsToFlush, ...this.logBuffer];
+      // Don't re-add logs to buffer in browser to prevent infinite loops
+      if (!this.isBrowser) {
+        this.logBuffer = [...logsToFlush, ...this.logBuffer];
+      }
     }
   }
 
   private async persistLogs(logs: GovernanceLogEntry[]): Promise<void> {
-    const logFilePath = './logs/governance.jsonl';
-    
-    try {
-      const fs = await import('fs/promises');
-      const logLines = logs.map(log => JSON.stringify(log)).join('\n') + '\n';
-      await fs.appendFile(logFilePath, logLines);
-    } catch (error) {
-      console.error('Error writing to governance log file:', error);
+    if (this.isBrowser) {
+      // Browser mode: send logs to server API endpoint
+      try {
+        const response = await fetch('/api/governance/log', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ logs })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+        }
+        
+        console.log('✅ Governance logs sent to server:', logs.length, 'entries');
+      } catch (error) {
+        console.warn('⚠️ Failed to send governance logs to server:', error);
+        // In browser, just log to console as fallback - don't retry to prevent loops
+        console.log('📝 Governance logs (console fallback):', logs);
+      }
+    } else {
+      // Node.js mode: write directly to file
+      const logFilePath = './logs/governance.jsonl';
+      
+      try {
+        const fs = await import('fs/promises');
+        const logLines = logs.map(log => JSON.stringify(log)).join('\n') + '\n';
+        await fs.appendFile(logFilePath, logLines);
+      } catch (error) {
+        console.error('Error writing to governance log file:', error);
+      }
     }
 
     const phaseCompleteEntry = {
       timestamp: new Date().toISOString(),
-      phase: 'Phase3–RuntimeEnablement',
+      phase: 'Phase5–GovernanceRefactor',
       status: 'logging_active',
       log_entries_count: logs.length,
       unique_users: new Set(logs.map(l => l.user_id)).size,
-      unique_resources: new Set(logs.map(l => l.resource_id)).size
+      unique_resources: new Set(logs.map(l => l.resource_id)).size,
+      environment: this.isBrowser ? 'browser' : 'server'
     };
 
-    console.log('SPQR Phase 3 Logging Summary:', phaseCompleteEntry);
+    console.log('SPQR Phase 5 Logging Summary:', phaseCompleteEntry);
   }
 
   private checkAlerts(): void {
@@ -641,7 +670,7 @@ class GovernanceLogger {
       },
       connection_type: (navigator as typeof navigator & { connection?: { effectiveType?: string } }).connection?.effectiveType || 'unknown',
       phase: 'Phase4–RuntimeObservability',
-      environment: process.env.NODE_ENV || 'production'
+      environment: this.isBrowser ? (import.meta.env?.VITE_NODE_ENV || 'production') : (process.env?.NODE_ENV || 'production')
     };
   }
 

@@ -1,0 +1,6 @@
+﻿tableName,canonicalSource,createdAt,fieldName,issueType,linkedPhase,notes,resolution,status,updatedAt
+WT Projects,wt-project-tracker,"July 29, 2025 11:54 AM",projectType,Missing,WT-8.0.2,Field successfully added to maintain project categorization consistency,Add,Resolved,"July 29, 2025 10:00 PM"
+WT Phase Database,wt-phase-tracker,"July 29, 2025 11:54 AM",ragStatus,Type Mismatch,WT-8.0.2,Converting from text field to select field for better data consistency,Map,In Progress,"July 29, 2025 10:00 PM"
+Sub-Apps,wt-sub-apps-registry,"July 29, 2025 11:54 AM",legacyField,Deprecated,WT-8.0.2,"Field no longer used in current architecture, safe to remove in next migration",Deprecate,Open,"July 29, 2025 10:00 PM"
+MemSync Implementation,wt-memory-sync,"July 29, 2025 11:54 AM",syncStatus,Extra Field,WT-8.0.2,"Custom field specific to memory sync, not needed in canonical schema",Ignore,Deferred,"July 29, 2025 10:00 PM"
+Tech Debt Register,wt-tech-debt-register,"July 29, 2025 11:54 AM",effortEstimate,Renamed,WT-8.0.2,Successfully mapped from estimatedEffort to effortEstimate for consistency,Map,Resolved,"July 29, 2025 10:00 PM"

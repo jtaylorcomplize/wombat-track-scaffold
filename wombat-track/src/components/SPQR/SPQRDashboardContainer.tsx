@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SPQRDashboardEmbed } from './SPQRDashboardEmbed';
 import { LookerAuthService, type EmbedUrlRequest } from '../../services/looker-auth';
 
@@ -61,51 +61,81 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
     sessionStart: new Date().toISOString()
   });
 
+  // Use refs to prevent infinite loops
+  const initializedRef = useRef(false);
+  const loggedRef = useRef(false);
+  const lastCardDataRef = useRef<string>('');
+
   const lookerAuth = new LookerAuthService({
-    clientId: process.env.REACT_APP_LOOKER_CLIENT_ID || '',
-    clientSecret: process.env.REACT_APP_LOOKER_CLIENT_SECRET || '',
-    host: process.env.REACT_APP_LOOKER_HOST || 'actionstep.looker.com'
+    clientId: import.meta.env.VITE_LOOKER_CLIENT_ID || '',
+    clientSecret: import.meta.env.VITE_LOOKER_CLIENT_SECRET || '',
+    host: import.meta.env.VITE_LOOKER_HOST || 'actionstep.looker.com'
   });
 
   useEffect(() => {
-    initializeDashboard();
+    // Prevent infinite loops by checking if already initialized
+    const cardDataKey = JSON.stringify({ id: cardData.id, role: userRole });
+    if (lastCardDataRef.current !== cardDataKey) {
+      lastCardDataRef.current = cardDataKey;
+      initializedRef.current = false; // Reset for new card/role combination
+      initializeDashboard();
+    }
   }, [cardData, userRole]);
 
   const initializeDashboard = async () => {
+    // Guard against repeated initialization
+    if (initializedRef.current) {
+      return;
+    }
+    
     try {
+      initializedRef.current = true;
       setAuthError(null);
       
-      const permissionCheck = await lookerAuth.validateEmbedPermissions(userRole, cardData.permissions);
+      const permissionCheck = await lookerAuth.validateEmbedPermissions(userRole, cardData.permissions, cardData.name);
       
       if (!permissionCheck.canView) {
         setIsAuthorized(false);
-        setAuthError(`Access denied: Role '${userRole}' cannot view this dashboard`);
+        setAuthError(`Access denied: Role '${userRole}' cannot view this dashboard. Required roles: ${cardData.permissions.viewRoles.join(', ')}`);
         return;
       }
 
       setIsAuthorized(true);
       
-      const targetDashboardId = process.env.REACT_APP_LOOKER_DASHBOARD_ID || 'b13a3784-7e6d-4e6b-acb5-4dae3202fd74';
+      const targetDashboardId = import.meta.env.VITE_LOOKER_DASHBOARD_ID || 'b13a3784-7e6d-4e6b-acb5-4dae3202fd74';
       setDashboardId(targetDashboardId);
+
+      // Log effective roles for debugging
+      console.log(`🔐 Dashboard Authorization: ${cardData.name}`, {
+        originalRole: userRole,
+        effectiveRoles: permissionCheck.effectiveRoles,
+        permissions: permissionCheck.permissions,
+        canView: permissionCheck.canView,
+        canEdit: permissionCheck.canEdit
+      });
 
       const embedRequest: EmbedUrlRequest = {
         type: 'dashboard',
         id: targetDashboardId,
         permissions: permissionCheck.permissions,
         models: ['Actionstep_Model_v1'],
-        external_group_id: `spqr_${userRole}`,
-        user_attributes: lookerAuth.getUserAttributesForRole(userRole),
+        external_group_id: `spqr_${permissionCheck.effectiveRoles.join('_')}`,
+        user_attributes: lookerAuth.getUserAttributesForRole(userRole, permissionCheck.effectiveRoles),
         session_length: 3600,
         force_logout_login: true
       };
 
       await lookerAuth.createEmbedUrl(embedRequest);
 
-      logGovernanceEntry('dashboard_authorized', {
+      logGovernanceEntryOnce('dashboard_authorized', {
         card_id: cardData.id,
+        card_name: cardData.name,
         dashboard_id: targetDashboardId,
+        original_role: userRole,
+        effective_roles: permissionCheck.effectiveRoles,
         user_permissions: permissionCheck.permissions,
-        can_edit: permissionCheck.canEdit
+        can_edit: permissionCheck.canEdit,
+        hotfix_applied: permissionCheck.effectiveRoles.length > 1 ? 'single_dashboard_override' : 'none'
       });
 
     } catch (error) {
@@ -113,10 +143,13 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
       setAuthError(error instanceof Error ? error.message : 'Unknown authorization error');
       setIsAuthorized(false);
 
-      logGovernanceEntry('dashboard_auth_failed', {
+      logGovernanceEntryOnce('dashboard_auth_failed', {
         card_id: cardData.id,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
+      
+      // Reset initialization flag on error so it can be retried
+      initializedRef.current = false;
     }
   };
 
@@ -187,6 +220,13 @@ export const SPQRDashboardContainer: React.FC<SPQRDashboardContainerProps> = ({
 
     if (onGovernanceLog) {
       onGovernanceLog(entry);
+    }
+  };
+
+  const logGovernanceEntryOnce = (eventType: string, details: Record<string, unknown>) => {
+    if (!loggedRef.current) {
+      logGovernanceEntry(eventType, details);
+      loggedRef.current = true;
     }
   };
 

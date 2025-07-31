@@ -1,0 +1,62 @@
+[
+  {
+    "tableName": "WT Projects",
+    "canonicalSource": "wt-project-tracker",
+    "createdAt": "July 29",
+    "fieldName": "2025 11:54 AM",
+    "issueType": "projectType",
+    "linkedPhase": "Missing",
+    "notes": "WT-8.0.2",
+    "resolution": "Field successfully added to maintain project categorization consistency",
+    "status": "Add",
+    "updatedAt": "Resolved"
+  },
+  {
+    "tableName": "WT Phase Database",
+    "canonicalSource": "wt-phase-tracker",
+    "createdAt": "July 29",
+    "fieldName": "2025 11:54 AM",
+    "issueType": "ragStatus",
+    "linkedPhase": "Type Mismatch",
+    "notes": "WT-8.0.2",
+    "resolution": "Converting from text field to select field for better data consistency",
+    "status": "Map",
+    "updatedAt": "In Progress"
+  },
+  {
+    "tableName": "Sub-Apps",
+    "canonicalSource": "wt-sub-apps-registry",
+    "createdAt": "July 29",
+    "fieldName": "2025 11:54 AM",
+    "issueType": "legacyField",
+    "linkedPhase": "Deprecated",
+    "notes": "WT-8.0.2",
+    "resolution": "Field no longer used in current architecture",
+    "status": "safe to remove in next migration",
+    "updatedAt": "Deprecate"
+  },
+  {
+    "tableName": "MemSync Implementation",
+    "canonicalSource": "wt-memory-sync",
+    "createdAt": "July 29",
+    "fieldName": "2025 11:54 AM",
+    "issueType": "syncStatus",
+    "linkedPhase": "Extra Field",
+    "notes": "WT-8.0.2",
+    "resolution": "Custom field specific to memory sync",
+    "status": "not needed in canonical schema",
+    "updatedAt": "Ignore"
+  },
+  {
+    "tableName": "Tech Debt Register",
+    "canonicalSource": "wt-tech-debt-register",
+    "createdAt": "July 29",
+    "fieldName": "2025 11:54 AM",
+    "issueType": "effortEstimate",
+    "linkedPhase": "Renamed",
+    "notes": "WT-8.0.2",
+    "resolution": "Successfully mapped from estimatedEffort to effortEstimate for consistency",
+    "status": "Map",
+    "updatedAt": "Resolved"
+  }
+]

@@ -1,0 +1,45 @@
+[2025-07-31T02:35:38.301Z] DEBUG: [vite] connecting...
+[2025-07-31T02:35:38.479Z] DEBUG: [vite] connected.
+[2025-07-31T02:35:42.777Z] INFO: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+[2025-07-31T02:35:43.641Z] LOG: ✅ App is being rendered
+[2025-07-31T02:35:43.642Z] LOG: ✅ main.tsx starting render
+[2025-07-31T02:35:43.643Z] LOG: 🔎 Document root: JSHandle@node
+[2025-07-31T02:35:44.294Z] LOG: 🔍 Loading projects from oApp production database...
+[2025-07-31T02:35:44.295Z] LOG: 🔍 Attempting to fetch from API endpoint...
+[2025-07-31T02:35:44.371Z] LOG: 🔐 Admin Mode Check: JSHandle@object
+[2025-07-31T02:35:44.372Z] LOG: 🔍 Loading projects from oApp production database...
+[2025-07-31T02:35:44.373Z] LOG: 🔍 Attempting to fetch from API endpoint...
+[2025-07-31T02:35:44.373Z] LOG: 🔐 Admin Mode Check: JSHandle@object
+[2025-07-31T02:35:44.694Z] ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+[2025-07-31T02:35:44.737Z] LOG: 📝 API Response preview: <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module">import { injectIntoGlobalHook } from "/@react-refresh";
+injectIntoGlobalHook(window);
+window.$RefreshReg$ = () => {};
+window.$Refres
+[2025-07-31T02:35:44.737Z] WARN: ⚠️ API response is not valid JSON, response preview: <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module">import { injectIntoGlobalHook } 
+[2025-07-31T02:35:44.737Z] WARN: JSON parse error: JSHandle@error
+[2025-07-31T02:35:44.737Z] LOG: 🔄 API unavailable, fetching CSV directly...
+[2025-07-31T02:35:44.739Z] LOG: 📝 API Response preview: <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module">import { injectIntoGlobalHook } from "/@react-refresh";
+injectIntoGlobalHook(window);
+window.$RefreshReg$ = () => {};
+window.$Refres
+[2025-07-31T02:35:44.740Z] WARN: ⚠️ API response is not valid JSON, response preview: <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module">import { injectIntoGlobalHook } 
+[2025-07-31T02:35:44.740Z] WARN: JSON parse error: JSHandle@error
+[2025-07-31T02:35:44.740Z] LOG: 🔄 API unavailable, fetching CSV directly...
+[2025-07-31T02:35:44.757Z] LOG: 📊 CSV: Loaded 92 projects from oApp production data
+[2025-07-31T02:35:44.758Z] LOG: ✅ Successfully loaded 92 projects from oApp
+[2025-07-31T02:35:44.758Z] LOG: 📝 Dev Server Fix - oApp Connection: JSHandle@object
+[2025-07-31T02:35:44.834Z] LOG: 📊 CSV: Loaded 92 projects from oApp production data
+[2025-07-31T02:35:44.835Z] LOG: ✅ Successfully loaded 92 projects from oApp
+[2025-07-31T02:35:44.835Z] LOG: 📝 Dev Server Fix - oApp Connection: JSHandle@object

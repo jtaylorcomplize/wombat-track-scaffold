@@ -34,8 +34,7 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
   cardId,
   userId,
   userRole,
-  onMetricsUpdate,
-  captureInterval = 30000
+  onMetricsUpdate
 }) => {
   const governanceLogger = GovernanceLogger.getInstance();
   const sessionStartRef = useRef(Date.now());
@@ -156,6 +155,9 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
     );
   }, [dashboardId, cardId, userId, userRole, calculateRAGScore, governanceLogger]);
 
+  // Use ref to prevent dependency recreation causing infinite loops
+  const captureErrorRef = useRef<typeof captureError>();
+  
   const captureError = useCallback((error: Error, context?: Record<string, unknown>) => {
     const errorMetric: PerformanceMetric = {
       timestamp: new Date().toISOString(),
@@ -191,6 +193,9 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
       { dashboard_id: dashboardId, ...context }
     );
   }, [dashboardId, cardId, userId, userRole, calculatePerformanceGrade, calculateRAGScore, governanceLogger]);
+
+  // Update ref whenever callback changes
+  captureErrorRef.current = captureError;
 
   const flushMetricsBuffer = useCallback(async () => {
     if (metricsBufferRef.current.length === 0) return;
@@ -245,31 +250,40 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
   }, [dashboardId, cardId, userId, userRole, metrics, onMetricsUpdate, governanceLogger]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (isCapturing) {
-        flushMetricsBuffer();
-      }
-    }, captureInterval);
+    const intervalId = setInterval(() => {
+      flushMetricsBuffer();           // existing metrics fetch
+    }, 60000);                        // Fixed 60-second interval
 
-    return () => {
-      clearInterval(interval);
-      flushMetricsBuffer();
-    };
-  }, [captureInterval, isCapturing, flushMetricsBuffer]);
+    return () => clearInterval(intervalId);
+  }, []);                             // ✅ runs once on mount
 
+  // Use ref-based approach to prevent infinite loops from callback dependency
+  const errorHandlersRef = useRef(false);
+  
   useEffect(() => {
+    
+    // Only set up event handlers once
+    if (errorHandlersRef.current) return;
+    errorHandlersRef.current = true;
+    
     const handleWindowError = (event: ErrorEvent) => {
-      captureError(new Error(event.message), {
-        filename: event.filename,
-        lineno: event.lineno,
-        colno: event.colno
-      });
+      // Use current ref to access latest captureError
+      if (captureErrorRef.current) {
+        captureErrorRef.current(new Error(event.message), {
+          filename: event.filename,
+          lineno: event.lineno,
+          colno: event.colno
+        });
+      }
     };
 
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      captureError(new Error('Unhandled promise rejection'), {
-        reason: event.reason
-      });
+      // Use current ref to access latest captureError
+      if (captureErrorRef.current) {
+        captureErrorRef.current(new Error('Unhandled promise rejection'), {
+          reason: event.reason
+        });
+      }
     };
 
     window.addEventListener('error', handleWindowError);
@@ -278,8 +292,9 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
     return () => {
       window.removeEventListener('error', handleWindowError);
       window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      errorHandlersRef.current = false;
     };
-  }, [captureError]);
+  }, []); // ✅ Empty dependency array - runs once on mount
 
   const getRAGStatusColor = (status: RAGStatus) => {
     switch (status) {
