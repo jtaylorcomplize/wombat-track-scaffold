@@ -55,6 +55,14 @@ export const EnhancedProjectSidebar: React.FC<EnhancedProjectSidebarProps> = ({
     owner: 'All'
   });
 
+  // Helper function for RAG status calculation
+  const getProjectRAGStatus = (project: Project) => {
+    const percentage = project.completionPercentage || 0;
+    if (percentage >= 80) return 'Green';
+    if (percentage >= 50) return 'Amber';
+    return 'Red';
+  };
+
   // Filter projects by current Sub-App and apply filters
   const filteredProjects = useMemo(() => {
     // Use real projects if available, otherwise fallback to mock projects
@@ -98,13 +106,6 @@ export const EnhancedProjectSidebar: React.FC<EnhancedProjectSidebarProps> = ({
   const uniqueOwners = ['All', ...new Set(allProjects.map(p => p.projectOwner))];
 
   // Project status color utility removed - unused in this component
-
-  const getProjectRAGStatus = (project: Project) => {
-    const percentage = project.completionPercentage || 0;
-    if (percentage >= 80) return 'Green';
-    if (percentage >= 50) return 'Amber';
-    return 'Red';
-  };
 
   if (collapsed) {
     return (

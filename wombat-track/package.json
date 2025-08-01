@@ -15,6 +15,7 @@
     "test:ui": "jest tests/ui",
     "test:ui:headed": "HEADLESS=false jest tests/ui",
     "test:ui:watch": "jest tests/ui --watch",
+    "test:admin:sidebar": "jest tests/admin-ui-sidebar-table.test.js --detectOpenHandles --forceExit",
     "sdlc:check-commit": "scripts/check-commit-message.sh",
     "sdlc:test-dispatchers": "node .github/scripts/test-dispatchers.cjs",
     "sdlc:watchdog": "node .github/scripts/sidebar-watchdog.cjs",
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
+    "@types/jest": "^30.0.0",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.7.0",
@@ -57,6 +59,7 @@
     "jest-puppeteer": "^10.0.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
+    "ts-jest": "^29.4.0",
     "tsx": "^4.20.3",
     "typescript": "^4.0.0",
     "typescript-eslint": "^8.37.0",
