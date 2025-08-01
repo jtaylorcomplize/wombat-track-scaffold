@@ -1,6 +1,5 @@
-import { mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
-import { jest } from '@jest/globals';
+const { mkdir } = require('fs/promises');
+const { existsSync } = require('fs');
 
 // Create screenshots directory if it doesn't exist
 beforeAll(async () => {

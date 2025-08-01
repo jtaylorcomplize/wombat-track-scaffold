@@ -1,8 +1,10 @@
 export default {
   testEnvironment: 'node',
-  preset: 'jest-puppeteer',
-  testMatch: ['**/tests/**/*.spec.js', '**/tests/**/*.test.js'],
-  transform: {},
+  testMatch: ['**/tests/**/*.spec.js', '**/tests/**/*.test.js', '**/tests/**/*.spec.ts', '**/tests/**/*.test.ts'],
+  transform: {
+    '^.+\\.tsx?$': 'ts-jest'
+  },
+  preset: 'ts-jest',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   },

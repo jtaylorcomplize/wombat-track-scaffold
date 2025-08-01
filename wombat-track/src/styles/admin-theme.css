@@ -1,0 +1,275 @@
+/* Admin Mode Theme Overrides for OF-BEV */
+
+/* Admin Mode Body Classes - Professional Blue-Gray Theme */
+body.admin-mode,
+:root {
+  --admin-primary: #2563EB;
+  --admin-primary-dark: #1D4ED8;
+  --admin-secondary: #1E293B;
+  --admin-accent: #3B82F6;
+  --admin-bg-dark: #0F172A;
+  --admin-text-light: #F8FAFC;
+  --admin-text-muted: #CBD5E1;
+  --admin-border: #374151;
+  
+  /* Sub-App Theme Colors */
+  --sub-app-orbis: #8B5CF6;
+  --sub-app-complize: #DC2626;
+  --sub-app-meta: #059669;
+  --sub-app-spqr: #F59E0B;
+}
+
+/* Admin Banner Styles - Updated for Blue-Gray Theme */
+.admin-banner {
+  background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 100%);
+  border-bottom: 2px solid #1E40AF;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+/* Admin Theme Sidebar Overrides */
+body.admin-theme .sidebar,
+body.admin-theme nav[class*="sidebar"] {
+  background-color: var(--admin-secondary) !important;
+  border-right: 1px solid var(--admin-border);
+}
+
+body.admin-theme .sidebar .nav-item,
+body.admin-theme nav[class*="sidebar"] .nav-item {
+  color: var(--admin-text-muted);
+}
+
+body.admin-theme .sidebar .nav-item:hover,
+body.admin-theme nav[class*="sidebar"] .nav-item:hover {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: var(--admin-text-light);
+}
+
+body.admin-theme .sidebar .nav-item.active,
+body.admin-theme nav[class*="sidebar"] .nav-item.active {
+  background-color: var(--admin-primary);
+  color: var(--admin-text-light);
+  border-left: 3px solid var(--admin-accent);
+}
+
+/* Admin Theme Content Area */
+body.admin-theme .main-content {
+  background-color: #F1F5F9;
+}
+
+/* Admin Theme Cards and Panels */
+body.admin-theme .card,
+body.admin-theme .panel {
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+body.admin-theme .card-header,
+body.admin-theme .panel-header {
+  background-color: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  color: #1E293B;
+}
+
+/* Admin Theme Buttons */
+body.admin-theme .btn-primary {
+  background-color: var(--admin-primary);
+  border-color: var(--admin-primary);
+}
+
+body.admin-theme .btn-primary:hover {
+  background-color: var(--admin-primary-dark);
+  border-color: var(--admin-primary-dark);
+}
+
+body.admin-theme .btn-danger {
+  background-color: #EF4444;
+  border-color: #EF4444;
+}
+
+/* Admin Theme Tables */
+body.admin-theme table {
+  border: 1px solid #E2E8F0;
+}
+
+body.admin-theme table th {
+  background-color: #F1F5F9;
+  color: #374151;
+  border-bottom: 2px solid var(--admin-primary);
+}
+
+body.admin-theme table tr:nth-child(even) {
+  background-color: #F8FAFC;
+}
+
+body.admin-theme table tr:hover {
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+/* Admin Theme Form Elements */
+body.admin-theme input[type="text"],
+body.admin-theme input[type="email"],
+body.admin-theme input[type="password"],
+body.admin-theme select,
+body.admin-theme textarea {
+  border: 1px solid #D1D5DB;
+  background-color: white;
+}
+
+body.admin-theme input[type="text"]:focus,
+body.admin-theme input[type="email"]:focus,
+body.admin-theme input[type="password"]:focus,
+body.admin-theme select:focus,
+body.admin-theme textarea:focus {
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Admin Theme Alerts and Notifications */
+body.admin-theme .alert-success {
+  background-color: #D1FAE5;
+  border-color: #A7F3D0;
+  color: #065F46;
+}
+
+body.admin-theme .alert-warning {
+  background-color: #FEF3C7;
+  border-color: #FDE68A;
+  color: #92400E;
+}
+
+body.admin-theme .alert-error {
+  background-color: #FEE2E2;
+  border-color: #FECACA;
+  color: #991B1B;
+}
+
+body.admin-theme .alert-info {
+  background-color: #DBEAFE;
+  border-color: #BFDBFE;
+  color: #1E40AF;
+}
+
+/* Admin Theme Status Indicators */
+body.admin-theme .status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+body.admin-theme .status-indicator.healthy {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+body.admin-theme .status-indicator.warning {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+
+body.admin-theme .status-indicator.critical {
+  background-color: #FEE2E2;
+  color: #991B1B;
+}
+
+/* Admin Theme Enhanced Sidebar Overrides */
+body.admin-theme .enhanced-sidebar {
+  background-color: var(--admin-secondary) !important;
+}
+
+body.admin-theme .enhanced-sidebar .sidebar-header {
+  background-color: var(--admin-bg-dark);
+  border-bottom: 1px solid var(--admin-border);
+}
+
+body.admin-theme .enhanced-sidebar .sidebar-section {
+  border-bottom: 1px solid var(--admin-border);
+}
+
+body.admin-theme .enhanced-sidebar .sidebar-item {
+  color: var(--admin-text-muted);
+}
+
+body.admin-theme .enhanced-sidebar .sidebar-item:hover {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: var(--admin-text-light);
+}
+
+body.admin-theme .enhanced-sidebar .sidebar-item.active {
+  background-color: var(--admin-primary);
+  color: var(--admin-text-light);
+}
+
+/* Admin Theme Breadcrumb Overrides */
+body.admin-theme .breadcrumb {
+  background-color: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+body.admin-theme .breadcrumb-item.active {
+  color: var(--admin-primary);
+}
+
+/* Admin Theme Data Tables */
+body.admin-theme .data-table-container {
+  border: 1px solid #E2E8F0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+body.admin-theme .data-table-header {
+  background-color: #F1F5F9;
+  padding: 1rem;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+body.admin-theme .data-table-title {
+  color: #1E293B;
+  font-weight: 600;
+}
+
+body.admin-theme .data-table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Admin Theme Mobile Responsive */
+@media (max-width: 768px) {
+  .admin-banner {
+    padding: 0.75rem 1rem;
+  }
+  
+  .admin-banner .text-base {
+    font-size: 0.875rem;
+  }
+}
+
+/* Admin Theme Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  body.admin-theme {
+    --admin-bg-dark: #020617;
+    --admin-secondary: #0F172A;
+    --admin-text-light: #F1F5F9;
+    --admin-text-muted: #94A3B8;
+    --admin-border: #334155;
+  }
+}
+
+/* Admin Theme Print Styles */
+@media print {
+  .admin-banner {
+    display: none;
+  }
+  
+  body.admin-theme {
+    background-color: white !important;
+  }
+  
+  body.admin-theme * {
+    color: black !important;
+    background-color: white !important;
+  }
+}

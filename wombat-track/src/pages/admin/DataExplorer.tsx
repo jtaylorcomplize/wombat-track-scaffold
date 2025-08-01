@@ -34,7 +34,7 @@ export default function DataExplorer() {
     const fetchTableData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`/api/admin/${selectedTable}`);
+        const response = await fetch(`/api/admin/tables/${selectedTable}`);
         if (response.ok) {
           const data = await response.json();
           setTableData(data);
@@ -52,8 +52,15 @@ export default function DataExplorer() {
     fetchTableData();
   }, [selectedTable]);
 
-  // Filter and search data
-  const filteredData = tableData.filter(item => {
+  // Filter and search data - normalize tableData to always be an array
+  const safeTableData = Array.isArray(tableData) ? tableData : [];
+  
+  // Log warning if tableData is not an array
+  if (!Array.isArray(tableData)) {
+    console.warn("AdminDashboard: tableData was not an array", tableData);
+  }
+  
+  const filteredData = safeTableData.filter(item => {
     const matchesSearch = searchTerm ? 
       Object.values(item).some(value => 
         String(value).toLowerCase().includes(searchTerm.toLowerCase())
