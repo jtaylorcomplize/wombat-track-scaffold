@@ -16,10 +16,16 @@
     "test:ui:headed": "HEADLESS=false jest tests/ui",
     "test:ui:watch": "jest tests/ui --watch",
     "test:admin:sidebar": "jest tests/admin-ui-sidebar-table.test.js --detectOpenHandles --forceExit",
+    "qa:admin-ui-phase1": "jest tests/admin-ui-qa/admin-ui-qa-suite.test.js --detectOpenHandles --forceExit --verbose",
     "sdlc:check-commit": "scripts/check-commit-message.sh",
     "sdlc:test-dispatchers": "node .github/scripts/test-dispatchers.cjs",
     "sdlc:watchdog": "node .github/scripts/sidebar-watchdog.cjs",
-    "sdlc:validate": "npm run lint && npm run test && npm run sdlc:test-dispatchers && npm run sdlc:watchdog"
+    "sdlc:validate": "npm run lint && npm run test && npm run sdlc:test-dispatchers && npm run sdlc:watchdog",
+    "qa:framework": "node scripts/qa-framework/run-qa-framework.js",
+    "qa:framework:staging": "node scripts/qa-framework/run-qa-framework.js --environment staging",  
+    "qa:framework:dev": "node scripts/qa-framework/run-qa-framework.js --environment development",
+    "qa:admin-ui": "node scripts/qa-framework/enhanced-admin-qa.js",
+    "qa:configurable": "node scripts/qa-framework/configurable-qa-framework.js"
   },
   "dependencies": {
     "@looker/embed-sdk": "^2.0.6",
