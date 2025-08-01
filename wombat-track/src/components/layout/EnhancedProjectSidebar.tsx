@@ -30,14 +30,15 @@ const WORK_SURFACES: { id: WorkSurface; label: string; icon: string; description
   { id: 'document', label: 'Document', icon: '📝', description: 'Rich-text SOP + AI' },
   { id: 'govern', label: 'Govern', icon: '🛡️', description: 'Logs, reviews, AI audit trails' },
   { id: 'integrate', label: 'Integrate', icon: '🧬', description: 'Integration health monitoring' },
-  { id: 'spqr-runtime', label: 'SPQR Runtime', icon: '📊', description: 'Live SPQR dashboards with UAT mode' }
+  { id: 'spqr-runtime', label: 'SPQR Runtime', icon: '📊', description: 'Live SPQR dashboards with UAT mode' },
+  { id: 'admin', label: 'Admin', icon: '🔧', description: 'Data Explorer, Import/Export, Runtime Panel' }
 ];
 
 const RAG_STATUS_OPTIONS = ['All', 'Red', 'Amber', 'Green'];
 const STATUS_OPTIONS = ['All', 'Active', 'On Hold', 'Completed'];
 
 export const EnhancedProjectSidebar: React.FC<EnhancedProjectSidebarProps> = ({
-  _projects, // eslint-disable-line @typescript-eslint/no-unused-vars
+  projects,
   currentProject,
   selectedSurface,
   collapsed,
@@ -54,28 +55,7 @@ export const EnhancedProjectSidebar: React.FC<EnhancedProjectSidebarProps> = ({
     owner: 'All'
   });
 
-  // Filter projects by current Sub-App
-  const filteredProjects = useMemo(() => {
-    // Get mock projects for demo purposes, filtered by linkedProgramId
-    const subAppProjects = mockProjects.filter(p => p.linkedProgramId === currentSubApp);
-    
-    // Map to match expected Project type structure
-    return subAppProjects.map(p => ({
-      id: p.id,
-      name: p.title,
-      projectType: 'Development',
-      projectOwner: 'Team Lead',
-      currentPhase: 'Phase 1',
-      completionPercentage: Math.floor(Math.random() * 100),
-      phases: []
-    })) as Project[];
-  }, [currentSubApp]);
-
-  const currentProgram = mockPrograms.find(p => p.id === currentSubApp);
-  const uniqueOwners = ['All', ...new Set(filteredProjects.map(p => p.projectOwner))];
-
-  // Project status color utility removed - unused in this component
-
+  // Helper function for RAG status calculation
   const getProjectRAGStatus = (project: Project) => {
     const percentage = project.completionPercentage || 0;
     if (percentage >= 80) return 'Green';
@@ -83,9 +63,53 @@ export const EnhancedProjectSidebar: React.FC<EnhancedProjectSidebarProps> = ({
     return 'Red';
   };
 
+  // Filter projects by current Sub-App and apply filters
+  const filteredProjects = useMemo(() => {
+    // Use real projects if available, otherwise fallback to mock projects
+    let baseProjects: Project[];
+    
+    if (projects && projects.length > 0) {
+      // Use real oApp projects
+      baseProjects = projects;
+      console.log(`🔍 EnhancedProjectSidebar: Using ${projects.length} real projects from oApp`);
+    } else {
+      // Fallback to mock projects mapped to Project type
+      const subAppProjects = mockProjects.filter(p => p.linkedProgramId === currentSubApp);
+      baseProjects = subAppProjects.map(p => ({
+        id: p.id,
+        name: p.title,
+        projectType: 'Development',
+        projectOwner: 'Team Lead',
+        currentPhase: 'Phase 1',
+        completionPercentage: Math.floor(Math.random() * 100),
+        phases: []
+      })) as Project[];
+      console.log(`🔍 EnhancedProjectSidebar: Using ${baseProjects.length} mock projects for sub-app ${currentSubApp}`);
+    }
+    
+    // Apply filters
+    const filtered = baseProjects
+      .filter(p => filters.ragStatus === 'All' || getProjectRAGStatus(p) === filters.ragStatus)
+      .filter(p => filters.status === 'All' || p.status === filters.status)
+      .filter(p => filters.owner === 'All' || p.projectOwner === filters.owner);
+    
+    console.log(`📊 EnhancedProjectSidebar: Filtered ${baseProjects.length} projects to ${filtered.length} projects`);
+    return filtered;
+  }, [currentSubApp, projects, filters]);
+
+  const currentProgram = mockPrograms.find(p => p.id === currentSubApp);
+  
+  // Get unique owners from all available projects (not just filtered ones)
+  const allProjects = projects && projects.length > 0 ? projects : mockProjects.map(() => ({
+    projectOwner: 'Team Lead'
+  }));
+  const uniqueOwners = ['All', ...new Set(allProjects.map(p => p.projectOwner))];
+
+  // Project status color utility removed - unused in this component
+
   if (collapsed) {
     return (
-      <div className="fixed left-0 top-0 h-full w-16 bg-white border-r border-gray-200 shadow-sm z-40">
+      <div className="fixed left-0 top-0 h-screen w-16 bg-white border-r border-gray-200 shadow-lg z-[9999]">
         <div className="p-4">
           <button
             onClick={onToggleCollapse}
@@ -118,7 +142,7 @@ export const EnhancedProjectSidebar: React.FC<EnhancedProjectSidebarProps> = ({
   }
 
   return (
-    <div className="fixed left-0 top-0 h-full w-80 bg-white border-r border-gray-200 shadow-sm z-40 flex flex-col">
+    <div className="fixed left-0 top-0 h-screen w-80 bg-white border-r border-gray-200 shadow-lg z-[9999] flex flex-col">
       {/* Header with Platform Title */}
       <div className="p-6 pb-0 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">

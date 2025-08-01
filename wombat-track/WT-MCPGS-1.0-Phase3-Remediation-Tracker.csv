@@ -1,0 +1,24 @@
+Phase,Task ID,Task Description,Status,Responsible,Duration Est,Dependencies,Tooling,Validation Criteria,Notes
+Phase 1,WT-MCPGS-P1-001,Update tsconfig.json ES2020 config,Pending,Gizmo,30 min,None,Node/TS,"npm run dev:full starts without TS errors",Set module: es2020 target: es2020 moduleResolution: node16
+Phase 1,WT-MCPGS-P1-002,Refactor fs/promises imports,Pending,Gizmo,15 min,P1-001,Node/TS,No import errors in mcp-gsuite.ts,Change to import * as fs from 'fs/promises'
+Phase 1,WT-MCPGS-P1-003,Refactor crypto imports,Pending,Gizmo,10 min,P1-001,Node/TS,No import errors in mcp-gsuite.ts,Change to import * as crypto from 'crypto'
+Phase 1,WT-MCPGS-P1-004,Fix arguments parameter usage,✅ COMPLETE,Claude,5 min,None,Node/TS,Admin server starts without ESM errors,Renamed to toolArguments - DONE
+Phase 2,WT-MCPGS-P2-001,Deploy google_workspace_mcp container,Pending,Gizmo,15 min,P1-Complete,Docker/oApp,Container responds to health check,docker-compose up -d google_workspace_mcp
+Phase 2,WT-MCPGS-P2-002,Verify MCP container connectivity,Pending,Gizmo,5 min,P2-001,curl/Docker,HTTP 200 from localhost:3002/api/mcp/gsuite/health,Basic endpoint validation
+Phase 2,WT-MCPGS-P2-003,Configure MCP environment variables,Pending,Gizmo,10 min,P2-001,Docker/.env,MCP_GSUITE_URL properly configured,Set in docker-compose.yml
+Phase 3,WT-MCPGS-P3-001,Re-enable MCP route imports,Pending,Gizmo,5 min,P2-Complete,Node/Express,No import errors on admin-server start,Uncomment line 17 in admin-server.ts
+Phase 3,WT-MCPGS-P3-002,Re-enable MCP route registration,Pending,Gizmo,5 min,P3-001,Node/Express,Routes appear in admin server logs,Uncomment lines 72-73 in admin-server.ts
+Phase 3,WT-MCPGS-P3-003,Test Gmail send endpoint,Pending,Gizmo,10 min,P3-002,Postman/curl,Successful API response,POST /api/mcp/gsuite/gmail/send
+Phase 3,WT-MCPGS-P3-004,Test Drive read endpoint,Pending,Gizmo,10 min,P3-002,Postman/curl,Successful API response,GET /api/mcp/gsuite/drive/files/:fileId
+Phase 3,WT-MCPGS-P3-005,Test Sheets update endpoint,Pending,Gizmo,10 min,P3-002,Postman/curl,Successful API response,PUT /api/mcp/gsuite/sheets/:id
+Phase 3,WT-MCPGS-P3-006,Test Calendar events endpoint,Pending,Gizmo,10 min,P3-002,Postman/curl,Successful API response,GET /api/mcp/gsuite/calendar/events
+Phase 4,WT-MCPGS-P4-001,Run Puppeteer MCP integration tests,Pending,Claude,20 min,P3-Complete,Puppeteer/MCP,All MCP endpoints pass automated tests,Full end-to-end validation
+Phase 4,WT-MCPGS-P4-002,Validate DriveMemory JSONL logging,Pending,Claude,10 min,P4-001,DriveMemory,MCP actions appear in governance logs,Check logs/governance.jsonl
+Phase 4,WT-MCPGS-P4-003,Create MemoryPlugin anchor,Pending,Claude,5 min,P4-002,MemoryPlugin,Anchor created with phase completion,wt-mcpgs-1.0-phase3-complete
+Phase 4,WT-MCPGS-P4-004,Update GovernanceLog final status,Pending,Claude,5 min,P4-003,GovernanceLog,Phase 3 marked complete in governance,JSON entry with success: true
+Testing,WT-MCPGS-T-001,Full MCP orchestration test,Pending,Claude,30 min,P4-Complete,Puppeteer,End-to-end MCP workflow validation,Gmail → Drive → Sheets → Calendar flow
+Testing,WT-MCPGS-T-002,Load testing MCP endpoints,Pending,Claude,20 min,T-001,Artillery/curl,Endpoints handle concurrent requests,10 concurrent requests per endpoint
+Testing,WT-MCPGS-T-003,Error handling validation,Pending,Claude,15 min,T-001,Puppeteer,Graceful failure modes tested,Network timeouts auth failures API limits
+Deploy,WT-MCPGS-D-001,Production readiness checklist,Pending,Gizmo,30 min,Testing-Complete,SDLC,All deployment criteria met,Security config performance monitoring
+Deploy,WT-MCPGS-D-002,Create deployment documentation,Pending,Gizmo,20 min,D-001,Markdown,Complete deployment guide created,Docker env vars API keys scaling
+Deploy,WT-MCPGS-D-003,Submit for production approval,Pending,Gizmo,10 min,D-002,SDLC,Approval workflow initiated,Stakeholder sign-off obtained
