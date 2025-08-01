@@ -30,7 +30,8 @@ const WORK_SURFACES: { id: WorkSurface; label: string; icon: string; description
   { id: 'document', label: 'Document', icon: '📝', description: 'Rich-text SOP + AI' },
   { id: 'govern', label: 'Govern', icon: '🛡️', description: 'Logs, reviews, AI audit trails' },
   { id: 'integrate', label: 'Integrate', icon: '🧬', description: 'Integration health monitoring' },
-  { id: 'spqr-runtime', label: 'SPQR Runtime', icon: '📊', description: 'Live SPQR dashboards with UAT mode' }
+  { id: 'spqr-runtime', label: 'SPQR Runtime', icon: '📊', description: 'Live SPQR dashboards with UAT mode' },
+  { id: 'admin', label: 'Admin', icon: '🔧', description: 'Data Explorer, Import/Export, Runtime Panel' }
 ];
 
 const RAG_STATUS_OPTIONS = ['All', 'Red', 'Amber', 'Green'];

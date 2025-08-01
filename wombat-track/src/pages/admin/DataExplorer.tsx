@@ -34,7 +34,7 @@ export default function DataExplorer() {
     const fetchTableData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`/api/admin/${selectedTable}`);
+        const response = await fetch(`/api/admin/tables/${selectedTable}`);
         if (response.ok) {
           const data = await response.json();
           setTableData(data);

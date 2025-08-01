@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "timestamp": "2025-07-31T01:19:05.207Z",
+    "exportType": "full_schema",
+    "version": "3.0",
+    "hash": "55844d60aeb03c1954a4f8bb5359d5371d2b8807d68acce6bdf2a83ab7298d51",
+    "recordCounts": {
+      "projects": 0,
+      "phases": 0,
+      "step_progress": 0,
+      "governance_logs": 0
+    }
+  },
+  "tables": {
+    "projects": [],
+    "phases": [],
+    "step_progress": [],
+    "governance_logs": []
+  }
+}

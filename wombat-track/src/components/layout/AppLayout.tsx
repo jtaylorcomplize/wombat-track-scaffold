@@ -8,11 +8,14 @@ import { GovernSurface } from '../surfaces/GovernSurface';
 import { IntegrateSurface } from '../surfaces/IntegrateSurface';
 import { SPQRRuntimeDashboard } from '../SPQR/SPQRRuntimeDashboard';
 import { SubAppDashboard } from '../SubAppDashboard';
+import { AdminDashboard } from '../admin/AdminDashboard';
+import { AdminModeProvider } from '../../contexts/AdminModeContext';
+import AdminErrorBoundary from '../admin/AdminErrorBoundary';
 import type { Project, Phase, PhaseStep as Step } from '../../types/phase';
 import { mockPrograms } from '../../data/mockPrograms';
 import { fetchProjectsFromOApp } from '../../services/oappAPI';
 
-export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate' | 'spqr-runtime';
+export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate' | 'spqr-runtime' | 'admin' | 'admin-data-explorer' | 'admin-import-export' | 'admin-orphan-inspector' | 'admin-runtime-panel' | 'admin-secrets-manager';
 
 export interface AppLayoutProps {
   initialProjects?: Project[];
@@ -229,6 +232,54 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
         return <IntegrateSurface {...commonProps} />;
       case 'spqr-runtime':
         return <SPQRRuntimeDashboard />;
+      case 'admin':
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="overview" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
+      case 'admin-data-explorer':
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="data-explorer" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
+      case 'admin-import-export':
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="import-export" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
+      case 'admin-orphan-inspector':
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="orphan-inspector" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
+      case 'admin-runtime-panel':
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="runtime-panel" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
+      case 'admin-secrets-manager':
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="secrets-manager" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
       default:
         return <PlanSurface {...commonProps} />;
     }
