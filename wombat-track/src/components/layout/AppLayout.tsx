@@ -233,6 +233,8 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
       case 'spqr-runtime':
         return <SPQRRuntimeDashboard />;
       case 'admin':
+        // Auto-enable admin mode when accessing admin surfaces
+        localStorage.setItem('wombat-track-admin-mode', 'true');
         return (
           <AdminModeProvider>
             <AdminErrorBoundary>
@@ -241,6 +243,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
           </AdminModeProvider>
         );
       case 'admin-data-explorer':
+        localStorage.setItem('wombat-track-admin-mode', 'true');
         return (
           <AdminModeProvider>
             <AdminErrorBoundary>
@@ -249,6 +252,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
           </AdminModeProvider>
         );
       case 'admin-import-export':
+        localStorage.setItem('wombat-track-admin-mode', 'true');
         return (
           <AdminModeProvider>
             <AdminErrorBoundary>
@@ -257,6 +261,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
           </AdminModeProvider>
         );
       case 'admin-orphan-inspector':
+        localStorage.setItem('wombat-track-admin-mode', 'true');
         return (
           <AdminModeProvider>
             <AdminErrorBoundary>
@@ -265,6 +270,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
           </AdminModeProvider>
         );
       case 'admin-runtime-panel':
+        localStorage.setItem('wombat-track-admin-mode', 'true');
         return (
           <AdminModeProvider>
             <AdminErrorBoundary>
@@ -273,6 +279,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
           </AdminModeProvider>
         );
       case 'admin-secrets-manager':
+        localStorage.setItem('wombat-track-admin-mode', 'true');
         return (
           <AdminModeProvider>
             <AdminErrorBoundary>
