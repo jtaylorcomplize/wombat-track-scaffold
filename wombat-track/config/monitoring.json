@@ -1,0 +1,77 @@
+{
+  "production": {
+    "url": "https://orbis-forge-admin.oapp.io",
+    "thresholds": {
+      "pageLoad": 2000,
+      "crudLatency": 500,
+      "dbQuery": 100,
+      "errorRate": 0.1,
+      "systemHealth": 90,
+      "diskSpace": 80,
+      "memoryUsage": 85,
+      "cpuUsage": 80
+    },
+    "intervals": {
+      "healthCheck": 300000,
+      "performanceCheck": 120000,
+      "governanceCheck": 600000,
+      "systemCheck": 60000
+    },
+    "alerts": {
+      "emailFrom": "alerts@orbis-forge.com",
+      "emailTo": "devops@orbis-forge.com,security@orbis-forge.com",
+      "escalationDelay": 900000,
+      "maxRetries": 3
+    }
+  },
+  "staging": {
+    "url": "https://orbis-forge-admin.staging.oapp.io",
+    "thresholds": {
+      "pageLoad": 3000,
+      "crudLatency": 1000,
+      "dbQuery": 200,
+      "errorRate": 1.0,
+      "systemHealth": 80,
+      "diskSpace": 85,
+      "memoryUsage": 90,
+      "cpuUsage": 90
+    },
+    "intervals": {
+      "healthCheck": 600000,
+      "performanceCheck": 300000,
+      "governanceCheck": 1200000,
+      "systemCheck": 120000
+    },
+    "alerts": {
+      "emailFrom": "staging-alerts@orbis-forge.com", 
+      "emailTo": "dev-team@orbis-forge.com",
+      "escalationDelay": 1800000,
+      "maxRetries": 2
+    }
+  },
+  "development": {
+    "url": "http://localhost:3000",
+    "thresholds": {
+      "pageLoad": 5000,
+      "crudLatency": 2000,
+      "dbQuery": 500,
+      "errorRate": 5.0,
+      "systemHealth": 70,
+      "diskSpace": 90,
+      "memoryUsage": 95,
+      "cpuUsage": 95
+    },
+    "intervals": {
+      "healthCheck": 1800000,
+      "performanceCheck": 900000,
+      "governanceCheck": 1800000,
+      "systemCheck": 300000
+    },
+    "alerts": {
+      "emailFrom": "dev-alerts@orbis-forge.com",
+      "emailTo": "developer@orbis-forge.com",
+      "escalationDelay": 3600000,
+      "maxRetries": 1
+    }
+  }
+}
