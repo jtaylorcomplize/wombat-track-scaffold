@@ -37,7 +37,32 @@ export default function DataExplorer() {
         const response = await fetch(`/api/admin/tables/${selectedTable}`);
         if (response.ok) {
           const data = await response.json();
-          setTableData(data);
+          
+          // Enhanced data normalization - handle various API response formats
+          let normalizedData: TableData[] = [];
+          
+          if (Array.isArray(data)) {
+            normalizedData = data;
+          } else if (data && Array.isArray(data.rows)) {
+            normalizedData = data.rows;
+          } else if (data && Array.isArray(data.data)) {
+            normalizedData = data.data;
+          } else if (data && typeof data === 'object') {
+            // If it's an object with unknown structure, try to extract array properties
+            const possibleArrays = Object.values(data).filter(Array.isArray);
+            if (possibleArrays.length > 0) {
+              normalizedData = possibleArrays[0] as TableData[];
+            } else {
+              console.warn(`DataExplorer: API returned object but no arrays found for ${selectedTable}`, data);
+              normalizedData = [];
+            }
+          } else {
+            console.warn(`DataExplorer: API returned unexpected data format for ${selectedTable}`, data);
+            normalizedData = [];
+          }
+          
+          setTableData(normalizedData);
+          console.log(`✅ DataExplorer: Loaded ${normalizedData.length} records for ${selectedTable}`);
         } else {
           console.error(`Failed to fetch ${selectedTable} data`);
           setTableData([]);
@@ -61,10 +86,15 @@ export default function DataExplorer() {
   }
   
   const filteredData = safeTableData.filter(item => {
+    // Enhanced null safety for search operations
+    if (!item || typeof item !== 'object') return false;
+    
     const matchesSearch = searchTerm ? 
-      Object.values(item).some(value => 
-        String(value).toLowerCase().includes(searchTerm.toLowerCase())
-      ) : true;
+      Object.values(item).some(value => {
+        // Additional safety check for null/undefined values
+        if (value === null || value === undefined) return false;
+        return String(value).toLowerCase().includes(searchTerm.toLowerCase());
+      }) : true;
     
     const matchesFilter = filterStatus === 'all' ? true :
       item.status?.toLowerCase() === filterStatus.toLowerCase();
@@ -77,13 +107,17 @@ export default function DataExplorer() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
-  // Get table columns dynamically
+  // Get table columns dynamically with null safety
   const getTableColumns = (data: TableData[]) => {
-    if (data.length === 0) return [];
-    return Object.keys(data[0]);
+    if (!Array.isArray(data) || data.length === 0) return [];
+    
+    const firstRow = data[0];
+    if (!firstRow || typeof firstRow !== 'object') return [];
+    
+    return Object.keys(firstRow);
   };
 
-  const columns = getTableColumns(tableData);
+  const columns = getTableColumns(safeTableData);
 
   return (
     <div className="p-6 space-y-6">
@@ -188,7 +222,18 @@ export default function DataExplorer() {
           </div>
         ) : paginatedData.length === 0 ? (
           <div className="p-8 text-center text-gray-500">
-            No records found for the current search and filter criteria.
+            <Database size={48} className="mx-auto mb-3 text-gray-300" />
+            {safeTableData.length === 0 ? (
+              <div>
+                <p className="text-lg font-medium mb-2">⚠️ No data available for this table</p>
+                <p className="text-sm">The {selectedTable} table appears to be empty or the API returned no data.</p>
+              </div>
+            ) : (
+              <div>
+                <p className="text-lg font-medium mb-2">No matching records found</p>
+                <p className="text-sm">Try adjusting your search terms or filter criteria.</p>
+              </div>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -206,17 +251,35 @@ export default function DataExplorer() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {paginatedData.map((row, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    {columns.map((column) => (
-                      <td key={column} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <div className="max-w-xs truncate" title={String(row[column])}>
-                          {String(row[column])}
-                        </div>
-                      </td>
-                    ))}
-                  </tr>
-                ))}
+                {paginatedData.map((row, index) => {
+                  // Enhanced null safety for row rendering
+                  if (!row || typeof row !== 'object') {
+                    return (
+                      <tr key={index} className="hover:bg-gray-50">
+                        <td colSpan={columns.length} className="px-6 py-4 text-center text-gray-500">
+                          Invalid row data
+                        </td>
+                      </tr>
+                    );
+                  }
+                  
+                  return (
+                    <tr key={index} className="hover:bg-gray-50">
+                      {columns.map((column) => {
+                        const cellValue = row[column];
+                        const displayValue = cellValue === null || cellValue === undefined ? '' : String(cellValue);
+                        
+                        return (
+                          <td key={column} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <div className="max-w-xs truncate" title={displayValue}>
+                              {displayValue}
+                            </div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
