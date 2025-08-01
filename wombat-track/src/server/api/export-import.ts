@@ -9,25 +9,48 @@ import multer from 'multer';
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
-// Table configurations with primary keys
+// Enhanced table configurations with support for all table types
 const TABLE_CONFIG = {
   projects: {
     csvFile: 'cleaned-projects-snapshot.csv',
+    dataSource: 'csv',
     primaryKey: 'projectId',
     requiredFields: ['projectName', 'projectId', 'status'],
-    foreignKeys: { owner: 'users' }
+    foreignKeys: { owner: 'users' },
+    supportsExport: true
   },
   phases: {
     csvFile: 'cleaned-phases-snapshot.csv',
+    dataSource: 'csv',
     primaryKey: 'phaseid',
     requiredFields: ['phasename', 'phaseid', 'WT Projects'],
-    foreignKeys: { 'WT Projects': 'projects' }
+    foreignKeys: { 'WT Projects': 'projects' },
+    supportsExport: true
   },
   step_progress: {
     csvFile: 'step-progress-snapshot.csv',
+    dataSource: 'csv',
     primaryKey: 'stepId',
     requiredFields: ['stepId', 'phaseId', 'status'],
-    foreignKeys: { phaseId: 'phases' }
+    foreignKeys: { phaseId: 'phases' },
+    supportsExport: true
+  },
+  governance_logs: {
+    jsonlFile: 'logs/governance.jsonl',
+    dataSource: 'jsonl',
+    primaryKey: 'id',
+    requiredFields: ['timestamp', 'event_type'],
+    foreignKeys: {},
+    supportsExport: true,
+    exportSensitive: true // Requires special handling
+  },
+  sub_apps: {
+    csvFile: 'Sub-Apps 23ee1901e36e81deba63ce1abf2ed31e_all.csv',
+    dataSource: 'csv',
+    primaryKey: 'id',
+    requiredFields: ['name'],
+    foreignKeys: {},
+    supportsExport: true
   }
 };
 
@@ -51,6 +74,44 @@ async function parseCSV(filePath: string): Promise<any[]> {
   }
 }
 
+// Helper to parse JSONL file
+async function parseJSONL(filePath: string): Promise<any[]> {
+  try {
+    const fileContent = await fs.readFile(filePath, 'utf-8');
+    const lines = fileContent.trim().split('\n').filter(line => line.trim());
+    return lines.map(line => {
+      try {
+        return JSON.parse(line);
+      } catch (e) {
+        console.warn('Invalid JSON line:', line.substring(0, 100));
+        return null;
+      }
+    }).filter(item => item !== null);
+  } catch (error) {
+    console.error(`Error reading JSONL file ${filePath}:`, error);
+    return [];
+  }
+}
+
+// Helper to get data from any supported source
+async function getTableData(tableName: string, config: any): Promise<any[]> {
+  let data: any[] = [];
+  
+  try {
+    if (config.dataSource === 'csv' && config.csvFile) {
+      const filePath = path.join(process.cwd(), config.csvFile);
+      data = await parseCSV(filePath);
+    } else if (config.dataSource === 'jsonl' && config.jsonlFile) {
+      const filePath = path.join(process.cwd(), config.jsonlFile);
+      data = await parseJSONL(filePath);
+    }
+  } catch (error) {
+    console.warn(`Could not load data for ${tableName}:`, error);
+  }
+  
+  return data;
+}
+
 // Export table to CSV
 router.get('/export/:tableName', async (req, res) => {
   const { tableName } = req.params;
@@ -58,56 +119,95 @@ router.get('/export/:tableName', async (req, res) => {
   if (!TABLE_CONFIG[tableName as keyof typeof TABLE_CONFIG]) {
     return res.status(404).json({ 
       error: 'Table not found',
-      availableTables: Object.keys(TABLE_CONFIG)
+      availableTables: Object.keys(TABLE_CONFIG).filter(t => TABLE_CONFIG[t as keyof typeof TABLE_CONFIG].supportsExport),
+      message: `Table '${tableName}' is not available for export. Check available tables list.`
     });
   }
 
   try {
     const config = TABLE_CONFIG[tableName as keyof typeof TABLE_CONFIG];
-    const filePath = path.join(process.cwd(), config.csvFile);
     
-    // Check if file exists, if not create empty data
-    let data: any[] = [];
-    try {
-      data = await parseCSV(filePath);
-    } catch (error) {
-      console.warn(`CSV file not found for ${tableName}, returning empty dataset`);
+    if (!config.supportsExport) {
+      return res.status(403).json({
+        error: 'Export not supported',
+        message: `Table '${tableName}' does not support export operations`
+      });
+    }
+    
+    // Get data using the unified helper function
+    const data = await getTableData(tableName, config);
+
+    if (data.length === 0) {
+      console.warn(`No data found for ${tableName}, exporting empty dataset`);
+    }
+
+    // Handle sensitive data exports (governance_logs)
+    let exportData = data;
+    if (config.exportSensitive && tableName === 'governance_logs') {
+      // For governance logs, limit to last 1000 entries and sanitize sensitive fields
+      exportData = data
+        .slice(-1000) // Last 1000 entries
+        .map(entry => ({
+          ...entry,
+          // Remove potentially sensitive details if needed
+          user_id: entry.user_id || 'system',
+          timestamp: entry.timestamp,
+          event_type: entry.event_type,
+          action: entry.action,
+          success: entry.success,
+          resource_type: entry.resource_type,
+          resource_id: entry.resource_id
+        }));
     }
 
     // Convert to CSV format
-    const csvContent = stringify(data, {
+    const csvContent = stringify(exportData, {
       header: true,
-      columns: data.length > 0 ? Object.keys(data[0]) : config.requiredFields
+      columns: exportData.length > 0 ? Object.keys(exportData[0]) : config.requiredFields
     });
 
     // Set headers for file download
     res.setHeader('Content-Type', 'text/csv');
     res.setHeader('Content-Disposition', `attachment; filename="${tableName}_export_${Date.now()}.csv"`);
     
-    // Log export to governance
-    const governanceEntry = {
-      timestamp: new Date().toISOString(),
-      event_type: 'data_export',
-      user_id: req.headers['x-user-id'] || 'admin',
-      user_role: 'admin',
-      resource_type: 'table_export',
-      resource_id: tableName,
-      action: 'export_csv',
-      success: true,
-      details: {
-        operation: 'CSV Export',
-        table: tableName,
-        recordCount: data.length,
-        exportPath: `${tableName}_export_${Date.now()}.csv`
-      },
-      runtime_context: {
-        phase: 'OF-BEV-2.2',
-        environment: 'data_pipeline'
-      }
-    };
+    // Log export to governance (avoid recursion for governance_logs)
+    if (tableName !== 'governance_logs') {
+      const governanceEntry = {
+        timestamp: new Date().toISOString(),
+        event_type: 'data_export',
+        user_id: req.headers['x-user-id'] || 'admin',
+        user_role: 'admin',
+        resource_type: 'table_export',
+        resource_id: tableName,
+        action: 'export_csv',
+        success: true,
+        details: {
+          operation: 'CSV Export',
+          table: tableName,
+          dataSource: config.dataSource,
+          recordCount: data.length,
+          exportedRecords: exportData.length,
+          exportPath: `${tableName}_export_${Date.now()}.csv`
+        },
+        runtime_context: {
+          phase: 'WT-ADMIN-UI-4.0',
+          environment: 'data_pipeline'
+        }
+      };
 
-    const governanceLogPath = path.join(process.cwd(), 'logs/governance.jsonl');
-    await fs.appendFile(governanceLogPath, JSON.stringify(governanceEntry) + '\n');
+      const governanceLogPath = path.join(process.cwd(), 'logs/governance.jsonl');
+      await fs.appendFile(governanceLogPath, JSON.stringify(governanceEntry) + '\n');
+    }
+
+    // Save export to DriveMemory for audit trail
+    const exportArtifactPath = path.join(
+      process.cwd(),
+      'DriveMemory/OrbisForge/BackEndVisibility/exports',
+      `${tableName}_export_${Date.now()}.csv`
+    );
+    
+    await fs.mkdir(path.dirname(exportArtifactPath), { recursive: true });
+    await fs.writeFile(exportArtifactPath, csvContent);
 
     res.send(csvContent);
 
@@ -115,7 +215,7 @@ router.get('/export/:tableName', async (req, res) => {
     console.error(`Error exporting ${tableName}:`, error);
     res.status(500).json({ 
       error: 'Internal server error',
-      message: `Failed to export ${tableName}`
+      message: `Failed to export ${tableName}: ${error instanceof Error ? error.message : 'Unknown error'}`
     });
   }
 });
