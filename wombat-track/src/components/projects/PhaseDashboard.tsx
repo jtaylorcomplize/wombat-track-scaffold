@@ -8,15 +8,15 @@ export const PhaseDashboard: React.FC = () => {
   const { projectId, phaseId } = useParams<{ projectId: string; phaseId: string }>();
   const { projects } = useProjectContext();
   
+  const project = projects.find(p => p.id === projectId);
+  const phase = project?.phases.find(p => p.id === phaseId);
+  
   useEffect(() => {
     console.log('✅ PhaseDashboard rendered with params:', { projectId, phaseId });
     console.log('✅ Project found:', !!project, 'Phase found:', !!phase);
     if (project) console.log('✅ Project name:', project.name);
     if (phase) console.log('✅ Phase name:', phase.name);
   }, [projectId, phaseId, project, phase]);
-
-  const project = projects.find(p => p.id === projectId);
-  const phase = project?.phases.find(p => p.id === phaseId);
 
   if (!project || !phase) {
     return (

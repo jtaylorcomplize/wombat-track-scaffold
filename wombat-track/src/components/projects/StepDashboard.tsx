@@ -11,6 +11,10 @@ export const StepDashboard: React.FC = () => {
   }>();
   const { projects } = useProjectContext();
   
+  const project = projects.find(p => p.id === projectId);
+  const phase = project?.phases.find(p => p.id === phaseId);
+  const step = phase?.steps.find(s => s.id === stepId);
+  
   useEffect(() => {
     console.log('✅ StepDashboard rendered with params:', { projectId, phaseId, stepId });
     console.log('✅ Project found:', !!project, 'Phase found:', !!phase, 'Step found:', !!step);
@@ -18,10 +22,6 @@ export const StepDashboard: React.FC = () => {
     if (phase) console.log('✅ Phase name:', phase.name);
     if (step) console.log('✅ Step name:', step.name);
   }, [projectId, phaseId, stepId, project, phase, step]);
-
-  const project = projects.find(p => p.id === projectId);
-  const phase = project?.phases.find(p => p.id === phaseId);
-  const step = phase?.steps.find(s => s.id === stepId);
 
   if (!project || !phase || !step) {
     return (
