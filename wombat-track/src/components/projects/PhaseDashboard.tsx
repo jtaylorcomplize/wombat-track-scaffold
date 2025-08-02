@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { ChevronRight, Calendar, Target, AlertCircle } from 'lucide-react';
@@ -9,8 +9,11 @@ export const PhaseDashboard: React.FC = () => {
   const { projects } = useProjectContext();
   
   useEffect(() => {
-    console.log('PhaseDashboard loaded - Project:', projectId, 'Phase:', phaseId);
-  }, [projectId, phaseId]);
+    console.log('✅ PhaseDashboard rendered with params:', { projectId, phaseId });
+    console.log('✅ Project found:', !!project, 'Phase found:', !!phase);
+    if (project) console.log('✅ Project name:', project.name);
+    if (phase) console.log('✅ Phase name:', phase.name);
+  }, [projectId, phaseId, project, phase]);
 
   const project = projects.find(p => p.id === projectId);
   const phase = project?.phases.find(p => p.id === phaseId);
@@ -156,7 +159,9 @@ export const PhaseDashboard: React.FC = () => {
       </div>
 
       {/* Outlet for nested step routes */}
-      <Outlet />
+      <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="text-gray-500">Loading step dashboard...</div></div>}>
+        <Outlet />
+      </Suspense>
     </div>
   );
 };

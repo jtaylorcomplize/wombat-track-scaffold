@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import type { Phase, PhaseStep } from '../types/phase';
@@ -574,7 +574,9 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
       </div>
       
       {/* Outlet for nested routes (Phase/Step dashboards) */}
-      <Outlet />
+      <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="text-gray-500">Loading nested dashboard...</div></div>}>
+        <Outlet />
+      </Suspense>
     </div>
   );
 };

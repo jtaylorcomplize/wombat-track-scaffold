@@ -7,8 +7,10 @@ export const SubAppAnalyticsDashboard: React.FC = () => {
   const { subAppId } = useParams<{ subAppId: string }>();
   
   useEffect(() => {
-    console.log('SubAppAnalyticsDashboard loaded - SubApp:', subAppId);
-  }, [subAppId]);
+    console.log('✅ SubAppAnalyticsDashboard rendered with params:', { subAppId });
+    console.log('✅ SubApp found:', !!subApp);
+    if (subApp) console.log('✅ SubApp name:', subApp.name);
+  }, [subAppId, subApp]);
 
   const subApp = mockPrograms.find(p => p.id === subAppId);
 

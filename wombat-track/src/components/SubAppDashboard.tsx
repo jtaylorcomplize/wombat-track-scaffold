@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Activity, Shield, FileText, Grid3x3, Layers } from 'lucide-react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import type { Program } from '../types/models';
@@ -303,7 +303,9 @@ export const SubAppDashboard: React.FC<SubAppDashboardProps> = ({
       </div>
       
       {/* Outlet for nested routes (SubApp dashboard views) */}
-      <Outlet />
+      <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="text-gray-500">Loading sub-app dashboard...</div></div>}>
+        <Outlet />
+      </Suspense>
     </div>
   );
 };
