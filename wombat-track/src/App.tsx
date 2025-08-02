@@ -1,14 +1,16 @@
 // wombat-track/src/App.tsx
 import React, { useState } from 'react';
 import { AppLayout } from './components/layout/AppLayout';
+import { AppRouter } from './router/AppRouter';
 import { PhasePlan } from './pages/PhasePlan';
 import { OrbisDashboard } from './pages/OrbisDashboard';
 import { ProjectComposerView } from './components/ProjectComposerView';
 import { DocsPage } from './pages/DocsPage';
 console.log("✅ App is being rendered");
 
-// Toggle between old tabbed interface and new Work Surfaces layout
+// Toggle between old tabbed interface and new Work Surfaces layout with routing
 const USE_NEW_LAYOUT = true;
+const USE_ROUTING = true;
 
 type ActiveView = 'phase-plan' | 'project-composer' | 'orbis-dashboard' | 'docs' | 'settings';
 
@@ -22,7 +24,12 @@ function App() {
     console.log(`Health check completed for: ${integrationId}`);
   };
 
-  // Use new Work Surfaces layout
+  // Use new Work Surfaces layout with routing
+  if (USE_NEW_LAYOUT && USE_ROUTING) {
+    return <AppRouter />;
+  }
+  
+  // Use new Work Surfaces layout without routing
   if (USE_NEW_LAYOUT) {
     return <AppLayout />;
   }

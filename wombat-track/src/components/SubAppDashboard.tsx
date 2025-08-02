@@ -1,5 +1,6 @@
 import React from 'react';
 import { Activity, Shield, FileText, Grid3x3, Layers } from 'lucide-react';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import type { Program } from '../types/models';
 import { mockProjects } from '../data/mockProjects';
 
@@ -54,6 +55,8 @@ export const SubAppDashboard: React.FC<SubAppDashboardProps> = ({
   subApp, 
   onWorkSurfaceSelect 
 }) => {
+  const navigate = useNavigate();
+  const { subAppId } = useParams<{ subAppId: string }>();
   const theme = subAppThemes[subApp.id] || subAppThemes['prog-orbis-001'];
   
   // Calculate program metrics
@@ -217,7 +220,13 @@ export const SubAppDashboard: React.FC<SubAppDashboardProps> = ({
           {dashboardCards.map((card) => (
             <button
               key={card.id}
-              onClick={() => onWorkSurfaceSelect(card.id)}
+              onClick={() => {
+                if (card.id === 'dashboard' || card.id === 'analytics') {
+                  navigate(`/subapps/${subApp.id}/${card.id}`);
+                } else {
+                  onWorkSurfaceSelect(card.id);
+                }
+              }}
               className="bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-200 p-6 
                        transition-all duration-300 hover:-translate-y-1 text-left group 
                        wt-interactive overflow-hidden"
@@ -292,6 +301,9 @@ export const SubAppDashboard: React.FC<SubAppDashboardProps> = ({
           </div>
         </div>
       </div>
+      
+      {/* Outlet for nested routes (SubApp dashboard views) */}
+      <Outlet />
     </div>
   );
 };

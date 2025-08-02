@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import type { Phase, PhaseStep } from '../types/phase';
 import type { TemplateExecution } from '../types/template';
 import { ProjectSwitcher } from './project/ProjectSwitcher';
@@ -18,11 +19,15 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
   readOnly = false
 }) => {
   const { projects, activeProjectId, setActiveProjectId, updatePhaseStep } = useProjectContext();
+  const { projectId } = useParams<{ projectId: string }>();
+  const navigate = useNavigate();
   const [expandedPhases, setExpandedPhases] = useState<Set<string>>(new Set());
   const [executionMap, setExecutionMap] = useState<Map<string, TemplateExecution>>(new Map());
   const [loadingSteps, setLoadingSteps] = useState<Set<string>>(new Set());
 
-  const activeProject = projects.find(p => p.id === activeProjectId);
+  // Use projectId from route params if available
+  const currentProjectId = projectId || activeProjectId;
+  const activeProject = projects.find(p => p.id === currentProjectId);
 
   // Initialize expanded phases on mount
   useEffect(() => {
@@ -276,7 +281,13 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
               >
                 {/* Phase Header */}
                 <div
-                  onClick={() => togglePhase(phase.id)}
+                  onClick={() => {
+                    togglePhase(phase.id);
+                    // Navigate to phase dashboard when clicking phase header
+                    if (activeProject) {
+                      navigate(`/projects/${activeProject.id}/phases/${phase.id}`);
+                    }
+                  }}
                   style={{
                     padding: '16px',
                     cursor: 'pointer',
@@ -561,6 +572,9 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
             );
           })}
       </div>
+      
+      {/* Outlet for nested routes (Phase/Step dashboards) */}
+      <Outlet />
     </div>
   );
 };
