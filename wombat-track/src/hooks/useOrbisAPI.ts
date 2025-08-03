@@ -170,6 +170,7 @@ export const useAllProjects = (filters?: {
   
   const wsRef = useRef<WebSocket | null>(null);
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const fetchProjectsRef = useRef<() => Promise<void>>();
 
   const fetchProjects = useCallback(async () => {
     try {
@@ -211,13 +212,15 @@ export const useAllProjects = (filters?: {
     }
   }, [filters]);
 
+  fetchProjectsRef.current = fetchProjects;
+
   const setupPolling = useCallback(() => {
     if (pollIntervalRef.current) return; // Already polling
     
     pollIntervalRef.current = setInterval(() => {
-      fetchProjects();
+      fetchProjectsRef.current?.();
     }, 30000); // 30 second polling fallback
-  }, [fetchProjects]);
+  }, []);
 
   const setupWebSocket = useCallback(() => {
     // WebSocket disabled in development - use polling only for stability
@@ -233,6 +236,9 @@ export const useAllProjects = (filters?: {
 
   useEffect(() => {
     fetchProjects();
+  }, [fetchProjects]);
+
+  useEffect(() => {
     setupWebSocket();
     
     return () => {
@@ -243,7 +249,7 @@ export const useAllProjects = (filters?: {
         clearInterval(pollIntervalRef.current);
       }
     };
-  }, [filters]);
+  }, [setupWebSocket]);
 
   const refresh = useCallback(() => {
     setLoading(true);
@@ -271,6 +277,7 @@ export const useSubApps = (includeProjects: boolean = true) => {
 
   const wsRef = useRef<WebSocket | null>(null);
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const fetchSubAppsRef = useRef<() => Promise<void>>();
 
   const fetchSubApps = useCallback(async () => {
     try {
@@ -304,13 +311,15 @@ export const useSubApps = (includeProjects: boolean = true) => {
     }
   }, [includeProjects]);
 
+  fetchSubAppsRef.current = fetchSubApps;
+
   const setupPolling = useCallback(() => {
     if (pollIntervalRef.current) return;
     
     pollIntervalRef.current = setInterval(() => {
-      fetchSubApps();
+      fetchSubAppsRef.current?.();
     }, 30000);
-  }, [fetchSubApps]);
+  }, []);
 
   const setupWebSocket = useCallback(() => {
     // WebSocket disabled in development - use polling only for stability
@@ -361,6 +370,9 @@ export const useSubApps = (includeProjects: boolean = true) => {
 
   useEffect(() => {
     fetchSubApps();
+  }, [fetchSubApps]);
+
+  useEffect(() => {
     setupWebSocket();
     
     return () => {
@@ -371,7 +383,7 @@ export const useSubApps = (includeProjects: boolean = true) => {
         clearInterval(pollIntervalRef.current);
       }
     };
-  }, [includeProjects]);
+  }, [setupWebSocket]);
 
   const refresh = useCallback(() => {
     setLoading(true);
@@ -452,6 +464,7 @@ export const useRuntimeStatus = () => {
 
   const wsRef = useRef<WebSocket | null>(null);
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const fetchRuntimeStatusRef = useRef<() => Promise<void>>();
 
   const fetchRuntimeStatus = useCallback(async () => {
     try {
@@ -482,13 +495,15 @@ export const useRuntimeStatus = () => {
     }
   }, []);
 
+  fetchRuntimeStatusRef.current = fetchRuntimeStatus;
+
   const setupPolling = useCallback(() => {
     if (pollIntervalRef.current) return;
     
     pollIntervalRef.current = setInterval(() => {
-      fetchRuntimeStatus();
+      fetchRuntimeStatusRef.current?.();
     }, 30000); // 30 second polling for runtime status
-  }, [fetchRuntimeStatus]);
+  }, []);
 
   const setupWebSocket = useCallback(() => {
     // WebSocket disabled in development - use polling only for stability
@@ -544,6 +559,9 @@ export const useRuntimeStatus = () => {
 
   useEffect(() => {
     fetchRuntimeStatus();
+  }, [fetchRuntimeStatus]);
+
+  useEffect(() => {
     setupWebSocket();
     
     return () => {
@@ -554,7 +572,7 @@ export const useRuntimeStatus = () => {
         clearInterval(pollIntervalRef.current);
       }
     };
-  }, []);
+  }, [setupWebSocket]);
 
   const refresh = useCallback(() => {
     setLoading(true);
