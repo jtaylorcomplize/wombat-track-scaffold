@@ -36,7 +36,7 @@ export default function DataExplorer() {
       setLoading(true);
       try {
         // Use live database API for canonical property support
-        const response = await fetch(`http://localhost:3002/api/admin/live/${selectedTable}`);
+        const response = await fetch(`/api/admin/live/${selectedTable}`);
         if (response.ok) {
           const data = await response.json();
           
