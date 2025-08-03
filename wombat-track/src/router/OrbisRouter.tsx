@@ -19,6 +19,8 @@ const GovernSurface = lazy(() => import('../components/surfaces/GovernSurface').
 const IntegrateSurface = lazy(() => import('../components/surfaces/IntegrateSurface').then(m => ({ default: m.IntegrateSurface })));
 const SPQRRuntimeDashboard = lazy(() => import('../components/SPQR/SPQRRuntimeDashboard'));
 const AdminDashboard = lazy(() => import('../components/admin/AdminDashboard'));
+const AdminProjectView = lazy(() => import('../pages/admin/AdminProjectView'));
+const AdminPhaseView = lazy(() => import('../pages/admin/AdminPhaseView'));
 
 // Loading component
 const RouteLoading: React.FC = () => (
@@ -93,6 +95,10 @@ export const OrbisRouter: React.FC = () => {
               <Route path="admin/orphan-inspector" element={<AdminModeProvider><AdminDashboard initialView="orphan-inspector" /></AdminModeProvider>} />
               <Route path="admin/runtime-panel" element={<AdminModeProvider><AdminDashboard initialView="runtime-panel" /></AdminModeProvider>} />
               <Route path="admin/secrets-manager" element={<AdminModeProvider><AdminDashboard initialView="secrets-manager" /></AdminModeProvider>} />
+              
+              {/* Admin Deep-Link Routes */}
+              <Route path="admin/projects/:projectId" element={<AdminModeProvider><AdminProjectView /></AdminModeProvider>} />
+              <Route path="admin/phases/:phaseId" element={<AdminModeProvider><AdminPhaseView /></AdminModeProvider>} />
             </Route>
             
             {/* Catch all - redirect to Orbis */}

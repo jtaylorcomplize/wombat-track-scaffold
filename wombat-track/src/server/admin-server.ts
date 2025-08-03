@@ -16,6 +16,7 @@ import runtimeRoutes from './api/runtime';
 import jsonOperationsRoutes from './api/json-operations';
 import mcpGsuiteRoutes from './api/mcp-gsuite';
 import secretsRoutes from './api/secrets';
+import adminDetailRoutes from './api/admin-detail';
 import { getAllProjects, getSubApps, getSubAppRecentProjects, getRuntimeStatus, getProjectById } from './api/orbis';
 
 const app = express();
@@ -77,6 +78,11 @@ console.log('   ✓ /api/mcp/gsuite/* - MCP GSuite integration (WT-MCPGS-1.0)');
 // Secrets management routes
 app.use('/api/admin/secrets', secretsRoutes);
 console.log('   ✓ /api/admin/secrets/* - Secrets management (MCP credentials)');
+
+// Admin detail routes (deep-link support)
+app.use('/api/admin', adminDetailRoutes);
+console.log('   ✓ /api/admin/projects/:id - Project detail view');
+console.log('   ✓ /api/admin/phases/:id - Phase detail view');
 
 // Orbis API routes for cross-sub-app data
 app.get('/api/orbis/projects/all', getAllProjects);

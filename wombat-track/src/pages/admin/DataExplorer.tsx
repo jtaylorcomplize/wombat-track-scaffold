@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, ChevronLeft, ChevronRight, Database, FileText, Clock, Users } from 'lucide-react';
+import { Search, Filter, ChevronLeft, ChevronRight, Database, FileText, Clock, Users, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface TableData {
   [key: string]: any;
@@ -269,6 +270,35 @@ export default function DataExplorer() {
                       {columns.map((column) => {
                         const cellValue = row[column];
                         const displayValue = cellValue === null || cellValue === undefined ? '' : String(cellValue);
+                        
+                        // Add deep-link for project and phase IDs
+                        if (selectedTable === 'projects' && column === 'projectId' && cellValue) {
+                          return (
+                            <td key={column} className="px-6 py-4 whitespace-nowrap text-sm">
+                              <Link 
+                                to={`/orbis/admin/projects/${cellValue}`}
+                                className="text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+                              >
+                                <span>{displayValue}</span>
+                                <ExternalLink size={14} />
+                              </Link>
+                            </td>
+                          );
+                        }
+                        
+                        if (selectedTable === 'phases' && column === 'phaseid' && cellValue) {
+                          return (
+                            <td key={column} className="px-6 py-4 whitespace-nowrap text-sm">
+                              <Link 
+                                to={`/orbis/admin/phases/${cellValue}`}
+                                className="text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+                              >
+                                <span>{displayValue}</span>
+                                <ExternalLink size={14} />
+                              </Link>
+                            </td>
+                          );
+                        }
                         
                         return (
                           <td key={column} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

@@ -1,0 +1,26 @@
+
+> wombat-track@0.1.0 admin-server
+> tsx src/server/admin-server.ts
+
+🔐 Registering admin API routes...
+   ✓ /api/admin/live/* - Live database CRUD operations
+   ✓ /api/admin/tables/* - Table data access
+   ✓ /api/admin/csv/* - CSV/JSON import/export operations
+   ✓ /api/admin/json/* - JSON import/export operations
+   ✓ /api/admin/orphans/* - Orphan detection and repair
+   ✓ /api/admin/runtime/* - Runtime status monitoring
+   ✓ /api/mcp/gsuite/* - MCP GSuite integration (WT-MCPGS-1.0)
+   ✓ /api/admin/secrets/* - Secrets management (MCP credentials)
+   ✓ /api/orbis/* - Cross-sub-app data aggregation (Enhanced Sidebar v3.1)
+🗄️  Database connection initialized
+🚀 Admin API Server running on http://localhost:3002
+🔐 Serving admin endpoints for OF-BEV Phase 3
+📊 Available admin operations:
+   • Data Explorer - Browse and edit database records
+   • Import/Export - CSV and JSON data operations
+   • Orphan Inspector - Detect and fix orphaned records
+   • Runtime Panel - System health and job monitoring
+🔗 Test endpoints:
+   GET  http://localhost:3002/health
+   GET  http://localhost:3002/api/admin/tables/projects
+   GET  http://localhost:3002/api/admin/runtime/status
