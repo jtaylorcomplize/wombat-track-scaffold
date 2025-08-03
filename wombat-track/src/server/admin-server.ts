@@ -16,6 +16,7 @@ import runtimeRoutes from './api/runtime';
 import jsonOperationsRoutes from './api/json-operations';
 import mcpGsuiteRoutes from './api/mcp-gsuite';
 import secretsRoutes from './api/secrets';
+import { getAllProjects, getSubApps, getSubAppRecentProjects, getRuntimeStatus, getProjectById } from './api/orbis';
 
 const app = express();
 const PORT = process.env.ADMIN_PORT || 3002;
@@ -55,7 +56,7 @@ console.log('   ✓ /api/admin/tables/* - Table data access');
 
 // Import/Export routes
 app.use('/api/admin/csv', exportImportRoutes);
-console.log('   ✓ /api/admin/csv/* - CSV import/export operations');
+console.log('   ✓ /api/admin/csv/* - CSV/JSON import/export operations');
 
 // JSON operations routes
 app.use('/api/admin/json', jsonOperationsRoutes);
@@ -76,6 +77,14 @@ console.log('   ✓ /api/mcp/gsuite/* - MCP GSuite integration (WT-MCPGS-1.0)');
 // Secrets management routes
 app.use('/api/admin/secrets', secretsRoutes);
 console.log('   ✓ /api/admin/secrets/* - Secrets management (MCP credentials)');
+
+// Orbis API routes for cross-sub-app data
+app.get('/api/orbis/projects/all', getAllProjects);
+app.get('/api/orbis/sub-apps', getSubApps);
+app.get('/api/orbis/sub-apps/:id/projects/recent', getSubAppRecentProjects);
+app.get('/api/orbis/runtime/status', getRuntimeStatus);
+app.get('/api/orbis/projects/:id', getProjectById);
+console.log('   ✓ /api/orbis/* - Cross-sub-app data aggregation (Enhanced Sidebar v3.1)');
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -99,10 +108,12 @@ app.use((req, res) => {
       'POST /api/admin/live/:tableName - Create record',
       'DELETE /api/admin/live/:tableName/:recordId - Delete record',
       'GET /api/admin/tables/:tableName - Get CSV/JSONL data',
+      'GET /api/admin/csv/tables - List available tables',
       'GET /api/admin/csv/export/:tableName - Export CSV',
+      'GET /api/admin/csv/json/:tableName - Export JSON',
       'POST /api/admin/csv/import/:tableName - Import CSV',
-      'GET /api/admin/json/export - Export JSON',
-      'POST /api/admin/json/import - Import JSON',
+      'GET /api/admin/json/export - Export full schema JSON',
+      'POST /api/admin/json/import - Import full schema JSON',
       'GET /api/admin/orphans - Detect orphaned records',
       'PATCH /api/admin/orphans/fix/:tableName - Fix orphan',
       'GET /api/admin/runtime/status - Runtime status',

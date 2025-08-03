@@ -1,0 +1,54 @@
+[2025-08-02T07:34:21.800Z] DEBUG: [vite] connecting...
+[2025-08-02T07:34:21.815Z] DEBUG: [vite] connected.
+[2025-08-02T07:34:21.874Z] INFO: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+[2025-08-02T07:34:21.879Z] LOG: ✅ App is being rendered
+[2025-08-02T07:34:21.879Z] LOG: ✅ main.tsx starting render
+[2025-08-02T07:34:21.880Z] LOG: 🔎 Document root: JSHandle@node
+[2025-08-02T07:34:21.885Z] LOG: 🔍 Loading projects from oApp production database...
+[2025-08-02T07:34:21.885Z] LOG: 🔍 Attempting to fetch from API endpoint...
+[2025-08-02T07:34:21.886Z] LOG: 🔍 Loading projects from oApp production database...
+[2025-08-02T07:34:21.886Z] LOG: 🔍 Attempting to fetch from API endpoint...
+[2025-08-02T07:34:21.887Z] LOG: 🔍 EnhancedProjectSidebar: Using 2 real projects from oApp
+[2025-08-02T07:34:21.888Z] LOG: 📊 EnhancedProjectSidebar: Filtered 2 projects to 2 projects
+[2025-08-02T07:34:21.888Z] LOG: 🔍 EnhancedProjectSidebar: Using 2 real projects from oApp
+[2025-08-02T07:34:21.888Z] LOG: 📊 EnhancedProjectSidebar: Filtered 2 projects to 2 projects
+[2025-08-02T07:34:21.902Z] ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+[2025-08-02T07:34:21.903Z] WARN: ⚠️ API endpoint returned 404: Not Found
+[2025-08-02T07:34:21.903Z] LOG: 🔄 API unavailable, fetching CSV directly...
+[2025-08-02T07:34:21.904Z] ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+[2025-08-02T07:34:21.904Z] WARN: ⚠️ API endpoint returned 404: Not Found
+[2025-08-02T07:34:21.904Z] LOG: 🔄 API unavailable, fetching CSV directly...
+[2025-08-02T07:34:21.924Z] LOG: 🔍 Loading projects from oApp production database...
+[2025-08-02T07:34:21.924Z] LOG: 🔍 Attempting to fetch from API endpoint...
+[2025-08-02T07:34:21.933Z] LOG: 📊 CSV: Loaded 92 projects from oApp production data
+[2025-08-02T07:34:21.933Z] LOG: ✅ Successfully loaded 92 projects from oApp
+[2025-08-02T07:34:21.933Z] LOG: 📝 Dev Server Fix - oApp Connection: JSHandle@object
+[2025-08-02T07:34:21.935Z] LOG: 📊 CSV: Loaded 92 projects from oApp production data
+[2025-08-02T07:34:21.935Z] LOG: ✅ Successfully loaded 92 projects from oApp
+[2025-08-02T07:34:21.935Z] LOG: 📝 Dev Server Fix - oApp Connection: JSHandle@object
+[2025-08-02T07:34:21.940Z] ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+[2025-08-02T07:34:21.940Z] WARN: ⚠️ API endpoint returned 404: Not Found
+[2025-08-02T07:34:21.940Z] LOG: 🔄 API unavailable, fetching CSV directly...
+[2025-08-02T07:34:21.942Z] LOG: 🔍 EnhancedProjectSidebar: Using 92 real projects from oApp
+[2025-08-02T07:34:21.942Z] LOG: 📊 EnhancedProjectSidebar: Filtered 92 projects to 92 projects
+[2025-08-02T07:34:21.942Z] LOG: 🔍 EnhancedProjectSidebar: Using 92 real projects from oApp
+[2025-08-02T07:34:21.943Z] LOG: 📊 EnhancedProjectSidebar: Filtered 92 projects to 92 projects
+[2025-08-02T07:34:21.946Z] LOG: 🔍 Loading projects from oApp production database...
+[2025-08-02T07:34:21.947Z] LOG: 🔍 Attempting to fetch from API endpoint...
+[2025-08-02T07:34:21.956Z] ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+[2025-08-02T07:34:21.956Z] WARN: ⚠️ API endpoint returned 404: Not Found
+[2025-08-02T07:34:21.957Z] LOG: 🔄 API unavailable, fetching CSV directly...
+[2025-08-02T07:34:21.958Z] LOG: 📊 CSV: Loaded 92 projects from oApp production data
+[2025-08-02T07:34:21.958Z] LOG: ✅ Successfully loaded 92 projects from oApp
+[2025-08-02T07:34:21.959Z] LOG: 📝 Dev Server Fix - oApp Connection: JSHandle@object
+[2025-08-02T07:34:21.959Z] LOG: 🔍 EnhancedProjectSidebar: Using 92 real projects from oApp
+[2025-08-02T07:34:21.959Z] LOG: 📊 EnhancedProjectSidebar: Filtered 92 projects to 92 projects
+[2025-08-02T07:34:21.960Z] LOG: 🔍 EnhancedProjectSidebar: Using 92 real projects from oApp
+[2025-08-02T07:34:21.960Z] LOG: 📊 EnhancedProjectSidebar: Filtered 92 projects to 92 projects
+[2025-08-02T07:34:21.963Z] LOG: 📊 CSV: Loaded 92 projects from oApp production data
+[2025-08-02T07:34:21.964Z] LOG: ✅ Successfully loaded 92 projects from oApp
+[2025-08-02T07:34:21.964Z] LOG: 📝 Dev Server Fix - oApp Connection: JSHandle@object
+[2025-08-02T07:34:21.964Z] LOG: 🔍 EnhancedProjectSidebar: Using 92 real projects from oApp
+[2025-08-02T07:34:21.964Z] LOG: 📊 EnhancedProjectSidebar: Filtered 92 projects to 92 projects
+[2025-08-02T07:34:21.964Z] LOG: 🔍 EnhancedProjectSidebar: Using 92 real projects from oApp
+[2025-08-02T07:34:21.964Z] LOG: 📊 EnhancedProjectSidebar: Filtered 92 projects to 92 projects

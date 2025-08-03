@@ -17,7 +17,13 @@ const SURFACE_ICONS: Record<WorkSurface, React.ReactNode> = {
   document: <span className="text-sm">📝</span>,
   govern: <span className="text-sm">🛡️</span>,
   integrate: <span className="text-sm">🧬</span>,
-  'spqr-runtime': <span className="text-sm">📊</span>
+  'spqr-runtime': <span className="text-sm">📊</span>,
+  admin: <span className="text-sm">🔧</span>,
+  'admin-data-explorer': <span className="text-sm">🔧</span>,
+  'admin-import-export': <span className="text-sm">🔧</span>,
+  'admin-orphan-inspector': <span className="text-sm">🔧</span>,
+  'admin-runtime-panel': <span className="text-sm">🔧</span>,
+  'admin-secrets-manager': <span className="text-sm">🔧</span>
 };
 
 const SURFACE_STYLES: Record<WorkSurface, { background: string; color: string; border: string }> = {
@@ -26,7 +32,13 @@ const SURFACE_STYLES: Record<WorkSurface, { background: string; color: string; b
   document: { background: 'var(--wt-primary-50)', color: 'var(--wt-primary-700)', border: 'var(--wt-primary-200)' },
   govern: { background: 'var(--wt-warning-50)', color: 'var(--wt-warning-700)', border: 'var(--wt-warning-200)' },
   integrate: { background: 'var(--wt-primary-50)', color: 'var(--wt-primary-700)', border: 'var(--wt-primary-200)' },
-  'spqr-runtime': { background: 'var(--wt-success-50)', color: 'var(--wt-success-700)', border: 'var(--wt-success-200)' }
+  'spqr-runtime': { background: 'var(--wt-success-50)', color: 'var(--wt-success-700)', border: 'var(--wt-success-200)' },
+  admin: { background: 'var(--wt-neutral-50)', color: 'var(--wt-neutral-700)', border: 'var(--wt-neutral-200)' },
+  'admin-data-explorer': { background: 'var(--wt-neutral-50)', color: 'var(--wt-neutral-700)', border: 'var(--wt-neutral-200)' },
+  'admin-import-export': { background: 'var(--wt-neutral-50)', color: 'var(--wt-neutral-700)', border: 'var(--wt-neutral-200)' },
+  'admin-orphan-inspector': { background: 'var(--wt-neutral-50)', color: 'var(--wt-neutral-700)', border: 'var(--wt-neutral-200)' },
+  'admin-runtime-panel': { background: 'var(--wt-neutral-50)', color: 'var(--wt-neutral-700)', border: 'var(--wt-neutral-200)' },
+  'admin-secrets-manager': { background: 'var(--wt-neutral-50)', color: 'var(--wt-neutral-700)', border: 'var(--wt-neutral-200)' }
 };
 
 export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
@@ -39,12 +51,18 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
   // Surface label mapping for consistent UI display
   const getSurfaceLabel = useMemo(() => {
     const labels: Record<WorkSurface, string> = {
-      plan: 'Set Up',
-      execute: 'Track Progress',
-      document: 'Create Records',
-      govern: 'Review & Audit',
-      integrate: 'Connect Tools',
-      'spqr-runtime': 'SPQR Runtime'
+      plan: 'Plan',
+      execute: 'Execute',
+      document: 'Document',
+      govern: 'Govern',
+      integrate: 'Integrate',
+      'spqr-runtime': 'SPQR Runtime',
+      admin: 'Admin',
+      'admin-data-explorer': 'Data Explorer',
+      'admin-import-export': 'Import/Export',
+      'admin-orphan-inspector': 'Orphan Inspector',
+      'admin-runtime-panel': 'Runtime Panel',
+      'admin-secrets-manager': 'Secrets Manager'
     };
     return (surface: WorkSurface) => labels[surface];
   }, []);

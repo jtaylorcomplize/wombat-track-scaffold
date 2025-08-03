@@ -1,0 +1,4 @@
+projectId,projectName,owner,status,description,startDate,endDate,priority,budget,actualCost,estimatedHours,actualHours,completionPercentage,risk,stakeholders,tags,category,department,createdAt
+WT-UX14,"Enhanced Sidebar v3.1","system","Completed","Implement three-tier sidebar architecture","2025-01-01","2025-01-15","High",5000,4200,120,115,100,"Low","Development Team","ui,navigation,enhancement","Frontend","Engineering","2025-01-01T00:00:00Z"
+WT-UX7,"Agent Mesh Visualization","system","Planning","Create live agent mesh visualization for Integrate Surface","2025-01-20","2025-02-15","Medium",3000,0,80,0,0,"Medium","Product Team","integration,visualization","Backend","Engineering","2025-01-20T00:00:00Z"
+WT-DBM-2.0,"Database Migration Canonical","system","In Progress","Migrate to canonical 19+10 property schema","2025-08-03","2025-08-10","High",2000,500,40,10,25,"Low","Data Team","database,migration","Infrastructure","Engineering","2025-08-03T00:00:00Z"

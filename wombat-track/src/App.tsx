@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { AppLayout } from './components/layout/AppLayout';
 import { AppRouter } from './router/AppRouter';
+import { OrbisRouter } from './router/OrbisRouter';
 import { PhasePlan } from './pages/PhasePlan';
 import { OrbisDashboard } from './pages/OrbisDashboard';
 import { ProjectComposerView } from './components/ProjectComposerView';
@@ -24,9 +25,9 @@ function App() {
     console.log(`Health check completed for: ${integrationId}`);
   };
 
-  // Use new Work Surfaces layout with routing
+  // Use new Work Surfaces layout with routing - Enhanced Sidebar v3.1
   if (USE_NEW_LAYOUT && USE_ROUTING) {
-    return <AppRouter />;
+    return <OrbisRouter />;
   }
   
   // Use new Work Surfaces layout without routing

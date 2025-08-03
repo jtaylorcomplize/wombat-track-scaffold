@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Database, FileText, Search, Activity, Settings, Shield, Key } from 'lucide-react';
 import { useAdminMode } from '../../contexts/AdminModeContext';
 import DataExplorer from '../../pages/admin/DataExplorer';
@@ -18,6 +18,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 }) => {
   const [activeView, setActiveView] = useState<AdminView>(initialView);
   const { isAdminMode, environment } = useAdminMode();
+
+  // Update activeView when initialView prop changes (for route navigation)
+  useEffect(() => {
+    setActiveView(initialView);
+  }, [initialView]);
 
   // Redirect to overview if not in admin mode
   if (!isAdminMode) {

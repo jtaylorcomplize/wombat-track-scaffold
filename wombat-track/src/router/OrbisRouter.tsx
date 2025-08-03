@@ -1,0 +1,107 @@
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { NavigationContextProvider } from '../contexts/NavigationContext';
+import { AdminModeProvider } from '../contexts/AdminModeContext';
+
+// Lazy load all route components
+const OrbisLayout = lazy(() => import('../components/layout/OrbisLayout'));
+const AllProjectsDashboard = lazy(() => import('../components/strategic/AllProjectsDashboard'));
+const ProjectAnalyticsDashboard = lazy(() => import('../components/strategic/ProjectAnalyticsDashboard'));
+const TeamOverview = lazy(() => import('../components/strategic/TeamOverview'));
+const StrategicPlanning = lazy(() => import('../components/strategic/StrategicPlanning'));
+const SubAppOverview = lazy(() => import('../components/operational/SubAppOverview'));
+const SubAppProjectsList = lazy(() => import('../components/operational/SubAppProjectsList'));
+const ProjectDashboard = lazy(() => import('../components/ProjectDashboard'));
+const PlanSurface = lazy(() => import('../components/surfaces/PlanSurface').then(m => ({ default: m.PlanSurface })));
+const ExecuteSurface = lazy(() => import('../components/surfaces/ExecuteSurface').then(m => ({ default: m.ExecuteSurface })));
+const DocumentSurface = lazy(() => import('../components/surfaces/DocumentSurface').then(m => ({ default: m.DocumentSurface })));
+const GovernSurface = lazy(() => import('../components/surfaces/GovernSurface').then(m => ({ default: m.GovernSurface })));
+const IntegrateSurface = lazy(() => import('../components/surfaces/IntegrateSurface').then(m => ({ default: m.IntegrateSurface })));
+const SPQRRuntimeDashboard = lazy(() => import('../components/SPQR/SPQRRuntimeDashboard'));
+const AdminDashboard = lazy(() => import('../components/admin/AdminDashboard'));
+
+// Loading component
+const RouteLoading: React.FC = () => (
+  <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p className="text-gray-600">Loading...</p>
+    </div>
+  </div>
+);
+
+// Work surface wrapper to ensure proper context
+const WorkSurfaceWrapper: React.FC = () => {
+  return (
+    <div className="flex-1 p-6">
+      <Suspense fallback={<RouteLoading />}>
+        <Outlet />
+      </Suspense>
+    </div>
+  );
+};
+
+export const OrbisRouter: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <NavigationContextProvider>
+        <Suspense fallback={<RouteLoading />}>
+          <Routes>
+            {/* Root redirect */}
+            <Route path="/" element={<Navigate to="/orbis" replace />} />
+            
+            {/* Main Orbis layout with sidebar */}
+            <Route path="/orbis" element={<OrbisLayout />}>
+              {/* Default redirect to all projects */}
+              <Route index element={<Navigate to="projects/all-projects" replace />} />
+              
+              {/* Strategic Level Routes - Project Surfaces */}
+              <Route path="projects">
+                <Route path="all-projects" element={<AllProjectsDashboard />} />
+                <Route path="dashboard" element={<ProjectAnalyticsDashboard />} />
+                <Route path="teams" element={<TeamOverview />} />
+                <Route path="strategy" element={<StrategicPlanning />} />
+                <Route index element={<Navigate to="all-projects" replace />} />
+              </Route>
+              
+              {/* Operational Level Routes - Sub-Apps */}
+              <Route path="sub-apps/:subAppId" element={<SubAppOverview />}>
+                {/* Sub-app projects list */}
+                <Route path="projects" element={<SubAppProjectsList />} />
+                
+                {/* Individual project with work surfaces */}
+                <Route path="projects/:projectId" element={<ProjectDashboard />}>
+                  <Route element={<WorkSurfaceWrapper />}>
+                    <Route path="plan" element={<PlanSurface />} />
+                    <Route path="execute" element={<ExecuteSurface />} />
+                    <Route path="document" element={<DocumentSurface />} />
+                    <Route path="govern" element={<GovernSurface />} />
+                    <Route index element={<Navigate to="plan" replace />} />
+                  </Route>
+                </Route>
+                
+                {/* Default to projects list when accessing sub-app */}
+                <Route index element={<Navigate to="projects" replace />} />
+              </Route>
+
+              {/* System Level Routes - Platform Surfaces */}
+              <Route path="integrate" element={<IntegrateSurface currentProject={null} currentPhase={null} currentStep={null} onPhaseChange={() => {}} onStepChange={() => {}} />} />
+              <Route path="spqr-runtime" element={<SPQRRuntimeDashboard />} />
+              <Route path="admin" element={<AdminModeProvider><AdminDashboard initialView="overview" /></AdminModeProvider>} />
+              <Route path="admin/data-explorer" element={<AdminModeProvider><AdminDashboard initialView="data-explorer" /></AdminModeProvider>} />
+              <Route path="admin/import-export" element={<AdminModeProvider><AdminDashboard initialView="import-export" /></AdminModeProvider>} />
+              <Route path="admin/orphan-inspector" element={<AdminModeProvider><AdminDashboard initialView="orphan-inspector" /></AdminModeProvider>} />
+              <Route path="admin/runtime-panel" element={<AdminModeProvider><AdminDashboard initialView="runtime-panel" /></AdminModeProvider>} />
+              <Route path="admin/secrets-manager" element={<AdminModeProvider><AdminDashboard initialView="secrets-manager" /></AdminModeProvider>} />
+            </Route>
+            
+            {/* Catch all - redirect to Orbis */}
+            <Route path="*" element={<Navigate to="/orbis" replace />} />
+          </Routes>
+        </Suspense>
+      </NavigationContextProvider>
+    </BrowserRouter>
+  );
+};
+
+export default OrbisRouter;

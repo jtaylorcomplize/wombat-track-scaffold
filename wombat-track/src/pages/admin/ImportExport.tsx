@@ -4,10 +4,10 @@ import { Download, Upload, FileText, Database, AlertCircle, CheckCircle } from '
 interface ImportExportProps {}
 
 const TABLES = [
-  { id: 'projects', name: 'Projects', description: 'Project records from oApp database' },
-  { id: 'phases', name: 'Phases', description: 'Phase and step definitions' },
+  { id: 'projects', name: 'Projects', description: 'Canonical projects (20 properties)' },
+  { id: 'phases', name: 'Phases', description: 'Canonical phases (12 properties)' },
   { id: 'governance_logs', name: 'Governance Logs', description: 'Audit and governance entries' },
-  { id: 'sub_apps', name: 'Sub-Apps', description: 'Sub-application definitions' }
+  { id: 'step_progress', name: 'Step Progress', description: 'Step tracking and progress' }
 ];
 
 export default function ImportExport({}: ImportExportProps) {
@@ -42,11 +42,63 @@ export default function ImportExport({}: ImportExportProps) {
           success: true
         });
       } else {
-        throw new Error(`Export failed: ${response.status}`);
+        // Try to get detailed error message from response
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        const errorMessage = errorData.message || errorData.error || `HTTP ${response.status}`;
+        
+        if (response.status === 404) {
+          throw new Error(`Table '${tableName}' not available for export. This table may not support CSV export or the data source may not be accessible.`);
+        } else {
+          throw new Error(`Export failed: ${errorMessage}`);
+        }
       }
     } catch (error) {
       setMessage(`❌ Failed to export ${tableName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
       setMessageType('error');
+      console.error('CSV Export Error:', error);
+    }
+  };
+
+  const handleJSONTableExport = async (tableName: string) => {
+    try {
+      const response = await fetch(`/api/admin/csv/json/${tableName}`);
+      
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${tableName}_export_${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        setMessage(`✅ Successfully exported ${tableName} to JSON`);
+        setMessageType('success');
+        
+        // Log to governance
+        console.log('📝 JSON Table Export:', {
+          timestamp: new Date().toISOString(),
+          event_type: 'json_table_export',
+          table: tableName,
+          success: true
+        });
+      } else {
+        // Try to get detailed error message from response
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        const errorMessage = errorData.message || errorData.error || `HTTP ${response.status}`;
+        
+        if (response.status === 404) {
+          throw new Error(`Table '${tableName}' not available for JSON export. This table may not support export or the data source may not be accessible.`);
+        } else {
+          throw new Error(`JSON export failed: ${errorMessage}`);
+        }
+      }
+    } catch (error) {
+      setMessage(`❌ Failed to export ${tableName} as JSON: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setMessageType('error');
+      console.error('JSON Table Export Error:', error);
     }
   };
 
@@ -226,13 +278,25 @@ export default function ImportExport({}: ImportExportProps) {
                 ))}
               </select>
               
-              <button
-                onClick={() => handleCSVExport(selectedTable)}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2"
-              >
-                <Download size={16} />
-                <span>Export {TABLES.find(t => t.id === selectedTable)?.name}</span>
-              </button>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => handleCSVExport(selectedTable)}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2"
+                >
+                  <Download size={16} />
+                  <span>CSV</span>
+                </button>
+                <button
+                  onClick={() => handleJSONTableExport(selectedTable)}
+                  className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 flex items-center justify-center space-x-2"
+                >
+                  <Download size={16} />
+                  <span>JSON</span>
+                </button>
+              </div>
+              <p className="text-sm text-gray-500 text-center">
+                Export {TABLES.find(t => t.id === selectedTable)?.name} as CSV or JSON
+              </p>
             </div>
           </div>
 

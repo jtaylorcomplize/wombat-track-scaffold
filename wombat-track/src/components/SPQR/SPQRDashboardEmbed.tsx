@@ -67,7 +67,7 @@ export const SPQRDashboardEmbed: React.FC<SPQRDashboardEmbedProps> = ({
 
   const buildEmbedConfig = (): EmbedConfig => {
     const config: EmbedConfig = {
-      host: process.env.LOOKER_HOST || 'your-looker-instance.looker.com',
+      host: import.meta.env.VITE_LOOKER_HOST || 'your-looker-instance.looker.com',
       auth_url: '/api/looker/auth',
       dashboard_id: dashboardId,
       theme: 'actionstep_theme'

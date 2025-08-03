@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-08-03T14:41:42.713905",
+  "event_type": "canonical_migration",
+  "user_id": "system",
+  "user_role": "migration_script",
+  "resource_type": "comms_canonical",
+  "action": "merge_communications",
+  "success": true,
+  "details": {
+    "source": "oApp_AgentLogs_20250802.json",
+    "target": "comms_canonical",
+    "record_count": 135,
+    "success_count": 134,
+    "error_count": 1,
+    "agent_distribution": {
+      "Claude": 42,
+      "Gizmo": 0,
+      "System": 12,
+      "Unknown": 80
+    },
+    "phase": "staging"
+  }
+}

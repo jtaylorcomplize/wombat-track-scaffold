@@ -1,0 +1,139 @@
+{
+  "governance_event": {
+    "event_id": "oapp-canonical-schema-rebuild-20250802",
+    "event_type": "database_schema_rebuild",
+    "event_category": "data_migration",
+    "governance_anchor": "oapp-canonical-schema-rebuild-20250802",
+    "execution_timestamp": "[EXECUTION_TIMESTAMP]",
+    "completion_timestamp": "[COMPLETION_TIMESTAMP]",
+    "status": "[SUCCESS|FAILED|PARTIAL]",
+    "risk_level": "MEDIUM",
+    "business_impact": "LOW"
+  },
+  "migration_details": {
+    "objective": "Align Projects/Phases/Steps hierarchy with canonical Notion source",
+    "scope": {
+      "tables_modified": ["projects_canonical", "phases_canonical", "steps_canonical"],
+      "tables_preserved": ["governance_logs", "comms_canonical"],
+      "source_system": "Notion CSV exports",
+      "target_system": "oapp_prod.db"
+    },
+    "expected_outcomes": {
+      "projects_count": 18,
+      "phases_count": 38,
+      "steps_extracted": "[STEP_COUNT]",
+      "orphans_allowed": 0,
+      "governance_preservation": true
+    }
+  },
+  "execution_metrics": {
+    "pre_migration": {
+      "projects_count": "[BEFORE_PROJECTS]",
+      "phases_count": "[BEFORE_PHASES]",
+      "steps_count": "[BEFORE_STEPS]",
+      "governance_logs_count": "[GOV_LOGS_COUNT]",
+      "comms_canonical_count": "[COMMS_COUNT]"
+    },
+    "post_migration": {
+      "projects_count": "[AFTER_PROJECTS]",
+      "phases_count": "[AFTER_PHASES]",
+      "steps_count": "[AFTER_STEPS]",
+      "governance_logs_count": "[GOV_LOGS_COUNT]",
+      "comms_canonical_count": "[COMMS_COUNT]"
+    },
+    "performance": {
+      "total_duration_minutes": "[TOTAL_DURATION]",
+      "downtime_minutes": "[DOWNTIME]",
+      "rollback_executed": false,
+      "scripts_executed": 4
+    }
+  },
+  "validation_results": {
+    "row_count_validation": "[PASS|FAIL]",
+    "orphan_detection": "[PASS|FAIL]",
+    "data_quality_checks": "[PASS|FAIL]",
+    "hierarchy_integrity": "[PASS|FAIL]",
+    "governance_preservation": "[PASS|FAIL]",
+    "overall_validation": "[PASS|FAIL]"
+  },
+  "quality_assurance": {
+    "automated_tests": {
+      "validation_script_executed": true,
+      "before_after_comparison": true,
+      "orphan_detection_passed": "[PASS|FAIL]",
+      "data_integrity_verified": "[PASS|FAIL]"
+    },
+    "manual_verification": {
+      "spot_check_projects": "[COMPLETED|PENDING]",
+      "phase_relationship_verify": "[COMPLETED|PENDING]",
+      "step_extraction_review": "[COMPLETED|PENDING]",
+      "api_endpoint_testing": "[COMPLETED|PENDING]"
+    }
+  },
+  "risk_assessment": {
+    "data_loss_risk": "MINIMAL",
+    "service_disruption": "LOW",
+    "rollback_complexity": "SIMPLE",
+    "business_continuity": "MAINTAINED",
+    "mitigation_measures": [
+      "Full database backup before migration",
+      "Governance logs preserved",
+      "Step-by-step validation",
+      "Immediate rollback capability"
+    ]
+  },
+  "compliance_and_audit": {
+    "artifacts_location": "DriveMemory/QA/Canonical_Rebuild/20250802/",
+    "backup_location": "DriveMemory/QA/Canonical_Rebuild/20250802/before_cutover/",
+    "validation_reports": [
+      "QA_VALIDATION_TEMPLATE.csv",
+      "QA_SUMMARY_TEMPLATE.md",
+      "validation_results.txt"
+    ],
+    "memory_plugin_anchor": "oapp-canonical-schema-rebuild-20250802-PRODUCTION",
+    "governance_approval": "[APPROVED|PENDING]",
+    "audit_trail": "COMPLETE"
+  },
+  "stakeholder_communication": {
+    "notification_sent": "[YES|NO]",
+    "stakeholders_informed": [
+      "Database Administrator",
+      "Application Owner", 
+      "Business Sponsor",
+      "Quality Assurance Team"
+    ],
+    "communication_method": "Governance log entry + DriveMemory artifacts",
+    "escalation_required": false
+  },
+  "follow_up_actions": {
+    "monitoring_required": true,
+    "monitoring_duration_days": 7,
+    "next_review_date": "2025-09-02",
+    "performance_baseline_update": true,
+    "documentation_updates": [
+      "API documentation refresh",
+      "Database schema documentation",
+      "Operational runbooks"
+    ]
+  },
+  "lessons_learned": {
+    "what_went_well": [
+      "[POST_EXECUTION_ENTRY]"
+    ],
+    "areas_for_improvement": [
+      "[POST_EXECUTION_ENTRY]"
+    ],
+    "recommendations": [
+      "[POST_EXECUTION_ENTRY]"
+    ]
+  },
+  "metadata": {
+    "created_by": "Claude_Code_Assistant",
+    "creation_method": "Automated governance template",
+    "template_version": "1.0",
+    "governance_framework": "DriveMemory_Standards",
+    "retention_period_years": 7,
+    "classification": "INTERNAL",
+    "tags": ["data_migration", "canonical_rebuild", "notion_alignment", "oapp_backend"]
+  }
+}

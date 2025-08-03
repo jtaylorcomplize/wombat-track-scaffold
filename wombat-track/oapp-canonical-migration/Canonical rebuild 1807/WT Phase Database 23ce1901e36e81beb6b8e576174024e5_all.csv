@@ -1,0 +1,258 @@
+﻿phasename,phaseid,RAG,WT Projects,endDate,notes,projectId,startDate,status,WT Projects 1
+MetaPlatform Dashboard Embedding,AMV-1.4,,Agent Mesh Visualisation (Integrate Surface) (https://www.notion.so/Agent-Mesh-Visualisation-Integrate-Surface-23ee1901e36e8096914ae499b3d494d7?pvs=21),,StepTaskOutput4.1Import AgentMesh.tsx into MetaPlatformDashboard.tsxRendered diagram within dashboard4.2Link view filter to agent registry card (Agent Tracker)Interactive dashboard toggle4.3Add dispatch overlay when MetaPlatform agent is clickedActionable UI hook4.4Enable live-sync toggle in Meta contextRuntime control layer,,,Planned,Agent Mesh Visualisation (Integrate Surface) (https://www.notion.so/Agent-Mesh-Visualisation-Integrate-Surface-23ee1901e36e8096914ae499b3d494d7?pvs=21)
+Live Status + Semantic Tags,AMV-1.3,,Agent Mesh Visualisation (Integrate Surface) (https://www.notion.so/Agent-Mesh-Visualisation-Integrate-Surface-23ee1901e36e8096914ae499b3d494d7?pvs=21),,"StepTaskOutput3.1Add status field to each link (e.g., active, planned, deprecated)Updated JSON3.2Add visual styling for active/planned/deprecated edgesEdge color coding3.3Pull live state from GitHub / Claude Dispatcher status (future)Runtime sync hooks (optional)3.4Add RAG status badge overlays where applicableOptional Governance overlay",,,Planned,Agent Mesh Visualisation (Integrate Surface) (https://www.notion.so/Agent-Mesh-Visualisation-Integrate-Surface-23ee1901e36e8096914ae499b3d494d7?pvs=21)
+Dynamic Component (React),AMV-1.2,,Agent Mesh Visualisation (Integrate Surface) (https://www.notion.so/Agent-Mesh-Visualisation-Integrate-Surface-23ee1901e36e8096914ae499b3d494d7?pvs=21),,"StepTaskOutput2.1Create AgentMesh.tsx component scaffoldComponent file2.2Create source-of-truth file integrationMap.jsonJSON registry2.3Render diagram using Mermaid wrapper (@mermaid-js/react) or custom D3Live diagram inside WT UI2.4Add toggle views (CodeOps, Memory, Runtime, Governance)UI filters2.5Connect diagram hover/click events to metadata or modal detailInteraction layer2.6Log component and source config in Template TrackerGovernance linkage",,,Planned,Agent Mesh Visualisation (Integrate Surface) (https://www.notion.so/Agent-Mesh-Visualisation-Integrate-Surface-23ee1901e36e8096914ae499b3d494d7?pvs=21)
+Static Diagram Prototype,AMV-1.1,,Agent Mesh Visualisation (Integrate Surface) (https://www.notion.so/Agent-Mesh-Visualisation-Integrate-Surface-23ee1901e36e8096914ae499b3d494d7?pvs=21),,"StepTaskOutput1.1Define core entities (Claude, Gizmo, GitHub, WT UI, DriveMemory, MemoryPlugin)JSON and diagram node list1.2Define directional flows (read/write/dispatch/submit)Arrow config and access labels1.3Generate Mermaid static diagramMermaid block and test render1.4Add tooltip text + edge labels to define capabilityAnnotated diagram in Markdown1.5Commit static draft to GovernanceLog.md artefact for Phase 1 closure",,,Planned,Agent Mesh Visualisation (Integrate Surface) (https://www.notion.so/Agent-Mesh-Visualisation-Integrate-Surface-23ee1901e36e8096914ae499b3d494d7?pvs=21)
+Mobile + Cross Project,WT-5.4,,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21),,"WT 5.4 – Mobile + Cross-Project View
+• Responsive updates to core components
+• Timeline: add global view with filters by tag/status",,,Planned,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21)
+Collaboration & Alert,WT-5.3,,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21),,"WT 5.3 – Collaboration & Alerts
+• Add inline comment threads per PhaseStep
+• Support user mentions and task ownership
+• Build Slack/email notification connector",,,Planned,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21)
+Rule Engine MVP,WT-5.2,,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21),,"WT 5.2 – Rule Engine MVP
+• Define Rule, Trigger, Action data types
+• Implement Rule builder UI + logic processor
+• Link rules to Step events and Logs",,,Planned,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21)
+"Kanban & Timeline Foundations
+",WT-5.1,,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21),,"WT 5.1 – Kanban & Timeline Foundations
+• Add startDate, dueDate, statusLastUpdated fields
+• Create Kanban UI: drag/drop PhaseSteps grouped by status
+• Create Gantt UI: timeline bar per PhaseStep",,,Planned,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21)
+Slash Command + Memory Ops,"WT-5.7 ",Amber,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21),,"Slash commands, memory summarisation, recall and context injection",Wombat Track – Gizmo,,Planned,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21)
+Real-Time Dispatch,"WT-5.6 ",Green,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21),"July 25, 2025",Live API wiring to Claude and Gizmo agents,Wombat Track – Gizmo,"July 23, 2025",Complete,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21)
+GovernanceLog Hook,"WT-5.5 ",Green,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21),"July 22, 2025",All console interactions are now logged with metadata,Wombat Track – Gizmo,"July 21, 2025",Complete,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21)
+"GizmoConsole UI Integration ",WT-5.4,Green,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21),"July 21, 2025","UI console with threaded messaging, styling, and dispatch hook",Wombat Track – Gizmo,"July 20, 2025",Complete,Core Feature Retrofit (https://www.notion.so/Core-Feature-Retrofit-23ee1901e36e80c79980f25071cdb8e8?pvs=21)
+Logo and Brand visual identity,"Orb-1.3 ",,Design Principles (https://www.notion.so/Design-Principles-23ee1901e36e80d99b34fe4f9df8e231?pvs=21),,"The conversation about Orbis branding might be stored in:
+
+1. Project Memory: ./CLAUDE.md (team-shared)
+2. User Memory: ~/.claude/CLAUDE.md (your personal memory)
+
+● Bash(ls -la ~/.claude/ 2>/dev/null || echo ""No ~/.claude directory found"")
+⎿  total 4
+drwxr-xr-x 1 jtaylor jtaylor  104 Jul 26 14:15 .
+drwxr-xr-x 1 jtaylor jtaylor  522 Jul 28 13:03 ..
+… +5 lines (ctrl+r to expand)
+
+● Bash(find ~/.claude -name ""http://claude.md/"" -o -name ""*.md"" | head -10)
+⎿  (No content)
+
+● List(../../.claude/projects)
+⎿  Listed 29 paths (ctrl+r to expand)",WP-UX13,"January 1, 2000",In Progress,Design Principles (https://www.notion.so/Design-Principles-23ee1901e36e80d99b34fe4f9df8e231?pvs=21)
+Wireframes,"Orb-1.4 ",,Design Principles (https://www.notion.so/Design-Principles-23ee1901e36e80d99b34fe4f9df8e231?pvs=21),,,,"January 1, 2000",In Progress,Design Principles (https://www.notion.so/Design-Principles-23ee1901e36e80d99b34fe4f9df8e231?pvs=21)
+Logo Vision,"Orb-1.2 ",,Design Principles (https://www.notion.so/Design-Principles-23ee1901e36e80d99b34fe4f9df8e231?pvs=21),,"🌌 ORBIS BRAND CONCEPT EVOLUTIONS
+🔵 1. Orbis Core
+“The center of intelligent systems.”
+
+Circular, recursive, fundamental. This name embodies the philosophical nucleus of Orbis — a semantic engine driving governance, memory, AI interaction, and system orchestration.
+✴️ Core Themes:
+• Cognition loops (Hofstadter’s “Strange Loop”)
+• Autopoiesis — systems that regenerate themselves
+• Governance kernel — a semantic OS at the heart of digital infrastructure
+• Circular logic → Rational coherence → Auditability
+🌈 Visual Mood:
+• Minimalist, high-contrast
+• Monoline circle glyphs / stacked concentric rings
+• Echoes of operating system boot loaders or schematic cores
+🔤 Logo Direction:
+• Stylised “O” with pulsing center
+• Typography: geometric sans (e.g., Space Grotesk / Inter / Satoshi)
+• Variant: 0rbis Core (logo glyph only)
+🔥 2. Orbis Forge
+“The intelligence foundry.”
+
+Symbolic of both heat and transformation, Forge reflects a platform where AI and human intent co-create new systems. It's not passive — it’s molten, shaping intelligence like ancient smiths shaped metal.
+✴️ Core Themes:
+• Techno-alchemy — crafting AI tools from raw prompts and system intent
+• Industrial → Digital revolution parallel
+• Agentic systems forged into tools, protocols, workflows
+• Signals to founders, builders, and creators
+🌈 Visual Mood:
+• Warm copper / forged steel tones
+• Hammer-and-spark motifs
+• Glowing ember or furnace-core visuals
+• Modular UI “ingots” that combine into features
+🔤 Logo Direction:
+• Wordmark with flare accents on “F”
+• Symbol: Anvil + Orbit, or “O” encircling a flame glyph
+• Font: Sturdy but refined — consider Degular, Neue Haas, Founders Grotesk
+🔁 3. Orbis Loop (Honourable Mention)
+“I am a strange loop.”
+
+A self-observing system. Less grounded than Core or Forge, but poetic and AI-native.
+Could be used as a product or feature name later (e.g., Orbis Loop: Lifecycle Autopilot)
+🧬 SHARED DESIGN SYSTEM ELEMENTS (All Variants)
+🧠 Voice & Language:ElementStyleCopyControlled, system-aware, semanticTonePrecision with calm clarityAgents“Forged intelligence” (Forge), “Core threads” (Core)
+🎨 Shared Color FoundationRoleColorBackground#0C0C0E (Obsidian Black)Accent A#D77B28 (Copper Ember – Forge)Accent B#1C5D99 (Nebula Blue – Core)Surface#F2F0E6 (Lumen Cream)Status#3FB8AF (Signal Teal)Trace Layer#B3B6B7 (Orbit Gray)
+🧩 Shared UI Concepts
+• Governance Thread View → Like metal wire drawn through structure
+• Prompt Console = Foundry Surface (Forge) or Semantic Kernel (Core)
+• Visual Tags = alloy tokens / stackable schema
+• Runtime Indicators = heat map (Forge) or pulse ring (Core)
+🏁 Summary & Next Step OptionsNameSymbolismToneFuture SimplicityStrong Use CasesOrbis CoreNucleus, self-governing loopElegant, systemic✅ Easily collapses to OrbisOS, governance platformOrbis ForgeTransformation, AI smithingCreative, founder-friendly✅ Iconic as Forge → OrbisTooling, agents, dev infra",,,In Progress,Design Principles (https://www.notion.so/Design-Principles-23ee1901e36e80d99b34fe4f9df8e231?pvs=21)
+Orbis Design,Orb-1.1,,Design Principles (https://www.notion.so/Design-Principles-23ee1901e36e80d99b34fe4f9df8e231?pvs=21),,"🌌 ORBIS BRAND CONCEPT EVOLUTIONS
+🔵 1. Orbis Core
+“The center of intelligent systems.”
+
+Circular, recursive, fundamental. This name embodies the philosophical nucleus of Orbis — a semantic engine driving governance, memory, AI interaction, and system orchestration.
+✴️ Core Themes:
+• Cognition loops (Hofstadter’s “Strange Loop”)
+• Autopoiesis — systems that regenerate themselves
+• Governance kernel — a semantic OS at the heart of digital infrastructure
+• Circular logic → Rational coherence → Auditability
+🌈 Visual Mood:
+• Minimalist, high-contrast
+• Monoline circle glyphs / stacked concentric rings
+• Echoes of operating system boot loaders or schematic cores
+🔤 Logo Direction:
+• Stylised “O” with pulsing center
+• Typography: geometric sans (e.g., Space Grotesk / Inter / Satoshi)
+• Variant: 0rbis Core (logo glyph only)
+🔥 2. Orbis Forge
+“The intelligence foundry.”
+
+Symbolic of both heat and transformation, Forge reflects a platform where AI and human intent co-create new systems. It's not passive — it’s molten, shaping intelligence like ancient smiths shaped metal.
+✴️ Core Themes:
+• Techno-alchemy — crafting AI tools from raw prompts and system intent
+• Industrial → Digital revolution parallel
+• Agentic systems forged into tools, protocols, workflows
+• Signals to founders, builders, and creators
+🌈 Visual Mood:
+• Warm copper / forged steel tones
+• Hammer-and-spark motifs
+• Glowing ember or furnace-core visuals
+• Modular UI “ingots” that combine into features
+🔤 Logo Direction:
+• Wordmark with flare accents on “F”
+• Symbol: Anvil + Orbit, or “O” encircling a flame glyph
+• Font: Sturdy but refined — consider Degular, Neue Haas, Founders Grotesk
+🔁 3. Orbis Loop (Honourable Mention)
+“I am a strange loop.”
+
+A self-observing system. Less grounded than Core or Forge, but poetic and AI-native.
+Could be used as a product or feature name later (e.g., Orbis Loop: Lifecycle Autopilot)
+🧬 SHARED DESIGN SYSTEM ELEMENTS (All Variants)
+🧠 Voice & Language:ElementStyleCopyControlled, system-aware, semanticTonePrecision with calm clarityAgents“Forged intelligence” (Forge), “Core threads” (Core)
+🎨 Shared Color FoundationRoleColorBackground#0C0C0E (Obsidian Black)Accent A#D77B28 (Copper Ember – Forge)Accent B#1C5D99 (Nebula Blue – Core)Surface#F2F0E6 (Lumen Cream)Status#3FB8AF (Signal Teal)Trace Layer#B3B6B7 (Orbit Gray)
+🧩 Shared UI Concepts
+• Governance Thread View → Like metal wire drawn through structure
+• Prompt Console = Foundry Surface (Forge) or Semantic Kernel (Core)
+• Visual Tags = alloy tokens / stackable schema
+• Runtime Indicators = heat map (Forge) or pulse ring (Core)
+🏁 Summary & Next Step OptionsNameSymbolismToneFuture SimplicityStrong Use CasesOrbis CoreNucleus, self-governing loopElegant, systemic✅ Easily collapses to OrbisOS, governance platformOrbis ForgeTransformation, AI smithingCreative, founder-friendly✅ Iconic as Forge → OrbisTooling, agents, dev infra",,,Done,Design Principles (https://www.notion.so/Design-Principles-23ee1901e36e80d99b34fe4f9df8e231?pvs=21)
+Doc Module Enhancements,DM-1.1,,Docs Module (https://www.notion.so/Docs-Module-23ee1901e36e803dad14e25804f430b4?pvs=21),,"Feature EnhancementsPage / LocationComponentActionIntegrationStatusNotesDocsEditor.tsxClaude DispatcherReplace mock AI with live Claude endpoint✅ Claude🔜 To implementUse dispatchClaude(promptType, context)DocsEditor.tsxExport HandlerEnable DriveMemory export (.md)✅ DriveMemory🔜 Placeholder existsRequires auth + API keyDocsEditor.tsxMemory SyncPush anchor to MemoryPlugin on save✅ MemoryPlugin🔜 Use anchor creation APIDocsEditor.tsxGovernance ViewerShow GovernanceLog entries per docWT Internal🔜 Component to be addedDocsPage.tsxDoc Grouping UIAdd filters for project/phase/moduleNone🔜 Suggest GroupBySelector or visual foldersDocsEditor.tsxTags FieldImprove tag entry with autocompleteNone🧪 Partially implementedConnect to global tags storeDocsEditor.tsxEditor CollaborationEnable WebSocket/CRDT for live editFuture WT-native⏳ R&D neededPlan using Y.js or similarDocsPage.tsxExport-to-NotionExport doc index + .md to NotionOptional🧪 Future API syncConsider .zip import/export bridgeDocsEditor.tsxFull Version HistoryImplement diff view of prior savesInternal⏳ SuggestedRequires change logging modelDocsEditor.tsxAuthor Role LogicEnforce role-based permissionsWT Auth🔜 View / Edit / Approve rolesDocsEditor.tsxMemory MigrationReplace MemoryPlugin with native RAG storeWT-native🧠 Future phaseAlign with internal SDLC memoryDocsPage.tsxMulti-format ExportAdd .csv, .json export optionsNone✅ Markdown doneAdd format toggle buttonsDocsEditor.tsxClaude Prompt TemplatesCentralise reusable GPT prompt libraryWT Claude Dispatcher🔜 PhaseSteps + Docs use same promptsDocsEditor.tsxSave IndicatorsAdd persistent toast or log on successful saveNone✅ Basic save indicator presentEnhance visibilityDocsEditor.tsxAI Suggest → GovernanceLogAuto-log AI summaries directly on usageWT Internal🔜 Stubbed in placeConfirm logging schema 🔍 Metadata Schema Audit — DocsEntryFieldTypeSourceCompletionNotestitlestringUser input✅docTypeenumDropdown (SOP, Template, etc.)✅contentrich text (Tiptap JSON)Editor✅tags[string]Tag editor🧪 Needs global tag autocompleterelatedProjectIdstring?Selector✅relatedPhaseIdstring?Selector✅relatedFeatureIdstring?Selector✅memoryAnchorIdstring?Auto-generated🔜driveLinkstring?Auto on export🔜createdByUserAuth session✅lastUpdateddatetimeAuto✅versionintInternal⏳ Suggested
+🔄 Proposed Groupings (Docs Dashboard Filters)FilterValuesRequired?DocTypeSOP, Project Spec, Checklist, Template✅ProjectAll WT projects✅PhaseLinked phases✅FeatureComposer features✅TagsCustom tags🧪
+🧱 Infrastructure DependenciesServiceRequired ForNotesClaude (live)AI editing, summarising, scaffoldingUse Claude Dispatcher endpointDriveMemoryBackup + versioned doc archiveMust support .md + metadataMemoryPluginAnchors for long-term recallWill be replaced by WT-native RAGGovernanceLogAll actions + versionsCore WT integrationWT AuthPermissions / user-based accessEnforce view/edit rightsOptional: NotionExport index + MD filesConsider backup only",,,Planned,Docs Module (https://www.notion.so/Docs-Module-23ee1901e36e803dad14e25804f430b4?pvs=21)
+Doc Module Implementation,DM-1.0,,Docs Module (https://www.notion.so/Docs-Module-23ee1901e36e803dad14e25804f430b4?pvs=21),,,,,Planned,Docs Module (https://www.notion.so/Docs-Module-23ee1901e36e803dad14e25804f430b4?pvs=21)
+MetaValidator Sys,WT-3.3,,"Infrastructure, CI/CD (https://www.notion.so/Infrastructure-CI-CD-23de1901e36e80cdae85dc296ceea755?pvs=21)",,"WT-3.3 – MetaValidator System
+Status: 🔵 Planned Objective: Build CLI and CI-integrated validator to enforce governance compliance in project metadata and structure
+Key Steps (Planned):
+1. 🔲 Build Validator Engine (WTMetaValidator.ts)
+2. 🔲 Add rules for markdown, step counts, RAG enforcement
+3. 🔲 Hook into CI pipeline or Git pre-push
+4. 🔲 Post failures to ExecutionLog with suggested backlog tasks
+Side Quest (Planned):
+• Create reusable prompt scaffolder for validator errors",WP-UX9,"January 1, 2000",Done,"Infrastructure, CI/CD (https://www.notion.so/Infrastructure-CI-CD-23de1901e36e80cdae85dc296ceea755?pvs=21)"
+CI/CD Pipeline Mig,WT-3.2,,"Infrastructure, CI/CD (https://www.notion.so/Infrastructure-CI-CD-23de1901e36e80cdae85dc296ceea755?pvs=21)",,"WT-3.2 – CI/CD Pipeline Migration
+Status: ✅ Complete Objective: Formalise deployment workflow with rollback, governance logging, and CI validation
+Key Steps:
+1. ✅ Create reusable CI pipeline (ci.yml, deploy.yml)
+2. ✅ Configure deploy + rollback
+3. ✅ Add structured governance hooks
+4. ✅ Integrate RAG signals post-deploy
+Side Quest (Complete):
+• Claude refactor of legacy deploy scripts and log writers",WP-UX10,"January 1, 2000",Planned,"Infrastructure, CI/CD (https://www.notion.so/Infrastructure-CI-CD-23de1901e36e80cdae85dc296ceea755?pvs=21)"
+Adv Testing Infra,"WT-3.1 ",,"Infrastructure, CI/CD (https://www.notion.so/Infrastructure-CI-CD-23de1901e36e80cdae85dc296ceea755?pvs=21)",,"WT-3.1 – Advanced Testing Infrastructure
+Status: 🟡 In Progress Objective: Implement CI-integrated Puppeteer test suite with standardised coverage and logging
+Key Steps:
+1. ✅ Implement Puppeteer-based test suite (Phase Tracker, Dispatcher, Dashboard)
+2. ✅ Integrate GitHub Action test runner
+3. ⚠️ Standardise coverage thresholds
+4. ⚠️ Add failure logging + RAG dashboard visibility
+Side Quest (Planned):
+• Develop Puppeteer screenshot diff utility for visual regression",WP-UX11,"January 1, 2000",Planned,"Infrastructure, CI/CD (https://www.notion.so/Infrastructure-CI-CD-23de1901e36e80cdae85dc296ceea755?pvs=21)"
+Arch Reconciliation,WT-3.0,,"Infrastructure, CI/CD (https://www.notion.so/Infrastructure-CI-CD-23de1901e36e80cdae85dc296ceea755?pvs=21)","December 1, 2000","📦 Overview
+This document summarizes the implementation and governance outcomes of WT Phase 3.x, covering Phases WT-3.0 to WT-3.3. The purpose of Phase 3.x is to establish robust developer infrastructure, CI/CD automation, and governance-enforced quality controls across the Wombat Track platform.
+✅ Phase Breakdown
+WT-3.0 – Architecture Reconciliation
+Status: ✅ Complete Summary:
+• Refactored orbis-* naming to wombat-console
+• Unified phase hierarchy under WT naming
+• Enhanced UX vertical nesting: Project > Phase > Step",WP-UX12,"January 1, 2000",Complete,"Infrastructure, CI/CD (https://www.notion.so/Infrastructure-CI-CD-23de1901e36e80cdae85dc296ceea755?pvs=21)"
+Post-Mortem - regression analysis,PM-1.1,,Post-mortem - sidebar rendering failure (https://www.notion.so/Post-mortem-sidebar-rendering-failure-23ee1901e36e8000a4e2f117bb1bbfad?pvs=21),,,,,Complete,Post-mortem - sidebar rendering failure (https://www.notion.so/Post-mortem-sidebar-rendering-failure-23ee1901e36e8000a4e2f117bb1bbfad?pvs=21)
+Post Mortem - rectify,PM 2.1,,Post-mortem - sidebar rendering failure (https://www.notion.so/Post-mortem-sidebar-rendering-failure-23ee1901e36e8000a4e2f117bb1bbfad?pvs=21),,"📘 Session Summary
+This session surfaced and resolved critical Git integrity, sidebar recovery, and CI build reliability issues. The robustness of these workflows is essential for the long-term viability of the MetaPlatform and Wombat Track as an AI-governed SDLC nucleus.
+✅ Confirmed IssuesIDIssueImpactStatus001Sidebar commit (64a589c) was unintentionally overwrittenHigh – loss of local work and visual logic✅ Recovery complete002Direct push to main bypassed PR reviewHigh – violated SDLC safeguards🛠️ PR review policy reinforced003Git operations not guided → user uncertaintyHigh – SDLC risk for MetaPlatform✅ Gizmo now owns all Git workflows004lucide-react not installed after Claude restoreHigh – broke Vercel production build✅ Pending fix via npm install + commit005Missing CI safety check for new dependenciesMedium – future risk🔄 Pending CI enhancement006No Git pre-checkout safety scriptsMedium – context loss on branch switch🔄 Add http://wt-safe-checkout.sh/007No GovernanceLog entry for recovery eventMedium – traceability gap🔄 Pending log creation008Recovery not logged as PhaseStep in WTMedium🔄 Needs WT-5.1 entry
+🛠️ Fix Actions TakenActionDescription✅ Created sidebar-recovery-branchSafely restored lost logic from commit 64a589c✅ Claude selectively reintegrated sidebar UI + logicPreserved Claude scaffold, restored visual hierarchy✅ Gizmo assigned as GitOps and PR reviewerEnsures controlled merges, version integrity✅ Full PR plan and GovernanceLog scaffold generatedSemantic traceability restored✅ Seed script generated for WT PhasePlanEnables traceable UI feature linking
+🔄 Pending Fixes / ImprovementsIDFixDescriptionF001Install lucide-reactRequired for production build to succeedF002Commit + push package.json, package-lock.jsonFinalise sidebar icon fixF003Create GovernanceLog entry for sidebar recoveryCapture key decisions + traceable eventF004Update WT-5.x PhasePlan to include sidebar recoveryInclude all PhaseSteps tied to UI fixF005Add pre-checkout script (http://wt-safe-checkout.sh/)Prevents work loss when switching branchesF006Add CI rule to catch missing dependenciese.g., validate imports vs package.json
+🧠 Optional EnhancementsEnhancementBenefitGit PR automation for ClaudeClaude commits auto-tagged, PRs generated without push to mainwt-recovery-checker.ts scriptDetect unmerged/dangling commits and prevent data lossReal-time Git/Gizmo sync layer in MetaPlatformPush/pull status updates surfaced in UIBuild-stage AI warning systemDetects missing modules or unresolved imports before deploy
+🧭 MetaPlatform ImpactAreaRisk if UnresolvedResolution PathSDLC EnforcementMetaPlatform cannot offer true governance without Git integrity✅ Assign GitOps to Gizmo + CI rulesRuntime Build StabilityBreaks “self-healing system” promise if prod build fails silently🔄 Add automated dependency check + lock auditTrust in AI CollaborationAI agents must not bypass governance (e.g., push to main)✅ Require PR layer with Gizmo as reviewerDeveloper ConfidenceLoss of work reduces dev velocity, faith in automation🔄 Git pre-checkout and recovery monitoringArtefact TraceabilityMetaPlatform requires memory + log sync🔄 Log sidebar recovery + link to WT-5.1 PhaseStep
+📌 Suggested Phase EntryPhaseNamePurposeWT-6.0GitOps + Runtime IntegrityImplement full guardrails for GitHub, Dev environment, and build pipeline integrity
+📂 Artefacts Generated
+• http://sidebar-recovery-pr-plan.md/
+• http://sidebar-recovery-diff-summary.md/
+• sidebarRecoveryPhasePlan.ts
+• Claude prompt for selective reintroduction
+• Claude prompt for lucide-react install fix
+• Git workflow policy (for inclusion in http://git-workflow.md/)",,,Complete,Post-mortem - sidebar rendering failure (https://www.notion.so/Post-mortem-sidebar-rendering-failure-23ee1901e36e8000a4e2f117bb1bbfad?pvs=21)
+Data Taxonomy,WP-1.2,,WT MemSync Implementation (https://www.notion.so/WT-MemSync-Implementation-23ee1901e36e800bb279c50c177e4e2a?pvs=21),,"Tag data using structured taxonomy
+https://www.notion.so/23de1901e36e8137a195dad4fc3c2969?pvs=21
+https://www.notion.so/23de1901e36e81ae9c9fcdf031dc5d46?pvs=21
+https://www.notion.so/23de1901e36e81209f7be82646197560?pvs=21
+https://www.notion.so/23de1901e36e81ca8353c8b78687ea31?pvs=21
+https://www.notion.so/23de1901e36e8138ac74f21f38df3755?pvs=21",WP-UX2,"January 1, 2000",Active,WT MemSync Implementation (https://www.notion.so/WT-MemSync-Implementation-23ee1901e36e800bb279c50c177e4e2a?pvs=21)
+Agent Protocol Sync,WP-1.4,,WT MemSync Implementation (https://www.notion.so/WT-MemSync-Implementation-23ee1901e36e800bb279c50c177e4e2a?pvs=21),,"🤝 Define Message Types
+https://www.notion.so/23ce1901e36e80b980e3de9693a794a2?pvs=21
+https://www.notion.so/23ce1901e36e800092b8dea9bd01d4fa?pvs=21
+https://www.notion.so/23ce1901e36e80f9b926e811585a0a47?pvs=21
+https://www.notion.so/23de1901e36e81f19354f40da684c301?pvs=21
+https://www.notion.so/23de1901e36e8109b38ff1089b8ae018?pvs=21",WP-UX4,"January 1, 2000",Active,WT MemSync Implementation (https://www.notion.so/WT-MemSync-Implementation-23ee1901e36e800bb279c50c177e4e2a?pvs=21)
+Memory Push,WP-1.6,,WT MemSync Implementation (https://www.notion.so/WT-MemSync-Implementation-23ee1901e36e800bb279c50c177e4e2a?pvs=21),,"# 💽Unstructured Data
+
+https://www.notion.so/23de1901e36e8046a103de4a184d48a7?pvs=21https://www.notion.so/23de1901e36e80508edee2e0ecc105d3?pvs=21https://www.notion.so/23de1901e36e80218c31c5284c2fbf9c?pvs=21https://www.notion.so/23de1901e36e8024a138dabd27edd421?pvs=21https://www.notion.so/23de1901e36e800d81a7f6f5c62022b6?pvs=21https://www.notion.so/23de1901e36e8126bd71f9c49b6af071?pvs=21https://www.notion.so/23de1901e36e81859deec1a52fb6c958?pvs=21https://www.notion.so/23de1901e36e81fc9e6ee94fc3b8e926?pvs=21",WP-UX6,"January 1, 2000",Active,WT MemSync Implementation (https://www.notion.so/WT-MemSync-Implementation-23ee1901e36e800bb279c50c177e4e2a?pvs=21)
+Self-governance App,"WT-2.0 ",,WT Project Overview (https://www.notion.so/WT-Project-Overview-23ee1901e36e80158be7f4c78cbc062b?pvs=21),,"🌟 Purpose
+Establish Wombat Track as its own project governance and management environment — tracking the WT app’s own evolution within the WT platform.
+This project formalises the goal of replacing local artefacts and external documentation with WT-native project management, execution, and governance capabilities.
+🧭 Strategic Goal
+Migrate all planning, execution, documentation, and governance activities of the WT app into the WT platform itself.
+Wombat Track must be used to manage Wombat Track.
+📘 Project SummaryElementDescriptionProject NameWT Self-Managed App MigrationLeadGizmo (AI) + JacksonStart Date2025-07-25Status🟡 In ProgressGovernanceLog Ref""Self-Management Initiative"" (Proposal + Phase Logs)
+🧠 Governance Hooks
+• Proposal: WT should manage itself.
+• Decisions: Logged at each project intake and schema change.
+• Changes: Linked to data model PRs.
+• Reviews: Every feature must have its own GovernanceLog.
+🛡️ Integrity Requirements
+• Every WT feature/project must be traceable in WT.
+• No markdown-only artefacts should exist outside WT unless exported.
+• Claude and Gizmo must both log AI actions to GovernanceLog.
+✅ Blocker CheckAreaStatusNotesData Model❌ IncompleteNeeds 3 new data types + extensionsUI Surfaces⚠️ PartialMostly functional, needs richer metadata fieldsGovernance Logging✅ CompleteJust needs more usageAI Prompt Hooks✅ AvailableClaude and Gizmo ready to trigger create/import
+🔚 Output Goals
+• Every active WT artefact tracked as WT project
+• Self-documented change history
+• MetaPlatform fully monitored from within WT
+• WT becomes a self-reflexive governance operating system",,,Complete,WT Project Overview (https://www.notion.so/WT-Project-Overview-23ee1901e36e80158be7f4c78cbc062b?pvs=21)
+Operational Loop,WT-2.4,,WT Project Overview (https://www.notion.so/WT-Project-Overview-23ee1901e36e80158be7f4c78cbc062b?pvs=21),,"🚀 Phase 4: Operational LoopStepTaskOutput4.1Run future features using WT nativelyE.g., MetaPlatform Dashboard, Docs Module enhancements4.2Claude auto-generates PhasePlans and Governance entriesAI-authored entries4.3Agent Mesh manages visual layer of dependenciesRuntime visualisation4.4WT manages its own versioning and deployment logsSelf-documenting infra",,,In Progress,WT Project Overview (https://www.notion.so/WT-Project-Overview-23ee1901e36e80158be7f4c78cbc062b?pvs=21)
+Metaproject Activation,WT-2.3,,WT Project Overview (https://www.notion.so/WT-Project-Overview-23ee1901e36e80158be7f4c78cbc062b?pvs=21),,"🔁 Phase 3: MetaProject ActivationStepTaskOutput3.1Ingest current WT artefacts (Agent Mesh, AI Strategy, etc.) as projectsWT-native planning entries3.2Rebuild GovernanceLog from markdown historyTrue WT governance archive3.3Build default dashboards for WT internal projectsView progress from within app3.4Claude prompt layer: “Scaffold as WT Project”Prompt-based self-registration",,,Complete,WT Project Overview (https://www.notion.so/WT-Project-Overview-23ee1901e36e80158be7f4c78cbc062b?pvs=21)
+Gov Enhancement,WT-2.2,,WT Project Overview (https://www.notion.so/WT-Project-Overview-23ee1901e36e80158be7f4c78cbc062b?pvs=21),,"🛠️ Phase 2: WT App EnhancementsStepTaskOutput2.1Add fields: techStack, outputFiles, repoRefs, governanceLinksUpdated Project and Phase schemas2.2Add support for CIWorkflow, PhaseCompletionChecklistExecute surface improvements2.3Add mesh-specific entryType to GovernanceLogSupports traceability2.4UI support for document linking to projectsBidirectional visibility",,,Complete,WT Project Overview (https://www.notion.so/WT-Project-Overview-23ee1901e36e80158be7f4c78cbc062b?pvs=21)
+Gov Analysis,WT-2.1,,WT Project Overview (https://www.notion.so/WT-Project-Overview-23ee1901e36e80158be7f4c78cbc062b?pvs=21),,"📍 Phases & Steps
+✅ Phase 1: Assessment & Gap AnalysisStepTaskOutput1.1Evaluate WT surfaces vs artefact requirementsCompatibility matrix1.2Identify missing fields for Plan, Execute, Document, GovernStructured recommendations1.3Propose data model changesAgent, AgentConnection, ExternalService data types1.4Confirm blockersNone beyond data model and UX additions",,,Complete,WT Project Overview (https://www.notion.so/WT-Project-Overview-23ee1901e36e80158be7f4c78cbc062b?pvs=21)
+Runtime enforcement,"SDLC-2.0 ",,WT SDLC Framework (https://www.notion.so/WT-SDLC-Framework-23ee1901e36e800fb67dcab74baddf92?pvs=21),,"🧭 Runtime Enforcement: SDLC vs PDLCAreaSDLC (Software)PDLC (Product/Project)🔄 Claude RoleScaffold & PR creationTrigger agent-based product specs🧠 Gizmo RoleMerge enforcement, test strategy, CI verificationGovernance logging, traceability enforcement✅ Required GatesPR link confirmation, GitHub label check, GovernanceLog entryPhasePlan entry, artefact attachment, metadata schema🚨 Runtime AlertsPR not confirmed → ❌ no mergeArtefact not logged → 🚨 prompt to log via Gizmo📌 Storage LocationGitHub, DriveMemory, MemoryPluginWT Docs, Project Tracker, MemoryPlugin🧪 TestingPuppeteer via MCPNarrative, doc review, RAG classification
+✅ From WT-6.0 onward, all SDLC flows are runtime-enforced using this model.",WP-UX8,"January 1, 2000",In Progress,WT SDLC Framework (https://www.notion.so/WT-SDLC-Framework-23ee1901e36e800fb67dcab74baddf92?pvs=21)
+WT-8.0.1 – SDLC Visibility Layer,WP-1.1,Green,,,"Create UI surface and metadata visibility for SDLC guardrails, compliance state, and technical risk score
+
+Expected Outcome: Users and agents can query guardrails, see CI risk score, view enforcement history, and propose mitigations
+
+Tags: sdlc-governance, oApp-migration, runtime-risk, wt-8.0
+
+Linked DBs: wt-sdlc-visibility-spec, wt-sdlc-guardrails, wt-tech-debt-register
+
+Canonical: true",WP-UX1,"January 1, 2000",Planned,
+RAG Dashboard + Sync,WP-1.3,,,,"🔒 Mark Notion as RAG Source of Truth
+https://www.notion.so/23de1901e36e80209fb8f912636baa3e?pvs=21
+https://www.notion.so/23de1901e36e80be9bf4c2c5163bc68b?pvs=21
+https://www.notion.so/23de1901e36e80c9a221ecddd1eeece5?pvs=21
+https://www.notion.so/23de1901e36e8143a44cf87588bf730b?pvs=21
+https://www.notion.so/23de1901e36e8141ba08e61ee8fe0879?pvs=21",WP-UX3,"January 1, 2000",Active,WT MemSync Implementation (https://www.notion.so/WT-MemSync-Implementation-23ee1901e36e800bb279c50c177e4e2a?pvs=21)
+Agent Protocol Sync,WP-1.5,,,,,WP-UX5,"January 1, 2000",Active,
+Runtime Agent Awareness,WT-6.1,,,,"This phase enables real-time visibility into AI agent activity (Claude and Gizmo) within the Orbis UI. It includes UI enhancements to display agent status, last prompt time, and activity metrics. Backend tracking of `agentStatus`, `lastPromptTime`, and `responseTime` will feed the console and support future runtime diagnostics. Designed to improve user trust and enable runtime orchestration for the Vision Layer.",WP-UX7,"January 1, 2000",Planned,

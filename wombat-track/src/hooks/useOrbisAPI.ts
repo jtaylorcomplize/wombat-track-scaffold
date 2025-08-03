@@ -27,10 +27,19 @@ const getMockProjectsData = () => ({
       description: 'AI-powered business intelligence platform',
       subAppId: 'prog-orbis-001',
       subAppName: 'Orbis Intelligence',
-      status: 'active',
+      status: 'active' as const,
+      priority: 'high' as const,
+      completionPercentage: 75,
+      owner: 'system',
+      teamSize: 8,
+      startDate: '2025-01-01',
+      endDate: '2025-03-15',
       lastUpdated: new Date().toISOString(),
-      progress: 75,
-      teamSize: 8
+      budget: {
+        allocated: 50000,
+        spent: 37500
+      },
+      tags: ['ai', 'analytics', 'intelligence']
     },
     {
       id: 'proj-complize-001', 
@@ -38,10 +47,19 @@ const getMockProjectsData = () => ({
       description: 'Regulatory tracking and compliance management',
       subAppId: 'prog-complize-001',
       subAppName: 'Complize Platform',
-      status: 'active',
+      status: 'active' as const,
+      priority: 'medium' as const,
+      completionPercentage: 60,
+      owner: 'system',
+      teamSize: 5,
+      startDate: '2025-02-01',
+      endDate: '2025-04-30',
       lastUpdated: new Date().toISOString(),
-      progress: 60,
-      teamSize: 5
+      budget: {
+        allocated: 30000,
+        spent: 18000
+      },
+      tags: ['compliance', 'regulatory', 'management']
     },
     {
       id: 'proj-spqr-001',
@@ -49,10 +67,19 @@ const getMockProjectsData = () => ({
       description: 'Real-time system performance monitoring',
       subAppId: 'prog-spqr-001', 
       subAppName: 'SPQR Runtime',
-      status: 'warning',
+      status: 'active' as const,
+      priority: 'critical' as const,
+      completionPercentage: 40,
+      owner: 'system',
+      teamSize: 3,
+      startDate: '2025-01-15',
+      endDate: '2025-05-01',
       lastUpdated: new Date().toISOString(),
-      progress: 40,
-      teamSize: 3
+      budget: {
+        allocated: 25000,
+        spent: 10000
+      },
+      tags: ['monitoring', 'performance', 'runtime']
     }
   ],
   total: 3,
@@ -65,34 +92,49 @@ const getMockSubAppsData = () => [
     id: 'prog-orbis-001',
     name: 'Orbis Intelligence',
     description: 'AI-powered business intelligence and analytics platform',
-    status: 'active',
-    projectCount: 12,
-    activeUsers: 45,
+    version: 'v2.1.3',
+    status: 'active' as const,
+    launchUrl: 'https://orbis.complize.com',
     lastUpdated: new Date().toISOString(),
-    url: 'https://orbis.complize.com',
-    version: 'v2.1.3'
+    metrics: {
+      totalProjects: 12,
+      activeProjects: 8,
+      totalUsers: 45,
+      uptime: 99.2,
+      avgResponseTime: 120
+    }
   },
   {
     id: 'prog-complize-001',
     name: 'Complize Platform',
     description: 'Compliance management and regulatory tracking system',
-    status: 'active',
-    projectCount: 8,
-    activeUsers: 23,
+    version: 'v1.8.2',
+    status: 'active' as const,
+    launchUrl: 'https://app.complize.com',
     lastUpdated: new Date().toISOString(),
-    url: 'https://app.complize.com',
-    version: 'v1.8.2'
+    metrics: {
+      totalProjects: 8,
+      activeProjects: 6,
+      totalUsers: 23,
+      uptime: 98.7,
+      avgResponseTime: 95
+    }
   },
   {
     id: 'prog-spqr-001',
     name: 'SPQR Runtime',
     description: 'Real-time system monitoring and performance dashboard',
-    status: 'warning',
-    projectCount: 4,
-    activeUsers: 12,
+    version: 'v3.0.1',
+    status: 'warning' as const,
+    launchUrl: 'https://spqr.internal.com',
     lastUpdated: new Date().toISOString(),
-    url: 'https://spqr.internal.com',
-    version: 'v3.0.1'
+    metrics: {
+      totalProjects: 4,
+      activeProjects: 2,
+      totalUsers: 12,
+      uptime: 95.1,
+      avgResponseTime: 180
+    }
   }
 ];
 

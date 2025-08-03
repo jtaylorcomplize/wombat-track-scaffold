@@ -4,6 +4,7 @@ import path from 'path';
 import csv from 'csv-parser';
 import { stringify } from 'csv-stringify/sync';
 import { Readable } from 'stream';
+import DatabaseManager from '../database/connection';
 
 const router = express.Router();
 
@@ -43,30 +44,53 @@ async function parseCSV(filePath: string): Promise<any[]> {
   }
 }
 
-// Detect orphaned records
+// Detect orphaned records using live canonical database
 async function detectOrphans(): Promise<IntegrityIssue[]> {
   const issues: IntegrityIssue[] = [];
   
   try {
-    // Load data from CSV files
-    const projects = await parseCSV(path.join(process.cwd(), 'cleaned-projects-snapshot.csv'));
-    const phases = await parseCSV(path.join(process.cwd(), 'cleaned-phases-snapshot.csv'));
+    const dbManager = DatabaseManager.getInstance();
+    const db = await dbManager.getConnection('production');
+    
+    // Load data from live canonical database
+    const projects = await dbManager.executeQuery('SELECT * FROM projects');
+    const phases = await dbManager.executeQuery('SELECT * FROM phases');
+    const stepProgress = await dbManager.executeQuery('SELECT * FROM step_progress');
+    
+    console.log(`🔍 Orphan Inspector: Checking ${projects.length} projects, ${phases.length} phases, ${stepProgress.length} steps`);
     
     // Create lookup maps
-    const projectIds = new Set(projects.map(p => p.projectId));
+    const projectIds = new Set(projects.map((p: any) => p.projectId));
+    const phaseIds = new Set(phases.map((p: any) => p.phaseid));
     
     // Check orphaned phases (phases without valid project reference)
     const orphanedPhases: OrphanedRecord[] = [];
-    phases.forEach(phase => {
-      const projectRef = phase['WT Projects'];
+    phases.forEach((phase: any) => {
+      const projectRef = phase.project_ref;
       if (projectRef && !projectIds.has(projectRef)) {
         orphanedPhases.push({
           id: `phase-${phase.phaseid}`,
           table: 'phases',
-          field: 'WT Projects',
+          field: 'project_ref',
           missingReference: 'projects',
           currentValue: projectRef,
           record: phase
+        });
+      }
+    });
+    
+    // Check orphaned step_progress records (steps without valid phase reference)
+    const orphanedSteps: OrphanedRecord[] = [];
+    stepProgress.forEach((step: any) => {
+      const phaseRef = step.phaseId;
+      if (phaseRef && !phaseIds.has(phaseRef)) {
+        orphanedSteps.push({
+          id: `step-${step.stepId}`,
+          table: 'step_progress',
+          field: 'phaseId',
+          missingReference: 'phases',
+          currentValue: phaseRef,
+          record: step
         });
       }
     });
@@ -80,10 +104,19 @@ async function detectOrphans(): Promise<IntegrityIssue[]> {
       });
     }
     
+    if (orphanedSteps.length > 0) {
+      issues.push({
+        table: 'step_progress',
+        orphanedRecords: orphanedSteps.slice(0, 10),
+        totalOrphans: orphanedSteps.length,
+        severity: orphanedSteps.length > 20 ? 'high' : orphanedSteps.length > 10 ? 'medium' : 'low'
+      });
+    }
+    
     // Check projects without owners (not technically orphaned, but missing critical data)
-    const projectsWithoutOwners = projects.filter(p => !p.owner || p.owner.trim() === '');
+    const projectsWithoutOwners = projects.filter((p: any) => !p.owner || p.owner.trim() === '');
     if (projectsWithoutOwners.length > 0) {
-      const orphanedProjects: OrphanedRecord[] = projectsWithoutOwners.map(project => ({
+      const orphanedProjects: OrphanedRecord[] = projectsWithoutOwners.map((project: any) => ({
         id: `project-${project.projectId}`,
         table: 'projects',
         field: 'owner',

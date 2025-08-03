@@ -11,13 +11,20 @@ const TABLE_CONFIGS = {
   projects: {
     primaryKey: 'projectId',
     requiredFields: ['projectName', 'projectId'],
-    editableFields: ['projectName', 'owner', 'status'],
+    editableFields: [
+      'projectName', 'owner', 'status', 'description', 'startDate', 'endDate',
+      'priority', 'budget', 'actualCost', 'estimatedHours', 'actualHours', 
+      'completionPercentage', 'risk', 'stakeholders', 'tags', 'category', 'department'
+    ],
     tableName: 'projects'
   },
   phases: {
     primaryKey: 'phaseid',
     requiredFields: ['phasename', 'phaseid'],
-    editableFields: ['phasename', 'project_ref', 'status', 'startDate', 'endDate', 'RAG', 'notes'],
+    editableFields: [
+      'phasename', 'project_ref', 'status', 'startDate', 'endDate', 'RAG', 
+      'notes', 'estimatedDuration', 'actualDuration'
+    ],
     tableName: 'phases'
   },
   step_progress: {

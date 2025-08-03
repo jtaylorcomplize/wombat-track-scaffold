@@ -13,10 +13,10 @@ interface TableMetadata {
 }
 
 const TABLES: TableMetadata[] = [
-  { name: 'projects', icon: <FileText size={20} />, description: 'Project records', recordCount: 92 },
-  { name: 'phases', icon: <Clock size={20} />, description: 'Phase and step definitions', recordCount: 257 },
-  { name: 'governance_logs', icon: <Database size={20} />, description: 'Audit and governance entries', recordCount: 60 },
-  { name: 'sub_apps', icon: <Users size={20} />, description: 'Sub-application definitions', recordCount: 4 }
+  { name: 'projects', icon: <FileText size={20} />, description: 'Project records (19 canonical properties)', recordCount: 3 },
+  { name: 'phases', icon: <Clock size={20} />, description: 'Phase definitions (10 canonical properties)', recordCount: 6 },
+  { name: 'governance_logs', icon: <Database size={20} />, description: 'Audit and governance entries', recordCount: 0 },
+  { name: 'step_progress', icon: <Users size={20} />, description: 'Step progress tracking', recordCount: 0 }
 ];
 
 export default function DataExplorer() {
@@ -34,7 +34,8 @@ export default function DataExplorer() {
     const fetchTableData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`/api/admin/tables/${selectedTable}`);
+        // Use live database API for canonical property support
+        const response = await fetch(`http://localhost:3002/api/admin/live/${selectedTable}`);
         if (response.ok) {
           const data = await response.json();
           
@@ -125,10 +126,10 @@ export default function DataExplorer() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Data Explorer</h1>
-          <p className="text-gray-600 mt-1">Browse and analyze oApp database tables</p>
+          <p className="text-gray-600 mt-1">Browse canonical database with 19+10 properties</p>
         </div>
-        <div className="bg-blue-50 px-4 py-2 rounded-lg">
-          <span className="text-blue-700 font-medium">Phase 1: Read-Only Mode</span>
+        <div className="bg-green-50 px-4 py-2 rounded-lg">
+          <span className="text-green-700 font-medium">WT-DBM-2.0: Canonical Schema Active</span>
         </div>
       </div>
 
