@@ -1,0 +1,46 @@
+{
+  "timestamp": "2025-08-03T14:42:14.323540",
+  "migration_validation": "oapp-canonical-schema-migration-20250802",
+  "phase": "staging",
+  "results": {
+    "projects_canonical_count": 87,
+    "phases_canonical_count": 81,
+    "steps_canonical_count": 12,
+    "comms_canonical_count": 134,
+    "orphaned_phases": 27,
+    "orphaned_steps": 0,
+    "orphaned_comms_projects": 0,
+    "agent_distribution": {
+      "Claude": 42,
+      "System": 12,
+      "admin": 10,
+      "automation": 4,
+      "system_architect": 5,
+      "unknown": 61
+    },
+    "sample_projects": [
+      {
+        "projectId": "WT-UX7",
+        "projectName": "Agent Mesh Visualisation (Integrate Surface)"
+      },
+      {
+        "projectId": "RECON-2",
+        "projectName": "To create a live"
+      },
+      {
+        "projectId": "write",
+        "projectName": "\u2022 Show directional capabilities (read"
+      },
+      {
+        "projectId": "RECON-4",
+        "projectName": "\u2022 Clarify runtime agent orchestration"
+      },
+      {
+        "projectId": "governance",
+        "projectName": "\u2022 Support debugging"
+      }
+    ]
+  },
+  "validation_status": "WARNINGS",
+  "total_issues": 27
+}

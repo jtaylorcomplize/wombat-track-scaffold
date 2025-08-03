@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-08-03T14:41:11.003253",
+  "event_type": "canonical_migration",
+  "user_id": "system",
+  "user_role": "migration_script",
+  "resource_type": "steps_canonical",
+  "action": "extract_and_backfill",
+  "success": true,
+  "details": {
+    "source": "oApp_Phases_Export_20250802.json",
+    "target": "steps_canonical",
+    "total_extracted": 19,
+    "success_count": 12,
+    "error_count": 0,
+    "extraction_patterns": 6,
+    "phase": "staging"
+  }
+}

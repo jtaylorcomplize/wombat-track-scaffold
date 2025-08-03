@@ -1,0 +1,71 @@
+{
+  "timestamp": "2025-08-03T12:00:00.000Z",
+  "event_type": "critical_bug_fix",
+  "user_id": "claude_code",
+  "user_role": "ai_developer",
+  "resource_type": "hooks",
+  "resource_id": "useOrbisAPI",
+  "action": "fix_hook_recursion",
+  "success": true,
+  "details": {
+    "issue_type": "React hook infinite recursion",
+    "severity": "critical",
+    "affected_components": [
+      "src/hooks/useOrbisAPI.ts",
+      "src/components/strategic/AllProjectsDashboard.tsx"
+    ],
+    "root_cause": "Filter object recreation causing infinite useCallback dependency trigger",
+    "fixes_applied": [
+      "Memoized filter objects in AllProjectsDashboard using useMemo",
+      "Broke circular dependency chains with useRef for stable function references",
+      "Separated WebSocket lifecycle from filter changes using split useEffect",
+      "Eliminated duplicate API calls on component mount",
+      "Fixed infinite loop from filter object recreation on every render"
+    ],
+    "technical_details": {
+      "primary_issue": "Filter object literal recreated on every render in AllProjectsDashboard.tsx:59-66",
+      "secondary_issues": [
+        "Circular dependency: fetchProjects → setupPolling → fetchProjects",
+        "WebSocket restart on every filter change",
+        "Duplicate fetchProjects calls on mount",
+        "Mixed cleanup concerns in single useEffect"
+      ],
+      "fixes_implemented": {
+        "filter_memoization": "Added useMemo for stable filter object references",
+        "circular_dependency": "Used fetchProjectsRef.current for stable polling callbacks",
+        "websocket_lifecycle": "Split data fetching and connection management useEffects",
+        "duplicate_calls": "Removed redundant fetchProjects call from mount effect"
+      }
+    },
+    "hooks_fixed": [
+      "useAllProjects",
+      "useSubApps", 
+      "useRuntimeStatus"
+    ],
+    "performance_impact": {
+      "before": "Infinite re-renders, memory leaks, excessive API calls",
+      "after": "Stable renders, proper cleanup, 30-second polling intervals only",
+      "memory_usage": "Reduced by eliminating infinite render loops",
+      "api_calls": "Reduced to proper intervals (30s) instead of continuous"
+    }
+  },
+  "runtime_context": {
+    "phase": "WT-8.2",
+    "environment": "development",
+    "branch": "feature/useorbis-api-hooks-fix",
+    "commit": "15233af",
+    "testing_status": "hooks compile correctly, dev server runs without recursion errors"
+  },
+  "validation": {
+    "typescript_check": "passed for hook logic",
+    "dev_server": "starts without infinite loops",
+    "render_cycles": "stabilized after initial load",
+    "memory_leaks": "prevented with proper cleanup"
+  },
+  "next_steps": [
+    "Push fixes to GitHub repository",
+    "Notify Gizmo AI of resolution", 
+    "Monitor Enhanced Sidebar v3.1 performance",
+    "Validate real-time WebSocket functionality in production"
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "framework": {
+    "name": "Enhanced Admin UI QA Framework",
+    "version": "1.0",
+    "description": "AI-assisted QA framework for Admin UI and future Work Surfaces"
+  },
+  "environments": {
+    "development": {
+      "baseUrl": "http://localhost:5173",
+      "serverCommand": ["npm", "run", "dev"],
+      "startDelay": 10000
+    },
+    "staging": {
+      "baseUrl": "http://staging.wombat-track.local",
+      "serverCommand": null,
+      "startDelay": 2000
+    },
+    "production": {
+      "baseUrl": "https://wombat-track.com",
+      "serverCommand": null,
+      "startDelay": 1000
+    }
+  },
+  "testSuites": {
+    "admin-ui": {
+      "name": "Admin UI Core Routes",
+      "description": "Core admin functionality testing",
+      "routes": [
+        "/admin",
+        "/admin/data", 
+        "/admin/runtime"
+      ],
+      "enabled": true,
+      "timeout": 30000,
+      "screenshotOptions": {
+        "fullPage": true,
+        "quality": 90
+      }
+    },
+    "work-surfaces": {
+      "name": "Work Surfaces Testing",
+      "description": "Future Work Surfaces QA testing",
+      "routes": [
+        "/surfaces/plan",
+        "/surfaces/execute", 
+        "/surfaces/govern",
+        "/surfaces/integrate",
+        "/surfaces/document"
+      ],
+      "enabled": false,
+      "timeout": 30000,
+      "screenshotOptions": {
+        "fullPage": true,
+        "quality": 90
+      }
+    },
+    "sub-apps": {
+      "name": "Sub-App Dashboards",
+      "description": "Individual Sub-App dashboard testing",
+      "routes": [
+        "/sub-apps/spqr",
+        "/sub-apps/orbis-forge",
+        "/sub-apps/mcp-gsuite"
+      ],
+      "enabled": false,
+      "timeout": 45000,
+      "screenshotOptions": {
+        "fullPage": true,
+        "quality": 85
+      }
+    }
+  },
+  "verification": {
+    "ai": {
+      "enabled": true,
+      "confidence_threshold": 75,
+      "console_analysis": {
+        "critical_error_patterns": [
+          "TypeError",
+          "ReferenceError",
+          "Cannot read properties of null",
+          "Cannot read properties of undefined", 
+          "Maximum update depth exceeded",
+          "Uncaught",
+          "Failed to fetch"
+        ],
+        "warning_patterns": [
+          "Warning:",
+          "deprecated",
+          "Deprecated"
+        ]
+      },
+      "screenshot_analysis": {
+        "error_indicators": [
+          "Admin UI Error",
+          "error-banner",
+          "Something went wrong",
+          "Error loading",
+          "Failed to load"
+        ],
+        "min_sidebar_width": 60,
+        "max_load_time": 10000
+      }
+    },
+    "performance": {
+      "enabled": true,
+      "thresholds": {
+        "load_time_ms": 10000,
+        "error_rate_percent": 5,
+        "warning_rate_percent": 15
+      }
+    }
+  },
+  "artifacts": {
+    "screenshots": {
+      "path": "QAArtifacts/screenshots",
+      "format": "admin-ui-{route}.png",
+      "retention_days": 30
+    },
+    "logs": {
+      "path": "QAArtifacts/logs", 
+      "format": "admin-ui-{route}.log",
+      "retention_days": 30
+    },
+    "reports": {
+      "path": "QAArtifacts",
+      "format": "qa-report.json",
+      "retention_days": 90
+    }
+  },
+  "governance": {
+    "enabled": true,
+    "log_path": "logs/governance.jsonl",
+    "memory_anchors": {
+      "base": "WT-ADMIN-UI-QA-FRAMEWORK",
+      "version": "1.0"
+    },
+    "required_fields": [
+      "timestamp",
+      "phase",
+      "changeType", 
+      "summary",
+      "branch",
+      "artifact",
+      "memoryAnchor"
+    ]
+  },
+  "browser": {
+    "headless": true,
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "args": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-web-security"
+    ],
+    "timeout": 30000
+  },
+  "reporting": {
+    "formats": ["json", "console", "html"],
+    "include_screenshots": true,
+    "include_console_logs": true,
+    "generate_summary": true
+  }
+}

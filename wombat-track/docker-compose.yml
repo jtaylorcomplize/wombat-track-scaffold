@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mcp-gsuite:
+    build: .
+    container_name: mcp-gsuite
+    ports:
+      - "3002:3002"
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
+      - ./config:/app/config
+    networks:
+      - oapp-net
+
+networks:
+  oapp-net:
+    driver: bridge

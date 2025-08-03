@@ -1,18 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { EnhancedProjectSidebar } from './EnhancedProjectSidebar';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { EnhancedSidebar } from './EnhancedSidebar';
 import { BreadcrumbHeader } from './BreadcrumbHeader';
-import { PlanSurface } from '../surfaces/PlanSurface';
-import { ExecuteSurface } from '../surfaces/ExecuteSurface';
-import { DocumentSurface } from '../surfaces/DocumentSurface';
-import { GovernSurface } from '../surfaces/GovernSurface';
-import { IntegrateSurface } from '../surfaces/IntegrateSurface';
-import { SPQRRuntimeDashboard } from '../SPQR/SPQRRuntimeDashboard';
+import { QuickSwitcherModal } from './QuickSwitcherModal';
 import { SubAppDashboard } from '../SubAppDashboard';
+import { AdminDashboard } from '../admin/AdminDashboard';
+
+// Dynamic imports for better performance and loading states
+const PlanSurface = lazy(() => import('../surfaces/PlanSurface').then(module => ({ default: module.PlanSurface })));
+const ExecuteSurface = lazy(() => import('../surfaces/ExecuteSurface').then(module => ({ default: module.ExecuteSurface })));
+const DocumentSurface = lazy(() => import('../surfaces/DocumentSurface').then(module => ({ default: module.DocumentSurface })));
+const GovernSurface = lazy(() => import('../surfaces/GovernSurface').then(module => ({ default: module.GovernSurface })));
+const IntegrateSurface = lazy(() => import('../surfaces/IntegrateSurface').then(module => ({ default: module.IntegrateSurface })));
+const SPQRRuntimeDashboard = lazy(() => import('../SPQR/SPQRRuntimeDashboard').then(module => ({ default: module.SPQRRuntimeDashboard })));
+import { AdminModeProvider } from '../../contexts/AdminModeContext';
+import { ProjectProvider, useProjectContext } from '../../contexts/ProjectContext';
+import { useSidebarState } from '../../hooks/useLocalStorage';
+import AdminErrorBoundary from '../admin/AdminErrorBoundary';
 import type { Project, Phase, PhaseStep as Step } from '../../types/phase';
 import { mockPrograms } from '../../data/mockPrograms';
 import { fetchProjectsFromOApp } from '../../services/oappAPI';
 
-export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate' | 'spqr-runtime';
+export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate' | 'spqr-runtime' | 'admin' | 'admin-data-explorer' | 'admin-import-export' | 'admin-orphan-inspector' | 'admin-runtime-panel' | 'admin-secrets-manager';
+
+// Loading component for nested dashboards
+const DashboardLoading: React.FC = () => (
+  <div className="flex items-center justify-center min-h-96 wt-animate-fade-in">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p className="text-gray-600">Loading dashboard...</p>
+    </div>
+  </div>
+);
 
 export interface AppLayoutProps {
   initialProjects?: Project[];
@@ -99,12 +117,25 @@ const mockProjects: Project[] = [
   }
 ];
 
-export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProjects }) => {
-  const [projects, setProjects] = useState<Project[]>(initialProjects);
-  const [currentProject, setCurrentProject] = useState<Project | null>(initialProjects[0] || null);
-  const [currentSubApp, setCurrentSubApp] = useState<string>(mockPrograms[0]?.id || 'prog-orbis-001');
+// Internal component that uses ProjectContext
+const AppLayoutInner: React.FC<AppLayoutProps> = ({ initialProjects = mockProjects }) => {
+  const projectContext = useProjectContext();
+  const { projects, setProjects, activeProjectId, setActiveProjectId } = projectContext;
+  
+  // Derive current project from context
+  const currentProject = projects.find(p => p.id === activeProjectId) || projects[0] || null;
+  
+  // Use persistent state hooks
+  const { 
+    collapsed: sidebarCollapsed, 
+    setCollapsed: setSidebarCollapsed,
+    selectedSurface, 
+    setSelectedSurface,
+    currentSubApp,
+    setCurrentSubApp
+  } = useSidebarState();
+
   const [showSubAppDashboard, setShowSubAppDashboard] = useState<boolean>(true);
-  const [selectedSurface, setSelectedSurface] = useState<WorkSurface>('plan');
   const [loadingProjects, setLoadingProjects] = useState(false);
   const [dataSource, setDataSource] = useState<'mock' | 'oapp'>('mock');
   const [currentPhase, setCurrentPhase] = useState<Phase | null>(
@@ -114,7 +145,45 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
     currentPhase?.steps.find(s => s.status === 'in_progress') || currentPhase?.steps[0] || null
   );
 
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [quickSwitcherOpen, setQuickSwitcherOpen] = useState(false);
+
+  // Keyboard shortcut for quick switcher
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setQuickSwitcherOpen(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Mock sub-app data for quick switcher
+  const mockSubApps = [
+    {
+      id: 'prog-orbis-001',
+      name: 'Orbis Intelligence',
+      status: 'active' as const,
+      lastUpdated: new Date(Date.now() - 2 * 60 * 1000),
+      description: 'AI-powered business intelligence and analytics platform'
+    },
+    {
+      id: 'prog-complize-001',
+      name: 'Complize Platform',
+      status: 'warning' as const,
+      lastUpdated: new Date(Date.now() - 15 * 60 * 1000),
+      description: 'Compliance management and regulatory tracking system'
+    },
+    {
+      id: 'prog-spqr-001',
+      name: 'SPQR Runtime',
+      status: 'offline' as const,
+      lastUpdated: new Date(Date.now() - 45 * 60 * 1000),
+      description: 'Real-time system monitoring and performance dashboard'
+    }
+  ];
 
   // Load projects from oApp on mount
   useEffect(() => {
@@ -129,9 +198,9 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
         setProjects(oappProjects);
         setDataSource('oapp');
         
-        // Set first project as current if no current project
-        if (!currentProject && oappProjects.length > 0) {
-          setCurrentProject(oappProjects[0]);
+        // Set first project as current if no active project
+        if (!activeProjectId && oappProjects.length > 0) {
+          setActiveProjectId(oappProjects[0].id);
         }
         
         // Log to governance for observability
@@ -185,11 +254,19 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
       }
     };
 
+    // Initialize projects with mock data if context is empty
+    if (projects.length === 0 && initialProjects.length > 0) {
+      setProjects(initialProjects);
+      if (!activeProjectId && initialProjects.length > 0) {
+        setActiveProjectId(initialProjects[0].id);
+      }
+    }
+
     loadOAppProjects();
-  }, [currentProject, initialProjects.length]);
+  }, [activeProjectId, initialProjects.length, projects.length, setProjects, setActiveProjectId]);
 
   const handleProjectChange = (project: Project) => {
-    setCurrentProject(project);
+    setActiveProjectId(project.id);
     const activePhase = project.phases.find(p => p.status === 'in_progress') || project.phases[0] || null;
     setCurrentPhase(activePhase);
     const activeStep = activePhase?.steps.find(s => s.status === 'in_progress') || activePhase?.steps[0] || null;
@@ -218,19 +295,102 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
 
     switch (selectedSurface) {
       case 'plan':
-        return <PlanSurface {...commonProps} />;
+        return (
+          <Suspense fallback={<DashboardLoading />}>
+            <PlanSurface {...commonProps} />
+          </Suspense>
+        );
       case 'execute':
-        return <ExecuteSurface {...commonProps} />;
+        return (
+          <Suspense fallback={<DashboardLoading />}>
+            <ExecuteSurface {...commonProps} />
+          </Suspense>
+        );
       case 'document':
-        return <DocumentSurface {...commonProps} />;
+        return (
+          <Suspense fallback={<DashboardLoading />}>
+            <DocumentSurface {...commonProps} />
+          </Suspense>
+        );
       case 'govern':
-        return <GovernSurface {...commonProps} />;
+        return (
+          <Suspense fallback={<DashboardLoading />}>
+            <GovernSurface {...commonProps} />
+          </Suspense>
+        );
       case 'integrate':
-        return <IntegrateSurface {...commonProps} />;
+        return (
+          <Suspense fallback={<DashboardLoading />}>
+            <IntegrateSurface {...commonProps} />
+          </Suspense>
+        );
       case 'spqr-runtime':
-        return <SPQRRuntimeDashboard />;
+        return (
+          <Suspense fallback={<DashboardLoading />}>
+            <SPQRRuntimeDashboard />
+          </Suspense>
+        );
+      case 'admin':
+        // Auto-enable admin mode when accessing admin surfaces
+        localStorage.setItem('wombat-track-admin-mode', 'true');
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="overview" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
+      case 'admin-data-explorer':
+        localStorage.setItem('wombat-track-admin-mode', 'true');
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="data-explorer" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
+      case 'admin-import-export':
+        localStorage.setItem('wombat-track-admin-mode', 'true');
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="import-export" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
+      case 'admin-orphan-inspector':
+        localStorage.setItem('wombat-track-admin-mode', 'true');
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="orphan-inspector" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
+      case 'admin-runtime-panel':
+        localStorage.setItem('wombat-track-admin-mode', 'true');
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="runtime-panel" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
+      case 'admin-secrets-manager':
+        localStorage.setItem('wombat-track-admin-mode', 'true');
+        return (
+          <AdminModeProvider>
+            <AdminErrorBoundary>
+              <AdminDashboard initialView="secrets-manager" />
+            </AdminErrorBoundary>
+          </AdminModeProvider>
+        );
       default:
-        return <PlanSurface {...commonProps} />;
+        return (
+          <Suspense fallback={<DashboardLoading />}>
+            <PlanSurface {...commonProps} />
+          </Suspense>
+        );
     }
   };
 
@@ -251,8 +411,8 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
       data-testid="app-layout"
       style={{ background: 'var(--wt-neutral-50)' }}
     >
-      {/* Enhanced Sidebar with Sub-App Support */}
-      <EnhancedProjectSidebar
+      {/* Enhanced Sidebar v3.1 with Three-Tier Architecture */}
+      <EnhancedSidebar
         projects={projects}
         currentProject={currentProject}
         selectedSurface={selectedSurface}
@@ -264,10 +424,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
           setShowSubAppDashboard(false);
         }}
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
-        onSubAppChange={(subAppId) => {
-          setCurrentSubApp(subAppId);
-          setShowSubAppDashboard(true);
-        }}
+        onSubAppChange={setCurrentSubApp}
       />
 
       {/* Main Content Area */}
@@ -332,6 +489,42 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ initialProjects = mockProj
           </div>
         </main>
       </div>
+
+      {/* Quick Switcher Modal */}
+      <QuickSwitcherModal
+        isOpen={quickSwitcherOpen}
+        onClose={() => setQuickSwitcherOpen(false)}
+        projects={projects}
+        currentProject={currentProject}
+        selectedSurface={selectedSurface}
+        subApps={mockSubApps}
+        onProjectChange={(project) => {
+          handleProjectChange(project);
+          setQuickSwitcherOpen(false);
+        }}
+        onSurfaceChange={(surface) => {
+          setSelectedSurface(surface);
+          setShowSubAppDashboard(false);
+          setQuickSwitcherOpen(false);
+        }}
+        onSubAppChange={(subAppId) => {
+          setCurrentSubApp(subAppId);
+          setShowSubAppDashboard(true);
+          setQuickSwitcherOpen(false);
+        }}
+      />
     </div>
+  );
+};
+
+// Main exported component with ProjectProvider wrapper
+export const AppLayout: React.FC<AppLayoutProps> = (props) => {
+  return (
+    <ProjectProvider 
+      initialProjects={props.initialProjects}
+      initialActiveProjectId={props.initialProjects?.[0]?.id}
+    >
+      <AppLayoutInner {...props} />
+    </ProjectProvider>
   );
 };

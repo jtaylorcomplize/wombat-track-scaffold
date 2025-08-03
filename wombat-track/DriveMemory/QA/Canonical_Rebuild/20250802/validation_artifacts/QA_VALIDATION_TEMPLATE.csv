@@ -1,0 +1,15 @@
+validation_category,metric,before_count,after_count,expected_count,status,notes
+projects,total_count,[BEFORE_PROJECTS],[AFTER_PROJECTS],18,[STATUS],Canonical projects from Notion source
+phases,total_count,[BEFORE_PHASES],[AFTER_PHASES],38,[STATUS],Canonical phases from Notion source
+steps,total_count,[BEFORE_STEPS],[AFTER_STEPS],[EXTRACTED_COUNT],[STATUS],Steps extracted from phase notes using regex
+orphans,orphaned_phases,[BEFORE_ORPHANS],[AFTER_ORPHANS],0,[STATUS],Phases without valid project references
+orphans,orphaned_steps,[BEFORE_STEP_ORPHANS],[AFTER_STEP_ORPHANS],0,[STATUS],Steps without valid phase references
+data_quality,empty_project_ids,0,0,0,[STATUS],Projects with missing required fields
+data_quality,duplicate_project_ids,0,0,0,[STATUS],Duplicate project identifiers
+data_quality,duplicate_phase_ids,0,0,0,[STATUS],Duplicate phase identifiers
+hierarchy,projects_with_phases,[BEFORE_PROJ_PHASES],[AFTER_PROJ_PHASES],[EXPECTED_PROJ_PHASES],[STATUS],Projects that have associated phases
+hierarchy,phases_with_steps,[BEFORE_PHASE_STEPS],[AFTER_PHASE_STEPS],[EXPECTED_PHASE_STEPS],[STATUS],Phases that have extracted steps
+governance,governance_logs_preserved,[GOV_LOGS_COUNT],[GOV_LOGS_COUNT],[GOV_LOGS_COUNT],PASS,Historical governance records untouched
+governance,comms_canonical_preserved,[COMMS_COUNT],[COMMS_COUNT],[COMMS_COUNT],PASS,Communication records untouched
+performance,cutover_duration_minutes,0,[ACTUAL_DURATION],12,[STATUS],Total time for production cutover
+performance,downtime_minutes,0,[ACTUAL_DOWNTIME],5,[STATUS],Service downtime during migration

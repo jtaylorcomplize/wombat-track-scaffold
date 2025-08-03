@@ -1,0 +1,5 @@
+﻿subAppName,description,launchDate,linkedProjects,notes,orbisDependencyLevel,platformIntegration,primaryLead,programType,status,usesOrbisEngine
+MetaPlatform,Universal platform integration and workflow orchestration system,,,Next-generation platform for cross-system integration and AI orchestration,Full,"Claude, GitHub, Notion, Vercel",,Sub-App,Planning,Yes
+Complize,Immigration compliance and case management platform,,,Client-facing application built on Orbis infrastructure,Full,"Claude, DriveMemory, Notion",,Sub-App,Active,Yes
+Orbis,Core governance and coordination platform for AI-human collaboration,,,Primary platform - all other sub-apps derive from Orbis architecture,Full,"Claude, GitHub, Notion",,Core,Active,Yes
+Roam,,,,,,,,,,No

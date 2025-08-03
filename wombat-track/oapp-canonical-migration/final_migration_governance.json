@@ -1,0 +1,33 @@
+{
+  "timestamp": "2025-08-03T14:42:42+10:00",
+  "event_type": "canonical_migration_complete",
+  "user_id": "migration_script",
+  "user_role": "system",
+  "resource_type": "oapp_canonical_schema",
+  "action": "full_migration",
+  "success": true,
+  "details": {
+    "anchor": "oapp-canonical-schema-migration-20250802",
+    "phase": "staging",
+    "tables_created": [
+      "projects_canonical",
+      "phases_canonical",
+      "steps_canonical",
+      "comms_canonical"
+    ],
+    "data_sources": [
+      "oApp_Projects_Local_Schema_20250802.json",
+      "oApp_Phases_Export_20250802.json",
+      "oApp_AgentLogs_20250802.json"
+    ],
+    "record_counts": {
+      "projects": 87,
+      "phases": 81,
+      "steps": 12,
+      "communications": 134
+    },
+    "validation_status": "WARNINGS",
+    "orphaned_phases": 27,
+    "next_phase": "production_deployment"
+  }
+}

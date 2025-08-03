@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-08-03T14:40:11.272663",
+  "event_type": "canonical_migration",
+  "user_id": "system",
+  "user_role": "migration_script",
+  "resource_type": "projects_canonical",
+  "action": "backfill",
+  "success": true,
+  "details": {
+    "source": "oApp_Projects_Local_Schema_20250802.json",
+    "target": "projects_canonical",
+    "record_count": 92,
+    "success_count": 92,
+    "error_count": 0,
+    "phase": "staging"
+  }
+}
