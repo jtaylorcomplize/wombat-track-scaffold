@@ -1,0 +1,338 @@
+[2025-08-03T08:39:47.012Z] DEBUG: [vite] connecting...
+[2025-08-03T08:39:47.103Z] DEBUG: [vite] connected.
+[2025-08-03T08:39:47.221Z] INFO: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+[2025-08-03T08:39:47.241Z] LOG: ✅ App is being rendered
+[2025-08-03T08:39:47.244Z] LOG: ✅ main.tsx starting render
+[2025-08-03T08:39:47.246Z] LOG: 🔎 Document root: JSHandle@node
+[2025-08-03T08:39:47.286Z] ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+[2025-08-03T08:39:47.314Z] ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+[2025-08-03T08:39:47.419Z] LOG: [GovernanceEvent] phase_init: JSHandle@object
+[2025-08-03T08:39:47.421Z] LOG: [PhaseAnchor] INIT phase2: of-admin-4.0-sidebar-v3.1-phase2-init-20250803
+[2025-08-03T08:39:47.427Z] LOG: [DEBUG] Sidebar v3.1 rendering failure analysis: JSHandle@object
+[2025-08-03T08:39:47.428Z] LOG: [RESOLUTION] Sidebar v3.1 rendering and routing fixed: JSHandle@object
+[2025-08-03T08:39:47.429Z] LOG: ✅ Enhanced Governance Logger: Browser compatibility mode active
+[2025-08-03T08:39:47.430Z] LOG: 📝 File operations disabled in browser, console logging enabled
+[2025-08-03T08:39:47.431Z] LOG: 🎉 Enhanced Sidebar v3.1 - Ready for QA Phase 3!
+[2025-08-03T08:39:47.432Z] LOG: ✅ All critical fixes applied:
+[2025-08-03T08:39:47.433Z] LOG:    - governanceLogger.logProjectSurfaceSelect method exported
+[2025-08-03T08:39:47.434Z] LOG:    - API fallback to mock data enabled
+[2025-08-03T08:39:47.434Z] LOG:    - Error boundaries added to prevent blank screen
+[2025-08-03T08:39:47.436Z] LOG:    - System Surfaces section added with Admin/Integration/SPQR
+[2025-08-03T08:39:47.437Z] LOG:    - WebSocket errors eliminated in development mode
+[2025-08-03T08:39:47.439Z] LOG: 🚀 Enhanced Sidebar v3.1 with System Surfaces ready for QA!
+[2025-08-03T08:39:47.474Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:39:47.476Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:39:47.480Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:39:47.483Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:39:47.585Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:39:47.588Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:39:47.590Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:39:47.591Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:39:47.593Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:39:47.595Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:39:47.597Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:39:47.598Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:39:47.599Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:39:47.601Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:39:47.603Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:39:47.604Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:39:47.702Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:39:47.704Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:39:47.709Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210387700 JSHandle@object
+[2025-08-03T08:39:47.711Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:39:47.712Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:39:47.713Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210387701 JSHandle@object
+[2025-08-03T08:39:47.724Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:39:47.725Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:39:47.726Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:39:47.727Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:39:47.728Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:39:47.729Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:00.828Z] DEBUG: [vite] connecting...
+[2025-08-03T08:40:00.847Z] DEBUG: [vite] connected.
+[2025-08-03T08:40:00.939Z] INFO: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+[2025-08-03T08:40:00.974Z] LOG: ✅ App is being rendered
+[2025-08-03T08:40:00.976Z] LOG: ✅ main.tsx starting render
+[2025-08-03T08:40:00.978Z] LOG: 🔎 Document root: JSHandle@node
+[2025-08-03T08:40:01.037Z] LOG: [GovernanceEvent] phase_init: JSHandle@object
+[2025-08-03T08:40:01.038Z] LOG: [PhaseAnchor] INIT phase2: of-admin-4.0-sidebar-v3.1-phase2-init-20250803
+[2025-08-03T08:40:01.040Z] LOG: [DEBUG] Sidebar v3.1 rendering failure analysis: JSHandle@object
+[2025-08-03T08:40:01.041Z] LOG: [RESOLUTION] Sidebar v3.1 rendering and routing fixed: JSHandle@object
+[2025-08-03T08:40:01.042Z] LOG: ✅ Enhanced Governance Logger: Browser compatibility mode active
+[2025-08-03T08:40:01.044Z] LOG: 📝 File operations disabled in browser, console logging enabled
+[2025-08-03T08:40:01.045Z] LOG: 🎉 Enhanced Sidebar v3.1 - Ready for QA Phase 3!
+[2025-08-03T08:40:01.047Z] LOG: ✅ All critical fixes applied:
+[2025-08-03T08:40:01.048Z] LOG:    - governanceLogger.logProjectSurfaceSelect method exported
+[2025-08-03T08:40:01.048Z] LOG:    - API fallback to mock data enabled
+[2025-08-03T08:40:01.050Z] LOG:    - Error boundaries added to prevent blank screen
+[2025-08-03T08:40:01.052Z] LOG:    - System Surfaces section added with Admin/Integration/SPQR
+[2025-08-03T08:40:01.057Z] LOG:    - WebSocket errors eliminated in development mode
+[2025-08-03T08:40:01.058Z] LOG: 🚀 Enhanced Sidebar v3.1 with System Surfaces ready for QA!
+[2025-08-03T08:40:01.078Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:01.080Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:01.084Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:01.086Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:01.110Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:01.112Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:01.115Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:01.116Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:01.118Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:01.119Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:01.121Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:01.123Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:01.124Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:01.126Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:01.128Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:01.130Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:01.144Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:01.146Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:01.148Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210401143 JSHandle@object
+[2025-08-03T08:40:01.150Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:01.152Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:01.154Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210401144 JSHandle@object
+[2025-08-03T08:40:01.156Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:01.158Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:01.159Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:01.167Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:01.169Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:01.170Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:14.233Z] DEBUG: [vite] connecting...
+[2025-08-03T08:40:14.240Z] DEBUG: [vite] connected.
+[2025-08-03T08:40:14.327Z] INFO: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+[2025-08-03T08:40:14.343Z] LOG: ✅ App is being rendered
+[2025-08-03T08:40:14.347Z] LOG: ✅ main.tsx starting render
+[2025-08-03T08:40:14.350Z] LOG: 🔎 Document root: JSHandle@node
+[2025-08-03T08:40:14.379Z] LOG: [GovernanceEvent] phase_init: JSHandle@object
+[2025-08-03T08:40:14.382Z] LOG: [PhaseAnchor] INIT phase2: of-admin-4.0-sidebar-v3.1-phase2-init-20250803
+[2025-08-03T08:40:14.384Z] LOG: [DEBUG] Sidebar v3.1 rendering failure analysis: JSHandle@object
+[2025-08-03T08:40:14.386Z] LOG: [RESOLUTION] Sidebar v3.1 rendering and routing fixed: JSHandle@object
+[2025-08-03T08:40:14.388Z] LOG: ✅ Enhanced Governance Logger: Browser compatibility mode active
+[2025-08-03T08:40:14.389Z] LOG: 📝 File operations disabled in browser, console logging enabled
+[2025-08-03T08:40:14.390Z] LOG: 🎉 Enhanced Sidebar v3.1 - Ready for QA Phase 3!
+[2025-08-03T08:40:14.391Z] LOG: ✅ All critical fixes applied:
+[2025-08-03T08:40:14.392Z] LOG:    - governanceLogger.logProjectSurfaceSelect method exported
+[2025-08-03T08:40:14.394Z] LOG:    - API fallback to mock data enabled
+[2025-08-03T08:40:14.395Z] LOG:    - Error boundaries added to prevent blank screen
+[2025-08-03T08:40:14.396Z] LOG:    - System Surfaces section added with Admin/Integration/SPQR
+[2025-08-03T08:40:14.398Z] LOG:    - WebSocket errors eliminated in development mode
+[2025-08-03T08:40:14.400Z] LOG: 🚀 Enhanced Sidebar v3.1 with System Surfaces ready for QA!
+[2025-08-03T08:40:14.417Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:14.420Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:14.423Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:14.426Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:14.439Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:14.444Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:14.446Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:14.448Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:14.450Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:14.452Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:14.455Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:14.457Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:14.461Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:14.463Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:14.465Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:14.467Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:14.474Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:14.488Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:14.504Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210414473 JSHandle@object
+[2025-08-03T08:40:14.529Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:14.535Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:14.539Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210414474 JSHandle@object
+[2025-08-03T08:40:14.545Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:14.549Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:14.551Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:14.556Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:14.559Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:14.560Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:17.608Z] DEBUG: [vite] connecting...
+[2025-08-03T08:40:17.624Z] DEBUG: [vite] connected.
+[2025-08-03T08:40:17.773Z] INFO: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+[2025-08-03T08:40:17.809Z] LOG: ✅ App is being rendered
+[2025-08-03T08:40:17.811Z] LOG: ✅ main.tsx starting render
+[2025-08-03T08:40:17.814Z] LOG: 🔎 Document root: JSHandle@node
+[2025-08-03T08:40:17.877Z] LOG: [GovernanceEvent] phase_init: JSHandle@object
+[2025-08-03T08:40:17.879Z] LOG: [PhaseAnchor] INIT phase2: of-admin-4.0-sidebar-v3.1-phase2-init-20250803
+[2025-08-03T08:40:17.881Z] LOG: [DEBUG] Sidebar v3.1 rendering failure analysis: JSHandle@object
+[2025-08-03T08:40:17.883Z] LOG: [RESOLUTION] Sidebar v3.1 rendering and routing fixed: JSHandle@object
+[2025-08-03T08:40:17.884Z] LOG: ✅ Enhanced Governance Logger: Browser compatibility mode active
+[2025-08-03T08:40:17.885Z] LOG: 📝 File operations disabled in browser, console logging enabled
+[2025-08-03T08:40:17.886Z] LOG: 🎉 Enhanced Sidebar v3.1 - Ready for QA Phase 3!
+[2025-08-03T08:40:17.888Z] LOG: ✅ All critical fixes applied:
+[2025-08-03T08:40:17.889Z] LOG:    - governanceLogger.logProjectSurfaceSelect method exported
+[2025-08-03T08:40:17.891Z] LOG:    - API fallback to mock data enabled
+[2025-08-03T08:40:17.893Z] LOG:    - Error boundaries added to prevent blank screen
+[2025-08-03T08:40:17.894Z] LOG:    - System Surfaces section added with Admin/Integration/SPQR
+[2025-08-03T08:40:17.896Z] LOG:    - WebSocket errors eliminated in development mode
+[2025-08-03T08:40:17.897Z] LOG: 🚀 Enhanced Sidebar v3.1 with System Surfaces ready for QA!
+[2025-08-03T08:40:17.906Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:17.909Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:17.913Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:17.915Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:17.934Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:17.936Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:17.937Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:17.939Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:17.941Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:17.942Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:17.944Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:17.945Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:17.947Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:17.949Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:17.951Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:17.953Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:17.960Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:17.962Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:17.964Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210417959 JSHandle@object
+[2025-08-03T08:40:17.966Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:17.967Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:17.969Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210417960 JSHandle@object
+[2025-08-03T08:40:17.970Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:17.972Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:17.976Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:17.977Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:17.978Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:17.979Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:21.068Z] DEBUG: [vite] connecting...
+[2025-08-03T08:40:21.079Z] DEBUG: [vite] connected.
+[2025-08-03T08:40:21.155Z] INFO: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+[2025-08-03T08:40:21.183Z] LOG: ✅ App is being rendered
+[2025-08-03T08:40:21.184Z] LOG: ✅ main.tsx starting render
+[2025-08-03T08:40:21.187Z] LOG: 🔎 Document root: JSHandle@node
+[2025-08-03T08:40:21.232Z] LOG: [GovernanceEvent] phase_init: JSHandle@object
+[2025-08-03T08:40:21.234Z] LOG: [PhaseAnchor] INIT phase2: of-admin-4.0-sidebar-v3.1-phase2-init-20250803
+[2025-08-03T08:40:21.236Z] LOG: [DEBUG] Sidebar v3.1 rendering failure analysis: JSHandle@object
+[2025-08-03T08:40:21.237Z] LOG: [RESOLUTION] Sidebar v3.1 rendering and routing fixed: JSHandle@object
+[2025-08-03T08:40:21.238Z] LOG: ✅ Enhanced Governance Logger: Browser compatibility mode active
+[2025-08-03T08:40:21.239Z] LOG: 📝 File operations disabled in browser, console logging enabled
+[2025-08-03T08:40:21.240Z] LOG: 🎉 Enhanced Sidebar v3.1 - Ready for QA Phase 3!
+[2025-08-03T08:40:21.241Z] LOG: ✅ All critical fixes applied:
+[2025-08-03T08:40:21.242Z] LOG:    - governanceLogger.logProjectSurfaceSelect method exported
+[2025-08-03T08:40:21.242Z] LOG:    - API fallback to mock data enabled
+[2025-08-03T08:40:21.243Z] LOG:    - Error boundaries added to prevent blank screen
+[2025-08-03T08:40:21.244Z] LOG:    - System Surfaces section added with Admin/Integration/SPQR
+[2025-08-03T08:40:21.246Z] LOG:    - WebSocket errors eliminated in development mode
+[2025-08-03T08:40:21.247Z] LOG: 🚀 Enhanced Sidebar v3.1 with System Surfaces ready for QA!
+[2025-08-03T08:40:21.263Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:21.265Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:21.268Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:21.271Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:21.296Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:21.298Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:21.300Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:21.302Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:21.303Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:21.304Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:21.306Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:21.307Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:21.308Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:21.310Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:21.311Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:21.313Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:21.324Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:21.327Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:21.329Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210421323 JSHandle@object
+[2025-08-03T08:40:21.332Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:21.335Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:21.337Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210421323 JSHandle@object
+[2025-08-03T08:40:21.340Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:21.342Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:21.343Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:21.345Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:21.347Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:21.349Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:24.433Z] DEBUG: [vite] connecting...
+[2025-08-03T08:40:24.441Z] DEBUG: [vite] connected.
+[2025-08-03T08:40:24.573Z] INFO: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+[2025-08-03T08:40:24.589Z] LOG: ✅ App is being rendered
+[2025-08-03T08:40:24.591Z] LOG: ✅ main.tsx starting render
+[2025-08-03T08:40:24.592Z] LOG: 🔎 Document root: JSHandle@node
+[2025-08-03T08:40:24.632Z] LOG: [GovernanceEvent] phase_init: JSHandle@object
+[2025-08-03T08:40:24.637Z] LOG: [PhaseAnchor] INIT phase2: of-admin-4.0-sidebar-v3.1-phase2-init-20250803
+[2025-08-03T08:40:24.640Z] LOG: [DEBUG] Sidebar v3.1 rendering failure analysis: JSHandle@object
+[2025-08-03T08:40:24.642Z] LOG: [RESOLUTION] Sidebar v3.1 rendering and routing fixed: JSHandle@object
+[2025-08-03T08:40:24.645Z] LOG: ✅ Enhanced Governance Logger: Browser compatibility mode active
+[2025-08-03T08:40:24.648Z] LOG: 📝 File operations disabled in browser, console logging enabled
+[2025-08-03T08:40:24.651Z] LOG: 🎉 Enhanced Sidebar v3.1 - Ready for QA Phase 3!
+[2025-08-03T08:40:24.654Z] LOG: ✅ All critical fixes applied:
+[2025-08-03T08:40:24.656Z] LOG:    - governanceLogger.logProjectSurfaceSelect method exported
+[2025-08-03T08:40:24.658Z] LOG:    - API fallback to mock data enabled
+[2025-08-03T08:40:24.661Z] LOG:    - Error boundaries added to prevent blank screen
+[2025-08-03T08:40:24.663Z] LOG:    - System Surfaces section added with Admin/Integration/SPQR
+[2025-08-03T08:40:24.666Z] LOG:    - WebSocket errors eliminated in development mode
+[2025-08-03T08:40:24.669Z] LOG: 🚀 Enhanced Sidebar v3.1 with System Surfaces ready for QA!
+[2025-08-03T08:40:24.673Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:24.677Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:24.679Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:24.681Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:24.703Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:24.711Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:24.712Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:24.714Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:24.716Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:24.717Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:24.719Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:24.720Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:24.721Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:24.722Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:24.723Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:24.724Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:24.736Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:24.737Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:24.739Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210424735 JSHandle@object
+[2025-08-03T08:40:24.740Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:24.741Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:24.742Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210424736 JSHandle@object
+[2025-08-03T08:40:24.746Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:24.747Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:24.748Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:24.749Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:24.750Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:24.750Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:27.830Z] DEBUG: [vite] connecting...
+[2025-08-03T08:40:27.837Z] DEBUG: [vite] connected.
+[2025-08-03T08:40:27.934Z] INFO: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+[2025-08-03T08:40:27.953Z] LOG: ✅ App is being rendered
+[2025-08-03T08:40:27.955Z] LOG: ✅ main.tsx starting render
+[2025-08-03T08:40:27.957Z] LOG: 🔎 Document root: JSHandle@node
+[2025-08-03T08:40:27.995Z] LOG: [GovernanceEvent] phase_init: JSHandle@object
+[2025-08-03T08:40:27.998Z] LOG: [PhaseAnchor] INIT phase2: of-admin-4.0-sidebar-v3.1-phase2-init-20250803
+[2025-08-03T08:40:28.000Z] LOG: [DEBUG] Sidebar v3.1 rendering failure analysis: JSHandle@object
+[2025-08-03T08:40:28.002Z] LOG: [RESOLUTION] Sidebar v3.1 rendering and routing fixed: JSHandle@object
+[2025-08-03T08:40:28.003Z] LOG: ✅ Enhanced Governance Logger: Browser compatibility mode active
+[2025-08-03T08:40:28.005Z] LOG: 📝 File operations disabled in browser, console logging enabled
+[2025-08-03T08:40:28.006Z] LOG: 🎉 Enhanced Sidebar v3.1 - Ready for QA Phase 3!
+[2025-08-03T08:40:28.007Z] LOG: ✅ All critical fixes applied:
+[2025-08-03T08:40:28.007Z] LOG:    - governanceLogger.logProjectSurfaceSelect method exported
+[2025-08-03T08:40:28.008Z] LOG:    - API fallback to mock data enabled
+[2025-08-03T08:40:28.009Z] LOG:    - Error boundaries added to prevent blank screen
+[2025-08-03T08:40:28.010Z] LOG:    - System Surfaces section added with Admin/Integration/SPQR
+[2025-08-03T08:40:28.011Z] LOG:    - WebSocket errors eliminated in development mode
+[2025-08-03T08:40:28.013Z] LOG: 🚀 Enhanced Sidebar v3.1 with System Surfaces ready for QA!
+[2025-08-03T08:40:28.041Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:28.043Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:28.046Z] LOG: [useSubApps] Using polling in development mode
+[2025-08-03T08:40:28.048Z] LOG: [useRuntimeStatus] Using polling in development mode
+[2025-08-03T08:40:28.072Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:28.073Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:28.074Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:28.092Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:28.094Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:28.095Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:28.095Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:28.096Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:28.097Z] WARN: [useSubApps] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:28.098Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:28.098Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:28.099Z] WARN: [useRuntimeStatus] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:28.125Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:28.127Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:28.129Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210428125 JSHandle@object
+[2025-08-03T08:40:28.131Z] LOG: [useAllProjects] Using polling in development mode
+[2025-08-03T08:40:28.133Z] LOG: [GovernanceEvent] project_surface_select: JSHandle@object
+[2025-08-03T08:40:28.135Z] LOG: [MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210428126 JSHandle@object
+[2025-08-03T08:40:28.139Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:28.141Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:28.142Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
+[2025-08-03T08:40:28.144Z] ERROR: Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[2025-08-03T08:40:28.146Z] ERROR: Failed to load resource: net::ERR_FAILED
+[2025-08-03T08:40:28.147Z] WARN: [useAllProjects] API failed, falling back to mock data: JSHandle@error
