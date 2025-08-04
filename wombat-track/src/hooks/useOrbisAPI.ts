@@ -66,7 +66,7 @@ const getMockProjectsData = () => ({
       name: 'SPQR Runtime Monitoring',
       description: 'Real-time system performance monitoring',
       subAppId: 'prog-spqr-001', 
-      subAppName: 'SPQR Runtime',
+      subAppName: 'SPQR',
       status: 'active' as const,
       priority: 'critical' as const,
       completionPercentage: 40,
@@ -80,9 +80,29 @@ const getMockProjectsData = () => ({
         spent: 10000
       },
       tags: ['monitoring', 'performance', 'runtime']
+    },
+    {
+      id: 'proj-roam-001',
+      name: 'Business Migration Planning',
+      description: 'Visa calculation and business migration planning tool',
+      subAppId: 'prog-roam-001',
+      subAppName: 'Roam',
+      status: 'active' as const,
+      priority: 'medium' as const,
+      completionPercentage: 80,
+      owner: 'system',
+      teamSize: 4,
+      startDate: '2025-02-15',
+      endDate: '2025-06-01',
+      lastUpdated: new Date().toISOString(),
+      budget: {
+        allocated: 35000,
+        spent: 28000
+      },
+      tags: ['visa', 'migration', 'calculation']
     }
   ],
-  total: 3,
+  total: 4,
   page: 1,
   hasMore: false
 });
@@ -91,7 +111,7 @@ const getMockSubAppsData = () => [
   {
     id: 'prog-orbis-001',
     name: 'Orbis Intelligence',
-    description: 'AI-powered business intelligence and analytics platform',
+    description: 'Core program for recursive AI-native development and Sub-App orchestration; 3D printer engine for SDLC and governance.',
     version: 'v2.1.3',
     status: 'active' as const,
     launchUrl: 'https://orbis.complize.com',
@@ -122,7 +142,7 @@ const getMockSubAppsData = () => [
   {
     id: 'prog-complize-001',
     name: 'Complize Platform',
-    description: 'Compliance management and regulatory tracking system',
+    description: 'Compliance suite Sub-App; includes Visa Management, Knowledge Base, and RAG/Compliance Tracker modules.',
     version: 'v1.8.2',
     status: 'active' as const,
     launchUrl: 'https://app.complize.com',
@@ -152,8 +172,8 @@ const getMockSubAppsData = () => [
   },
   {
     id: 'prog-spqr-001',
-    name: 'SPQR Runtime',
-    description: 'Real-time system monitoring and performance dashboard',
+    name: 'SPQR',
+    description: 'Sub-App for reporting and Looker Studio integration within Orbis Intelligence ecosystem.',
     version: 'v3.0.1',
     status: 'warning' as const,
     launchUrl: 'https://spqr.internal.com',
@@ -177,6 +197,37 @@ const getMockSubAppsData = () => [
           id: 'proj-spqr-002',
           name: 'Performance Dashboard',
           completionPercentage: 25
+        }
+      ]
+    }
+  },
+  {
+    id: 'prog-roam-001',
+    name: 'Roam',
+    description: 'Formerly VisaCalcPro; business migration planning and visa calculation tool.',
+    version: 'v4.2.0',
+    status: 'active' as const,
+    launchUrl: 'https://roam.complize.com',
+    lastUpdated: new Date().toISOString(),
+    metrics: {
+      totalProjects: 6,
+      activeProjects: 5,
+      totalUsers: 28,
+      uptime: 99.9,
+      avgResponseTime: 85
+    },
+    projects: {
+      total: 6,
+      recent: [
+        {
+          id: 'proj-roam-001',
+          name: 'Business Migration Planning',
+          completionPercentage: 80
+        },
+        {
+          id: 'proj-roam-002',
+          name: 'Visa Calculation Engine',
+          completionPercentage: 90
         }
       ]
     }

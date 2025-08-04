@@ -1,0 +1,117 @@
+{
+  "template": {
+    "name": "Governance_Closure_Template",
+    "version": "1.0.0",
+    "description": "Template for UAT closure governance JSON generation",
+    "schema": {
+      "closureId": "wt-[event]-closure-[YYYYMMDD]",
+      "timestamp": "ISO8601",
+      "event": {
+        "type": "UATClosure|PhaseStepComplete|BranchMergeToMain",
+        "phase": "string",
+        "project": "string",
+        "milestone": "string"
+      },
+      "evidence": {
+        "screenshots": [
+          {
+            "path": "string",
+            "description": "string",
+            "timestamp": "ISO8601"
+          }
+        ],
+        "logs": [
+          {
+            "type": "console|network|error",
+            "path": "string",
+            "summary": "string"
+          }
+        ],
+        "artifacts": [
+          {
+            "type": "governance|memory|qa",
+            "path": "string",
+            "description": "string"
+          }
+        ]
+      },
+      "validation": {
+        "testsPassed": "boolean",
+        "criticalIssues": "number",
+        "qaStatus": "PASS|FAIL|PARTIAL",
+        "automatedChecks": {
+          "linting": "boolean",
+          "typecheck": "boolean",
+          "security": "boolean"
+        }
+      },
+      "memoryAnchor": {
+        "id": "string",
+        "pluginStatus": "PUSHED|PENDING|FAILED",
+        "driveMemoryStatus": "QUEUED|IMPORTED|FAILED"
+      },
+      "governance": {
+        "approver": "string",
+        "signoff": "boolean",
+        "notes": "string",
+        "nextActions": ["string"]
+      }
+    }
+  },
+  "examples": {
+    "uatClosure": {
+      "closureId": "wt-uat-closure-20250804",
+      "timestamp": "2025-08-04T12:00:00Z",
+      "event": {
+        "type": "UATClosure",
+        "phase": "Enhanced Sidebar v3.1",
+        "project": "Wombat Track",
+        "milestone": "OF-SDLC-IMP1"
+      },
+      "evidence": {
+        "screenshots": [
+          {
+            "path": "DriveMemory/WT-IMP1/ClosureArtifacts/sidebar-v3.1-final.png",
+            "description": "Final sidebar structure validation",
+            "timestamp": "2025-08-04T12:00:00Z"
+          }
+        ],
+        "logs": [
+          {
+            "type": "console",
+            "path": "DriveMemory/WT-IMP1/ClosureArtifacts/console-logs.txt",
+            "summary": "No critical errors during UAT"
+          }
+        ],
+        "artifacts": [
+          {
+            "type": "governance",
+            "path": "DriveMemory/WT-IMP1/ClosureArtifacts/governance-log.jsonl",
+            "description": "Complete governance audit trail"
+          }
+        ]
+      },
+      "validation": {
+        "testsPassed": true,
+        "criticalIssues": 0,
+        "qaStatus": "PASS",
+        "automatedChecks": {
+          "linting": true,
+          "typecheck": true,
+          "security": true
+        }
+      },
+      "memoryAnchor": {
+        "id": "wt-sidebar-v3.1-closure-20250804",
+        "pluginStatus": "PUSHED",
+        "driveMemoryStatus": "QUEUED"
+      },
+      "governance": {
+        "approver": "SDLC_GIZMO_AGENT",
+        "signoff": true,
+        "notes": "Enhanced Sidebar v3.1 successfully deployed with full UAT validation",
+        "nextActions": ["Archive to DriveMemory", "Prepare next phase"]
+      }
+    }
+  }
+}

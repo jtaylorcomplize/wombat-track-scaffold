@@ -6,6 +6,7 @@
 import express from 'express';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import sdlcRouter from './api/sdlc/index';
 
 const app = express();
 const PORT = process.env.API_PORT || 3001;
@@ -18,8 +19,12 @@ app.use(express.static('public'));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   next();
 });
+
+// SDLC API routes
+app.use('/api/sdlc', sdlcRouter);
 
 interface OAppProject {
   projectName: string;
@@ -232,6 +237,7 @@ if (require.main === module) {
     console.log(`   GET /api/projects - Fetch all projects`);
     console.log(`   GET /api/projects/stats - Get project statistics`);
     console.log(`   GET /api/health - Health check`);
+    console.log(`   /api/sdlc/* - SDLC governance and management endpoints`);
   });
 }
 

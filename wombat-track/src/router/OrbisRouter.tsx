@@ -96,6 +96,7 @@ export const OrbisRouter: React.FC = () => {
               <Route path="admin/orphan-inspector" element={<AdminModeProvider><AdminDashboard initialView="orphan-inspector" /></AdminModeProvider>} />
               <Route path="admin/runtime-panel" element={<AdminModeProvider><AdminDashboard initialView="runtime-panel" /></AdminModeProvider>} />
               <Route path="admin/secrets-manager" element={<AdminModeProvider><AdminDashboard initialView="secrets-manager" /></AdminModeProvider>} />
+              <Route path="admin/sdlc-dashboard" element={<AdminModeProvider><AdminDashboard initialView="sdlc-dashboard" /></AdminModeProvider>} />
               <Route path="admin/editable-tables" element={<AdminModeProvider><AdminDashboard initialView="editable-tables" /></AdminModeProvider>} />
               
               {/* Admin Deep-Link Routes */}
