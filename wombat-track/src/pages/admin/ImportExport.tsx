@@ -35,12 +35,12 @@ export default function ImportExport({}: ImportExportProps) {
         setMessageType('success');
         
         // Log to governance
-        console.log('📝 CSV Export:', {
+        console.log('📝 CSV Export:', JSON.stringify({
           timestamp: new Date().toISOString(),
           event_type: 'csv_export',
           table: tableName,
           success: true
-        });
+        }, null, 2));
       } else {
         // Try to get detailed error message from response
         const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
@@ -78,12 +78,12 @@ export default function ImportExport({}: ImportExportProps) {
         setMessageType('success');
         
         // Log to governance
-        console.log('📝 JSON Table Export:', {
+        console.log('📝 JSON Table Export:', JSON.stringify({
           timestamp: new Date().toISOString(),
           event_type: 'json_table_export',
           table: tableName,
           success: true
-        });
+        }, null, 2));
       } else {
         // Try to get detailed error message from response
         const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
@@ -128,14 +128,14 @@ export default function ImportExport({}: ImportExportProps) {
         setMessageType('success');
         
         // Log to governance
-        console.log('📝 CSV Import:', {
+        console.log('📝 CSV Import:', JSON.stringify({
           timestamp: new Date().toISOString(),
           event_type: 'csv_import',
           table: selectedTable,
           filename: file.name,
           success: true,
           validation: result.validation
-        });
+        }, null, 2));
       } else {
         throw new Error(result.message || `Import failed: ${response.status}`);
       }
@@ -168,11 +168,11 @@ export default function ImportExport({}: ImportExportProps) {
         setMessageType('success');
         
         // Log to governance
-        console.log('📝 JSON Export:', {
+        console.log('📝 JSON Export:', JSON.stringify({
           timestamp: new Date().toISOString(),
           event_type: 'json_export',
           success: true
-        });
+        }, null, 2));
       } else {
         throw new Error(`Export failed: ${response.status}`);
       }
@@ -208,13 +208,13 @@ export default function ImportExport({}: ImportExportProps) {
         setMessageType('success');
         
         // Log to governance
-        console.log('📝 JSON Import:', {
+        console.log('📝 JSON Import:', JSON.stringify({
           timestamp: new Date().toISOString(),
           event_type: 'json_import',
           filename: file.name,
           success: true,
           recordsImported: result.recordsImported
-        });
+        }, null, 2));
       } else {
         throw new Error(result.message || `Import failed: ${response.status}`);
       }

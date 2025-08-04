@@ -1,317 +1,317 @@
 {
-  "timestamp": "2025-08-03T08:40:31.139Z",
+  "timestamp": "2025-08-04T03:35:06.129Z",
   "testSuite": "Enhanced Sidebar v3.1 Final Phase 3 UAT",
   "baseUrl": "http://localhost:5178",
   "artifacts": {
     "screenshots": [],
     "governanceEvents": [
       {
-        "timestamp": "2025-08-03T08:39:47.429Z",
+        "timestamp": "2025-08-04T03:34:22.223Z",
         "event": "✅ Enhanced Governance Logger: Browser compatibility mode active"
       },
       {
-        "timestamp": "2025-08-03T08:39:47.433Z",
+        "timestamp": "2025-08-04T03:34:22.229Z",
         "event": "   - governanceLogger.logProjectSurfaceSelect method exported"
       },
       {
-        "timestamp": "2025-08-03T08:40:01.042Z",
+        "timestamp": "2025-08-04T03:34:35.966Z",
         "event": "✅ Enhanced Governance Logger: Browser compatibility mode active"
       },
       {
-        "timestamp": "2025-08-03T08:40:01.048Z",
+        "timestamp": "2025-08-04T03:34:35.971Z",
         "event": "   - governanceLogger.logProjectSurfaceSelect method exported"
       },
       {
-        "timestamp": "2025-08-03T08:40:14.388Z",
+        "timestamp": "2025-08-04T03:34:49.351Z",
         "event": "✅ Enhanced Governance Logger: Browser compatibility mode active"
       },
       {
-        "timestamp": "2025-08-03T08:40:14.392Z",
+        "timestamp": "2025-08-04T03:34:49.357Z",
         "event": "   - governanceLogger.logProjectSurfaceSelect method exported"
       },
       {
-        "timestamp": "2025-08-03T08:40:17.884Z",
+        "timestamp": "2025-08-04T03:34:52.787Z",
         "event": "✅ Enhanced Governance Logger: Browser compatibility mode active"
       },
       {
-        "timestamp": "2025-08-03T08:40:17.889Z",
+        "timestamp": "2025-08-04T03:34:52.793Z",
         "event": "   - governanceLogger.logProjectSurfaceSelect method exported"
       },
       {
-        "timestamp": "2025-08-03T08:40:21.238Z",
+        "timestamp": "2025-08-04T03:34:56.177Z",
         "event": "✅ Enhanced Governance Logger: Browser compatibility mode active"
       },
       {
-        "timestamp": "2025-08-03T08:40:21.242Z",
+        "timestamp": "2025-08-04T03:34:56.180Z",
         "event": "   - governanceLogger.logProjectSurfaceSelect method exported"
       },
       {
-        "timestamp": "2025-08-03T08:40:24.645Z",
+        "timestamp": "2025-08-04T03:34:59.581Z",
         "event": "✅ Enhanced Governance Logger: Browser compatibility mode active"
       },
       {
-        "timestamp": "2025-08-03T08:40:24.656Z",
+        "timestamp": "2025-08-04T03:34:59.586Z",
         "event": "   - governanceLogger.logProjectSurfaceSelect method exported"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.003Z",
+        "timestamp": "2025-08-04T03:35:03.031Z",
         "event": "✅ Enhanced Governance Logger: Browser compatibility mode active"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.007Z",
+        "timestamp": "2025-08-04T03:35:03.038Z",
         "event": "   - governanceLogger.logProjectSurfaceSelect method exported"
       }
     ],
     "consoleMessages": [
       {
-        "timestamp": "2025-08-03T08:40:24.750Z",
-        "type": "error",
-        "text": "Failed to load resource: net::ERR_FAILED"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:24.750Z",
-        "type": "warn",
-        "text": "[useAllProjects] API failed, falling back to mock data: JSHandle@error"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:27.830Z",
-        "type": "debug",
-        "text": "[vite] connecting..."
-      },
-      {
-        "timestamp": "2025-08-03T08:40:27.837Z",
-        "type": "debug",
-        "text": "[vite] connected."
-      },
-      {
-        "timestamp": "2025-08-03T08:40:27.934Z",
-        "type": "info",
-        "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:27.953Z",
-        "type": "log",
-        "text": "✅ App is being rendered"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:27.955Z",
-        "type": "log",
-        "text": "✅ main.tsx starting render"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:27.957Z",
-        "type": "log",
-        "text": "🔎 Document root: JSHandle@node"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:27.995Z",
-        "type": "log",
-        "text": "[GovernanceEvent] phase_init: JSHandle@object"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:27.998Z",
-        "type": "log",
-        "text": "[PhaseAnchor] INIT phase2: of-admin-4.0-sidebar-v3.1-phase2-init-20250803"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.000Z",
-        "type": "log",
-        "text": "[DEBUG] Sidebar v3.1 rendering failure analysis: JSHandle@object"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.002Z",
-        "type": "log",
-        "text": "[RESOLUTION] Sidebar v3.1 rendering and routing fixed: JSHandle@object"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.003Z",
+        "timestamp": "2025-08-04T03:34:59.581Z",
         "type": "log",
         "text": "✅ Enhanced Governance Logger: Browser compatibility mode active"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.005Z",
+        "timestamp": "2025-08-04T03:34:59.582Z",
         "type": "log",
         "text": "📝 File operations disabled in browser, console logging enabled"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.006Z",
+        "timestamp": "2025-08-04T03:34:59.583Z",
         "type": "log",
         "text": "🎉 Enhanced Sidebar v3.1 - Ready for QA Phase 3!"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.007Z",
+        "timestamp": "2025-08-04T03:34:59.585Z",
         "type": "log",
         "text": "✅ All critical fixes applied:"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.007Z",
+        "timestamp": "2025-08-04T03:34:59.586Z",
         "type": "log",
         "text": "   - governanceLogger.logProjectSurfaceSelect method exported"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.008Z",
+        "timestamp": "2025-08-04T03:34:59.587Z",
         "type": "log",
         "text": "   - API fallback to mock data enabled"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.009Z",
+        "timestamp": "2025-08-04T03:34:59.588Z",
         "type": "log",
         "text": "   - Error boundaries added to prevent blank screen"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.010Z",
+        "timestamp": "2025-08-04T03:34:59.588Z",
         "type": "log",
         "text": "   - System Surfaces section added with Admin/Integration/SPQR"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.011Z",
+        "timestamp": "2025-08-04T03:34:59.589Z",
         "type": "log",
         "text": "   - WebSocket errors eliminated in development mode"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.013Z",
+        "timestamp": "2025-08-04T03:34:59.590Z",
         "type": "log",
         "text": "🚀 Enhanced Sidebar v3.1 with System Surfaces ready for QA!"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.041Z",
+        "timestamp": "2025-08-04T03:34:59.600Z",
         "type": "log",
         "text": "[useSubApps] Using polling in development mode"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.043Z",
+        "timestamp": "2025-08-04T03:34:59.602Z",
         "type": "log",
         "text": "[useRuntimeStatus] Using polling in development mode"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.046Z",
+        "timestamp": "2025-08-04T03:34:59.605Z",
         "type": "log",
         "text": "[useSubApps] Using polling in development mode"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.048Z",
+        "timestamp": "2025-08-04T03:34:59.606Z",
         "type": "log",
         "text": "[useRuntimeStatus] Using polling in development mode"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.072Z",
-        "type": "error",
-        "text": "Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource."
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.073Z",
-        "type": "error",
-        "text": "Failed to load resource: net::ERR_FAILED"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.074Z",
-        "type": "warn",
-        "text": "[useSubApps] API failed, falling back to mock data: JSHandle@error"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.092Z",
-        "type": "error",
-        "text": "Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource."
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.094Z",
-        "type": "error",
-        "text": "Failed to load resource: net::ERR_FAILED"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.095Z",
-        "type": "warn",
-        "text": "[useRuntimeStatus] API failed, falling back to mock data: JSHandle@error"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.095Z",
-        "type": "error",
-        "text": "Access to fetch at 'http://localhost:3002/api/orbis/sub-apps?includeProjects=true' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource."
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.096Z",
-        "type": "error",
-        "text": "Failed to load resource: net::ERR_FAILED"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.097Z",
-        "type": "warn",
-        "text": "[useSubApps] API failed, falling back to mock data: JSHandle@error"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.098Z",
-        "type": "error",
-        "text": "Access to fetch at 'http://localhost:3002/api/orbis/runtime/status' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource."
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.098Z",
-        "type": "error",
-        "text": "Failed to load resource: net::ERR_FAILED"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.099Z",
-        "type": "warn",
-        "text": "[useRuntimeStatus] API failed, falling back to mock data: JSHandle@error"
-      },
-      {
-        "timestamp": "2025-08-03T08:40:28.125Z",
+        "timestamp": "2025-08-04T03:34:59.659Z",
         "type": "log",
         "text": "[useAllProjects] Using polling in development mode"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.127Z",
+        "timestamp": "2025-08-04T03:34:59.661Z",
         "type": "log",
-        "text": "[GovernanceEvent] project_surface_select: JSHandle@object"
+        "text": "[GovernanceEvent] project_surface_select: {\n  \"event\": \"project_surface_select\",\n  \"entityId\": \"all-projects\",\n  \"timestamp\": \"2025-08-04T03:34:59.658Z\",\n  \"context\": {\n    \"surface\": \"all-projects\",\n    \"navigationType\": \"direct_url\"\n  },\n  \"sessionId\": \"sidebar-v3.1-1754278499572-snostktc9\",\n  \"userId\": \"current-user\"\n}"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.129Z",
+        "timestamp": "2025-08-04T03:34:59.663Z",
         "type": "log",
-        "text": "[MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210428125 JSHandle@object"
+        "text": "[MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754278499658 {\n  \"id\": \"of-admin-4.0-sidebar-v3.1-project_surface_select-1754278499658\",\n  \"type\": \"navigation_context_change\",\n  \"event\": \"project_surface_select\",\n  \"entityId\": \"all-projects\",\n  \"context\": {\n    \"surface\": \"all-projects\",\n    \"navigationType\": \"direct_url\"\n  },\n  \"timestamp\": \"2025-08-04T03:34:59.658Z\",\n  \"sessionId\": \"sidebar-v3.1-1754278499572-snostktc9\"\n}"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.131Z",
+        "timestamp": "2025-08-04T03:34:59.665Z",
         "type": "log",
         "text": "[useAllProjects] Using polling in development mode"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.133Z",
+        "timestamp": "2025-08-04T03:34:59.667Z",
         "type": "log",
-        "text": "[GovernanceEvent] project_surface_select: JSHandle@object"
+        "text": "[GovernanceEvent] project_surface_select: {\n  \"event\": \"project_surface_select\",\n  \"entityId\": \"all-projects\",\n  \"timestamp\": \"2025-08-04T03:34:59.659Z\",\n  \"context\": {\n    \"surface\": \"all-projects\",\n    \"navigationType\": \"direct_url\"\n  },\n  \"sessionId\": \"sidebar-v3.1-1754278499572-snostktc9\",\n  \"userId\": \"current-user\"\n}"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.135Z",
+        "timestamp": "2025-08-04T03:34:59.668Z",
         "type": "log",
-        "text": "[MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754210428126 JSHandle@object"
+        "text": "[MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754278499659 {\n  \"id\": \"of-admin-4.0-sidebar-v3.1-project_surface_select-1754278499659\",\n  \"type\": \"navigation_context_change\",\n  \"event\": \"project_surface_select\",\n  \"entityId\": \"all-projects\",\n  \"context\": {\n    \"surface\": \"all-projects\",\n    \"navigationType\": \"direct_url\"\n  },\n  \"timestamp\": \"2025-08-04T03:34:59.659Z\",\n  \"sessionId\": \"sidebar-v3.1-1754278499572-snostktc9\"\n}"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.139Z",
-        "type": "error",
-        "text": "Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource."
+        "timestamp": "2025-08-04T03:35:02.752Z",
+        "type": "debug",
+        "text": "[vite] connecting..."
       },
       {
-        "timestamp": "2025-08-03T08:40:28.141Z",
-        "type": "error",
-        "text": "Failed to load resource: net::ERR_FAILED"
+        "timestamp": "2025-08-04T03:35:02.765Z",
+        "type": "debug",
+        "text": "[vite] connected."
       },
       {
-        "timestamp": "2025-08-03T08:40:28.142Z",
-        "type": "warn",
-        "text": "[useAllProjects] API failed, falling back to mock data: JSHandle@error"
+        "timestamp": "2025-08-04T03:35:02.962Z",
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.144Z",
-        "type": "error",
-        "text": "Access to fetch at 'http://localhost:3002/api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc' from origin 'http://localhost:5178' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource."
+        "timestamp": "2025-08-04T03:35:02.977Z",
+        "type": "log",
+        "text": "✅ App is being rendered"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.146Z",
-        "type": "error",
-        "text": "Failed to load resource: net::ERR_FAILED"
+        "timestamp": "2025-08-04T03:35:02.979Z",
+        "type": "log",
+        "text": "✅ main.tsx starting render"
       },
       {
-        "timestamp": "2025-08-03T08:40:28.147Z",
-        "type": "warn",
-        "text": "[useAllProjects] API failed, falling back to mock data: JSHandle@error"
+        "timestamp": "2025-08-04T03:35:02.981Z",
+        "type": "log",
+        "text": "🔎 Document root: JSHandle@node"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.024Z",
+        "type": "log",
+        "text": "[GovernanceEvent] phase_init: {\n  \"event\": \"phase_init\",\n  \"entityId\": \"phase2\",\n  \"timestamp\": \"2025-08-04T03:35:03.023Z\",\n  \"context\": {\n    \"phase\": \"phase2\",\n    \"action\": \"init\",\n    \"sessionId\": \"sidebar-v3.1-1754278503023-focl1haux\"\n  },\n  \"sessionId\": \"sidebar-v3.1-1754278503023-focl1haux\",\n  \"userId\": \"current-user\"\n}"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.026Z",
+        "type": "log",
+        "text": "[PhaseAnchor] INIT phase2: of-admin-4.0-sidebar-v3.1-phase2-init-20250804"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.028Z",
+        "type": "log",
+        "text": "[DEBUG] Sidebar v3.1 rendering failure analysis: {\n  \"id\": \"of-admin-4.0-sidebar-v3.1-debug-20250803\",\n  \"type\": \"debug_analysis\",\n  \"event\": \"sidebar_rendering_failure\",\n  \"entityId\": \"enhanced-sidebar-v3.1\",\n  \"timestamp\": \"2025-08-04T03:35:03.024Z\",\n  \"context\": {\n    \"issue\": \"Enhanced Sidebar v3.1 not visible\",\n    \"rootCause\": \"App.tsx using old AppRouter instead of OrbisRouter\",\n    \"analysis\": {\n      \"currentRouter\": \"AppRouter with /projects, /subapps routes\",\n      \"expectedRouter\": \"OrbisRouter with /orbis/projects, /orbis/sub-apps routes\",\n      \"currentSidebar\": \"EnhancedProjectSidebar v2.0\",\n      \"expectedSidebar\": \"EnhancedSidebarV3 v3.1\"\n    },\n    \"impact\": \"Phase 3 QA blocked, UAT cannot proceed\",\n    \"solution\": \"Update App.tsx to use OrbisRouter and OrbisLayout\"\n  }\n}"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.030Z",
+        "type": "log",
+        "text": "[RESOLUTION] Sidebar v3.1 rendering and routing fixed: {\n  \"id\": \"of-admin-4.0-sidebar-v3.1-resolution-20250803\",\n  \"type\": \"issue_resolution\",\n  \"event\": \"sidebar_rendering_fixed\",\n  \"entityId\": \"enhanced-sidebar-v3.1\",\n  \"timestamp\": \"2025-08-04T03:35:03.024Z\",\n  \"context\": {\n    \"issue\": \"Enhanced Sidebar v3.1 not visible\",\n    \"resolution\": \"Updated App.tsx to use OrbisRouter with proper BrowserRouter context\",\n    \"changes\": [\n      \"Added OrbisRouter import to App.tsx\",\n      \"Changed return <AppRouter /> to return <OrbisRouter />\",\n      \"Fixed NavigationContextProvider router context error\",\n      \"Added BrowserRouter wrapper in OrbisRouter\",\n      \"NavigationContextProvider now properly nested inside BrowserRouter\"\n    ],\n    \"technicalFixes\": {\n      \"routing\": \"App.tsx:30 - return <OrbisRouter />\",\n      \"context\": \"OrbisRouter.tsx:42-43 - <BrowserRouter><NavigationContextProvider>\",\n      \"hierarchy\": \"BrowserRouter > NavigationContextProvider > Routes > OrbisLayout > EnhancedSidebarV3\"\n    },\n    \"verification\": {\n      \"devServer\": \"Restarted on http://localhost:5173\",\n      \"routing\": \"OrbisRouter with /orbis/* routes active\",\n      \"components\": \"OrbisLayout and EnhancedSidebarV3 components loaded\",\n      \"errors\": \"useLocation() router context error resolved\"\n    },\n    \"impact\": \"Phase 3 QA fully unblocked, UAT can proceed with Enhanced Sidebar v3.1\"\n  }\n}"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.031Z",
+        "type": "log",
+        "text": "✅ Enhanced Governance Logger: Browser compatibility mode active"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.032Z",
+        "type": "log",
+        "text": "📝 File operations disabled in browser, console logging enabled"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.034Z",
+        "type": "log",
+        "text": "🎉 Enhanced Sidebar v3.1 - Ready for QA Phase 3!"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.037Z",
+        "type": "log",
+        "text": "✅ All critical fixes applied:"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.038Z",
+        "type": "log",
+        "text": "   - governanceLogger.logProjectSurfaceSelect method exported"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.039Z",
+        "type": "log",
+        "text": "   - API fallback to mock data enabled"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.040Z",
+        "type": "log",
+        "text": "   - Error boundaries added to prevent blank screen"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.041Z",
+        "type": "log",
+        "text": "   - System Surfaces section added with Admin/Integration/SPQR"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.041Z",
+        "type": "log",
+        "text": "   - WebSocket errors eliminated in development mode"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.042Z",
+        "type": "log",
+        "text": "🚀 Enhanced Sidebar v3.1 with System Surfaces ready for QA!"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.050Z",
+        "type": "log",
+        "text": "[useSubApps] Using polling in development mode"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.052Z",
+        "type": "log",
+        "text": "[useRuntimeStatus] Using polling in development mode"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.055Z",
+        "type": "log",
+        "text": "[useSubApps] Using polling in development mode"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.056Z",
+        "type": "log",
+        "text": "[useRuntimeStatus] Using polling in development mode"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.108Z",
+        "type": "log",
+        "text": "[useAllProjects] Using polling in development mode"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.109Z",
+        "type": "log",
+        "text": "[GovernanceEvent] project_surface_select: {\n  \"event\": \"project_surface_select\",\n  \"entityId\": \"all-projects\",\n  \"timestamp\": \"2025-08-04T03:35:03.107Z\",\n  \"context\": {\n    \"surface\": \"all-projects\",\n    \"navigationType\": \"direct_url\"\n  },\n  \"sessionId\": \"sidebar-v3.1-1754278503023-focl1haux\",\n  \"userId\": \"current-user\"\n}"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.111Z",
+        "type": "log",
+        "text": "[MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754278503107 {\n  \"id\": \"of-admin-4.0-sidebar-v3.1-project_surface_select-1754278503107\",\n  \"type\": \"navigation_context_change\",\n  \"event\": \"project_surface_select\",\n  \"entityId\": \"all-projects\",\n  \"context\": {\n    \"surface\": \"all-projects\",\n    \"navigationType\": \"direct_url\"\n  },\n  \"timestamp\": \"2025-08-04T03:35:03.107Z\",\n  \"sessionId\": \"sidebar-v3.1-1754278503023-focl1haux\"\n}"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.112Z",
+        "type": "log",
+        "text": "[useAllProjects] Using polling in development mode"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.113Z",
+        "type": "log",
+        "text": "[GovernanceEvent] project_surface_select: {\n  \"event\": \"project_surface_select\",\n  \"entityId\": \"all-projects\",\n  \"timestamp\": \"2025-08-04T03:35:03.108Z\",\n  \"context\": {\n    \"surface\": \"all-projects\",\n    \"navigationType\": \"direct_url\"\n  },\n  \"sessionId\": \"sidebar-v3.1-1754278503023-focl1haux\",\n  \"userId\": \"current-user\"\n}"
+      },
+      {
+        "timestamp": "2025-08-04T03:35:03.114Z",
+        "type": "log",
+        "text": "[MemoryPlugin] Created anchor: of-admin-4.0-sidebar-v3.1-project_surface_select-1754278503109 {\n  \"id\": \"of-admin-4.0-sidebar-v3.1-project_surface_select-1754278503109\",\n  \"type\": \"navigation_context_change\",\n  \"event\": \"project_surface_select\",\n  \"entityId\": \"all-projects\",\n  \"context\": {\n    \"surface\": \"all-projects\",\n    \"navigationType\": \"direct_url\"\n  },\n  \"timestamp\": \"2025-08-04T03:35:03.109Z\",\n  \"sessionId\": \"sidebar-v3.1-1754278503023-focl1haux\"\n}"
       }
     ]
   },

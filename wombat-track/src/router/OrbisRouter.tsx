@@ -3,6 +3,13 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom
 import { NavigationContextProvider } from '../contexts/NavigationContext';
 import { AdminModeProvider } from '../contexts/AdminModeContext';
 
+// Temporarily use direct imports to isolate the lazy loading issue
+import PlanSurfaceComponent from '../components/surfaces/PlanSurface';
+import ExecuteSurfaceComponent from '../components/surfaces/ExecuteSurface';
+import DocumentSurfaceComponent from '../components/surfaces/DocumentSurface';
+import GovernSurfaceComponent from '../components/surfaces/GovernSurface';
+import IntegrateSurfaceComponent from '../components/surfaces/IntegrateSurface';
+
 // Lazy load all route components
 const OrbisLayout = lazy(() => import('../components/layout/OrbisLayout'));
 const AllProjectsDashboard = lazy(() => import('../components/strategic/AllProjectsDashboard'));
@@ -12,11 +19,11 @@ const StrategicPlanning = lazy(() => import('../components/strategic/StrategicPl
 const SubAppOverview = lazy(() => import('../components/operational/SubAppOverview'));
 const SubAppProjectsList = lazy(() => import('../components/operational/SubAppProjectsList'));
 const ProjectDashboard = lazy(() => import('../components/ProjectDashboard'));
-const PlanSurface = lazy(() => import('../components/surfaces/PlanSurface').then(m => ({ default: m.PlanSurface })));
-const ExecuteSurface = lazy(() => import('../components/surfaces/ExecuteSurface').then(m => ({ default: m.ExecuteSurface })));
-const DocumentSurface = lazy(() => import('../components/surfaces/DocumentSurface').then(m => ({ default: m.DocumentSurface })));
-const GovernSurface = lazy(() => import('../components/surfaces/GovernSurface').then(m => ({ default: m.GovernSurface })));
-const IntegrateSurface = lazy(() => import('../components/surfaces/IntegrateSurface').then(m => ({ default: m.IntegrateSurface })));
+const PlanSurface = PlanSurfaceComponent;
+const ExecuteSurface = ExecuteSurfaceComponent;
+const DocumentSurface = DocumentSurfaceComponent;
+const GovernSurface = GovernSurfaceComponent;
+const IntegrateSurface = IntegrateSurfaceComponent;
 const SPQRRuntimeDashboard = lazy(() => import('../components/SPQR/SPQRRuntimeDashboard'));
 const AdminDashboard = lazy(() => import('../components/admin/AdminDashboard'));
 const AdminProjectView = lazy(() => import('../pages/admin/AdminProjectView'));

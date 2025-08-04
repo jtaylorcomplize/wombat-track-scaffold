@@ -86,6 +86,8 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
   onToggleCollapse,
   navigationState
 }) => {
+  // Debug logging removed - was causing object conversion issues
+  
   const { navigateToStrategic, navigateToSubApp } = useNavigationContext();
   const navigate = useNavigate();
   const { expandedSections, toggleSection } = useAccordionState(DEFAULT_ACCORDION_STATE);
@@ -97,6 +99,8 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
     refresh: refreshSubApps,
     isLive: subAppsLive
   } = useSubApps(true);
+  
+  // Debug logging removed - was causing object conversion issues
   
   // Get runtime status for live health indicators
   const { 
@@ -138,14 +142,14 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
   const handleSubAppSelect = (subAppId: string, subAppName: string) => {
     const subApp = subApps?.find(s => s.id === subAppId);
     const projectCount = subApp?.projects?.total || 0;
-    const recentProjects = subApp?.projects?.recent?.map(p => p.name) || [];
+    const recentProjects = subApp?.projects?.recent || [];
     
     // Enhanced governance logging for sub-app selection
     governanceLogger.logSubAppSelect(
       subAppId,
       subAppName,
       projectCount,
-      recentProjects,
+      recentProjects.map(p => p?.name || 'Unknown').slice(0, 3),
       'sidebar_navigation'
     );
     
@@ -325,7 +329,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                 
                 return (
                   <button
-                    key={surface.id}
+                    key={String(surface.id)}
                     onClick={() => handleStrategicSurfaceSelect(surface.id)}
                     className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-all ${
                       isSelected
@@ -398,15 +402,19 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                 </div>
               ) : (
                 subApps.map((subApp) => {
+                  // Debug logging removed - was causing object conversion issues
+                  
                   const isSelected = navigationState.level === 'operational' && 
                                    navigationState.subAppId === subApp.id;
                   const subAppStatus = getSubAppStatus(subApp.id);
                   const projectCount = subApp.projects?.total || 0;
                   const recentProjects = subApp.projects?.recent || [];
                   
+                  // Debug logging removed - was causing object conversion issues
+                  
                   return (
                     <div
-                      key={subApp.id}
+                      key={String(subApp.id)}
                       className={`border rounded-lg p-4 transition-all ${
                         isSelected 
                           ? 'border-purple-300 bg-purple-50' 
@@ -419,11 +427,11 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                           <div className={`w-3 h-3 rounded-full ${
                             subAppStatus.status === 'active' ? 'bg-green-500' :
                             subAppStatus.status === 'warning' ? 'bg-amber-500' : 'bg-red-500'
-                          }`} title={`Status: ${subAppStatus.status} | Uptime: ${subAppStatus.uptime.toFixed(1)}%`} />
+                          }`} title={`Status: ${subAppStatus.status} | Uptime: ${(subAppStatus.uptime || 0).toFixed(1)}%`} />
                           <div>
                             <h4 className="font-medium text-gray-900">{subApp.name}</h4>
                             <p className="text-xs text-gray-500">
-                              v{subApp.version} • {subAppStatus.responseTime.toFixed(0)}ms
+                              v{subApp.version} • {(subAppStatus.responseTime || 0).toFixed(0)}ms
                             </p>
                           </div>
                         </div>
@@ -454,9 +462,9 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                         {/* Recent Projects Preview (real data) */}
                         {recentProjects.length > 0 && (
                           <div className="mt-2 space-y-1">
-                            {recentProjects.slice(0, 2).map((project) => (
-                              <div key={project.id} className="text-xs text-gray-500 truncate">
-                                • {project.name} ({project.completionPercentage}%)
+                            {recentProjects.slice(0, 2).map((project, index) => (
+                              <div key={String(project?.id || `project-${index}`)} className="text-xs text-gray-500 truncate">
+                                • {project?.name || 'Unknown Project'} ({project?.completionPercentage || 0}%)
                               </div>
                             ))}
                             {projectCount > 2 && (
@@ -526,7 +534,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                 const isSelected = false; // We can add selection logic later if needed
                 
                 return (
-                  <div key={surface.id} className="space-y-1">
+                  <div key={String(surface.id)} className="space-y-1">
                     <button
                       onClick={() => handleSystemSurfaceSelect(
                         surface.id, 
@@ -559,7 +567,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                       <div className="ml-8 space-y-1 border-l-2 border-gray-200 pl-3">
                         {surface.subSurfaces.map((subSurface) => (
                           <button
-                            key={subSurface.id}
+                            key={String(subSurface.id)}
                             onClick={() => handleAdminSubSurfaceSelect(subSurface.id)}
                             className="w-full flex items-center space-x-2 p-1.5 text-left rounded-md hover:bg-gray-50 transition-colors group"
                             title={subSurface.description}

@@ -1,8 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ExternalLink, Activity, Users, Calendar, AlertTriangle, TrendingUp, Folder, Plus, Settings } from 'lucide-react';
+import { Outlet, useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import { ExternalLink, Activity, Users, Calendar, AlertTriangle, TrendingUp, Folder, Plus, Settings, FileText, Clock, DollarSign, Target } from 'lucide-react';
 import { useNavigationContext } from '../../contexts/NavigationContext';
 import { governanceLogger } from '../../services/governanceLogger';
+
+interface ProjectSummary {
+  projectId: string;
+  projectName: string;
+  status: string;
+  RAG: string;
+  priority: string;
+  owner: string;
+  startDate?: string;
+  endDate?: string;
+  completionPercentage: number;
+  budget?: number;
+  actualCost?: number;
+  lastUpdated: Date;
+  subAppContext: string;
+}
 
 interface SubAppInfo {
   id: string;
@@ -33,6 +49,7 @@ interface SubAppInfo {
     action: string;
     url?: string;
   }[];
+  projects: ProjectSummary[];
 }
 
 // Skeleton component
@@ -156,6 +173,53 @@ const SubAppOverview: React.FC = () => {
                 icon: <Settings className="w-4 h-4" />,
                 action: 'settings'
               }
+            ],
+            projects: [
+              {
+                projectId: 'ORB-2025-001',
+                projectName: 'Market Intelligence Dashboard',
+                status: 'Active',
+                RAG: 'Green',
+                priority: 'High',
+                owner: 'Sarah Chen',
+                startDate: '2025-01-15',
+                endDate: '2025-06-30',
+                completionPercentage: 75,
+                budget: 150000,
+                actualCost: 95000,
+                lastUpdated: new Date(Date.now() - 2 * 60 * 60 * 1000),
+                subAppContext: 'orbis-intelligence'
+              },
+              {
+                projectId: 'ORB-2025-002',
+                projectName: 'Competitive Analysis Toolkit',
+                status: 'Planning',
+                RAG: 'Amber',
+                priority: 'Medium',
+                owner: 'Michael Park',
+                startDate: '2025-03-01',
+                endDate: '2025-09-15',
+                completionPercentage: 25,
+                budget: 120000,
+                actualCost: 15000,
+                lastUpdated: new Date(Date.now() - 5 * 60 * 60 * 1000),
+                subAppContext: 'orbis-intelligence'
+              },
+              {
+                projectId: 'ORB-2024-015',
+                projectName: 'Data Pipeline Optimization',
+                status: 'Completed',
+                RAG: 'Green',
+                priority: 'High',
+                owner: 'Alex Rodriguez',
+                startDate: '2024-09-01',
+                endDate: '2025-01-31',
+                completionPercentage: 100,
+                budget: 80000,
+                actualCost: 76000,
+                lastUpdated: new Date(Date.now() - 24 * 60 * 60 * 1000),
+                subAppContext: 'orbis-intelligence'
+              }
             ]
           },
           'prog-complize-001': {
@@ -201,6 +265,38 @@ const SubAppOverview: React.FC = () => {
                 label: 'View Projects',
                 icon: <Folder className="w-4 h-4" />,
                 action: 'view_projects'
+              }
+            ],
+            projects: [
+              {
+                projectId: 'COM-2025-003',
+                projectName: 'Regulatory Compliance Automation',
+                status: 'Active',
+                RAG: 'Amber',
+                priority: 'High',
+                owner: 'Emma Thompson',
+                startDate: '2025-01-01',
+                endDate: '2025-08-15',
+                completionPercentage: 60,
+                budget: 200000,
+                actualCost: 135000,
+                lastUpdated: new Date(Date.now() - 3 * 60 * 60 * 1000),
+                subAppContext: 'complize-platform'
+              },
+              {
+                projectId: 'COM-2024-018',
+                projectName: 'Audit Trail Enhancement',
+                status: 'On Hold',
+                RAG: 'Red',
+                priority: 'Medium',
+                owner: 'David Wilson',
+                startDate: '2024-10-01',
+                endDate: '2025-03-30',
+                completionPercentage: 35,
+                budget: 95000,
+                actualCost: 42000,
+                lastUpdated: new Date(Date.now() - 12 * 60 * 60 * 1000),
+                subAppContext: 'complize-platform'
               }
             ]
           },
@@ -248,6 +344,68 @@ const SubAppOverview: React.FC = () => {
                 label: 'View Projects',
                 icon: <Folder className="w-4 h-4" />,
                 action: 'view_projects'
+              }
+            ],
+            projects: [
+              {
+                projectId: 'VIS-2025-001',
+                projectName: 'Automated Visa Processing',
+                status: 'Active',
+                RAG: 'Green',
+                priority: 'High',
+                owner: 'Roberto Silva',
+                startDate: '2024-11-01',
+                endDate: '2025-05-30',
+                completionPercentage: 85,
+                budget: 180000,
+                actualCost: 142000,
+                lastUpdated: new Date(Date.now() - 1 * 60 * 60 * 1000),
+                subAppContext: 'visacalc-pro'
+              },
+              {
+                projectId: 'VIS-2025-002',
+                projectName: 'Document Management System',
+                status: 'Active',
+                RAG: 'Green',
+                priority: 'Medium',
+                owner: 'Anna Petrova',
+                startDate: '2025-01-15',
+                endDate: '2025-07-31',
+                completionPercentage: 45,
+                budget: 120000,
+                actualCost: 58000,
+                lastUpdated: new Date(Date.now() - 4 * 60 * 60 * 1000),
+                subAppContext: 'visacalc-pro'
+              },
+              {
+                projectId: 'VIS-2024-019',
+                projectName: 'Client Portal Enhancement',
+                status: 'Completed',
+                RAG: 'Green',
+                priority: 'Medium',
+                owner: 'Maria Lopez',
+                startDate: '2024-08-01',
+                endDate: '2024-12-31',
+                completionPercentage: 100,
+                budget: 75000,
+                actualCost: 71000,
+                lastUpdated: new Date(Date.now() - 7 * 60 * 60 * 1000),
+                subAppContext: 'visacalc-pro'
+              },
+              {
+                projectId: 'VIS-2025-003',
+                projectName: 'Mobile App Development',
+                status: 'Planning',
+                RAG: 'Amber',
+                priority: 'Low',
+                owner: 'James Chen',
+                startDate: '2025-04-01',
+                endDate: '2025-11-30',
+                completionPercentage: 10,
+                budget: 220000,
+                actualCost: 8000,
+                lastUpdated: new Date(Date.now() - 8 * 60 * 60 * 1000),
+                subAppContext: 'visacalc-pro'
               }
             ]
           }
@@ -338,6 +496,44 @@ const SubAppOverview: React.FC = () => {
       const diffDays = Math.floor(diffHours / 24);
       return `${diffDays} days ago`;
     }
+  };
+
+  const getProjectStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'active': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'completed': return 'bg-green-100 text-green-800 border-green-200';
+      case 'planning': return 'bg-purple-100 text-purple-800 border-purple-200';
+      case 'on hold': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'cancelled': return 'bg-red-100 text-red-800 border-red-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  const getProjectRAGColor = (rag: string) => {
+    switch (rag.toLowerCase()) {
+      case 'green': return 'bg-green-100 text-green-800 border-green-300';
+      case 'amber': return 'bg-amber-100 text-amber-800 border-amber-300';
+      case 'red': return 'bg-red-100 text-red-800 border-red-300';
+      default: return 'bg-gray-100 text-gray-800 border-gray-300';
+    }
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority.toLowerCase()) {
+      case 'high': return 'text-red-600 font-semibold';
+      case 'medium': return 'text-yellow-600 font-medium';
+      case 'low': return 'text-green-600';
+      default: return 'text-gray-600';
+    }
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
   };
 
   if (isLoading) {
@@ -516,6 +712,140 @@ const SubAppOverview: React.FC = () => {
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Projects Overview */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6 mt-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+              <Folder className="w-5 h-5 text-blue-600" />
+              <span>Projects ({subAppInfo.projects.length})</span>
+            </h2>
+            <button
+              onClick={() => navigate(`/orbis/sub-apps/${subAppId}/projects`)}
+              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            >
+              View All Projects →
+            </button>
+          </div>
+
+          {/* Project Status Summary */}
+          {subAppInfo.projects.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+              <div className="text-center">
+                <div className="text-lg font-semibold text-blue-600">
+                  {subAppInfo.projects.filter(p => p.status?.toLowerCase() === 'active').length}
+                </div>
+                <div className="text-xs text-gray-600">Active</div>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-semibold text-green-600">
+                  {subAppInfo.projects.filter(p => p.status?.toLowerCase() === 'completed').length}
+                </div>
+                <div className="text-xs text-gray-600">Completed</div>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-semibold text-red-600">
+                  {subAppInfo.projects.filter(p => p.RAG?.toLowerCase() === 'red').length}
+                </div>
+                <div className="text-xs text-gray-600">At Risk</div>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-semibold text-gray-900">
+                  {Math.round(subAppInfo.projects.reduce((acc, p) => acc + p.completionPercentage, 0) / subAppInfo.projects.length)}%
+                </div>
+                <div className="text-xs text-gray-600">Avg Progress</div>
+              </div>
+            </div>
+          )}
+
+          {subAppInfo.projects.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              <Folder className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <p>No projects found for this sub-app.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {subAppInfo.projects.map((project) => (
+                <div key={project.projectId} className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-50">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1 min-w-0">
+                      <Link
+                        to={`/orbis/sub-apps/${subAppId}/projects/${project.projectId}`}
+                        className="text-sm font-semibold text-gray-900 hover:text-blue-600 block truncate"
+                      >
+                        {project.projectName}
+                      </Link>
+                      <p className="text-xs text-gray-500 mt-1">{project.projectId}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2 mb-3">
+                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${
+                      getProjectStatusColor(project.status)
+                    }`}>
+                      {project.status}
+                    </span>
+                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${
+                      getProjectRAGColor(project.RAG)
+                    }`}>
+                      {project.RAG}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2 text-xs text-gray-600">
+                    <div className="flex items-center justify-between">
+                      <span>Owner:</span>
+                      <span className="font-medium">{project.owner}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Priority:</span>
+                      <span className={getPriorityColor(project.priority)}>{project.priority}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Progress:</span>
+                      <span className="font-medium">{project.completionPercentage}%</span>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${project.completionPercentage}%` }}
+                      ></div>
+                    </div>
+
+                    {project.budget && project.actualCost && (
+                      <div className="flex items-center justify-between">
+                        <span>Budget:</span>
+                        <span className="font-medium">
+                          {formatCurrency(project.actualCost)} / {formatCurrency(project.budget)}
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between">
+                      <span>Updated:</span>
+                      <span>{formatRelativeTime(project.lastUpdated)}</span>
+                    </div>
+                  </div>
+
+                  {/* Quick Actions */}
+                  <div className="mt-3 pt-3 border-t border-gray-200 flex items-center justify-between">
+                    <Link
+                      to={`/orbis/sub-apps/${subAppId}/projects/${project.projectId}/plan`}
+                      className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                      View Details
+                    </Link>
+                    <span className="text-xs text-gray-400">
+                      {project.endDate ? new Date(project.endDate).toLocaleDateString() : 'No end date'}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

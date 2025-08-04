@@ -548,3 +548,5 @@ What type of document would you like me to help you create?`;
     </div>
   );
 };
+
+export default DocumentSurface;

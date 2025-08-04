@@ -1,0 +1,34 @@
+{
+  "anchor_id": "wt-ux-bug-sidebar-primitive",
+  "governance_log": "WT-SB3.1-BUGFIX-PRIMITIVE-TYPE-BRANCH",
+  "created_at": "2025-08-04T10:50:00Z",
+  "branch": "bugfix/sidebar-3.1-primitive-error",
+  "error_details": {
+    "type": "TypeError: Cannot convert object to primitive value",
+    "location": "Enhanced Sidebar v3.1",
+    "stack_trace": [
+      "at String (<anonymous>)",
+      "at .../chunk-YHPANKLD.js:133:22", 
+      "at Array.map (<anonymous>)",
+      "at printWarning (...)",
+      "at lazyInitializer (...)"
+    ],
+    "symptoms": [
+      "Sidebar crashes with generic 'Something went wrong' message",
+      "Refresh does not resolve", 
+      "CC manual debugging failed"
+    ]
+  },
+  "investigation_targets": [
+    "src/components/layout/EnhancedSidebarV3.tsx",
+    "src/components/operational/SubAppOverview.tsx", 
+    "src/hooks/useOrbisAPI.ts",
+    "src/router/OrbisRouter.tsx"
+  ],
+  "suspected_patterns": [
+    "map() with key={object} instead of key={object.id}",
+    "React.lazy() or lazyInitializer misconfigurations",
+    "Props that are objects being coerced to string in JSX",
+    "Console.log statements passing objects directly"
+  ]
+}
