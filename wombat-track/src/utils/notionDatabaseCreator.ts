@@ -4,7 +4,7 @@ import type { CreateDatabaseParameters } from '@notionhq/client/build/src/api-en
 export interface DatabaseSchema {
   name: string;
   description?: string;
-  properties: Record<string, unknown>; // no-explicit-any fix
+  properties: Record<string, unknown>;
 }
 
 export class NotionDatabaseCreator {
@@ -54,10 +54,10 @@ export class NotionDatabaseCreator {
     }
   }
 
-  // Project Database Schema
+  // Project Database Schema - Updated for canonical format
   static getProjectSchema(): DatabaseSchema {
     return {
-      name: 'WT Projects',
+      name: 'wt-project-tracker', // Canonical name
       description: 'Wombat Track project registry and metadata',
       properties: {
         projectId: {
@@ -69,10 +69,32 @@ export class NotionDatabaseCreator {
         description: {
           rich_text: {},
         },
+        // New field: Goals (was 'Goals' in old schema)
+        goals: {
+          rich_text: {},
+        },
         owner: {
           rich_text: {},
         },
+        // Enhanced AI fields
         aiPromptLog: {
+          rich_text: {},
+        },
+        // New fields for WT-7.2 requirements
+        tooling: {
+          rich_text: {},
+        },
+        knownIssues: {
+          rich_text: {},
+        },
+        forwardGuidance: {
+          rich_text: {},
+        },
+        openQuestions: {
+          rich_text: {},
+        },
+        // Temporary field for phase links (will be relation later)
+        linkedPhaseIds: {
           rich_text: {},
         },
         status: {
@@ -82,7 +104,9 @@ export class NotionDatabaseCreator {
               { name: 'Active', color: 'green' },
               { name: 'On Hold', color: 'yellow' },
               { name: 'Completed', color: 'blue' },
+              { name: 'Complete', color: 'blue' }, // Support both variants
               { name: 'Archived', color: 'red' },
+              { name: 'Blocked', color: 'red' },
             ],
           },
         },
@@ -94,6 +118,8 @@ export class NotionDatabaseCreator {
               { name: 'Integration', color: 'green' },
               { name: 'Migration', color: 'orange' },
               { name: 'Testing', color: 'pink' },
+              { name: 'MemSync', color: 'purple' },
+              { name: 'Schema', color: 'gray' },
             ],
           },
         },
@@ -107,10 +133,10 @@ export class NotionDatabaseCreator {
     };
   }
 
-  // Phase Database Schema
+  // Phase Database Schema - Updated for canonical format
   static getPhaseSchema(projectDbId?: string): DatabaseSchema {
     const schema: DatabaseSchema = {
-      name: 'WT Phases',
+      name: 'wt-phase-tracker', // Canonical name
       description: 'Wombat Track phase planning and tracking',
       properties: {
         phaseId: {
@@ -122,13 +148,25 @@ export class NotionDatabaseCreator {
         description: {
           rich_text: {},
         },
+        // New fields for WT-7.2 requirements
+        goals: {
+          rich_text: {},
+        },
+        purpose: {
+          rich_text: {},
+        },
+        expectedOutcome: {
+          rich_text: {},
+        },
         status: {
           select: {
             options: [
               { name: 'Not Started', color: 'gray' },
               { name: 'In Progress', color: 'yellow' },
               { name: 'Completed', color: 'green' },
+              { name: 'Complete', color: 'green' }, // Support both variants
               { name: 'Blocked', color: 'red' },
+              { name: 'On Hold', color: 'orange' },
               { name: 'Review', color: 'purple' },
             ],
           },
@@ -197,7 +235,7 @@ export class NotionDatabaseCreator {
   // PhaseStep Database Schema
   static getPhaseStepSchema(projectDbId?: string): DatabaseSchema {
     const schema: DatabaseSchema = {
-      name: 'WT Phase Steps',
+      name: 'wt-phase-steps', // Canonical name
       description: 'Detailed step-by-step instructions for each phase',
       properties: {
         phaseStepId: {
@@ -244,7 +282,7 @@ export class NotionDatabaseCreator {
   // Enhanced Governance Log Schema with RAG support
   static getEnhancedGovernanceSchema(phaseStepDbId?: string): DatabaseSchema {
     const schema: DatabaseSchema = {
-      name: 'WT Governance Log (Enhanced)',
+      name: 'wt-governance-log', // Canonical name
       description: 'Enhanced governance log with RAG status and semantic memory support',
       properties: {
         'Event ID': {
@@ -333,246 +371,69 @@ export class NotionDatabaseCreator {
     return schema;
   }
 
-  // Backfill Task Tracker Database Schema
-  static getBackfillTaskTrackerSchema(phaseDbId?: string): DatabaseSchema {
-    const schema: DatabaseSchema = {
-      name: 'wt-backfill-task-tracker',
-      description: 'Track data reconciliation and governance backfill tasks for WT-8.0.3',
-      properties: {
-        taskTitle: {
-          title: {},
-        },
-        databaseName: {
-          select: {
-            options: [
-              { name: 'wt-project-tracker', color: 'blue' },
-              { name: 'wt-claude-gizmo-comm', color: 'green' },
-              { name: 'wt-tech-debt-register', color: 'orange' },
-              { name: 'wt-schema-sync-report', color: 'purple' },
-              { name: 'Multiple Databases', color: 'gray' },
-            ],
-          },
-        },
-        issueType: {
-          select: {
-            options: [
-              { name: 'Missing Field', color: 'red' },
-              { name: 'Orphaned Entry', color: 'yellow' },
-              { name: 'Relationship Mismatch', color: 'orange' },
-              { name: 'Invalid Value', color: 'pink' },
-              { name: 'Data Quality', color: 'blue' },
-            ],
-          },
-        },
-        priority: {
-          select: {
-            options: [
-              { name: 'High', color: 'red' },
-              { name: 'Medium', color: 'yellow' },
-              { name: 'Low', color: 'green' },
-            ],
-          },
-        },
-        category: {
-          select: {
-            options: [
-              { name: 'Data Quality', color: 'blue' },
-              { name: 'Relationships', color: 'green' },
-              { name: 'Governance', color: 'purple' },
-              { name: 'Migration', color: 'orange' },
-            ],
-          },
-        },
-        status: {
-          select: {
-            options: [
-              { name: 'Open', color: 'red' },
-              { name: 'In Progress', color: 'yellow' },
-              { name: 'Resolved', color: 'green' },
-              { name: 'Deferred', color: 'gray' },
-              { name: 'Blocked', color: 'purple' },
-            ],
-          },
-        },
-        assignee: {
-          rich_text: {},
-        },
-        estimatedEffort: {
-          select: {
-            options: [
-              { name: '<30min', color: 'green' },
-              { name: '1-2 hours', color: 'yellow' },
-              { name: '1+ days', color: 'red' },
-              { name: 'Automated', color: 'blue' },
-            ],
-          },
-        },
-        recordsAffected: {
-          number: {},
-        },
-        suggestedFix: {
-          rich_text: {},
-        },
-        notes: {
-          rich_text: {},
-        },
-        createdAt: {
-          created_time: {},
-        },
-        updatedAt: {
-          last_edited_time: {},
-        },
-      },
-    };
-
-    // Add relation if phaseDbId is provided
-    if (phaseDbId) {
-      schema.properties.linkedPhase = {
-        relation: {
-          database_id: phaseDbId,
-          type: 'single_select',
-        },
-      };
-    } else {
-      schema.properties.linkedPhase = {
-        rich_text: {},
-      };
-    }
-
-    return schema;
-  }
-
-  // Schema Sync Report Database Schema  
-  static getSchemaSyncReportSchema(phaseDbId?: string): DatabaseSchema {
-    const schema: DatabaseSchema = {
-      name: 'wt-schema-sync-report',
-      description: 'Schema synchronization tracking and issue management for oApp migration',
-      properties: {
-        tableName: {
-          title: {},
-        },
-        fieldName: {
-          rich_text: {},
-        },
-        issueType: {
-          select: {
-            options: [
-              { name: 'Missing', color: 'red' },
-              { name: 'Renamed', color: 'yellow' },
-              { name: 'Deprecated', color: 'gray' },
-              { name: 'Type Mismatch', color: 'orange' },
-              { name: 'Extra Field', color: 'blue' },
-            ],
-          },
-        },
-        resolution: {
-          select: {
-            options: [
-              { name: 'Map', color: 'blue' },
-              { name: 'Add', color: 'green' },
-              { name: 'Ignore', color: 'gray' },
-              { name: 'Deprecate', color: 'red' },
-            ],
-          },
-        },
-        canonicalSource: {
-          rich_text: {},
-        },
-        status: {
-          select: {
-            options: [
-              { name: 'Open', color: 'red' },
-              { name: 'In Progress', color: 'yellow' },
-              { name: 'Resolved', color: 'green' },
-              { name: 'Deferred', color: 'gray' },
-            ],
-          },
-        },
-        notes: {
-          rich_text: {},
-        },
-        createdAt: {
-          created_time: {},
-        },
-        updatedAt: {
-          last_edited_time: {},
-        },
-      },
-    };
-
-    // Add relation if phaseDbId is provided
-    if (phaseDbId) {
-      schema.properties.linkedPhase = {
-        relation: {
-          database_id: phaseDbId,
-          type: 'single_select',
-        },
-      };
-    } else {
-      // Fallback to text field
-      schema.properties.linkedPhase = {
-        rich_text: {},
-      };
-    }
-
-    return schema;
-  }
-
-  // Tech Debt Register Database Schema
-  static getTechDebtRegisterSchema(phaseDbId?: string): DatabaseSchema {
-    const schema: DatabaseSchema = {
-      name: 'wt-tech-debt-register',
-      description: 'Central registry for active technical debt, lint violations, and code quality issues',
+  // Recovery Log Database Schema - New for WT-7.2
+  static getRecoveryLogSchema(): DatabaseSchema {
+    return {
+      name: 'wt-recovery-log', // Canonical name
+      description: 'Recovery log for incomplete or dropped artefacts from Wombat Tracks chat archive',
       properties: {
         title: {
           title: {},
         },
-        category: {
-          select: {
-            options: [
-              { name: 'Lint', color: 'yellow' },
-              { name: 'Dead Code', color: 'red' },
-              { name: 'Structural', color: 'blue' },
-              { name: 'Design Debt', color: 'purple' },
-              { name: 'Legacy', color: 'gray' },
-            ],
-          },
+        chatTimestamp: {
+          date: {},
         },
-        priority: {
-          select: {
-            options: [
-              { name: 'High', color: 'red' },
-              { name: 'Medium', color: 'yellow' },
-              { name: 'Low', color: 'green' },
-            ],
-          },
-        },
-        originFile: {
+        chatTitle: {
           rich_text: {},
         },
-        lineReference: {
+        artefactType: {
+          select: {
+            options: [
+              { name: 'Project', color: 'blue' },
+              { name: 'Phase', color: 'green' },
+              { name: 'Feature', color: 'purple' },
+              { name: 'SideQuest', color: 'pink' },
+              { name: 'Document', color: 'gray' },
+              { name: 'Configuration', color: 'orange' },
+              { name: 'Other', color: 'default' },
+            ],
+          },
+        },
+        summary: {
           rich_text: {},
         },
         status: {
           select: {
             options: [
-              { name: 'Open', color: 'red' },
-              { name: 'Suppressed', color: 'yellow' },
-              { name: 'Fixed', color: 'green' },
-              { name: 'Deferred', color: 'gray' },
+              { name: 'Cancelled', color: 'red' },
+              { name: 'Missing', color: 'orange' },
+              { name: 'Incomplete', color: 'yellow' },
+              { name: 'Unlogged', color: 'gray' },
+              { name: 'Complete', color: 'green' },
+              { name: 'Pending Validation', color: 'purple' },
             ],
           },
         },
-        effortEstimate: {
+        suggestedName: {
           rich_text: {},
         },
-        linkedPR: {
-          url: {},
+        recoveryAction: {
+          select: {
+            options: [
+              { name: 'Log', color: 'blue' },
+              { name: 'Ignore', color: 'gray' },
+              { name: 'Rebuild', color: 'orange' },
+              { name: 'Archive', color: 'red' },
+            ],
+          },
         },
         notes: {
           rich_text: {},
         },
-        canonicalUse: {
+        linkedCanonicalEntry: {
+          rich_text: {}, // Will store reference to existing entries
+        },
+        validationRequired: {
           checkbox: {},
         },
         createdAt: {
@@ -583,23 +444,6 @@ export class NotionDatabaseCreator {
         },
       },
     };
-
-    // Add relation if phaseDbId is provided
-    if (phaseDbId) {
-      schema.properties.linkedPhase = {
-        relation: {
-          database_id: phaseDbId,
-          type: 'single_select',
-        },
-      };
-    } else {
-      // Fallback to text field
-      schema.properties.linkedPhase = {
-        rich_text: {},
-      };
-    }
-
-    return schema;
   }
 }
 
@@ -612,10 +456,11 @@ export async function createWombatTrackDatabases(
   phaseDb?: { id: string; url: string };
   phaseStepDb?: { id: string; url: string };
   governanceDb?: { id: string; url: string };
+  recoveryLogDb?: { id: string; url: string };
   errors: string[];
 }> {
   const creator = new NotionDatabaseCreator(token, parentPageId);
-  const results: Record<string, unknown> = {}; // no-explicit-any fix
+  const results: Record<string, unknown> = {};
   const errors: string[] = [];
 
   // Create Project Database
@@ -682,6 +527,21 @@ export async function createWombatTrackDatabases(
     } else {
       errors.push(`Governance DB: ${govResult.error}`);
     }
+  }
+
+  // Create Recovery Log Database (new for WT-7.2)
+  console.log('📊 Creating Recovery Log database...');
+  const recoveryResult = await creator.createDatabase(
+    NotionDatabaseCreator.getRecoveryLogSchema()
+  );
+  if (recoveryResult.success) {
+    results.recoveryLogDb = {
+      id: recoveryResult.databaseId!,
+      url: recoveryResult.url!,
+    };
+    console.log(`✅ Recovery Log database created: ${recoveryResult.databaseId}`);
+  } else {
+    errors.push(`Recovery Log DB: ${recoveryResult.error}`);
   }
 
   results.errors = errors;

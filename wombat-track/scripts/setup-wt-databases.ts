@@ -137,6 +137,12 @@ async function setupDatabases() {
       console.log(`   URL: ${results.governanceDb.url}`);
     }
 
+    if (results.recoveryLogDb) {
+      console.log('\n📊 Recovery Log Database:');
+      console.log(`   ID: ${results.recoveryLogDb.id}`);
+      console.log(`   URL: ${results.recoveryLogDb.url}`);
+    }
+
     if (results.errors.length > 0) {
       console.log('\n⚠️  Errors encountered:');
       results.errors.forEach(error => console.log(`   - ${error}`));
@@ -147,14 +153,23 @@ async function setupDatabases() {
     
     const envContent = `# Wombat Track Notion Database IDs
 # Generated on ${new Date().toISOString()}
+# Updated for canonical naming (WT-7.2)
 
 NOTION_WT_PROJECT_DB_ID=${results.projectDb?.id || ''}
 NOTION_WT_PHASE_DB_ID=${results.phaseDb?.id || ''}
 NOTION_WT_PHASE_STEP_DB_ID=${results.phaseStepDb?.id || ''}
 NOTION_WT_GOVERNANCE_DB_ID=${results.governanceDb?.id || ''}
+NOTION_WT_RECOVERY_LOG_DB_ID=${results.recoveryLogDb?.id || ''}
 
 # Parent Page ID
 NOTION_WT_PARENT_PAGE_ID=${parentPageId}
+
+# Canonical database names
+# wt-project-tracker
+# wt-phase-tracker
+# wt-phase-steps
+# wt-governance-log
+# wt-recovery-log
 `;
 
     await import('fs/promises').then(fs => 
