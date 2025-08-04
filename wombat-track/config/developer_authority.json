@@ -1,0 +1,16 @@
+{
+  "claude_code_authority": {
+    "create_branches": true,
+    "push_to_github": true,
+    "create_governance_logs": true,
+    "create_memory_anchors": true,
+    "trigger_import_endpoints": true,
+    "activate_agents": true
+  },
+  "limits": {
+    "main_merge_requires_qa": true,
+    "main_merge_requires_governance": true,
+    "no_delete_without_approval": true
+  },
+  "last_updated": "2025-08-04T19:00:00+10:00"
+}

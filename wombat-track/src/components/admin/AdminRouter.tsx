@@ -5,10 +5,11 @@ import ImportExport from '../../pages/admin/ImportExport';
 import RuntimeStatus from '../../pages/admin/RuntimeStatus';
 import DataIntegrity from '../../pages/admin/DataIntegrity';
 import { SecretsManager } from './SecretsManager';
+import { GizmoSecretsWizard } from './SecretsWizard';
 import SDLCDashboard from './SDLCDashboard';
 import { Shield } from 'lucide-react';
 
-export type AdminRoute = 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager' | 'sdlc-dashboard';
+export type AdminRoute = 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager' | 'gizmo-wizard' | 'sdlc-dashboard';
 
 interface AdminRouterProps {
   currentRoute: AdminRoute;
@@ -58,6 +59,8 @@ export const AdminRouter: React.FC<AdminRouterProps> = ({ currentRoute }) => {
       return <RuntimeStatus />;
     case 'secrets-manager':
       return <SecretsManager />;
+    case 'gizmo-wizard':
+      return <GizmoSecretsWizard onComplete={(sessionId) => console.log('Wizard completed:', sessionId)} />;
     case 'sdlc-dashboard':
       return <SDLCDashboard />;
     default:

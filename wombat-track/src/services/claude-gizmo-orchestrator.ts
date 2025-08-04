@@ -14,6 +14,7 @@ import {
   MCPGsuiteResponse
 } from '../types/mcp-gsuite';
 import { mcpGsuiteGovernance } from './mcp-gsuite-governance';
+import { authorityService, AuthorityService } from './authority-service';
 
 export class ClaudeGizmoOrchestrator extends EventEmitter {
   private readonly baseUrl: string;
@@ -232,9 +233,17 @@ export class ClaudeGizmoOrchestrator extends EventEmitter {
     approved: boolean;
     reason?: string;
     estimatedDuration?: number;
+    autonomous?: boolean;
   }> {
     const actionId = this.generateExecutionId();
     
+    // Check authority for autonomous execution
+    const authorityCheck = authorityService.checkAuthority('activate_agents', {
+      agent,
+      user_id: options.userId,
+      risk_level: options.riskLevel
+    });
+
     const claudeGizmoAction: ClaudeGizmoAction = {
       type: 'mcp-gsuite-action',
       id: actionId,
@@ -245,10 +254,44 @@ export class ClaudeGizmoOrchestrator extends EventEmitter {
       rationale: options.rationale,
       confidenceLevel: options.confidenceLevel,
       riskLevel: options.riskLevel,
-      requiresApproval: options.riskLevel === 'high' || options.confidenceLevel < 0.7
+      requiresApproval: !authorityCheck.authorized || options.riskLevel === 'high' || options.confidenceLevel < 0.7
     };
 
-    // Validate the action
+    // If authorized for autonomous execution, skip manual validation
+    if (authorityCheck.authorized && !claudeGizmoAction.requiresApproval) {
+      console.log(`🤖 Claude-Gizmo Orchestrator: Autonomous execution authorized for ${agent} - ${prompt}`);
+      
+      // Create execution plan
+      const executionPlan: AgentExecutionPlan = {
+        id: actionId,
+        agent,
+        actions: [claudeGizmoAction],
+        dependencies: [],
+        executionOrder: [0],
+        approvalRequired: false,
+        estimatedDuration: this.estimateExecutionTime(action)
+      };
+
+      // Add to queue for immediate execution
+      this.executionQueue.push(executionPlan);
+
+      this.emit('actionAutonomouslyApproved', {
+        actionId,
+        agent,
+        action: claudeGizmoAction,
+        executionPlan,
+        authorityCheck
+      });
+
+      return {
+        actionId,
+        approved: true,
+        autonomous: true,
+        estimatedDuration: executionPlan.estimatedDuration
+      };
+    }
+
+    // Validate the action (manual approval path)
     const validation = await this.validateAction(claudeGizmoAction, options.userId);
     
     if (!validation.valid) {
@@ -262,7 +305,8 @@ export class ClaudeGizmoOrchestrator extends EventEmitter {
       return {
         actionId,
         approved: false,
-        reason: validation.reason
+        reason: validation.reason,
+        autonomous: false
       };
     }
 
@@ -290,6 +334,7 @@ export class ClaudeGizmoOrchestrator extends EventEmitter {
     return {
       actionId,
       approved: true,
+      autonomous: false,
       estimatedDuration: executionPlan.estimatedDuration
     };
   }

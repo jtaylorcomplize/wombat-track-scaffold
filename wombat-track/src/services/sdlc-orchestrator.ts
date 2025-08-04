@@ -1,5 +1,6 @@
 import { getGizmoAgent, SDLCEvent } from '../server/agents/gizmo';
 import { GovernanceLogger } from './governance-logger';
+import { authorityService } from './authority-service';
 
 export interface GitHookEvent {
   event_type: 'push' | 'pull_request' | 'branch_created' | 'branch_deleted';
@@ -104,20 +105,40 @@ export class SDLCOrchestrator {
       return;
     }
 
-    const sdlcEvent: SDLCEvent = {
-      type: 'branch_created',
-      branch: event.branch,
-      timestamp: event.timestamp,
-      metadata: {
-        repository: event.repository,
-        author: event.author,
-        commit_sha: event.commit_sha,
-        trigger: 'git_hook'
-      }
-    };
+    // Use authority service for autonomous branch creation handling
+    const result = await authorityService.executeAutonomousAction(
+      'create_branches',
+      {
+        agent: 'gizmo',
+        branch: event.branch,
+        user_id: event.author,
+        risk_level: 'low',
+        description: `Branch created: ${event.branch} by ${event.author}`
+      },
+      async () => {
+        const sdlcEvent: SDLCEvent = {
+          type: 'branch_created',
+          branch: event.branch,
+          timestamp: event.timestamp,
+          metadata: {
+            repository: event.repository,
+            author: event.author,
+            commit_sha: event.commit_sha,
+            trigger: 'git_hook',
+            autonomous: true
+          }
+        };
 
-    this.gizmoAgent.emit(sdlcEvent);
-    console.log(`🚀 SDLC Orchestrator: Branch created event emitted for ${event.branch}`);
+        this.gizmoAgent.emit(sdlcEvent);
+        return sdlcEvent;
+      }
+    );
+
+    if (result.success) {
+      console.log(`🤖 SDLC Orchestrator: Branch created event autonomously processed for ${event.branch}`);
+    } else {
+      console.log(`🚫 SDLC Orchestrator: Branch creation requires manual approval - ${result.error}`);
+    }
   }
 
   private async handlePushEvent(event: GitHookEvent): Promise<void> {

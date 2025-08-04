@@ -4,6 +4,7 @@ import * as governanceLog from './governance-log';
 import * as memoryAnchor from './memory-anchor';
 import * as ciStatus from './ci-status';
 import * as webhooks from './webhooks';
+import * as activityFeed from './activity-feed';
 
 const router = Router();
 
@@ -47,5 +48,11 @@ router.post('/ci/trigger-build', webhooks.triggerCIBuild);
 router.get('/merge-readiness/:branch', webhooks.checkMergeReadiness);
 router.get('/orchestrator/status', webhooks.getOrchestratorStatus);
 router.post('/orchestrator/active', webhooks.setOrchestratorActive);
+
+// Activity Feed routes (Authority Delegation Protocol)
+router.get('/activity-feed', activityFeed.getActivityFeed);
+router.get('/authority/status', activityFeed.getAuthorityStatus);
+router.post('/authority/reload', activityFeed.reloadAuthorityConfig);
+router.get('/activity/stats', activityFeed.getActivityStats);
 
 export default router;
