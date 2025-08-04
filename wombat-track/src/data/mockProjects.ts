@@ -1,6 +1,6 @@
 // wombat-track/src/data/mockProjects.ts
 
-import { Project, PhaseStep } from '../types/models';
+import type { Project, PhaseStep } from '../types/models';
 
 // Mock phase steps for testing
 const mockPhaseSteps: PhaseStep[] = [

@@ -1,6 +1,6 @@
 // wombat-track/src/data/mockPrograms.ts
 
-import { Program } from '../types/models';
+import type { Program } from '../types/models';
 
 export const mockPrograms: Program[] = [
   {
