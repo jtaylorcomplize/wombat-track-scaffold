@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { GovernanceLogger } from '../../../services/governance-logger.ts';
-import { getGizmoAgent } from '../../agents/gizmo.ts';
+import { GovernanceLogger } from '../../../services/governance-logger';
+import { getGizmoAgent } from '../../agents/gizmo';
 
 const governanceLogger = GovernanceLogger.getInstance();
 const gizmoAgent = getGizmoAgent();

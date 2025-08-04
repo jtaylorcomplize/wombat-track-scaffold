@@ -1,5 +1,5 @@
-import { Agent, AgentStatus, AgentCapability } from '../../types/agent.ts';
-import { GovernanceLogger } from '../../services/governance-logger.ts';
+import { Agent, AgentStatus, AgentCapability } from '../../types/agent';
+import { GovernanceLogger } from '../../services/governance-logger';
 
 export interface SDLCPhaseStep {
   id: string;
@@ -390,35 +390,22 @@ export class GizmoAgent implements Agent {
     this.phaseSteps.set(memoryStepId, memoryStep);
 
     try {
-      // Simulate memory anchor creation - would integrate with actual MemoryPlugin
-      const anchorData = {
-        branch: branch,
-        timestamp: timestamp,
-        sdlc_validation: await this.validateMergeReadiness(branch),
-        phase_steps: Array.from(this.phaseSteps.values()).filter(step => step.branch === branch)
-      };
+      // Use MemoryPlugin integration for proper memory anchor creation
+      const { memoryPluginIntegration } = await import('../../services/memory-plugin-integration');
+      
+      const anchorId = await memoryPluginIntegration.createMemoryAnchor(branch, {
+        commit_sha: 'merge_trigger',
+        triggered_by: 'gizmo_agent',
+        timestamp: timestamp
+      });
 
       // Update memory step status
       memoryStep.status = 'completed';
+      memoryStep.memory_anchor!.anchor_id = anchorId;
       memoryStep.memory_anchor!.status = 'created';
       memoryStep.updated_at = new Date().toISOString();
 
-      console.log(`🔗 Gizmo: Memory anchor created for ${branch}`, anchorData);
-
-      this.governanceLogger.log({
-        event_type: 'sdlc_memory_anchor',
-        user_id: 'system',
-        user_role: 'agent',
-        resource_type: 'dashboard',
-        resource_id: branch,
-        action: 'memory_anchor_created',
-        success: true,
-        details: {
-          branch: branch,
-          anchor_id: memoryStep.memory_anchor!.anchor_id,
-          anchor_data: anchorData
-        }
-      });
+      console.log(`🔗 Gizmo: Memory anchor created for ${branch} via MemoryPlugin (${anchorId})`);
 
     } catch (error) {
       memoryStep.status = 'failed';

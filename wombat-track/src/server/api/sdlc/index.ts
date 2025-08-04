@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import * as phaseSteps from './phase-steps.ts';
-import * as governanceLog from './governance-log.ts';
-import * as memoryAnchor from './memory-anchor.ts';
-import * as ciStatus from './ci-status.ts';
-import * as webhooks from './webhooks.ts';
+import * as phaseSteps from './phase-steps';
+import * as governanceLog from './governance-log';
+import * as memoryAnchor from './memory-anchor';
+import * as ciStatus from './ci-status';
+import * as webhooks from './webhooks';
 
 const router = Router();
 

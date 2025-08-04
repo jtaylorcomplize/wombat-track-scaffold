@@ -6,7 +6,7 @@
 import express from 'express';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import sdlcRouter from './api/sdlc/index.ts';
+import sdlcRouter from './api/sdlc/index';
 
 const app = express();
 const PORT = process.env.API_PORT || 3001;

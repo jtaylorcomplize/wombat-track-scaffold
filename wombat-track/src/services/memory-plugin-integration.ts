@@ -1,5 +1,5 @@
-import { getGizmoAgent, SDLCPhaseStep } from '../server/agents/gizmo.ts';
-import { GovernanceLogger } from './governance-logger.ts';
+import { getGizmoAgent, SDLCPhaseStep } from '../server/agents/gizmo';
+import { GovernanceLogger } from './governance-logger';
 
 export interface MemoryAnchorPayload {
   branch: string;

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getGizmoAgent } from '../../agents/gizmo.ts';
+import { getGizmoAgent } from '../../agents/gizmo';
 
 const gizmoAgent = getGizmoAgent();
 

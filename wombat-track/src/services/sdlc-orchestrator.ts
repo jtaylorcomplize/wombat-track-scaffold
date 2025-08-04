@@ -1,5 +1,5 @@
-import { getGizmoAgent, SDLCEvent } from '../server/agents/gizmo.ts';
-import { GovernanceLogger } from './governance-logger.ts';
+import { getGizmoAgent, SDLCEvent } from '../server/agents/gizmo';
+import { GovernanceLogger } from './governance-logger';
 
 export interface GitHookEvent {
   event_type: 'push' | 'pull_request' | 'branch_created' | 'branch_deleted';
