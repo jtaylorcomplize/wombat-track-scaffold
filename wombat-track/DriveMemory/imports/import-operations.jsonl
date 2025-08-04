@@ -1,0 +1,1 @@
+{"timestamp":"2025-08-04T07:40:02.481Z","operation":"project-import","payloadHash":"7ba6c0ad11db63cbafafafac3406c7661042ea2232a92da713a400336ed199ae","recordCount":0,"status":"error","details":{},"submittedBy":"claude-code","errorMessage":"sqlite: driver is not defined"}

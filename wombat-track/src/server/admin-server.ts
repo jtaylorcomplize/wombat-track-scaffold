@@ -18,6 +18,7 @@ import mcpGsuiteRoutes from './api/mcp-gsuite';
 import secretsRoutes from './api/secrets';
 import adminDetailRoutes from './api/admin-detail';
 import adminEditRoutes from './api/admin-edit';
+import importRoutes from './api/import';
 import { getAllProjects, getSubApps, getSubAppRecentProjects, getRuntimeStatus, getProjectById } from './api/orbis';
 
 const app = express();
@@ -63,6 +64,10 @@ console.log('   ✓ /api/admin/csv/* - CSV/JSON import/export operations');
 // JSON operations routes
 app.use('/api/admin/json', jsonOperationsRoutes);
 console.log('   ✓ /api/admin/json/* - JSON import/export operations');
+
+// SDLC Import routes
+app.use('/api/admin/import', importRoutes);
+console.log('   ✓ /api/admin/import/* - SDLC canonical import operations');
 
 // Orphan detection and repair routes
 app.use('/api/admin/orphans', orphanRoutes);
