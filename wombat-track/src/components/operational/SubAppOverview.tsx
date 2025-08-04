@@ -281,24 +281,28 @@ const SubAppOverview: React.FC = () => {
   }, [subAppId]);
 
   const handleQuickAction = (action: string, url?: string) => {
-    switch (action) {
-      case 'launch_app':
-        if (url) {
-          window.open(url, '_blank');
-          governanceLogger.logSubAppLaunch(subAppId!, url, subAppInfo?.name || 'Unknown');
-        }
-        break;
-      case 'view_projects':
-        navigate(`/orbis/sub-apps/${subAppId}/projects`);
-        break;
-      case 'new_project':
-        // Would typically open a project creation modal
-        console.log('New project action');
-        break;
-      case 'settings':
-        // Would typically navigate to settings
-        console.log('Settings action');
-        break;
+    try {
+      switch (action) {
+        case 'launch_app':
+          if (url && subAppId && subAppInfo?.name) {
+            window.open(url, '_blank');
+            governanceLogger.logSubAppLaunch(subAppId, url, subAppInfo.name);
+          }
+          break;
+        case 'view_projects':
+          if (subAppId) {
+            navigate(`/orbis/sub-apps/${subAppId}/projects`);
+          }
+          break;
+        case 'new_project':
+          // Would typically open a project creation modal
+          break;
+        case 'settings':
+          // Would typically navigate to settings
+          break;
+      }
+    } catch (error) {
+      console.error('Error handling quick action:', error);
     }
   };
 
