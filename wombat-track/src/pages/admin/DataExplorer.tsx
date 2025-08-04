@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, ChevronLeft, ChevronRight, Database, FileText, Clock, Users, ExternalLink } from 'lucide-react';
+import { Search, Filter, ChevronLeft, ChevronRight, Database, FileText, Clock, Users, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface TableData {
@@ -11,6 +11,11 @@ interface TableMetadata {
   icon: React.ReactNode;
   description: string;
   recordCount: number;
+}
+
+interface SortConfig {
+  key: string | null;
+  direction: 'asc' | 'desc';
 }
 
 const TABLES: TableMetadata[] = [
@@ -27,6 +32,7 @@ export default function DataExplorer() {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ key: null, direction: 'asc' });
   
   const itemsPerPage = 20;
 
@@ -104,10 +110,39 @@ export default function DataExplorer() {
     return matchesSearch && matchesFilter;
   });
 
+  // Sorting logic
+  const sortedData = React.useMemo(() => {
+    if (!sortConfig.key) return filteredData;
+    
+    return [...filteredData].sort((a, b) => {
+      const aValue = a[sortConfig.key!];
+      const bValue = b[sortConfig.key!];
+      
+      // Handle null/undefined values
+      if (aValue === null || aValue === undefined) return 1;
+      if (bValue === null || bValue === undefined) return -1;
+      
+      // Compare values
+      let comparison = 0;
+      if (aValue < bValue) comparison = -1;
+      if (aValue > bValue) comparison = 1;
+      
+      return sortConfig.direction === 'asc' ? comparison : -comparison;
+    });
+  }, [filteredData, sortConfig]);
+
   // Pagination
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = sortedData.slice(startIndex, startIndex + itemsPerPage);
+
+  // Handle sorting
+  const handleSort = (key: string) => {
+    setSortConfig(prevConfig => ({
+      key,
+      direction: prevConfig.key === key && prevConfig.direction === 'asc' ? 'desc' : 'asc'
+    }));
+  };
 
   // Get table columns dynamically with null safety
   const getTableColumns = (data: TableData[]) => {
@@ -204,7 +239,7 @@ export default function DataExplorer() {
             </div>
           </div>
           <div className="text-sm text-gray-600">
-            Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredData.length)} of {filteredData.length} records
+            Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, sortedData.length)} of {sortedData.length} records
           </div>
         </div>
       </div>
@@ -245,9 +280,21 @@ export default function DataExplorer() {
                   {columns.map((column) => (
                     <th
                       key={column}
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSort(column)}
                     >
-                      {column.replace('_', ' ')}
+                      <div className="flex items-center space-x-1">
+                        <span>{column.replace('_', ' ')}</span>
+                        {sortConfig.key === column ? (
+                          sortConfig.direction === 'asc' ? (
+                            <ArrowUp size={14} />
+                          ) : (
+                            <ArrowDown size={14} />
+                          )
+                        ) : (
+                          <ArrowUpDown size={14} className="text-gray-400" />
+                        )}
+                      </div>
                     </th>
                   ))}
                 </tr>
