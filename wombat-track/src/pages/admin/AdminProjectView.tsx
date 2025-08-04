@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, AlertCircle, CheckCircle, Clock, FileText, FolderOpen } from 'lucide-react';
+import { ArrowLeft, AlertCircle, CheckCircle, Clock, FileText, FolderOpen, Edit3 } from 'lucide-react';
 
 interface Project {
   projectId: string;
@@ -156,15 +156,24 @@ export default function AdminProjectView() {
             <h1 className="text-3xl font-bold text-gray-900">{project.projectName}</h1>
             <p className="text-gray-600 mt-1">Project ID: {project.projectId}</p>
           </div>
-          <div className="flex space-x-2">
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(project.status)}`}>
-              {project.status || 'Unknown'}
-            </span>
-            {project.RAG && (
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${getRagColor(project.RAG)}`}>
-                RAG: {project.RAG}
+          <div className="flex items-center space-x-3">
+            <Link
+              to={`/orbis/admin/projects/${project.projectId}/edit`}
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              <Edit3 size={16} />
+              <span>Edit Project</span>
+            </Link>
+            <div className="flex space-x-2">
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(project.status)}`}>
+                {project.status || 'Unknown'}
               </span>
-            )}
+              {project.RAG && (
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getRagColor(project.RAG)}`}>
+                  RAG: {project.RAG}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

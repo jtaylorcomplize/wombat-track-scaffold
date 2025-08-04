@@ -18,9 +18,9 @@ interface SortConfig {
   direction: 'asc' | 'desc';
 }
 
-const TABLES: TableMetadata[] = [
-  { name: 'projects', icon: <FileText size={20} />, description: 'Project records (19 canonical properties)', recordCount: 3 },
-  { name: 'phases', icon: <Clock size={20} />, description: 'Phase definitions (10 canonical properties)', recordCount: 6 },
+const INITIAL_TABLES: TableMetadata[] = [
+  { name: 'projects', icon: <FileText size={20} />, description: 'Project records (19 canonical properties)', recordCount: 0 },
+  { name: 'phases', icon: <Clock size={20} />, description: 'Phase definitions (10 canonical properties)', recordCount: 0 },
   { name: 'governance_logs', icon: <Database size={20} />, description: 'Audit and governance entries', recordCount: 0 },
   { name: 'step_progress', icon: <Users size={20} />, description: 'Step progress tracking', recordCount: 0 }
 ];
@@ -33,8 +33,36 @@ export default function DataExplorer() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: null, direction: 'asc' });
+  const [tableCounts, setTableCounts] = useState<Record<string, number>>({});
   
   const itemsPerPage = 20;
+
+  // Fetch all table counts on mount
+  useEffect(() => {
+    const fetchAllTableCounts = async () => {
+      const counts: Record<string, number> = {};
+      
+      for (const table of INITIAL_TABLES) {
+        try {
+          const response = await fetch(`/api/admin/live/${table.name}`);
+          if (response.ok) {
+            const data = await response.json();
+            const recordArray = Array.isArray(data) ? data : 
+                              Array.isArray(data.data) ? data.data : 
+                              Array.isArray(data.rows) ? data.rows : [];
+            counts[table.name] = recordArray.length;
+          }
+        } catch (error) {
+          console.error(`Error fetching count for ${table.name}:`, error);
+          counts[table.name] = 0;
+        }
+      }
+      
+      setTableCounts(counts);
+    };
+    
+    fetchAllTableCounts();
+  }, []);
 
   // Fetch table data from API
   useEffect(() => {
@@ -173,7 +201,7 @@ export default function DataExplorer() {
       <div className="bg-white rounded-lg shadow-sm border p-6">
         <h2 className="text-lg font-semibold mb-4">Select Table</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {TABLES.map((table) => (
+          {INITIAL_TABLES.map((table) => (
             <button
               key={table.name}
               onClick={() => {
@@ -194,7 +222,7 @@ export default function DataExplorer() {
                 </div>
                 <div className="text-left">
                   <div className="font-medium capitalize">{table.name.replace('_', ' ')}</div>
-                  <div className="text-sm text-gray-500">{table.recordCount} records</div>
+                  <div className="text-sm text-gray-500">{tableCounts[table.name] || 0} records</div>
                 </div>
               </div>
               <p className="text-sm text-gray-600 mt-2">{table.description}</p>
