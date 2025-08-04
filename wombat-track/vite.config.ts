@@ -21,6 +21,20 @@ export default defineConfig({
         secure: false,
         ws: true
       },
+      // Proxy orbis API calls to admin server
+      '/api/orbis': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+        secure: false,
+        ws: true
+      },
+      // Proxy MCP API calls to admin server
+      '/api/mcp': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+        secure: false,
+        ws: true
+      },
       // Proxy other API calls to main backend
       '/api': {
         target: 'http://localhost:3001',
