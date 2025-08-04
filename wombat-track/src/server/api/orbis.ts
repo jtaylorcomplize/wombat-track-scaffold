@@ -171,8 +171,8 @@ const mockProjects: Project[] = [
     startDate: '2024-03-01',
     endDate: '2025-02-28',
     lastUpdated: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-    subAppId: 'prog-visacalc-001',
-    subAppName: 'VisaCalc Pro',
+    subAppId: 'prog-roam-001',
+    subAppName: 'Roam',
     budget: {
       allocated: 750000,
       spent: 637500
@@ -191,8 +191,8 @@ const mockProjects: Project[] = [
     startDate: '2024-04-01',
     endDate: '2025-03-31',
     lastUpdated: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-    subAppId: 'prog-visacalc-001',
-    subAppName: 'VisaCalc Pro',
+    subAppId: 'prog-roam-001',
+    subAppName: 'Roam',
     budget: {
       allocated: 540000,
       spent: 378000
@@ -211,8 +211,8 @@ const mockProjects: Project[] = [
     startDate: '2024-08-01',
     endDate: '2025-12-31',
     lastUpdated: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
-    subAppId: 'prog-visacalc-001',
-    subAppName: 'VisaCalc Pro',
+    subAppId: 'prog-roam-001',
+    subAppName: 'Roam',
     budget: {
       allocated: 850000,
       spent: 255000
@@ -231,8 +231,8 @@ const mockProjects: Project[] = [
     startDate: '2024-07-01',
     endDate: '2025-06-30',
     lastUpdated: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
-    subAppId: 'prog-visacalc-001',
-    subAppName: 'VisaCalc Pro',
+    subAppId: 'prog-roam-001',
+    subAppName: 'Roam',
     budget: {
       allocated: 420000,
       spent: 84000
@@ -245,7 +245,7 @@ const mockSubApps: SubApp[] = [
   {
     id: 'prog-orbis-001',
     name: 'Orbis Intelligence',
-    description: 'Advanced analytics and business intelligence platform for market research and competitive analysis',
+    description: 'Core program for recursive AI-native development and Sub-App orchestration; 3D printer engine for SDLC and governance.',
     version: 'v2.1.3',
     status: 'active',
     launchUrl: 'https://orbis.intelligence.app',
@@ -261,7 +261,7 @@ const mockSubApps: SubApp[] = [
   {
     id: 'prog-complize-001',
     name: 'Complize Platform',
-    description: 'Comprehensive compliance management and regulatory tracking system',
+    description: 'Compliance suite Sub-App; includes Visa Management, Knowledge Base, and RAG/Compliance Tracker modules.',
     version: 'v1.8.2',
     status: 'warning',
     launchUrl: 'https://complize.platform.app',
@@ -275,12 +275,12 @@ const mockSubApps: SubApp[] = [
     }
   },
   {
-    id: 'prog-visacalc-001',
-    name: 'VisaCalc Pro',
-    description: 'Advanced visa processing and immigration document management system',
-    version: 'v3.0.1',
+    id: 'prog-roam-001',
+    name: 'Roam',
+    description: 'Formerly VisaCalcPro; business migration planning and visa calculation tool.',
+    version: 'v4.2.0',
     status: 'active',
-    launchUrl: 'https://visacalc.pro.app',
+    launchUrl: 'https://roam.complize.com',
     lastUpdated: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
     metrics: {
       totalProjects: 4,
@@ -292,8 +292,8 @@ const mockSubApps: SubApp[] = [
   },
   {
     id: 'prog-spqr-001',
-    name: 'SPQR Runtime',
-    description: 'Strategic project query and reporting runtime environment',
+    name: 'SPQR',
+    description: 'Sub-App for reporting and Looker Studio integration within Orbis Intelligence ecosystem.',
     version: 'v1.2.0',
     status: 'active',
     launchUrl: 'https://spqr.runtime.app',

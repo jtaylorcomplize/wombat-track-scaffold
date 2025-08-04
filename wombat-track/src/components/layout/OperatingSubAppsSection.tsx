@@ -31,7 +31,7 @@ export const OperatingSubAppsSection: React.FC<OperatingSubAppsSectionProps> = (
       healthScore: 95,
       activeUsers: 23,
       url: 'https://orbis.complize.com',
-      description: 'AI-powered business intelligence and analytics platform',
+      description: 'Core program for recursive AI-native development and Sub-App orchestration; 3D printer engine for SDLC and governance.',
       version: 'v2.1.3'
     },
     {
@@ -43,31 +43,31 @@ export const OperatingSubAppsSection: React.FC<OperatingSubAppsSectionProps> = (
       healthScore: 72,
       activeUsers: 8,
       url: 'https://app.complize.com',
-      description: 'Compliance management and regulatory tracking system',
+      description: 'Compliance suite Sub-App; includes Visa Management, Knowledge Base, and RAG/Compliance Tracker modules.',
       version: 'v1.8.2'
     },
     {
       id: 'prog-spqr-001',
-      name: 'SPQR Runtime',
+      name: 'SPQR',
       status: 'offline',
       lastUpdated: new Date(Date.now() - 45 * 60 * 1000), // 45 minutes ago
       uptime: '89.1%',
       healthScore: 0,
       activeUsers: 0,
       url: 'https://spqr.internal.com',
-      description: 'Real-time system monitoring and performance dashboard',
+      description: 'Sub-App for reporting and Looker Studio integration within Orbis Intelligence ecosystem.',
       version: 'v3.0.1'
     },
     {
-      id: 'prog-visacalc-001',
-      name: 'VisaCalc',
+      id: 'prog-roam-001',
+      name: 'Roam',
       status: 'active',
       lastUpdated: new Date(Date.now() - 1 * 60 * 1000), // 1 minute ago
       uptime: '99.9%',
       healthScore: 98,
       activeUsers: 156,
-      url: 'https://visacalc.complize.com',
-      description: 'Advanced visa processing and calculation engine',
+      url: 'https://roam.complize.com',
+      description: 'Formerly VisaCalcPro; business migration planning and visa calculation tool.',
       version: 'v4.2.0'
     }
   ];
