@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { ChevronRight, Clock, CheckCircle, AlertCircle, FileText } from 'lucide-react';
 
-export const StepDashboard: React.FC = () => {
+const StepDashboard: React.FC = () => {
   const { projectId, phaseId, stepId } = useParams<{ 
     projectId: string; 
     phaseId: string; 
@@ -150,3 +150,6 @@ export const StepDashboard: React.FC = () => {
     </div>
   );
 };
+
+export { StepDashboard };
+export default StepDashboard;

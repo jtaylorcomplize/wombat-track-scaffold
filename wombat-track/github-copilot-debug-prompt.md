@@ -1,106 +1,183 @@
-# GitHub Copilot Debug Prompt - React WebSocket & Governance Logger Errors
+# GitHub Copilot Debug Prompt - Enhanced Sidebar v3.1 Persistent TypeError
 
-## 🚨 Current Issues
+## 🚨 **Critical Issue Summary**
+Enhanced Sidebar v3.1 continues to crash with "Cannot convert object to primitive value" TypeError despite implementing JSX key fixes. The error occurs in React's lazy loading system (`lazyInitializer` at `chunk-YHPANKLD.js:898:17`), suggesting the root cause is in component initialization, not JSX rendering.
 
-### Error 1: WebSocket Connection Failures
+## 📋 **Stack Trace Analysis**
 ```
-WebSocket connection to 'ws://localhost:3001/projects' failed: WebSocket is closed before the connection is established.
-```
-
-### Error 2: Missing Governance Logger Function
-```
-Uncaught TypeError: governanceLogger.logProjectSurfaceSelect is not a function
-    at AllProjectsDashboard.tsx:104:22
-```
-
-### Error 3: API Endpoint Not Found
-```
-Failed to load resource: the server responded with a status of 404 (Not Found)
-GET /api/orbis/projects/all?limit=100&sortBy=lastUpdated&sortOrder=desc
+TypeError: Cannot convert object to primitive value
+    at String (<anonymous>)
+    at chunk-YHPANKLD.js:133:22
+    at Array.map (<anonymous>)
+    at printWarning (chunk-YHPANKLD.js:132:39)
+    at error (chunk-YHPANKLD.js:120:15)
+    at lazyInitializer (chunk-YHPANKLD.js:898:17)
+    at mountLazyComponent (chunk-EJTTOCY5.js:14822:27)
+    at beginWork (chunk-EJTTOCY5.js:15918:22)
 ```
 
-## 📋 Debug Instructions for GitHub Copilot
+**Key Insight**: Error originates in `lazyInitializer` → `printWarning` → `Array.map` → `String()`, indicating React lazy component loading is attempting to convert an object to a string during warning/error message generation.
 
-### Analysis Tasks:
+## 🎯 **Investigation Targets**
 
-1. **Examine `useOrbisAPI.ts:179`** - Find why WebSocket connection to localhost:3001 is failing
-2. **Check `AllProjectsDashboard.tsx:104`** - Identify missing `logProjectSurfaceSelect` function
-3. **Review governance logger imports** - Verify all required functions are exported
-4. **Validate API endpoints** - Check if `/api/orbis/projects/all` route exists
-5. **WebSocket server status** - Determine if localhost:3001 WebSocket server is running
+### 1. **React.lazy() Components** (HIGH PRIORITY)
+```bash
+# Search for all lazy-loaded components
+grep -r "React.lazy" src/ --include="*.tsx" --include="*.ts"
+grep -r "lazy(" src/ --include="*.tsx" --include="*.ts"
+```
 
-### Specific Code Review:
+**Suspected Issues:**
+- Lazy component not returning valid default export
+- Import path resolving to undefined/object instead of component
+- Circular dependency in lazy loading chain
 
-#### File: `src/hooks/useOrbisAPI.ts`
-- Line 179: WebSocket connection initialization
-- Line 149: Error handling for WebSocket disconnection
-- Line 154: WebSocket error event handling
-- Check WebSocket URL configuration and fallback polling logic
+### 2. **Component Import/Export Validation**
+```bash
+# Check all component exports in sidebar-related files
+grep -r "export.*default" src/components/layout/ src/components/operational/
+grep -r "export \{" src/components/layout/ src/components/operational/
+```
 
-#### File: `src/components/strategic/AllProjectsDashboard.tsx`
-- Line 104: `governanceLogger.logProjectSurfaceSelect` call
-- Verify import statement for governanceLogger
-- Check if function exists in governance logger service
+**Validation Steps:**
+- Ensure all components have proper `export default ComponentName`
+- Verify no objects are being exported as default where components expected
+- Check for missing component definitions
 
-#### File: `src/services/governanceLogger.ts` or similar
-- Confirm `logProjectSurfaceSelect` function is defined and exported
-- Check function signature and implementation
+### 3. **Router Configuration**
+```typescript
+// Check src/router/OrbisRouter.tsx for problematic lazy imports
+const SuspiciousPatterns = [
+  'React.lazy(() => import("./undefined"))',
+  'React.lazy(() => someObject)',
+  'React.lazy(() => import(variablePath))', // Dynamic imports
+  'React.lazy(() => import("./Component").then(m => m.someProperty))'
+];
+```
 
-#### File: Server API routes
-- Look for `/api/orbis/projects/all` endpoint definition
-- Check if route handler exists in server files
-- Verify server is running on expected port
+## 🔍 **Systematic Debug Protocol**
 
-### Diagnostic Questions:
+### **Step 1: Component Export Validation**
+```bash
+# Verify all sidebar components export valid React components
+find src/components -name "*.tsx" -exec grep -l "EnhancedSidebar\|SubApp\|Surface" {} \; | xargs -I {} sh -c 'echo "=== {} ==="; tail -5 "{}"'
+```
 
-1. **WebSocket Server**: Is there a WebSocket server running on localhost:3001?
-2. **API Server**: Is the main API server running and serving the expected routes?
-3. **Governance Logger**: What functions are actually exported from the governance logger service?
-4. **Port Configuration**: Are client and server configured for the same ports?
-5. **Build Status**: Are there any TypeScript compilation errors?
+### **Step 2: Import Resolution Check**
+```bash
+# Check for undefined imports that could cause lazy loading failures
+grep -rn "import.*from.*undefined" src/
+grep -rn "import.*from.*null" src/
+grep -rn "import.*from.*\${" src/
+```
 
-### Expected Fixes:
+### **Step 3: React.lazy() Audit**
+```bash
+# Find all lazy-loaded components and their import paths
+grep -rn "React.lazy" src/ | while read line; do
+  echo "=== LAZY COMPONENT ==="
+  echo "$line"
+  # Extract file path and check if target exists
+  file=$(echo "$line" | cut -d':' -f1)
+  echo "In file: $file"
+  echo "Context:"
+  grep -A 3 -B 3 "React.lazy" "$file"
+  echo
+done
+```
 
-1. **WebSocket Connection**:
-   - Start WebSocket server on port 3001
-   - OR update client to use correct WebSocket URL
-   - OR improve fallback polling when WebSocket unavailable
+## 🛠️ **Likely Fix Patterns**
 
-2. **Governance Logger**:
-   - Add missing `logProjectSurfaceSelect` function
-   - OR update import to use correct function name
-   - OR fix export statement in governance logger
+### **Pattern 1: Invalid Lazy Import**
+```typescript
+// ❌ WRONG - Object being imported instead of component
+const BadComponent = React.lazy(() => import('./SomeObject'));
 
-3. **API Endpoint**:
-   - Create missing `/api/orbis/projects/all` route
-   - OR update client to use correct API endpoint
-   - OR verify server routing configuration
+// ✅ CORRECT - Component with proper default export
+const GoodComponent = React.lazy(() => import('./SomeComponent'));
+```
 
-### Code Pattern Analysis:
+### **Pattern 2: Missing Component Export**
+```typescript
+// ❌ WRONG - File exports object instead of component
+export default { name: 'ComponentConfig', data: {...} };
 
-Please analyze these files and provide:
-- Root cause for each error
-- Suggested fixes with code snippets
-- Missing function implementations
-- Server configuration issues
-- WebSocket connection troubleshooting steps
+// ✅ CORRECT - File exports React component
+export default function ComponentName() { return <div>...</div>; }
+```
 
-Focus on identifying inconsistencies between client expectations and server implementations.
+### **Pattern 3: Dynamic Import Resolution**
+```typescript
+// ❌ WRONG - Dynamic import resolving to undefined
+const dynamicPath = getComponentPath(); // Returns undefined/object
+const Component = React.lazy(() => import(dynamicPath));
 
-## 🔍 Context Information
+// ✅ CORRECT - Static import with fallback
+const Component = React.lazy(() => 
+  import('./Component').catch(() => import('./FallbackComponent'))
+);
+```
 
-- **Frontend**: React with TypeScript running on localhost:5173
-- **Expected API Server**: Should be serving routes under `/api/`
-- **Expected WebSocket**: Should be running on localhost:3001
-- **Governance System**: Uses structured logging for user interactions
-- **Project Data**: Comes from oApp canonical schema (recently migrated)
+## 🧪 **Debug Validation Steps**
 
-## 🎯 Expected Deliverables
+### **Step 1: Isolate Lazy Loading**
+```typescript
+// Temporarily replace all React.lazy() with direct imports
+// in src/router/OrbisRouter.tsx to identify problematic component
 
-1. **Root cause analysis** for each error
-2. **Code fixes** for missing functions and failed connections
-3. **Server setup instructions** if services are not running
-4. **Configuration updates** for correct port/URL mapping
-5. **Error boundary implementation** to prevent complete UI failure
+// Before:
+const EnhancedSidebarV3 = React.lazy(() => import('../components/layout/EnhancedSidebarV3'));
 
-Please prioritize fixing the governance logger error first as it's causing the React component to crash and preventing the entire dashboard from rendering.
+// After (for testing):
+import { EnhancedSidebarV3 } from '../components/layout/EnhancedSidebarV3';
+```
+
+### **Step 2: Component Resolution Test**
+```bash
+# Test each lazy-loaded component can be imported successfully
+node -e "
+const components = [
+  './src/components/layout/EnhancedSidebarV3.tsx',
+  './src/components/operational/SubAppOverview.tsx'
+];
+components.forEach(async (comp) => {
+  try {
+    const module = await import(comp);
+    console.log(\`✅ \${comp}: \`, typeof module.default);
+  } catch (e) {
+    console.error(\`❌ \${comp}:\`, e.message);
+  }
+});
+"
+```
+
+## 📊 **Expected Outcomes**
+
+### **Success Indicators:**
+- All `React.lazy()` components resolve to valid React components (not objects/undefined)
+- No circular dependencies in component imports
+- All component files export proper default React components
+- Error stack trace no longer shows `lazyInitializer` failures
+
+### **Implementation Priority:**
+1. **HIGH**: Audit all `React.lazy()` imports for invalid targets
+2. **HIGH**: Verify component default exports are React components, not objects
+3. **MEDIUM**: Check for circular dependencies in lazy loading chain
+4. **LOW**: Add error boundaries around Suspense components
+
+## 🎯 **GitHub Copilot Request**
+
+**Please analyze the Enhanced Sidebar v3.1 codebase and identify:**
+
+1. All `React.lazy()` component imports and their target resolution
+2. Component export validation (ensure default exports are React components, not objects)
+3. Any circular dependencies or invalid import paths in the lazy loading chain
+4. Dynamic import patterns that might resolve to undefined/objects
+
+**Focus on the relationship between `lazyInitializer` failures and component import/export patterns. The error suggests React is trying to convert an object to a string during lazy component initialization, which typically occurs when a lazy import resolves to a configuration object instead of a React component.**
+
+---
+
+**Branch**: `bugfix/sidebar-3.1-primitive-error`  
+**Commit**: `276ae3d`  
+**Files**: Focus on `src/router/OrbisRouter.tsx`, `src/components/layout/EnhancedSidebarV3.tsx`, lazy-loaded component exports

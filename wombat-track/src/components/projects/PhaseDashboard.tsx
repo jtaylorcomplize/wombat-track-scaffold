@@ -4,7 +4,7 @@ import { useProjectContext } from '../../contexts/ProjectContext';
 import { ChevronRight, Calendar, Target, AlertCircle } from 'lucide-react';
 import type { Phase, PhaseStep } from '../../types/phase';
 
-export const PhaseDashboard: React.FC = () => {
+const PhaseDashboard: React.FC = () => {
   const { projectId, phaseId } = useParams<{ projectId: string; phaseId: string }>();
   const { projects } = useProjectContext();
   
@@ -165,3 +165,6 @@ export const PhaseDashboard: React.FC = () => {
     </div>
   );
 };
+
+export { PhaseDashboard };
+export default PhaseDashboard;
