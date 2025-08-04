@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { NavigationContextProvider } from '../contexts/NavigationContext';
 import { AdminModeProvider } from '../contexts/AdminModeContext';
+import { ProjectProvider } from '../contexts/ProjectContext';
 
 // Temporarily use direct imports to isolate the lazy loading issue
 import PlanSurfaceComponent from '../components/surfaces/PlanSurface';
@@ -86,7 +87,11 @@ export const OrbisRouter: React.FC = () => {
                 <Route path="projects" element={<SubAppProjectsList />} />
                 
                 {/* Individual project with work surfaces */}
-                <Route path="projects/:projectId" element={<ProjectDashboard />}>
+                <Route path="projects/:projectId" element={
+                  <ProjectProvider initialProjects={[]} initialActiveProjectId="">
+                    <ProjectDashboard />
+                  </ProjectProvider>
+                }>
                   <Route element={<WorkSurfaceWrapper />}>
                     <Route path="plan" element={<PlanSurface />} />
                     <Route path="execute" element={<ExecuteSurface />} />
