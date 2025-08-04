@@ -599,18 +599,6 @@ export const governanceLogger = {
         );
         break;
     }
-  },
-
-  logAccordionToggle: (sectionId: string, isExpanded: boolean) => {
-    enhancedGovernanceLogger.logAccordionToggle(
-      sectionId,
-      isExpanded ? 'expand' : 'collapse',
-      [sectionId] // This would need to be passed from the component
-    );
-  },
-
-  logSubAppLaunch: (subAppId: string, launchUrl: string, subAppName: string) => {
-    enhancedGovernanceLogger.logSubAppLaunch(subAppId, subAppName, launchUrl, 'sidebar_button');
   }
 };
 
