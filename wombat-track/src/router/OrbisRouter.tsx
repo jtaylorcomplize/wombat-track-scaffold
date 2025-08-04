@@ -2,7 +2,6 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { NavigationContextProvider } from '../contexts/NavigationContext';
 import { AdminModeProvider } from '../contexts/AdminModeContext';
-import { ProjectProvider } from '../contexts/ProjectContext';
 
 // Temporarily use direct imports to isolate the lazy loading issue
 import PlanSurfaceComponent from '../components/surfaces/PlanSurface';
@@ -19,6 +18,7 @@ const TeamOverview = lazy(() => import('../components/strategic/TeamOverview'));
 const StrategicPlanning = lazy(() => import('../components/strategic/StrategicPlanning'));
 const SubAppOverview = lazy(() => import('../components/operational/SubAppOverview'));
 const SubAppProjectsList = lazy(() => import('../components/operational/SubAppProjectsList'));
+const SubAppProjectDetail = lazy(() => import('../components/operational/SubAppProjectDetail'));
 const ProjectDashboard = lazy(() => import('../components/ProjectDashboard').then(module => ({ default: module.ProjectDashboard })));
 const PlanSurface = PlanSurfaceComponent;
 const ExecuteSurface = ExecuteSurfaceComponent;
@@ -80,20 +80,8 @@ export const OrbisRouter: React.FC = () => {
                 {/* Sub-app projects list */}
                 <Route path="projects" element={<SubAppProjectsList />} />
                 
-                {/* Individual project with work surfaces */}
-                <Route path="projects/:projectId" element={
-                  <ProjectProvider initialProjects={[]} initialActiveProjectId="">
-                    <ProjectDashboard />
-                  </ProjectProvider>
-                }>
-                  <Route element={<WorkSurfaceWrapper />}>
-                    <Route path="plan" element={<PlanSurface />} />
-                    <Route path="execute" element={<ExecuteSurface />} />
-                    <Route path="document" element={<DocumentSurface />} />
-                    <Route path="govern" element={<GovernSurface />} />
-                    <Route index element={<Navigate to="plan" replace />} />
-                  </Route>
-                </Route>
+                {/* Individual project details */}
+                <Route path="projects/:projectId" element={<SubAppProjectDetail />} />
                 
                 {/* Default to projects list when accessing sub-app */}
                 <Route index element={<Navigate to="projects" replace />} />
