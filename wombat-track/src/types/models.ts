@@ -1,5 +1,20 @@
 // wombat-track/src/types/models.ts
 
+export type Program = {
+  id: string;
+  name: string;
+  description: string;
+  status: 'Planning' | 'Active' | 'Paused' | 'Retired';
+  programType: 'Core' | 'Sub-App' | 'External' | 'White Label';
+  usesOrbisEngine: boolean;
+  orbisDependencyLevel: 'None' | 'Partial' | 'Full';
+  platformIntegration: string[];
+  primaryLead?: string;
+  launchDate?: Date;
+  notes?: string;
+  linkedProjects?: string[]; // Project IDs
+};
+
 export type Project = {
   id: string;
   title: string;
@@ -9,6 +24,7 @@ export type Project = {
   keyTasks?: string[];
   aiPromptLog?: string[];
   phaseSteps: PhaseStep[];
+  linkedProgramId?: string; // References Program.id
 };
 
 export type PhaseStep = {
