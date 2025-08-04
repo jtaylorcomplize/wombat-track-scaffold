@@ -6,7 +6,6 @@
 
 import { EventEmitter } from 'events';
 import type { Project, Phase, PhaseStep } from '../types/phase';
-import { governanceLogger } from '../services/governanceLogger';
 import { enhancedGovernanceLogger } from '../services/enhancedGovernanceLogger';
 
 export interface AuditRule {
@@ -490,7 +489,7 @@ export class AutoAuditAgent extends EventEmitter {
   /**
    * Check governance log completeness
    */
-  private async checkGovernanceLogCompleteness(context: AuditContext): Promise<ComplianceResult> {
+  private async checkGovernanceLogCompleteness(_context: AuditContext): Promise<ComplianceResult> { // eslint-disable-line @typescript-eslint/no-unused-vars
     // For now, assume good governance logging since we have the infrastructure
     return {
       passed: true,
@@ -564,7 +563,7 @@ export class AutoAuditAgent extends EventEmitter {
   /**
    * Check performance thresholds
    */
-  private async checkPerformanceThresholds(context: AuditContext): Promise<ComplianceResult> {
+  private async checkPerformanceThresholds(_context: AuditContext): Promise<ComplianceResult> { // eslint-disable-line @typescript-eslint/no-unused-vars
     // Basic performance check - can be extended with real metrics
     return {
       passed: true,

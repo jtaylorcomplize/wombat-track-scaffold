@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Rocket, RefreshCw, Settings, Eye } from 'lucide-react';
-import { SubAppStatusBadge, SubAppStatusData } from './SubAppStatusBadge';
+import type { SubAppStatusData } from './SubAppStatusBadge';
+import { SubAppStatusBadge } from './SubAppStatusBadge';
 import { StatusAPI } from '../../services/statusAPI';
 
 interface OperatingSubAppsSectionProps {
@@ -21,56 +22,56 @@ export const OperatingSubAppsSection: React.FC<OperatingSubAppsSectionProps> = (
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
   // Mock sub-app data - in real implementation, fetch from API
-  const mockSubApps: SubAppStatusData[] = [
-    {
-      id: 'prog-orbis-001',
-      name: 'Orbis Intelligence',
-      status: 'active',
-      lastUpdated: new Date(Date.now() - 2 * 60 * 1000), // 2 minutes ago
-      uptime: '99.8%',
-      healthScore: 95,
-      activeUsers: 23,
-      url: 'https://orbis.complize.com',
-      description: 'Core program for recursive AI-native development and Sub-App orchestration; 3D printer engine for SDLC and governance.',
-      version: 'v2.1.3'
-    },
-    {
-      id: 'prog-complize-001',
-      name: 'Complize Platform',
-      status: 'warning',
-      lastUpdated: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
-      uptime: '98.2%',
-      healthScore: 72,
-      activeUsers: 8,
-      url: 'https://app.complize.com',
-      description: 'Compliance suite Sub-App; includes Visa Management, Knowledge Base, and RAG/Compliance Tracker modules.',
-      version: 'v1.8.2'
-    },
-    {
-      id: 'prog-spqr-001',
-      name: 'SPQR',
-      status: 'offline',
-      lastUpdated: new Date(Date.now() - 45 * 60 * 1000), // 45 minutes ago
-      uptime: '89.1%',
-      healthScore: 0,
-      activeUsers: 0,
-      url: 'https://spqr.internal.com',
-      description: 'Sub-App for reporting and Looker Studio integration within Orbis Intelligence ecosystem.',
-      version: 'v3.0.1'
-    },
-    {
-      id: 'prog-roam-001',
-      name: 'Roam',
-      status: 'active',
-      lastUpdated: new Date(Date.now() - 1 * 60 * 1000), // 1 minute ago
-      uptime: '99.9%',
-      healthScore: 98,
-      activeUsers: 156,
-      url: 'https://roam.complize.com',
-      description: 'Formerly VisaCalcPro; business migration planning and visa calculation tool.',
-      version: 'v4.2.0'
-    }
-  ];
+  // const _mockSubApps: SubAppStatusData[] = [
+  //   {
+  //     id: 'prog-orbis-001',
+  //     name: 'Orbis Intelligence',
+  //     status: 'active',
+  //     lastUpdated: new Date(Date.now() - 2 * 60 * 1000), // 2 minutes ago
+  //     uptime: '99.8%',
+  //     healthScore: 95,
+  //     activeUsers: 23,
+  //     url: 'https://orbis.complize.com',
+  //     description: 'Core program for recursive AI-native development and Sub-App orchestration; 3D printer engine for SDLC and governance.',
+  //     version: 'v2.1.3'
+  //   },
+  //   {
+  //     id: 'prog-complize-001',
+  //     name: 'Complize Platform',
+  //     status: 'warning',
+  //     lastUpdated: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
+  //     uptime: '98.2%',
+  //     healthScore: 72,
+  //     activeUsers: 8,
+  //     url: 'https://app.complize.com',
+  //     description: 'Compliance suite Sub-App; includes Visa Management, Knowledge Base, and RAG/Compliance Tracker modules.',
+  //     version: 'v1.8.2'
+  //   },
+  //   {
+  //     id: 'prog-spqr-001',
+  //     name: 'SPQR',
+  //     status: 'offline',
+  //     lastUpdated: new Date(Date.now() - 45 * 60 * 1000), // 45 minutes ago
+  //     uptime: '89.1%',
+  //     healthScore: 0,
+  //     activeUsers: 0,
+  //     url: 'https://spqr.internal.com',
+  //     description: 'Sub-App for reporting and Looker Studio integration within Orbis Intelligence ecosystem.',
+  //     version: 'v3.0.1'
+  //   },
+  //   {
+  //     id: 'prog-roam-001',
+  //     name: 'Roam',
+  //     status: 'active',
+  //     lastUpdated: new Date(Date.now() - 1 * 60 * 1000), // 1 minute ago
+  //     uptime: '99.9%',
+  //     healthScore: 98,
+  //     activeUsers: 156,
+  //     url: 'https://roam.complize.com',
+  //     description: 'Formerly VisaCalcPro; business migration planning and visa calculation tool.',
+  //     version: 'v4.2.0'
+  //   }
+  // ];
 
   // Fetch live status using StatusAPI
   useEffect(() => {
@@ -237,7 +238,7 @@ export const OperatingSubAppsSection: React.FC<OperatingSubAppsSectionProps> = (
             className="flex-1 text-xs text-blue-600 hover:text-blue-700 py-1 px-2 border border-blue-200 rounded hover:bg-blue-50 transition-colors"
             onClick={() => {
               // Navigate to admin surface instead of non-existent route
-              onSurfaceChange && onSurfaceChange('admin');
+              onSurfaceChange?.('admin');
             }}
           >
             System Dashboard
@@ -246,7 +247,7 @@ export const OperatingSubAppsSection: React.FC<OperatingSubAppsSectionProps> = (
             className="flex-1 text-xs text-gray-600 hover:text-gray-700 py-1 px-2 border border-gray-200 rounded hover:bg-gray-50 transition-colors"
             onClick={() => {
               // Navigate to admin surface for monitoring
-              onSurfaceChange && onSurfaceChange('spqr-runtime');
+              onSurfaceChange?.('spqr-runtime');
             }}
           >
             Monitor All

@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, Key, Shield, HelpCircle, ExternalLink } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -80,7 +79,7 @@ export const CredentialsStep: React.FC<CredentialsStepProps> = ({
     try {
       new URL(string);
       return true;
-    } catch (_) {
+    } catch {
       return false;
     }
   };
@@ -107,7 +106,7 @@ export const CredentialsStep: React.FC<CredentialsStepProps> = ({
         throw new Error(errorData.error || 'Failed to save credentials');
       }
 
-      const data = await response.json();
+      await response.json();
       onComplete({
         credentials_saved: true,
         client_id: formData.clientId,

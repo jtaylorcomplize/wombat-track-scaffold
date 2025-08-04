@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { sdlcOrchestrator } from '../../../services/sdlc-orchestrator';
 
 export async function handleGitHubWebhook(req: Request, res: Response): Promise<void> {

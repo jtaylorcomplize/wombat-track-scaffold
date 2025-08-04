@@ -1,4 +1,4 @@
-import { SubAppStatusData } from '../components/layout/SubAppStatusBadge';
+import type { SubAppStatusData } from '../components/layout/SubAppStatusBadge';
 
 // API service for live status monitoring
 export class StatusAPI {
@@ -161,11 +161,11 @@ export class StatusAPI {
   /**
    * Transform API response to match our SubAppStatusData interface
    */
-  private static transformAPIResponse(apiData: any[]): SubAppStatusData[] {
+  private static transformAPIResponse(apiData: unknown[]): SubAppStatusData[] {
     return apiData.map(item => this.transformSingleAPIResponse(item));
   }
 
-  private static transformSingleAPIResponse(item: any): SubAppStatusData {
+  private static transformSingleAPIResponse(item: unknown): SubAppStatusData {
     return {
       id: item.id || item.subapp_id,
       name: item.name || item.display_name,

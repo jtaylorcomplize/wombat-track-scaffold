@@ -208,7 +208,7 @@ export class AgentMonitoringService extends EventEmitter {
         // Update agent status
         this.agents.set(agentId, status);
 
-      } catch (error) {
+      } catch {
         this.handleAgentError(agentId, error);
       }
     }
@@ -327,7 +327,7 @@ export class AgentMonitoringService extends EventEmitter {
     this.emit('agent-status-changed', { agentId, active: false });
   }
 
-  private handleAgentError(agentId: string, error: any): void {
+  private handleAgentError(agentId: string, error: unknown): void {
     const status = this.agents.get(agentId);
     if (!status) return;
 
@@ -350,7 +350,7 @@ export class AgentMonitoringService extends EventEmitter {
     this.emit('agent-error', { agentId, error: agentError });
   }
 
-  private handleTaskCompleted(agentId: string, data: any): void {
+  private handleTaskCompleted(agentId: string, data: unknown): void {
     const status = this.agents.get(agentId);
     if (!status) return;
 
@@ -417,7 +417,7 @@ export class AgentMonitoringService extends EventEmitter {
   /**
    * Get agent configuration
    */
-  private getAgentConfiguration(id: string, agentInstance: any): Record<string, unknown> {
+  private getAgentConfiguration(id: string, agentInstance: unknown): Record<string, unknown> {
     try {
       if (typeof agentInstance.getStatus === 'function') {
         return agentInstance.getStatus();
@@ -425,7 +425,7 @@ export class AgentMonitoringService extends EventEmitter {
       if (typeof agentInstance.getConfig === 'function') {
         return agentInstance.getConfig();
       }
-    } catch (error) {
+    } catch {
       // Ignore errors when getting configuration
     }
     
@@ -435,12 +435,13 @@ export class AgentMonitoringService extends EventEmitter {
   /**
    * Determine error severity
    */
-  private determineSeverity(error: any): AgentError['severity'] {
-    if (error.severity) {
-      return error.severity;
+  private determineSeverity(error: unknown): AgentError['severity'] {
+    const errorObj = error as Record<string, unknown>;
+    if (errorObj.severity) {
+      return errorObj.severity as AgentError['severity'];
     }
 
-    const message = error.message?.toLowerCase() || '';
+    const message = String(errorObj.message || '').toLowerCase();
     
     if (message.includes('critical') || message.includes('fatal')) {
       return 'critical';

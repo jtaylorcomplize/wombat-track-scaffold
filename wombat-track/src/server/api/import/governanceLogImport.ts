@@ -5,7 +5,8 @@
 
 import express from 'express';
 import DatabaseManager from '../../database/connection';
-import { GovernanceLogImportData, generatePayloadHash, ImportValidationError } from './validation';
+import type { GovernanceLogImportData} from './validation';
+import { generatePayloadHash, ImportValidationError } from './validation';
 import { DriveMemoryLogger } from './driveMemoryLogger';
 
 const router = express.Router();

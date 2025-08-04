@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { GovernanceLogger } from '../../../services/governance-logger';
 import { getGizmoAgent } from '../../agents/gizmo';
 

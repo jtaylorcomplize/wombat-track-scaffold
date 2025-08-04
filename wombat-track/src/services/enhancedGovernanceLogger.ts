@@ -13,8 +13,8 @@ export interface BaseGovernanceEvent {
   timestamp: string;
   userId?: string;
   sessionId?: string;
-  context: Record<string, any>;
-  metadata?: Record<string, any>;
+  context: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
 }
 
 // Navigation-specific event types
@@ -204,7 +204,7 @@ class EnhancedGovernanceLogger {
     this.saveToDriveMemory(enrichedEvent);
   }
 
-  private async writeToLogFile(event: any): Promise<void> {
+  private async writeToLogFile(event: unknown): Promise<void> {
     if (typeof window !== 'undefined') return;
 
     try {
@@ -267,7 +267,7 @@ class EnhancedGovernanceLogger {
     }
   }
 
-  private async writeToMemoryAnchors(anchorData: any): Promise<void> {
+  private async writeToMemoryAnchors(anchorData: unknown): Promise<void> {
     if (typeof window !== 'undefined') return;
 
     try {
@@ -582,7 +582,7 @@ export const governanceLogger = {
     action: string;
     target: string;
     context: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }) => {
     // Map legacy calls to new structured events
     switch (params.action) {

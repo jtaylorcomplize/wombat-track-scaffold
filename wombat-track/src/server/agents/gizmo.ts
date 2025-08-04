@@ -1,4 +1,4 @@
-import { Agent, AgentStatus, AgentCapability } from '../../types/agent';
+import type { Agent, AgentStatus, AgentCapability } from '../../types/agent';
 import { GovernanceLogger } from '../../services/governance-logger';
 
 export interface SDLCPhaseStep {

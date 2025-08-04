@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, AlertCircle, CheckCircle, Clock, FileText, FolderOpen, Edit3 } from 'lucide-react';
+import { ArrowLeft, AlertCircle, CheckCircle, FileText, FolderOpen, Edit3 } from 'lucide-react';
 
 interface Project {
   projectId: string;
@@ -53,8 +53,8 @@ interface GovernanceLog {
   resource_id?: string;
   action?: string;
   success?: boolean;
-  details?: any;
-  runtime_context?: any;
+  details?: unknown;
+  runtime_context?: unknown;
 }
 
 export default function AdminProjectView() {

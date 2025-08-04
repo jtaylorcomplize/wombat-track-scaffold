@@ -40,7 +40,7 @@ export interface AutonomousActionLog {
   governance_logged: boolean;
   memory_anchored: boolean;
   result: 'success' | 'failure' | 'pending';
-  details: Record<string, any>;
+  details: Record<string, unknown>;
 }
 
 export class AuthorityService {
@@ -66,7 +66,7 @@ export class AuthorityService {
       const configData = readFileSync(configPath, 'utf-8');
       this.config = JSON.parse(configData);
       console.log('✅ Authority Service: Configuration loaded successfully');
-    } catch (error) {
+    } catch {
       console.warn('⚠️ Authority Service: Could not load authority config, defaulting to manual approval mode');
       this.config = null;
     }
@@ -217,9 +217,9 @@ export class AuthorityService {
         authority_check: authorityCheck
       };
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       actionLog.result = 'failure';
-      actionLog.details.error = error.message;
+      actionLog.details.error = String((error as Error).message || 'Unknown error');
 
       console.error(`❌ Authority Service: Autonomous action failed - ${actionId}:`, error);
 
@@ -261,7 +261,7 @@ export class AuthorityService {
           risk_level: actionLog.details.risk_level
         }
       });
-    } catch (error) {
+    } catch {
       console.error('❌ Authority Service: Failed to log governance entry:', error);
     }
   }
@@ -286,7 +286,7 @@ export class AuthorityService {
 
       // TODO: Integrate with actual MemoryPlugin API
       console.log(`🧠 Authority Service: Memory anchor created - ${memoryAnchor.anchor_id}`);
-    } catch (error) {
+    } catch {
       console.error('❌ Authority Service: Failed to create memory anchor:', error);
     }
   }

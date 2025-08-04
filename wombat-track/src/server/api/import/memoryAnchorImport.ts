@@ -5,7 +5,8 @@
 
 import express from 'express';
 import DatabaseManager from '../../database/connection';
-import { MemoryAnchorImportData, validateMemoryAnchorPayload, generatePayloadHash, ImportValidationError } from './validation';
+import type { MemoryAnchorImportData} from './validation';
+import { validateMemoryAnchorPayload, generatePayloadHash, ImportValidationError } from './validation';
 import { DriveMemoryLogger } from './driveMemoryLogger';
 
 const router = express.Router();

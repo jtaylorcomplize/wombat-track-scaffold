@@ -20,7 +20,7 @@ interface AutonomousActionLog {
 
 interface AuthorityStatus {
   configured: boolean;
-  config?: any;
+  config?: unknown;
   actions_today: number;
   successful_actions: number;
   failed_actions: number;

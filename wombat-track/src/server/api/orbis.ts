@@ -3,7 +3,7 @@
  * Orbis API endpoints for cross-sub-app data aggregation
  */
 
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 
 // Types for API responses
 export interface Project {
@@ -460,7 +460,7 @@ export const getSubApps = (req: Request, res: Response) => {
   try {
     const { includeProjects = 'false' } = req.query;
 
-    let subAppsWithData = mockSubApps.map(subApp => {
+    const subAppsWithData = mockSubApps.map(subApp => {
       const subAppProjects = mockProjects.filter(p => p.subAppId === subApp.id);
       
       return {

@@ -7,7 +7,7 @@
 export interface MCPGsuiteRequest {
   action: string;
   service: 'gmail' | 'drive' | 'sheets' | 'calendar';
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   userId?: string;
   metadata?: {
     timestamp: string;
@@ -19,7 +19,7 @@ export interface MCPGsuiteRequest {
 
 export interface MCPGsuiteResponse {
   success: boolean;
-  data?: any;
+  data?: unknown;
   error?: string;
   metadata: {
     timestamp: string;
@@ -116,7 +116,7 @@ export interface SheetsReadRequest {
 export interface SheetsUpdateRequest {
   spreadsheetId: string;
   range: string;
-  values: any[][];
+  values: unknown[][];
   valueInputOption?: 'RAW' | 'USER_ENTERED';
 }
 
@@ -124,7 +124,7 @@ export interface SheetsData {
   spreadsheetId: string;
   range: string;
   majorDimension: 'ROWS' | 'COLUMNS';
-  values: any[][];
+  values: unknown[][];
 }
 
 // Google Calendar interfaces
@@ -202,7 +202,7 @@ export interface ClaudeGizmoResponse {
   followUpActions?: ClaudeGizmoAction[];
   memoryUpdate?: {
     key: string;
-    value: any;
+    value: unknown;
     context: string;
   };
 }
@@ -216,19 +216,19 @@ export interface GovernanceLogEntry {
   agent?: 'claude' | 'gizmo' | 'user';
   action?: string;
   service?: string;
-  parameters?: any;
+  parameters?: unknown;
   result?: 'success' | 'failure' | 'pending';
   riskLevel?: 'low' | 'medium' | 'high';
   sensitiveData?: boolean;
   auditId: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface MemoryPluginEntry {
   timestamp: string;
   type: 'mcp-gsuite-action' | 'mcp-gsuite-response' | 'governance-event';
   agent?: 'claude' | 'gizmo';
-  content: any;
+  content: unknown;
   context: {
     service: string;
     action: string;

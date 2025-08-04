@@ -1,4 +1,5 @@
-import { getGizmoAgent, SDLCEvent } from '../server/agents/gizmo';
+import type { SDLCEvent } from '../server/agents/gizmo';
+import { getGizmoAgent } from '../server/agents/gizmo';
 import { GovernanceLogger } from './governance-logger';
 import { authorityService } from './authority-service';
 

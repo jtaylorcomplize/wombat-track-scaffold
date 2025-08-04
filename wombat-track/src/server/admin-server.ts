@@ -109,7 +109,7 @@ app.get('/api/orbis/projects/:id', getProjectById);
 console.log('   ✓ /api/orbis/* - Cross-sub-app data aggregation (Enhanced Sidebar v3.1)');
 
 // Error handling middleware
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: unknown, req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Admin API Error:', err);
   res.status(500).json({
     error: 'Internal server error',
@@ -148,7 +148,7 @@ app.use((req, res) => {
 // Initialize database connection
 async function initializeDatabase() {
   try {
-    const dbManager = DatabaseManager.getInstance();
+    // const dbManager = DatabaseManager.getInstance();
     console.log('🗄️  Database connection initialized');
     return true;
   } catch (error) {

@@ -1,5 +1,6 @@
-import { Request, Response } from 'express';
-import { getGizmoAgent, SDLCPhaseStep } from '../../agents/gizmo';
+import type { Request, Response } from 'express';
+import type { SDLCPhaseStep } from '../../agents/gizmo';
+import { getGizmoAgent } from '../../agents/gizmo';
 
 const gizmoAgent = getGizmoAgent();
 

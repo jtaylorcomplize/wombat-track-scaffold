@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Calendar, User, DollarSign, Target, TrendingUp, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Calendar, User, DollarSign, TrendingUp, AlertTriangle } from 'lucide-react';
 
 interface ProjectSummary {
   projectId: string;

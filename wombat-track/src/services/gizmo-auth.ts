@@ -4,7 +4,8 @@
  * Implements OAuth2 with least privilege access and secure token management
  */
 
-import axios, { AxiosInstance } from 'axios';
+import type { AxiosInstance } from 'axios';
+import axios from 'axios';
 import { EventEmitter } from 'events';
 
 export interface GizmoAgentCredentials {
@@ -134,7 +135,7 @@ export class GizmoAuthService extends EventEmitter {
       this.isInitialized = true;
       this.emit('initialized', { timestamp: new Date().toISOString() });
 
-    } catch (error) {
+    } catch {
       this.emit('initialization-error', error);
       throw error;
     }
@@ -178,7 +179,7 @@ export class GizmoAuthService extends EventEmitter {
 
       return this.accessToken;
 
-    } catch (error) {
+    } catch {
       const authError = this.parseAuthError(error);
       this.emit('auth-error', authError);
       throw authError;
@@ -227,7 +228,7 @@ export class GizmoAuthService extends EventEmitter {
 
       return this.accessToken;
 
-    } catch (error) {
+    } catch {
       const authError = this.parseAuthError(error);
       this.emit('token-refresh-error', authError);
       throw authError;
@@ -245,7 +246,7 @@ export class GizmoAuthService extends EventEmitter {
     try {
       const response = await this.httpClient.get('/auth/userinfo');
       return response.data;
-    } catch (error) {
+    } catch {
       this.emit('userinfo-error', error);
       throw error;
     }
@@ -285,7 +286,7 @@ export class GizmoAuthService extends EventEmitter {
 
       this.emit('token-revoked', { timestamp: new Date().toISOString() });
 
-    } catch (error) {
+    } catch {
       this.emit('revocation-error', error);
       throw error;
     }
@@ -370,7 +371,7 @@ export class GizmoAuthService extends EventEmitter {
       if (tokenData) {
         this.accessToken = JSON.parse(Buffer.from(tokenData, 'base64').toString());
       }
-    } catch (error) {
+    } catch {
       // Ignore errors when loading stored token
       this.accessToken = null;
     }
@@ -385,7 +386,7 @@ export class GizmoAuthService extends EventEmitter {
       // This would typically be stored in secure storage
       process.env.GIZMO_STORED_TOKEN = tokenData;
       
-    } catch (error) {
+    } catch {
       this.emit('token-storage-error', error);
     }
   }
@@ -393,7 +394,7 @@ export class GizmoAuthService extends EventEmitter {
   private async clearStoredToken(): Promise<void> {
     try {
       delete process.env.GIZMO_STORED_TOKEN;
-    } catch (error) {
+    } catch {
       this.emit('token-storage-error', error);
     }
   }
@@ -416,7 +417,7 @@ export class GizmoAuthService extends EventEmitter {
       try {
         await this.refreshAccessToken();
         this.setupTokenRefresh(); // Schedule next refresh
-      } catch (error) {
+      } catch {
         this.emit('auto-refresh-error', error);
         // Try to re-authenticate
         try {
@@ -429,16 +430,18 @@ export class GizmoAuthService extends EventEmitter {
     }, refreshIn * 1000);
   }
 
-  private parseAuthError(error: any): GizmoAuthError {
-    if (error.response?.data) {
+  private parseAuthError(error: unknown): GizmoAuthError {
+    const errorObj = error as Record<string, unknown>;
+    if (errorObj.response && typeof errorObj.response === 'object' && errorObj.response !== null) {
+      const response = errorObj.response as Record<string, unknown>;
       return {
-        ...error.response.data,
-        statusCode: error.response.status
+        ...(response.data as Record<string, unknown>),
+        statusCode: response.status
       };
-    } else if (error.message) {
+    } else if (errorObj.message) {
       return {
         error: 'network_error',
-        error_description: error.message
+        error_description: String(errorObj.message)
       };
     } else {
       return {

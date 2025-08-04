@@ -7,7 +7,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
-import {
+import type {
   MCPGsuiteRequest,
   MCPGsuiteResponse,
   GovernanceLogEntry,

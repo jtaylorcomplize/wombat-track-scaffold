@@ -7,8 +7,6 @@
 import { EventEmitter } from 'events';
 import { promises as fs } from 'fs';
 import * as path from 'path';
-import type { Project, Phase, PhaseStep } from '../types/phase';
-import { governanceLogger } from '../services/governanceLogger';
 import { enhancedGovernanceLogger } from '../services/enhancedGovernanceLogger';
 
 export interface AnchorTrigger {
@@ -26,7 +24,7 @@ export interface AnchorTrigger {
 export interface AnchorCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'exists' | 'not_exists';
-  value: any;
+  value: unknown;
   required: boolean;
 }
 
@@ -77,7 +75,7 @@ export interface MemoryArtifact {
 export interface GizmoSubmissionResult {
   success: boolean;
   submissionId?: string;
-  gizmoResponse?: any;
+  gizmoResponse?: unknown;
   error?: string;
 }
 
@@ -223,7 +221,7 @@ export class MemoryAnchorAgent extends EventEmitter {
   async processTrigger(
     event: string,
     context: MemoryContext,
-    data: any
+    data: unknown
   ): Promise<MemoryAnchor[]> {
     if (!this.isActive) {
       return [];
@@ -255,7 +253,7 @@ export class MemoryAnchorAgent extends EventEmitter {
   async createMemoryAnchor(
     trigger: AnchorTrigger,
     context: MemoryContext,
-    data: any
+    data: unknown
   ): Promise<MemoryAnchor> {
     const anchorId = `anchor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
@@ -302,7 +300,7 @@ export class MemoryAnchorAgent extends EventEmitter {
   /**
    * Generate anchor title based on context
    */
-  private generateAnchorTitle(trigger: AnchorTrigger, context: MemoryContext, data: any): string {
+  private generateAnchorTitle(trigger: AnchorTrigger, context: MemoryContext, _data: unknown): string { // eslint-disable-line @typescript-eslint/no-unused-vars
     const projectName = context.projectName || 'Unknown Project';
     const eventType = trigger.event.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
     
@@ -318,7 +316,7 @@ export class MemoryAnchorAgent extends EventEmitter {
   /**
    * Generate anchor summary
    */
-  private generateAnchorSummary(trigger: AnchorTrigger, context: MemoryContext, data: any): string {
+  private generateAnchorSummary(trigger: AnchorTrigger, context: MemoryContext, _data: unknown): string { // eslint-disable-line @typescript-eslint/no-unused-vars
     const timestamp = new Date().toLocaleString();
     const projectContext = context.projectName ? ` in project ${context.projectName}` : '';
     
@@ -332,7 +330,7 @@ export class MemoryAnchorAgent extends EventEmitter {
   private async generateAnchorContent(
     trigger: AnchorTrigger, 
     context: MemoryContext, 
-    data: any
+    data: unknown
   ): Promise<MemoryContent> {
     const content: MemoryContent = {
       keyInsights: [],
@@ -551,7 +549,7 @@ ${JSON.stringify(anchor.metadata, null, 2)}
   /**
    * Mock Gizmo submission for development/testing
    */
-  private async mockGizmoSubmission(payload: any): Promise<GizmoSubmissionResult> {
+  private async mockGizmoSubmission(_payload: unknown): Promise<GizmoSubmissionResult> { // eslint-disable-line @typescript-eslint/no-unused-vars
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -594,7 +592,7 @@ ${JSON.stringify(anchor.metadata, null, 2)}
   /**
    * Evaluate trigger conditions
    */
-  private async evaluateConditions(conditions: AnchorCondition[], data: any): Promise<boolean> {
+  private async evaluateConditions(conditions: AnchorCondition[], data: unknown): Promise<boolean> {
     for (const condition of conditions.filter(c => c.required)) {
       if (!this.evaluateCondition(condition, data)) {
         return false;
@@ -606,7 +604,7 @@ ${JSON.stringify(anchor.metadata, null, 2)}
   /**
    * Evaluate single condition
    */
-  private evaluateCondition(condition: AnchorCondition, data: any): boolean {
+  private evaluateCondition(condition: AnchorCondition, data: unknown): boolean {
     const value = this.getNestedValue(data, condition.field);
 
     switch (condition.operator) {
@@ -630,7 +628,7 @@ ${JSON.stringify(anchor.metadata, null, 2)}
   /**
    * Get nested value from object using dot notation
    */
-  private getNestedValue(obj: any, path: string): any {
+  private getNestedValue(obj: unknown, path: string): unknown {
     return path.split('.').reduce((current, key) => current?.[key], obj);
   }
 

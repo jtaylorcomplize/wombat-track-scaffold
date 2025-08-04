@@ -59,14 +59,14 @@ export const useSubAppStatus = (): UseSubAppStatusReturn => {
   };
 
   // Transform API response to SubApp interface
-  const transformAPIResponse = (apiData: any[]): SubApp[] => {
-    return apiData.map((item: any) => ({
-      id: item.id || item.subapp_id,
-      name: item.name || item.display_name,
-      status: normalizeStatus(item.status),
-      lastUpdated: new Date(item.last_updated || item.updated_at || Date.now()),
-      launchUrl: item.launch_url || item.url || `https://${item.name?.toLowerCase().replace(/\s+/g, '-')}.app.com`,
-      description: item.description
+  const transformAPIResponse = (apiData: Record<string, unknown>[]): SubApp[] => {
+    return apiData.map((item: Record<string, unknown>) => ({
+      id: String(item.id || item.subapp_id || ''),
+      name: String(item.name || item.display_name || ''),
+      status: normalizeStatus(String(item.status || 'offline')),
+      lastUpdated: new Date(String(item.last_updated || item.updated_at) || Date.now()),
+      launchUrl: String(item.launch_url || item.url || `https://${String(item.name || '').toLowerCase().replace(/\s+/g, '-')}.app.com`),
+      description: String(item.description || '')
     }));
   };
 

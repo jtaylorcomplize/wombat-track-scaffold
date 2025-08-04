@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import fs from 'fs/promises';
 import path from 'path';
 

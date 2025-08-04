@@ -228,16 +228,16 @@ export class SideQuestDetector extends EventEmitter {
   private async evaluateScopeChange(
     rule: SideQuestDetectionRule,
     step: PhaseStep,
-    previousVersion?: PhaseStep
+    _previousVersion?: PhaseStep
   ): Promise<{ triggered: boolean; confidence: number; details: Record<string, unknown> }> {
     
-    if (!previousVersion) {
+    if (!_previousVersion) {
       return { triggered: false, confidence: 0, details: { reason: 'no_previous_version' } };
     }
 
     // Compare step descriptions for scope changes
     const currentScope = step.description?.length || 0;
-    const previousScope = previousVersion.description?.length || 0;
+    const previousScope = _previousVersion.description?.length || 0;
     
     const scopeIncrease = currentScope > 0 ? (currentScope - previousScope) / previousScope : 0;
     
@@ -262,7 +262,8 @@ export class SideQuestDetector extends EventEmitter {
   private async evaluateTimelineExtension(
     rule: SideQuestDetectionRule,
     step: PhaseStep,
-    previousVersion?: PhaseStep
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _previousVersion?: PhaseStep
   ): Promise<{ triggered: boolean; confidence: number; details: Record<string, unknown> }> {
     
     // For now, use simple heuristics based on step name changes indicating timeline extension
@@ -289,8 +290,10 @@ export class SideQuestDetector extends EventEmitter {
   private async evaluateResourceAddition(
     rule: SideQuestDetectionRule,
     step: PhaseStep,
-    phase: Phase,
-    previousVersion?: PhaseStep
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _phase: Phase,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _previousVersion?: PhaseStep
   ): Promise<{ triggered: boolean; confidence: number; details: Record<string, unknown> }> {
     
     // Check if step has completion checklist (indicates additional resources/tasks)
@@ -321,12 +324,12 @@ export class SideQuestDetector extends EventEmitter {
   private async evaluateDependencyAddition(
     rule: SideQuestDetectionRule,
     step: PhaseStep,
-    previousVersion?: PhaseStep
+    _previousVersion?: PhaseStep
   ): Promise<{ triggered: boolean; confidence: number; details: Record<string, unknown> }> {
     
     // Check CI workflow references as proxy for dependencies
     const currentDependencies = step.ciWorkflowRefs?.length || 0;
-    const previousDependencies = previousVersion?.ciWorkflowRefs?.length || 0;
+    const previousDependencies = _previousVersion?.ciWorkflowRefs?.length || 0;
     
     const newDependencies = Math.max(0, currentDependencies - previousDependencies);
     

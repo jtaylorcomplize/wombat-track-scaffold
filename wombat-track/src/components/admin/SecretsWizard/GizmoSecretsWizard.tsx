@@ -44,7 +44,7 @@ export const GizmoSecretsWizard: React.FC<GizmoSecretsWizardProps> = ({
   defaultEnvironment = 'development'
 }) => {
   const [session, setSession] = useState<WizardSession | null>(null);
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  // const [currentStepIndex] = useState(0); // Unused variable
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

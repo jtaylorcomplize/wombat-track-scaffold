@@ -5,7 +5,7 @@
 
 import { EventEmitter } from 'events';
 import axios from 'axios';
-import {
+import type {
   ClaudeGizmoAction,
   ClaudeGizmoResponse,
   AgentExecutionPlan,

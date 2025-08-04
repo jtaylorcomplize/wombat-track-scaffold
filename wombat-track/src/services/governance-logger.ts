@@ -1063,10 +1063,10 @@ class GovernanceLogger {
       },
       sdlc_context: {
         branch: branch,
-        phase_step: step as any,
-        step_status: status as any,
+        phase_step: step as unknown,
+        step_status: status as unknown,
         commit_sha: details.commit_sha as string,
-        ci_status: details.ci_status as any
+        ci_status: details.ci_status as unknown
       }
     });
   }

@@ -143,13 +143,11 @@ export class SecretsPropagationService {
       let envContent = '';
       try {
         envContent = await fs.readFile(envPath, 'utf-8');
-      } catch (error) {
+      } catch {
         // File doesn't exist, create new
         envContent = '';
       }
 
-      // Track changes
-      const originalVars = this.parseEnvContent(envContent);
       
       // Add Gizmo section header if not exists
       if (!envContent.includes('# Gizmo OAuth2 Integration')) {
@@ -207,7 +205,7 @@ export class SecretsPropagationService {
   /**
    * Update GitHub Actions secrets documentation
    */
-  private async updateGitHubActionsSecrets(config: SecretsPropagationConfig, result: PropagationResult): Promise<void> {
+  private async updateGitHubActionsSecrets(config: SecretsPropagationConfig): Promise<void> {
     const secretsDocPath = path.join(process.cwd(), '.github', 'SECRETS.md');
     
     let docContent = `# Required Secrets for ${config.environment.toUpperCase()}\n\n`;
@@ -231,7 +229,7 @@ export class SecretsPropagationService {
   /**
    * Update GitLab CI secrets documentation
    */
-  private async updateGitLabCISecrets(config: SecretsPropagationConfig, result: PropagationResult): Promise<void> {
+  private async updateGitLabCISecrets(): Promise<void> {
     // Similar implementation for GitLab CI
     console.log('GitLab CI secrets documentation would be updated here');
   }
@@ -284,7 +282,7 @@ export class SecretsPropagationService {
       let composeContent = '';
       try {
         composeContent = await fs.readFile(composePath, 'utf-8');
-      } catch (error) {
+      } catch {
         result.errors.push(`Docker Compose file not found: ${composePath}`);
         return;
       }

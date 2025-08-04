@@ -3,7 +3,7 @@
  * Provides activity feed for autonomous CC/Gizmo operations
  */
 
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { authorityService } from '../../services/authority-service';
 
 /**

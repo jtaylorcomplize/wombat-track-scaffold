@@ -51,7 +51,7 @@ export const EnhancedProjectSidebar: React.FC<EnhancedProjectSidebarProps> = ({
   const [previousSurface, setPreviousSurface] = useState<WorkSurface>(selectedSurface);
 
   // Handle sub-app launch with governance logging
-  const handleSubAppLaunch = (subApp: any) => {
+  const handleSubAppLaunch = (subApp: unknown) => {
     try {
       window.open(subApp.launchUrl, '_blank');
       governanceLogger.logSubAppLaunch(subApp.id, subApp.launchUrl, subApp.name);

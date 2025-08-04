@@ -269,9 +269,9 @@ interface ProjectsResponse {
   };
 }
 
-interface SubAppsResponse {
-  subApps: SubApp[];
-}
+// interface SubAppsResponse {
+//   subApps: SubApp[];
+// }
 
 interface RuntimeStatusResponse {
   runtimeStatuses: RuntimeStatus[];
@@ -338,7 +338,7 @@ export const useAllProjects = (filters?: {
       } else {
         throw new Error(result.error || 'Failed to fetch projects');
       }
-    } catch (err) {
+    } catch {
       console.warn('[useAllProjects] API failed, falling back to mock data:', err);
       // Fallback to mock data
       const mockData = getMockProjectsData();
@@ -437,7 +437,7 @@ export const useSubApps = (includeProjects: boolean = true) => {
       } else {
         throw new Error(result.error || 'Failed to fetch sub-apps');
       }
-    } catch (err) {
+    } catch {
       console.warn('[useSubApps] API failed, falling back to mock data:', err);
       // Fallback to mock data
       const mockData = getMockSubAppsData();
@@ -484,7 +484,7 @@ export const useSubApps = (includeProjects: boolean = true) => {
           if (update.type === 'sub_apps_update') {
             fetchSubApps();
           }
-        } catch (err) {
+        } catch {
           console.error('[WebSocket] Failed to parse message:', err);
         }
       };
@@ -500,7 +500,7 @@ export const useSubApps = (includeProjects: boolean = true) => {
       };
       
       wsRef.current = ws;
-    } catch (err) {
+    } catch {
       console.error('[WebSocket] Failed to connect, using polling:', err);
       setupPolling();
     }
@@ -542,7 +542,7 @@ export const useSubApps = (includeProjects: boolean = true) => {
  * Hook for fetching recent projects for a specific sub-app
  */
 export const useSubAppRecentProjects = (subAppId: string, limit: number = 5) => {
-  const [data, setData] = useState<{ subApp: any; projects: Project[]; summary: any } | null>(null);
+  const [data, setData] = useState<{ subApp: unknown; projects: Project[]; summary: unknown } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -559,7 +559,7 @@ export const useSubAppRecentProjects = (subAppId: string, limit: number = 5) => 
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      const result: APIResponse<any> = await response.json();
+      const result: APIResponse<unknown> = await response.json();
       
       if (result.success) {
         setData(result.data);
@@ -567,7 +567,7 @@ export const useSubAppRecentProjects = (subAppId: string, limit: number = 5) => 
       } else {
         throw new Error(result.error || 'Failed to fetch recent projects');
       }
-    } catch (err) {
+    } catch {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
     } finally {
       setLoading(false);
@@ -621,7 +621,7 @@ export const useRuntimeStatus = () => {
       } else {
         throw new Error(result.error || 'Failed to fetch runtime status');
       }
-    } catch (err) {
+    } catch {
       console.warn('[useRuntimeStatus] API failed, falling back to mock data:', err);
       // Fallback to mock data
       const mockData = getMockRuntimeStatus();
@@ -673,7 +673,7 @@ export const useRuntimeStatus = () => {
               fetchRuntimeStatus();
             }
           }
-        } catch (err) {
+        } catch {
           console.error('[WebSocket] Failed to parse message:', err);
         }
       };
@@ -689,7 +689,7 @@ export const useRuntimeStatus = () => {
       };
       
       wsRef.current = ws;
-    } catch (err) {
+    } catch {
       console.error('[WebSocket] Failed to connect, using polling:', err);
       setupPolling();
     }
@@ -753,7 +753,7 @@ export const useProject = (projectId: string) => {
       } else {
         throw new Error(result.error || 'Failed to fetch project');
       }
-    } catch (err) {
+    } catch {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
     } finally {
       setLoading(false);
@@ -787,11 +787,11 @@ export const useAPIHealth = () => {
       const response = await fetch(`${API_BASE_URL}/health`, {
         method: 'HEAD',
         timeout: 5000
-      } as any);
+      } as unknown);
       
       setIsHealthy(response.ok);
       setLastCheck(new Date());
-    } catch (err) {
+    } catch {
       setIsHealthy(false);
       setLastCheck(new Date());
     }

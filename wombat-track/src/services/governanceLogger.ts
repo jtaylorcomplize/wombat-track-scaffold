@@ -9,14 +9,14 @@ interface GovernanceLogEntry {
   resource_id: string;
   action: string;
   success: boolean;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
 }
 
 interface SidebarInteractionContext {
   action: 'sub_app_launch' | 'surface_switch' | 'project_switch' | 'accordion_toggle' | 'settings_access';
   target: string;
   context: 'sidebar_navigation';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 class GovernanceLogger {

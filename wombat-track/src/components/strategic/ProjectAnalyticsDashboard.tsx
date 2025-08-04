@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3, TrendingUp, TrendingDown, AlertCircle, Calendar, DollarSign, Users, Clock } from 'lucide-react';
+import { BarChart3, AlertCircle, Calendar, DollarSign, Users, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { governanceLogger } from '../../services/governanceLogger';
 

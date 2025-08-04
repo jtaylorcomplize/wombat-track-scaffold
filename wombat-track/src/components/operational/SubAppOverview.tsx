@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { ExternalLink, Activity, Users, Calendar, AlertTriangle, TrendingUp, Folder, Plus, Settings, FileText, Clock, DollarSign, Target } from 'lucide-react';
-import { useNavigationContext } from '../../contexts/NavigationContext';
+// import { useNavigationContext } from '../../contexts/NavigationContext';
 import { governanceLogger } from '../../services/governanceLogger';
 
 // Icon mapping function to prevent object-to-primitive conversion errors
@@ -115,10 +115,10 @@ const SubAppOverview: React.FC = () => {
   const { subAppId } = useParams<{ subAppId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { state: navState } = useNavigationContext();
+  // const { state: _navState } = useNavigationContext();
   const [isLoading, setIsLoading] = useState(true);
   const [subAppInfo, setSubAppInfo] = useState<SubAppInfo | null>(null);
-  const [activeTab, setActiveTab] = useState('overview');
+  // const [_activeTab, _setActiveTab] = useState('overview');
 
   // Determine if we're in a nested route
   const isNestedRoute = location.pathname !== `/orbis/sub-apps/${subAppId}`;

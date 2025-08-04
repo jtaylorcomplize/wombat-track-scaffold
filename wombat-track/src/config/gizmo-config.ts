@@ -42,7 +42,7 @@ function loadGizmoCredentials(): GizmoAgentCredentials {
  */
 function loadGizmoAuthConfig(): Partial<GizmoAuthConfig> {
   return {
-    autoRefresh: process.env.GIZMO_AUTO_REFRESH === 'true' ?? true,
+    autoRefresh: process.env.GIZMO_AUTO_REFRESH !== 'false',
     refreshThreshold: parseInt(process.env.GIZMO_REFRESH_THRESHOLD || '300'),
     retryAttempts: parseInt(process.env.GIZMO_RETRY_ATTEMPTS || '3'),
     timeout: parseInt(process.env.GIZMO_REQUEST_TIMEOUT || '10000')

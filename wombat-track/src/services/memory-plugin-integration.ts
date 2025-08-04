@@ -1,4 +1,5 @@
-import { getGizmoAgent, SDLCPhaseStep } from '../server/agents/gizmo';
+import type { SDLCPhaseStep } from '../server/agents/gizmo';
+import { getGizmoAgent } from '../server/agents/gizmo';
 import { GovernanceLogger } from './governance-logger';
 
 export interface MemoryAnchorPayload {

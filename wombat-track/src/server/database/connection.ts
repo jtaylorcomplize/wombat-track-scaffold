@@ -1,5 +1,6 @@
 import * as sqlite3 from 'sqlite3';
-import { Database, open } from 'sqlite';
+import type { Database} from 'sqlite';
+import { open } from 'sqlite';
 import * as path from 'path';
 import { promises as fs } from 'fs';
 
