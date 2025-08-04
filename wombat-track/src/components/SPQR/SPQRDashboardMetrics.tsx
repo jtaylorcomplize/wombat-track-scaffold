@@ -34,7 +34,8 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
   cardId,
   userId,
   userRole,
-  onMetricsUpdate
+  onMetricsUpdate,
+  captureInterval = 30000
 }) => {
   const governanceLogger = GovernanceLogger.getInstance();
   const sessionStartRef = useRef(Date.now());
@@ -155,9 +156,6 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
     );
   }, [dashboardId, cardId, userId, userRole, calculateRAGScore, governanceLogger]);
 
-  // Use ref to prevent dependency recreation causing infinite loops
-  const captureErrorRef = useRef<typeof captureError>();
-  
   const captureError = useCallback((error: Error, context?: Record<string, unknown>) => {
     const errorMetric: PerformanceMetric = {
       timestamp: new Date().toISOString(),
@@ -193,9 +191,6 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
       { dashboard_id: dashboardId, ...context }
     );
   }, [dashboardId, cardId, userId, userRole, calculatePerformanceGrade, calculateRAGScore, governanceLogger]);
-
-  // Update ref whenever callback changes
-  captureErrorRef.current = captureError;
 
   const flushMetricsBuffer = useCallback(async () => {
     if (metricsBufferRef.current.length === 0) return;
@@ -250,40 +245,31 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
   }, [dashboardId, cardId, userId, userRole, metrics, onMetricsUpdate, governanceLogger]);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      flushMetricsBuffer();           // existing metrics fetch
-    }, 60000);                        // Fixed 60-second interval
-
-    return () => clearInterval(intervalId);
-  }, []);                             // ✅ runs once on mount
-
-  // Use ref-based approach to prevent infinite loops from callback dependency
-  const errorHandlersRef = useRef(false);
-  
-  useEffect(() => {
-    
-    // Only set up event handlers once
-    if (errorHandlersRef.current) return;
-    errorHandlersRef.current = true;
-    
-    const handleWindowError = (event: ErrorEvent) => {
-      // Use current ref to access latest captureError
-      if (captureErrorRef.current) {
-        captureErrorRef.current(new Error(event.message), {
-          filename: event.filename,
-          lineno: event.lineno,
-          colno: event.colno
-        });
+    const interval = setInterval(() => {
+      if (isCapturing) {
+        flushMetricsBuffer();
       }
+    }, captureInterval);
+
+    return () => {
+      clearInterval(interval);
+      flushMetricsBuffer();
+    };
+  }, [captureInterval, isCapturing, flushMetricsBuffer]);
+
+  useEffect(() => {
+    const handleWindowError = (event: ErrorEvent) => {
+      captureError(new Error(event.message), {
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno
+      });
     };
 
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      // Use current ref to access latest captureError
-      if (captureErrorRef.current) {
-        captureErrorRef.current(new Error('Unhandled promise rejection'), {
-          reason: event.reason
-        });
-      }
+      captureError(new Error('Unhandled promise rejection'), {
+        reason: event.reason
+      });
     };
 
     window.addEventListener('error', handleWindowError);
@@ -292,9 +278,8 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
     return () => {
       window.removeEventListener('error', handleWindowError);
       window.removeEventListener('unhandledrejection', handleUnhandledRejection);
-      errorHandlersRef.current = false;
     };
-  }, []); // ✅ Empty dependency array - runs once on mount
+  }, [captureError]);
 
   const getRAGStatusColor = (status: RAGStatus) => {
     switch (status) {
@@ -404,6 +389,7 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
       <SPQRMetricsCapture
         onLoadCapture={captureLoadMetrics}
         onInteractionCapture={captureInteraction}
+        onErrorCapture={captureError}
       />
     </>
   );
@@ -412,11 +398,13 @@ export const SPQRDashboardMetrics: React.FC<SPQRDashboardMetricsProps> = ({
 interface SPQRMetricsCaptureProps {
   onLoadCapture: (loadStartTime: number) => void;
   onInteractionCapture: (type: string, details?: Record<string, unknown>) => void;
+  onErrorCapture: (error: Error, context?: Record<string, unknown>) => void;
 }
 
 const SPQRMetricsCapture: React.FC<SPQRMetricsCaptureProps> = ({
   onLoadCapture,
-  onInteractionCapture
+  onInteractionCapture,
+  onErrorCapture
 }) => {
   const loadStartTimeRef = useRef(Date.now());
 

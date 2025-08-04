@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GovernanceLogger, type RuntimeObservabilityConfig } from '../../services/governance-logger';
+import { GovernanceLogger, type AlertRule, type RuntimeObservabilityConfig } from '../../services/governance-logger';
 
 interface AlertConfig {
   slackWebhookUrl?: string;
