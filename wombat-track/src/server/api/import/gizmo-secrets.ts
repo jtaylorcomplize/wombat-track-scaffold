@@ -7,11 +7,11 @@ import express from 'express';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import { createGizmoAuthService } from '../../services/gizmo-auth';
-import { agentMonitoringService } from '../../services/AgentMonitoringService';
-import { enhancedGovernanceLogger } from '../../services/enhancedGovernanceLogger';
-import { secretsPropagationService } from '../../services/secretsPropagationService';
-import type { GizmoAgentCredentials } from '../../services/gizmo-auth';
+import { createGizmoAuthService } from '../../../services/gizmo-auth';
+import { agentMonitoringService } from '../../../services/AgentMonitoringService';
+import { enhancedGovernanceLogger } from '../../../services/enhancedGovernanceLogger';
+import { secretsPropagationService } from '../../../services/secretsPropagationService';
+import type { GizmoAgentCredentials } from '../../../services/gizmo-auth';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -317,19 +317,8 @@ router.post('/wizard/:sessionId/propagate', async (req, res) => {
       propagationStep.status = 'in_progress';
     }
 
-    const envPath = path.join(process.cwd(), '.env');
-    
-    // Read current .env file
-    let envContent = '';
-    try {
-      envContent = await fs.readFile(envPath, 'utf-8');
-    } catch (error) {
-      // .env file doesn't exist, create it
-      envContent = '';
-    }
-
     // Prepare Gizmo environment variables
-    const gizmoVars = {
+    const gizmoSecrets = {
       GIZMO_CLIENT_ID: session.credentials.clientId,
       GIZMO_CLIENT_SECRET: session.credentials.clientSecret,
       GIZMO_TOKEN_ENDPOINT: session.credentials.tokenEndpoint,
@@ -339,28 +328,27 @@ router.post('/wizard/:sessionId/propagate', async (req, res) => {
       GIZMO_AGENT_SCOPES: session.credentials.scopes?.join(',') || 'memory:write,audit:read,detection:write'
     };
 
-    // Update or add Gizmo variables in .env
-    let updatedEnvContent = envContent;
-    const existingVars: string[] = [];
-    const newVars: string[] = [];
+    // Filter out empty values
+    const filteredSecrets = Object.fromEntries(
+      Object.entries(gizmoSecrets).filter(([_, value]) => value !== '')
+    );
 
-    for (const [key, value] of Object.entries(gizmoVars)) {
-      if (value) { // Only add if value is not empty
-        const regex = new RegExp(`^${key}=.*$`, 'm');
-        if (regex.test(updatedEnvContent)) {
-          // Update existing variable
-          updatedEnvContent = updatedEnvContent.replace(regex, `${key}=${value}`);
-          existingVars.push(key);
-        } else {
-          // Add new variable
-          updatedEnvContent += `\n# Gizmo OAuth2 Integration\n${key}=${value}\n`;
-          newVars.push(key);
-        }
-      }
+    // Use secrets propagation service
+    const propagationResult = await secretsPropagationService.propagateSecrets({
+      environment: session.environment,
+      secrets: filteredSecrets,
+      targetPaths: {
+        envFile: path.join(process.cwd(), '.env'),
+        cicdConfig: path.join(process.cwd(), '.github', 'workflows'),
+        dockerCompose: path.join(process.cwd(), 'docker-compose.yml')
+      },
+      backup: true,
+      encrypt: false
+    });
+
+    if (!propagationResult.success) {
+      throw new Error(`Propagation failed: ${propagationResult.errors.join(', ')}`);
     }
-
-    // Write updated .env file
-    await fs.writeFile(envPath, updatedEnvContent);
 
     // Also store in secrets manager for backup
     try {
@@ -386,9 +374,10 @@ router.post('/wizard/:sessionId/propagate', async (req, res) => {
       propagationStep.status = 'completed';
       propagationStep.data = {
         env_file_updated: true,
-        variables_added: newVars,
-        variables_updated: existingVars,
-        backup_created: true,
+        variables_added: propagationResult.variablesAdded,
+        variables_updated: propagationResult.variablesUpdated,
+        backup_created: propagationResult.backupCreated,
+        target_files: propagationResult.targetFilesPaths,
         propagated_at: new Date().toISOString()
       };
     }
@@ -396,8 +385,9 @@ router.post('/wizard/:sessionId/propagate', async (req, res) => {
     await enhancedGovernanceLogger.logAgentAction('gizmo-secrets-wizard', 'propagation-completed', {
       session_id: sessionId,
       environment: session.environment,
-      variables_added: newVars,
-      variables_updated: existingVars
+      variables_added: propagationResult.variablesAdded.length,
+      variables_updated: propagationResult.variablesUpdated.length,
+      target_files: propagationResult.targetFilesPaths.length
     });
 
     res.json({
@@ -405,9 +395,10 @@ router.post('/wizard/:sessionId/propagate', async (req, res) => {
       message: 'Gizmo secrets propagated successfully',
       propagation_result: {
         env_file_updated: true,
-        variables_added: newVars,
-        variables_updated: existingVars,
-        secrets_manager_backup: true
+        variables_added: propagationResult.variablesAdded,
+        variables_updated: propagationResult.variablesUpdated,
+        secrets_manager_backup: true,
+        target_files: propagationResult.targetFilesPaths
       },
       next_step: 'activation'
     });

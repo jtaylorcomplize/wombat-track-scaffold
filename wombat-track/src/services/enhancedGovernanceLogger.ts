@@ -4,17 +4,8 @@
  */
 
 // Conditional imports for server-side only
-let writeFileSync: any, appendFileSync: any, existsSync: any, mkdirSync: any, path: any;
-
-if (typeof window === 'undefined') {
-  // Server-side imports
-  const fs = require('fs');
-  writeFileSync = fs.writeFileSync;
-  appendFileSync = fs.appendFileSync;
-  existsSync = fs.existsSync;
-  mkdirSync = fs.mkdirSync;
-  path = require('path');
-}
+import { writeFileSync, appendFileSync, existsSync, mkdirSync } from 'fs';
+import * as path from 'path';
 
 // Base governance event interface
 export interface BaseGovernanceEvent {
@@ -136,10 +127,10 @@ class EnhancedGovernanceLogger {
 
   constructor(config?: Partial<GovernanceLoggerConfig>) {
     this.config = {
-      baseDir: '/OF-BEV/Phase4.0/NavigationLogs',
+      baseDir: process.cwd() + '/logs/governance',
       memoryPluginEnabled: true,
-      consoleLoggingEnabled: import.meta.env.DEV,
-      driveMemoryPath: '/OF-BEV/Phase4.0/UAT/Sidebar-v3.1-Phase2',
+      consoleLoggingEnabled: process.env.NODE_ENV === 'development',
+      driveMemoryPath: process.cwd() + '/logs/drive-memory',
       ...config
     };
 
