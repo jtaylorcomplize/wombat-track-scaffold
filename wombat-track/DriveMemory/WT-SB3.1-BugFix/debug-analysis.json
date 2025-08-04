@@ -1,0 +1,174 @@
+{
+  "timestamp": "2025-08-04T03:30:35.971Z",
+  "files_analyzed": [
+    {
+      "file": "src/components/layout/EnhancedSidebarV3.tsx",
+      "status": "ANALYZED",
+      "issues_count": 6,
+      "issues": [
+        {
+          "pattern": "JSX keys that might be objects",
+          "severity": "HIGH",
+          "line": 332,
+          "match": "key={surface.id}",
+          "context": "key={surface.id}"
+        },
+        {
+          "pattern": "JSX keys that might be objects",
+          "severity": "HIGH",
+          "line": 417,
+          "match": "key={subApp.id}",
+          "context": "key={subApp.id}"
+        },
+        {
+          "pattern": "JSX keys that might be objects",
+          "severity": "HIGH",
+          "line": 466,
+          "match": "key={project?.id || index}",
+          "context": "<div key={project?.id || index} className=\"text-xs text-gray-500 truncate\">"
+        },
+        {
+          "pattern": "Template literals that might contain objects",
+          "severity": "MEDIUM",
+          "line": 203,
+          "match": "${surfaceId}",
+          "context": "navigate(`/orbis/${surfaceId}`);"
+        },
+        {
+          "pattern": "Template literals that might contain objects",
+          "severity": "MEDIUM",
+          "line": 223,
+          "match": "${routePath}",
+          "context": "navigate(`/orbis/${routePath}`);"
+        },
+        {
+          "pattern": "Template literals that might contain objects",
+          "severity": "MEDIUM",
+          "line": 0,
+          "match": "${\n              expandedSections['strategic-surfaces'] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'\n            }",
+          "context": ""
+        }
+      ]
+    },
+    {
+      "file": "src/components/operational/SubAppOverview.tsx",
+      "status": "ANALYZED",
+      "issues_count": 7,
+      "issues": [
+        {
+          "pattern": "JSX keys that might be objects",
+          "severity": "HIGH",
+          "line": 77,
+          "match": "key={i}",
+          "context": "<div key={i} className=\"bg-white rounded-lg border border-gray-200 p-6 animate-pulse\">"
+        },
+        {
+          "pattern": "JSX keys that might be objects",
+          "severity": "HIGH",
+          "line": 593,
+          "match": "key={action.id}",
+          "context": "key={action.id}"
+        },
+        {
+          "pattern": "JSX keys that might be objects",
+          "severity": "HIGH",
+          "line": 664,
+          "match": "key={activity.id}",
+          "context": "<div key={activity.id} className=\"flex items-start space-x-3 p-3 rounded-lg border border-gray-100\">"
+        },
+        {
+          "pattern": "Explicit string conversion",
+          "severity": "MEDIUM",
+          "line": 842,
+          "match": "String()",
+          "context": "{project.endDate ? new Date(project.endDate).toLocaleDateString() : 'No end date'}"
+        },
+        {
+          "pattern": "Template literals that might contain objects",
+          "severity": "MEDIUM",
+          "line": 100,
+          "match": "${subAppId}",
+          "context": "const isNestedRoute = location.pathname !== `/orbis/sub-apps/${subAppId}`;"
+        },
+        {
+          "pattern": "Template literals that might contain objects",
+          "severity": "MEDIUM",
+          "line": 100,
+          "match": "${subAppId}",
+          "context": "const isNestedRoute = location.pathname !== `/orbis/sub-apps/${subAppId}`;"
+        },
+        {
+          "pattern": "Template literals that might contain objects",
+          "severity": "MEDIUM",
+          "line": 492,
+          "match": "${diffMinutes}",
+          "context": "return `${diffMinutes} minutes ago`;"
+        }
+      ]
+    },
+    {
+      "file": "src/hooks/useOrbisAPI.ts",
+      "status": "ANALYZED",
+      "issues_count": 6,
+      "issues": [
+        {
+          "pattern": "Explicit string conversion",
+          "severity": "MEDIUM",
+          "line": 37,
+          "match": "String()",
+          "context": "lastUpdated: new Date().toISOString(),"
+        },
+        {
+          "pattern": "Explicit string conversion",
+          "severity": "MEDIUM",
+          "line": 37,
+          "match": "String()",
+          "context": "lastUpdated: new Date().toISOString(),"
+        },
+        {
+          "pattern": "Explicit string conversion",
+          "severity": "MEDIUM",
+          "line": 37,
+          "match": "String()",
+          "context": "lastUpdated: new Date().toISOString(),"
+        },
+        {
+          "pattern": "Template literals that might contain objects",
+          "severity": "MEDIUM",
+          "line": 230,
+          "match": "${API_BASE_URL}",
+          "context": "const response = await fetch(`${API_BASE_URL}/orbis/projects/all?${queryParams}`);"
+        },
+        {
+          "pattern": "Template literals that might contain objects",
+          "severity": "MEDIUM",
+          "line": 230,
+          "match": "${queryParams}",
+          "context": "const response = await fetch(`${API_BASE_URL}/orbis/projects/all?${queryParams}`);"
+        },
+        {
+          "pattern": "Template literals that might contain objects",
+          "severity": "MEDIUM",
+          "line": 233,
+          "match": "${response.status}",
+          "context": "throw new Error(`HTTP error! status: ${response.status}`);"
+        }
+      ]
+    },
+    {
+      "file": "src/router/OrbisRouter.tsx",
+      "status": "ANALYZED",
+      "issues_count": 0,
+      "issues": []
+    }
+  ],
+  "issues_found": [],
+  "recommendations": [
+    "1. Check all .map() operations for proper key extraction: key={item.id || index}",
+    "2. Ensure JSX children are primitives: <div>{item.name}</div> not <div>{item}</div>",
+    "3. Use JSON.stringify() for console logging objects",
+    "4. Add defensive null checks: item?.property?.method?.()",
+    "5. Verify React.lazy() returns valid default exports",
+    "6. Check template literals for object interpolation: ${obj} should be ${obj.property}"
+  ]
+}

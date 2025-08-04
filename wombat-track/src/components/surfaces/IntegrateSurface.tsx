@@ -280,3 +280,5 @@ What would you like help with today?`;
     </div>
   );
 };
+
+export default IntegrateSurface;

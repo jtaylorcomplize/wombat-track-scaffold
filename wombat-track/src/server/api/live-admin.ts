@@ -98,7 +98,16 @@ router.get('/:tableName', async (req, res) => {
 
   try {
     const config = TABLE_CONFIGS[tableName as keyof typeof TABLE_CONFIGS];
-    const query = `SELECT * FROM ${config.tableName} ORDER BY updatedAt DESC`;
+    
+    // Use appropriate ordering column for each table
+    let orderBy = 'updatedAt DESC';
+    if (tableName === 'governance_logs') {
+      orderBy = 'timestamp DESC';
+    } else if (tableName === 'step_progress') {
+      orderBy = 'createdAt DESC';
+    }
+    
+    const query = `SELECT * FROM ${config.tableName} ORDER BY ${orderBy}`;
     const records = await dbManager.executeQuery(query);
     
     res.json({

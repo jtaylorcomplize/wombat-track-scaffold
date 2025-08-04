@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { BarChart3, PieChart, TrendingUp, Calendar } from 'lucide-react';
 import { mockPrograms } from '../../data/mockPrograms';
 
-export const SubAppAnalyticsDashboard: React.FC = () => {
+const SubAppAnalyticsDashboard: React.FC = () => {
   const { subAppId } = useParams<{ subAppId: string }>();
   const subApp = mockPrograms.find(p => p.id === subAppId);
   
@@ -127,3 +127,6 @@ export const SubAppAnalyticsDashboard: React.FC = () => {
     </div>
   );
 };
+
+export { SubAppAnalyticsDashboard };
+export default SubAppAnalyticsDashboard;

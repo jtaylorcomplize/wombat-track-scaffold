@@ -102,6 +102,21 @@ const getMockSubAppsData = () => [
       totalUsers: 45,
       uptime: 99.2,
       avgResponseTime: 120
+    },
+    projects: {
+      total: 12,
+      recent: [
+        {
+          id: 'proj-orbis-001',
+          name: 'Market Intelligence Dashboard',
+          completionPercentage: 75
+        },
+        {
+          id: 'proj-orbis-002', 
+          name: 'Analytics Platform',
+          completionPercentage: 45
+        }
+      ]
     }
   },
   {
@@ -118,6 +133,21 @@ const getMockSubAppsData = () => [
       totalUsers: 23,
       uptime: 98.7,
       avgResponseTime: 95
+    },
+    projects: {
+      total: 8,
+      recent: [
+        {
+          id: 'proj-complize-001',
+          name: 'Compliance Management System',
+          completionPercentage: 60
+        },
+        {
+          id: 'proj-complize-002',
+          name: 'Regulatory Tracking Portal',
+          completionPercentage: 85
+        }
+      ]
     }
   },
   {
@@ -134,6 +164,21 @@ const getMockSubAppsData = () => [
       totalUsers: 12,
       uptime: 95.1,
       avgResponseTime: 180
+    },
+    projects: {
+      total: 4,
+      recent: [
+        {
+          id: 'proj-spqr-001',
+          name: 'SPQR Runtime Monitoring',
+          completionPercentage: 40
+        },
+        {
+          id: 'proj-spqr-002',
+          name: 'Performance Dashboard',
+          completionPercentage: 25
+        }
+      ]
     }
   }
 ];

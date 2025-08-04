@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Database, FileText, Search, Activity, Settings, Shield, Key } from 'lucide-react';
+import { Database, FileText, Search, Activity, Settings, Shield, Key, Edit3 } from 'lucide-react';
 import { useAdminMode } from '../../contexts/AdminModeContext';
 import DataExplorer from '../../pages/admin/DataExplorer';
 import ImportExport from '../../pages/admin/ImportExport';
 import DataIntegrity from '../../pages/admin/DataIntegrity';
 import RuntimeStatus from '../../pages/admin/RuntimeStatus';
 import { SecretsManager } from './SecretsManager';
+import EditableProjectsTable from './EditableProjectsTable';
+import EditablePhasesTable from './EditablePhasesTable';
 
-type AdminView = 'overview' | 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager';
+type AdminView = 'overview' | 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager' | 'editable-tables';
 
 interface AdminDashboardProps {
   initialView?: AdminView;
@@ -81,6 +83,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       label: 'Secrets Manager',
       icon: <Key size={20} />,
       description: 'MCP GSuite credential management'
+    },
+    {
+      id: 'editable-tables' as AdminView,
+      label: 'Editable Tables',
+      icon: <Edit3 size={20} />,
+      description: 'Edit projects and phases with draft/commit workflow'
     }
   ];
 
@@ -96,6 +104,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         return <RuntimeStatus />;
       case 'secrets-manager':
         return <SecretsManager />;
+      case 'editable-tables':
+        return (
+          <div className="space-y-8">
+            <EditableProjectsTable />
+            <EditablePhasesTable />
+          </div>
+        );
       case 'overview':
       default:
         return (

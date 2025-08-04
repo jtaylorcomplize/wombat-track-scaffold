@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, ChevronLeft, ChevronRight, Database, FileText, Clock, Users } from 'lucide-react';
+import { Search, Filter, ChevronLeft, ChevronRight, Database, FileText, Clock, Users, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface TableData {
   [key: string]: any;
@@ -12,9 +13,14 @@ interface TableMetadata {
   recordCount: number;
 }
 
-const TABLES: TableMetadata[] = [
-  { name: 'projects', icon: <FileText size={20} />, description: 'Project records (19 canonical properties)', recordCount: 3 },
-  { name: 'phases', icon: <Clock size={20} />, description: 'Phase definitions (10 canonical properties)', recordCount: 6 },
+interface SortConfig {
+  key: string | null;
+  direction: 'asc' | 'desc';
+}
+
+const INITIAL_TABLES: TableMetadata[] = [
+  { name: 'projects', icon: <FileText size={20} />, description: 'Project records (19 canonical properties)', recordCount: 0 },
+  { name: 'phases', icon: <Clock size={20} />, description: 'Phase definitions (10 canonical properties)', recordCount: 0 },
   { name: 'governance_logs', icon: <Database size={20} />, description: 'Audit and governance entries', recordCount: 0 },
   { name: 'step_progress', icon: <Users size={20} />, description: 'Step progress tracking', recordCount: 0 }
 ];
@@ -26,8 +32,37 @@ export default function DataExplorer() {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ key: null, direction: 'asc' });
+  const [tableCounts, setTableCounts] = useState<Record<string, number>>({});
   
   const itemsPerPage = 20;
+
+  // Fetch all table counts on mount
+  useEffect(() => {
+    const fetchAllTableCounts = async () => {
+      const counts: Record<string, number> = {};
+      
+      for (const table of INITIAL_TABLES) {
+        try {
+          const response = await fetch(`/api/admin/live/${table.name}`);
+          if (response.ok) {
+            const data = await response.json();
+            const recordArray = Array.isArray(data) ? data : 
+                              Array.isArray(data.data) ? data.data : 
+                              Array.isArray(data.rows) ? data.rows : [];
+            counts[table.name] = recordArray.length;
+          }
+        } catch (error) {
+          console.error(`Error fetching count for ${table.name}:`, error);
+          counts[table.name] = 0;
+        }
+      }
+      
+      setTableCounts(counts);
+    };
+    
+    fetchAllTableCounts();
+  }, []);
 
   // Fetch table data from API
   useEffect(() => {
@@ -35,7 +70,7 @@ export default function DataExplorer() {
       setLoading(true);
       try {
         // Use live database API for canonical property support
-        const response = await fetch(`http://localhost:3002/api/admin/live/${selectedTable}`);
+        const response = await fetch(`/api/admin/live/${selectedTable}`);
         if (response.ok) {
           const data = await response.json();
           
@@ -103,10 +138,39 @@ export default function DataExplorer() {
     return matchesSearch && matchesFilter;
   });
 
+  // Sorting logic
+  const sortedData = React.useMemo(() => {
+    if (!sortConfig.key) return filteredData;
+    
+    return [...filteredData].sort((a, b) => {
+      const aValue = a[sortConfig.key!];
+      const bValue = b[sortConfig.key!];
+      
+      // Handle null/undefined values
+      if (aValue === null || aValue === undefined) return 1;
+      if (bValue === null || bValue === undefined) return -1;
+      
+      // Compare values
+      let comparison = 0;
+      if (aValue < bValue) comparison = -1;
+      if (aValue > bValue) comparison = 1;
+      
+      return sortConfig.direction === 'asc' ? comparison : -comparison;
+    });
+  }, [filteredData, sortConfig]);
+
   // Pagination
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = sortedData.slice(startIndex, startIndex + itemsPerPage);
+
+  // Handle sorting
+  const handleSort = (key: string) => {
+    setSortConfig(prevConfig => ({
+      key,
+      direction: prevConfig.key === key && prevConfig.direction === 'asc' ? 'desc' : 'asc'
+    }));
+  };
 
   // Get table columns dynamically with null safety
   const getTableColumns = (data: TableData[]) => {
@@ -137,7 +201,7 @@ export default function DataExplorer() {
       <div className="bg-white rounded-lg shadow-sm border p-6">
         <h2 className="text-lg font-semibold mb-4">Select Table</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {TABLES.map((table) => (
+          {INITIAL_TABLES.map((table) => (
             <button
               key={table.name}
               onClick={() => {
@@ -158,7 +222,7 @@ export default function DataExplorer() {
                 </div>
                 <div className="text-left">
                   <div className="font-medium capitalize">{table.name.replace('_', ' ')}</div>
-                  <div className="text-sm text-gray-500">{table.recordCount} records</div>
+                  <div className="text-sm text-gray-500">{tableCounts[table.name] || 0} records</div>
                 </div>
               </div>
               <p className="text-sm text-gray-600 mt-2">{table.description}</p>
@@ -203,7 +267,7 @@ export default function DataExplorer() {
             </div>
           </div>
           <div className="text-sm text-gray-600">
-            Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredData.length)} of {filteredData.length} records
+            Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, sortedData.length)} of {sortedData.length} records
           </div>
         </div>
       </div>
@@ -244,9 +308,21 @@ export default function DataExplorer() {
                   {columns.map((column) => (
                     <th
                       key={column}
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSort(column)}
                     >
-                      {column.replace('_', ' ')}
+                      <div className="flex items-center space-x-1">
+                        <span>{column.replace('_', ' ')}</span>
+                        {sortConfig.key === column ? (
+                          sortConfig.direction === 'asc' ? (
+                            <ArrowUp size={14} />
+                          ) : (
+                            <ArrowDown size={14} />
+                          )
+                        ) : (
+                          <ArrowUpDown size={14} className="text-gray-400" />
+                        )}
+                      </div>
                     </th>
                   ))}
                 </tr>
@@ -269,6 +345,35 @@ export default function DataExplorer() {
                       {columns.map((column) => {
                         const cellValue = row[column];
                         const displayValue = cellValue === null || cellValue === undefined ? '' : String(cellValue);
+                        
+                        // Add deep-link for project and phase IDs
+                        if (selectedTable === 'projects' && column === 'projectId' && cellValue) {
+                          return (
+                            <td key={column} className="px-6 py-4 whitespace-nowrap text-sm">
+                              <Link 
+                                to={`/orbis/admin/projects/${cellValue}`}
+                                className="text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+                              >
+                                <span>{displayValue}</span>
+                                <ExternalLink size={14} />
+                              </Link>
+                            </td>
+                          );
+                        }
+                        
+                        if (selectedTable === 'phases' && column === 'phaseid' && cellValue) {
+                          return (
+                            <td key={column} className="px-6 py-4 whitespace-nowrap text-sm">
+                              <Link 
+                                to={`/orbis/admin/phases/${cellValue}`}
+                                className="text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+                              >
+                                <span>{displayValue}</span>
+                                <ExternalLink size={14} />
+                              </Link>
+                            </td>
+                          );
+                        }
                         
                         return (
                           <td key={column} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

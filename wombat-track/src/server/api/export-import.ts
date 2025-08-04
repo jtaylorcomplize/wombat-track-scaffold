@@ -97,6 +97,7 @@ async function getTableData(tableName: string, config: any): Promise<any[]> {
   try {
     // Use live database for canonical tables
     if (config.dataSource === 'live_database') {
+      console.log(`🔄 Attempting to load from live database: ${config.tableName}`);
       const dbManager = DatabaseManager.getInstance();
       const db = await dbManager.getConnection('production');
       const query = `SELECT * FROM ${config.tableName} ORDER BY updatedAt DESC`;

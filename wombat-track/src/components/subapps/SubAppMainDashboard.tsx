@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Activity, TrendingUp, Users, AlertTriangle } from 'lucide-react';
 import { mockPrograms } from '../../data/mockPrograms';
 
-export const SubAppMainDashboard: React.FC = () => {
+const SubAppMainDashboard: React.FC = () => {
   const { subAppId } = useParams<{ subAppId: string }>();
   const subApp = mockPrograms.find(p => p.id === subAppId);
   
@@ -106,3 +106,6 @@ export const SubAppMainDashboard: React.FC = () => {
     </div>
   );
 };
+
+export { SubAppMainDashboard };
+export default SubAppMainDashboard;

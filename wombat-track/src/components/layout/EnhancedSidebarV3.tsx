@@ -89,41 +89,54 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
   const { navigateToStrategic, navigateToSubApp } = useNavigationContext();
   const navigate = useNavigate();
   const { expandedSections, toggleSection } = useAccordionState(DEFAULT_ACCORDION_STATE);
-  
+
   // Use real API data for sub-apps with live status
-  const { 
-    data: subApps, 
-    loading: subAppsLoading, 
+  const {
+    data: subApps,
+    loading: subAppsLoading,
     refresh: refreshSubApps,
     isLive: subAppsLive
   } = useSubApps(true);
-  
+
   // Get runtime status for live health indicators
-  const { 
-    data: runtimeStatus, 
-    isLive: runtimeLive 
+  const {
+    data: runtimeStatus,
+    isLive: runtimeLive
   } = useRuntimeStatus();
+
+  // Debug: Log shapes before rendering
+  console.log('Sidebar subApps:', subApps);
+  if (subApps && Array.isArray(subApps)) {
+    subApps.forEach((subApp, i) => {
+      console.log(`subApp[${i}]`, subApp);
+      if (subApp.projects && Array.isArray(subApp.projects.recent)) {
+        subApp.projects.recent.forEach((project, j) => {
+          console.log(`subApp[${i}].projects.recent[${j}]`, project);
+        });
+      }
+    });
+  }
 
   const handleAccordionToggle = (sectionId: string) => {
     const willBeExpanded = !expandedSections[sectionId];
     const action = willBeExpanded ? 'expand' : 'collapse';
-    
+
     // Enhanced governance logging with full context
     governanceLogger.logAccordionToggle(
       sectionId,
       action,
-      Object.keys(expandedSections).filter(key => 
+      Object.keys(expandedSections).filter(key =>
         key === sectionId ? willBeExpanded : expandedSections[key]
       )
     );
-    
+
     toggleSection(sectionId);
   };
 
   const handleViewAllProjects = (subAppId: string, subAppName: string) => {
     const subApp = subApps?.find(s => s.id === subAppId);
     const projectCount = subApp?.projects?.total || 0;
-    
+
     // Enhanced governance logging for view all projects
     governanceLogger.logViewAllProjects(
       subAppId,
@@ -131,15 +144,17 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
       projectCount,
       'sidebar_click'
     );
-    
+
     navigateToSubApp(subAppId);
   };
 
   const handleSubAppSelect = (subAppId: string, subAppName: string) => {
     const subApp = subApps?.find(s => s.id === subAppId);
     const projectCount = subApp?.projects?.total || 0;
-    const recentProjects = subApp?.projects?.recent?.map(p => p.name) || [];
-    
+    const recentProjects = Array.isArray(subApp?.projects?.recent)
+      ? subApp.projects.recent.map((p: any) => typeof p.name === 'string' ? p.name : '')
+      : [];
+
     // Enhanced governance logging for sub-app selection
     governanceLogger.logSubAppSelect(
       subAppId,
@@ -148,7 +163,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
       recentProjects,
       'sidebar_navigation'
     );
-    
+
     navigateToSubApp(subAppId);
   };
 
@@ -159,7 +174,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
       navigationState.strategicSurface,
       'sidebar_click'
     );
-    
+
     navigateToStrategic(surface);
   };
 
@@ -171,7 +186,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
       launchUrl,
       'sidebar_button'
     );
-    
+
     window.open(launchUrl, '_blank');
   };
 
@@ -221,13 +236,13 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
 
   const handleSidebarToggle = () => {
     const action = collapsed ? 'expand' : 'collapse';
-    
+
     // Enhanced governance logging for sidebar toggle
     governanceLogger.logSidebarToggle(
       action,
       window.location.pathname
     );
-    
+
     onToggleCollapse();
   };
 
@@ -235,7 +250,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
   const getSubAppStatus = (subAppId: string) => {
     const runtimeSubApp = runtimeStatus?.runtimeStatuses?.find(r => r.subAppId === subAppId);
     const subAppData = subApps?.find(s => s.id === subAppId);
-    
+
     return {
       status: runtimeSubApp?.status || subAppData?.status || 'warning',
       uptime: runtimeSubApp?.uptime || subAppData?.metrics?.uptime || 0,
@@ -257,13 +272,13 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
-        
+
         <div className="flex-1 flex flex-col space-y-4 px-2 py-4">
           <div className="flex flex-col items-center space-y-2">
             <Layers className="w-5 h-5 text-blue-600" title="Project Surfaces" />
             <div className="w-2 h-2 bg-blue-500 rounded-full" />
           </div>
-          
+
           <div className="flex flex-col items-center space-y-2">
             <Rocket className="w-5 h-5 text-purple-600" title="Sub-Apps" />
             <div className="w-2 h-2 bg-purple-500 rounded-full" />
@@ -320,12 +335,12 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
           >
             <div className="px-4 pb-4 space-y-1">
               {STRATEGIC_SURFACES.map((surface) => {
-                const isSelected = navigationState.level === 'strategic' && 
-                                 navigationState.strategicSurface === surface.id;
-                
+                const isSelected = navigationState.level === 'strategic' &&
+                  navigationState.strategicSurface === surface.id;
+
                 return (
                   <button
-                    key={surface.id}
+                    key={String(surface.id)}
                     onClick={() => handleStrategicSurfaceSelect(surface.id)}
                     className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-all ${
                       isSelected
@@ -336,10 +351,10 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                     {surface.icon}
                     <div className="flex-1 text-left">
                       <div className={`font-medium ${isSelected ? 'text-blue-700' : 'text-gray-900'}`}>
-                        {surface.label}
+                        {String(surface.label)}
                       </div>
                       <div className={`text-xs ${isSelected ? 'text-blue-600' : 'text-gray-500'}`}>
-                        {surface.description}
+                        {String(surface.description)}
                       </div>
                     </div>
                     {isSelected && (
@@ -398,18 +413,20 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                 </div>
               ) : (
                 subApps.map((subApp) => {
-                  const isSelected = navigationState.level === 'operational' && 
-                                   navigationState.subAppId === subApp.id;
+                  const isSelected = navigationState.level === 'operational' &&
+                    navigationState.subAppId === subApp.id;
                   const subAppStatus = getSubAppStatus(subApp.id);
-                  const projectCount = subApp.projects?.total || 0;
-                  const recentProjects = subApp.projects?.recent || [];
-                  
+
+                  // Defensive fallback values
+                  const projectCount = typeof subApp.projects?.total === 'number' ? subApp.projects.total : 0;
+                  const recentProjects = Array.isArray(subApp.projects?.recent) ? subApp.projects.recent : [];
+
                   return (
                     <div
-                      key={subApp.id}
+                      key={String(subApp.id)}
                       className={`border rounded-lg p-4 transition-all ${
-                        isSelected 
-                          ? 'border-purple-300 bg-purple-50' 
+                        isSelected
+                          ? 'border-purple-300 bg-purple-50'
                           : 'border-gray-200 hover:border-purple-200 hover:bg-gray-50'
                       }`}
                     >
@@ -418,12 +435,12 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                         <div className="flex items-center space-x-3">
                           <div className={`w-3 h-3 rounded-full ${
                             subAppStatus.status === 'active' ? 'bg-green-500' :
-                            subAppStatus.status === 'warning' ? 'bg-amber-500' : 'bg-red-500'
-                          }`} title={`Status: ${subAppStatus.status} | Uptime: ${subAppStatus.uptime.toFixed(1)}%`} />
+                              subAppStatus.status === 'warning' ? 'bg-amber-500' : 'bg-red-500'
+                          }`} title={`Status: ${String(subAppStatus.status)} | Uptime: ${Number(subAppStatus.uptime).toFixed(1)}%`} />
                           <div>
-                            <h4 className="font-medium text-gray-900">{subApp.name}</h4>
+                            <h4 className="font-medium text-gray-900">{String(subApp.name)}</h4>
                             <p className="text-xs text-gray-500">
-                              v{subApp.version} • {subAppStatus.responseTime.toFixed(0)}ms
+                              v{String(subApp.version)} • {Number(subAppStatus.responseTime).toFixed(0)}ms
                             </p>
                           </div>
                         </div>
@@ -431,7 +448,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                           onClick={() => handleSubAppLaunch(subApp.id, subApp.name, subApp.launchUrl)}
                           className="p-1 text-gray-400 hover:text-purple-600 transition-colors"
                           title="Open sub-app in new tab"
-                          aria-label={`Open ${subApp.name} in new tab`}
+                          aria-label={`Open ${String(subApp.name)} in new tab`}
                         >
                           <ExternalLink className="w-4 h-4" />
                         </button>
@@ -441,7 +458,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                       <div className="bg-white rounded-md p-3 border border-gray-100">
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-600">
-                            {projectCount} {projectCount === 1 ? 'project' : 'projects'}
+                            {Number(projectCount)} {projectCount === 1 ? 'project' : 'projects'}
                           </span>
                           <button
                             onClick={() => handleViewAllProjects(subApp.id, subApp.name)}
@@ -450,15 +467,22 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                             View All →
                           </button>
                         </div>
-                        
+
                         {/* Recent Projects Preview (real data) */}
                         {recentProjects.length > 0 && (
                           <div className="mt-2 space-y-1">
-                            {recentProjects.slice(0, 2).map((project) => (
-                              <div key={project.id} className="text-xs text-gray-500 truncate">
-                                • {project.name} ({project.completionPercentage}%)
-                              </div>
-                            ))}
+                            {recentProjects.slice(0, 2).map((project, idx) => {
+                              // Defensive property access
+                              const projectId = typeof project.id === 'string' || typeof project.id === 'number' ? project.id : `project-${idx}`;
+                              const projectName = typeof project.name === 'string' ? project.name : '[Unnamed]';
+                              const completion = typeof project.completionPercentage === 'number' ? project.completionPercentage : 0;
+
+                              return (
+                                <div key={String(projectId)} className="text-xs text-gray-500 truncate">
+                                  • {String(projectName)} ({Number(completion)}%)
+                                </div>
+                              );
+                            })}
                             {projectCount > 2 && (
                               <div className="text-xs text-gray-400 italic">
                                 +{projectCount - 2} more...
@@ -477,7 +501,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                   );
                 })
               )}
-              
+
               {/* Refresh Button */}
               <div className="pt-2">
                 <button
@@ -522,64 +546,64 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
           }`}
         >
           <div className="px-4 pb-4 space-y-1">
-              {SYSTEM_SURFACES.map((surface) => {
-                const isSelected = false; // We can add selection logic later if needed
-                
-                return (
-                  <div key={surface.id} className="space-y-1">
-                    <button
-                      onClick={() => handleSystemSurfaceSelect(
-                        surface.id, 
-                        surface.action, 
-                        surface.url, 
-                        surface.route
-                      )}
-                      className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-all ${
-                        isSelected
-                          ? 'bg-orange-100 text-orange-700 border border-orange-200'
-                          : 'text-gray-700 hover:bg-gray-50 border border-transparent'
-                      }`}
-                    >
-                      {surface.icon}
-                      <div className="flex-1 text-left">
-                        <div className={`font-medium ${isSelected ? 'text-orange-700' : 'text-gray-900'}`}>
-                          {surface.label}
-                        </div>
-                        <div className={`text-xs ${isSelected ? 'text-orange-600' : 'text-gray-500'}`}>
-                          {surface.description}
-                        </div>
-                      </div>
-                      {isSelected && (
-                        <div className="w-2 h-2 bg-orange-500 rounded-full" aria-hidden="true" />
-                      )}
-                    </button>
+            {SYSTEM_SURFACES.map((surface) => {
+              const isSelected = false; // Selection logic can be added later
 
-                    {/* Admin Sub-Surfaces */}
-                    {surface.id === 'admin' && surface.subSurfaces && (
-                      <div className="ml-8 space-y-1 border-l-2 border-gray-200 pl-3">
-                        {surface.subSurfaces.map((subSurface) => (
-                          <button
-                            key={subSurface.id}
-                            onClick={() => handleAdminSubSurfaceSelect(subSurface.id)}
-                            className="w-full flex items-center space-x-2 p-1.5 text-left rounded-md hover:bg-gray-50 transition-colors group"
-                            title={subSurface.description}
-                          >
-                            <div className="w-2 h-2 bg-gray-300 rounded-full group-hover:bg-gray-400"></div>
-                            <span className="text-xs font-medium text-gray-600 group-hover:text-gray-800">
-                              {subSurface.label}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
+              return (
+                <div key={String(surface.id)} className="space-y-1">
+                  <button
+                    onClick={() => handleSystemSurfaceSelect(
+                      surface.id,
+                      surface.action,
+                      surface.url,
+                      surface.route
                     )}
-                  </div>
-                );
-              })}
-            </div>
+                    className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-all ${
+                      isSelected
+                        ? 'bg-orange-100 text-orange-700 border border-orange-200'
+                        : 'text-gray-700 hover:bg-gray-50 border border-transparent'
+                    }`}
+                  >
+                    {surface.icon}
+                    <div className="flex-1 text-left">
+                      <div className={`font-medium ${isSelected ? 'text-orange-700' : 'text-gray-900'}`}>
+                        {String(surface.label)}
+                      </div>
+                      <div className={`text-xs ${isSelected ? 'text-orange-600' : 'text-gray-500'}`}>
+                        {String(surface.description)}
+                      </div>
+                    </div>
+                    {isSelected && (
+                      <div className="w-2 h-2 bg-orange-500 rounded-full" aria-hidden="true" />
+                    )}
+                  </button>
+
+                  {/* Admin Sub-Surfaces */}
+                  {surface.id === 'admin' && surface.subSurfaces && (
+                    <div className="ml-8 space-y-1 border-l-2 border-gray-200 pl-3">
+                      {surface.subSurfaces.map((subSurface) => (
+                        <button
+                          key={String(subSurface.id)}
+                          onClick={() => handleAdminSubSurfaceSelect(subSurface.id)}
+                          className="w-full flex items-center space-x-2 p-1.5 text-left rounded-md hover:bg-gray-50 transition-colors group"
+                          title={String(subSurface.description)}
+                        >
+                          <div className="w-2 h-2 bg-gray-300 rounded-full group-hover:bg-gray-400"></div>
+                          <span className="text-xs font-medium text-gray-600 group-hover:text-gray-800">
+                            {String(subSurface.label)}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
+      </div>
 
-        {/* Footer */}
+      {/* Footer */}
       <div className="p-4 border-t border-gray-200 bg-gray-50">
         <div className="text-xs text-gray-500 text-center">
           Enhanced Sidebar v3.1 • SDLC-Ready

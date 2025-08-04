@@ -47,13 +47,13 @@ export const AdminModeProvider: React.FC<AdminModeProviderProps> = ({ children }
         document.body.classList.remove('admin-theme');
       }
       
-      console.log('🔐 Admin Mode Check:', {
+      console.log('🔐 Admin Mode Check:', JSON.stringify({
         envAdminMode,
         urlAdminMode,
         storedAdminMode,
         adminModeActive,
         environment: currentEnv
-      });
+      }, null, 2));
     };
 
     checkAdminMode();

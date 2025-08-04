@@ -16,6 +16,8 @@ import runtimeRoutes from './api/runtime';
 import jsonOperationsRoutes from './api/json-operations';
 import mcpGsuiteRoutes from './api/mcp-gsuite';
 import secretsRoutes from './api/secrets';
+import adminDetailRoutes from './api/admin-detail';
+import adminEditRoutes from './api/admin-edit';
 import { getAllProjects, getSubApps, getSubAppRecentProjects, getRuntimeStatus, getProjectById } from './api/orbis';
 
 const app = express();
@@ -25,7 +27,7 @@ const PORT = process.env.ADMIN_PORT || 3002;
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'],
+  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176', 'http://localhost:5177', 'http://localhost:5178', 'http://localhost:5179', 'http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-user-id']
@@ -77,6 +79,16 @@ console.log('   ✓ /api/mcp/gsuite/* - MCP GSuite integration (WT-MCPGS-1.0)');
 // Secrets management routes
 app.use('/api/admin/secrets', secretsRoutes);
 console.log('   ✓ /api/admin/secrets/* - Secrets management (MCP credentials)');
+
+// Admin detail routes (deep-link support)
+app.use('/api/admin', adminDetailRoutes);
+console.log('   ✓ /api/admin/projects/:id - Project detail view');
+console.log('   ✓ /api/admin/phases/:id - Phase detail view');
+
+// Editable table routes (draft/commit workflow)
+app.use('/api/admin/edit', adminEditRoutes);
+console.log('   ✓ /api/admin/edit/projects - Editable projects with draft/commit');
+console.log('   ✓ /api/admin/edit/phases - Editable phases with draft/commit');
 
 // Orbis API routes for cross-sub-app data
 app.get('/api/orbis/projects/all', getAllProjects);

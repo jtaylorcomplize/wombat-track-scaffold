@@ -6,12 +6,12 @@ import { SubAppDashboard } from '../SubAppDashboard';
 import { AdminDashboard } from '../admin/AdminDashboard';
 
 // Dynamic imports for better performance and loading states
-const PlanSurface = lazy(() => import('../surfaces/PlanSurface').then(module => ({ default: module.PlanSurface })));
-const ExecuteSurface = lazy(() => import('../surfaces/ExecuteSurface').then(module => ({ default: module.ExecuteSurface })));
-const DocumentSurface = lazy(() => import('../surfaces/DocumentSurface').then(module => ({ default: module.DocumentSurface })));
-const GovernSurface = lazy(() => import('../surfaces/GovernSurface').then(module => ({ default: module.GovernSurface })));
-const IntegrateSurface = lazy(() => import('../surfaces/IntegrateSurface').then(module => ({ default: module.IntegrateSurface })));
-const SPQRRuntimeDashboard = lazy(() => import('../SPQR/SPQRRuntimeDashboard').then(module => ({ default: module.SPQRRuntimeDashboard })));
+const PlanSurface = lazy(() => import('../surfaces/PlanSurface'));
+const ExecuteSurface = lazy(() => import('../surfaces/ExecuteSurface'));
+const DocumentSurface = lazy(() => import('../surfaces/DocumentSurface'));
+const GovernSurface = lazy(() => import('../surfaces/GovernSurface'));
+const IntegrateSurface = lazy(() => import('../surfaces/IntegrateSurface'));
+const SPQRRuntimeDashboard = lazy(() => import('../SPQR/SPQRRuntimeDashboard'));
 import { AdminModeProvider } from '../../contexts/AdminModeContext';
 import { ProjectProvider, useProjectContext } from '../../contexts/ProjectContext';
 import { useSidebarState } from '../../hooks/useLocalStorage';

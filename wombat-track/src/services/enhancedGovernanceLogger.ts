@@ -209,7 +209,7 @@ class EnhancedGovernanceLogger {
 
     // Console logging for development
     if (this.config.consoleLoggingEnabled) {
-      console.log(`[GovernanceEvent] ${event.event}:`, enrichedEvent);
+      console.log(`[GovernanceEvent] ${event.event}:`, JSON.stringify(enrichedEvent, null, 2));
     }
 
     // Create MemoryPlugin anchor for major context changes
@@ -250,7 +250,7 @@ class EnhancedGovernanceLogger {
     // In a real implementation, this would call the MemoryPlugin API
     // For now, we'll log the anchor creation
     if (this.config.consoleLoggingEnabled) {
-      console.log(`[MemoryPlugin] Created anchor: ${anchorId}`, anchorData);
+      console.log(`[MemoryPlugin] Created anchor: ${anchorId}`, JSON.stringify(anchorData, null, 2));
     }
 
     // Save anchor to DriveMemory (server-side only)
@@ -497,7 +497,7 @@ const debugAnchor = {
   }
 };
 
-console.log('[DEBUG] Sidebar v3.1 rendering failure analysis:', debugAnchor);
+console.log('[DEBUG] Sidebar v3.1 rendering failure analysis:', JSON.stringify(debugAnchor, null, 2));
 
 // Create resolution anchor
 const resolutionAnchor = {
@@ -531,7 +531,7 @@ const resolutionAnchor = {
   }
 };
 
-console.log('[RESOLUTION] Sidebar v3.1 rendering and routing fixed:', resolutionAnchor);
+console.log('[RESOLUTION] Sidebar v3.1 rendering and routing fixed:', JSON.stringify(resolutionAnchor, null, 2));
 
 // Browser compatibility test
 if (typeof window !== 'undefined') {
@@ -599,18 +599,6 @@ export const governanceLogger = {
         );
         break;
     }
-  },
-
-  logAccordionToggle: (sectionId: string, isExpanded: boolean) => {
-    enhancedGovernanceLogger.logAccordionToggle(
-      sectionId,
-      isExpanded ? 'expand' : 'collapse',
-      [sectionId] // This would need to be passed from the component
-    );
-  },
-
-  logSubAppLaunch: (subAppId: string, launchUrl: string, subAppName: string) => {
-    enhancedGovernanceLogger.logSubAppLaunch(subAppId, subAppName, launchUrl, 'sidebar_button');
   }
 };
 

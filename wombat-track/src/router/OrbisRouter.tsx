@@ -3,6 +3,13 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom
 import { NavigationContextProvider } from '../contexts/NavigationContext';
 import { AdminModeProvider } from '../contexts/AdminModeContext';
 
+// Temporarily use direct imports to isolate the lazy loading issue
+import PlanSurfaceComponent from '../components/surfaces/PlanSurface';
+import ExecuteSurfaceComponent from '../components/surfaces/ExecuteSurface';
+import DocumentSurfaceComponent from '../components/surfaces/DocumentSurface';
+import GovernSurfaceComponent from '../components/surfaces/GovernSurface';
+import IntegrateSurfaceComponent from '../components/surfaces/IntegrateSurface';
+
 // Lazy load all route components
 const OrbisLayout = lazy(() => import('../components/layout/OrbisLayout'));
 const AllProjectsDashboard = lazy(() => import('../components/strategic/AllProjectsDashboard'));
@@ -11,14 +18,18 @@ const TeamOverview = lazy(() => import('../components/strategic/TeamOverview'));
 const StrategicPlanning = lazy(() => import('../components/strategic/StrategicPlanning'));
 const SubAppOverview = lazy(() => import('../components/operational/SubAppOverview'));
 const SubAppProjectsList = lazy(() => import('../components/operational/SubAppProjectsList'));
-const ProjectDashboard = lazy(() => import('../components/ProjectDashboard'));
-const PlanSurface = lazy(() => import('../components/surfaces/PlanSurface').then(m => ({ default: m.PlanSurface })));
-const ExecuteSurface = lazy(() => import('../components/surfaces/ExecuteSurface').then(m => ({ default: m.ExecuteSurface })));
-const DocumentSurface = lazy(() => import('../components/surfaces/DocumentSurface').then(m => ({ default: m.DocumentSurface })));
-const GovernSurface = lazy(() => import('../components/surfaces/GovernSurface').then(m => ({ default: m.GovernSurface })));
-const IntegrateSurface = lazy(() => import('../components/surfaces/IntegrateSurface').then(m => ({ default: m.IntegrateSurface })));
+const SubAppProjectDetail = lazy(() => import('../components/operational/SubAppProjectDetail'));
+const ProjectDashboard = lazy(() => import('../components/ProjectDashboard').then(module => ({ default: module.ProjectDashboard })));
+const PlanSurface = PlanSurfaceComponent;
+const ExecuteSurface = ExecuteSurfaceComponent;
+const DocumentSurface = DocumentSurfaceComponent;
+const GovernSurface = GovernSurfaceComponent;
+const IntegrateSurface = IntegrateSurfaceComponent;
 const SPQRRuntimeDashboard = lazy(() => import('../components/SPQR/SPQRRuntimeDashboard'));
 const AdminDashboard = lazy(() => import('../components/admin/AdminDashboard'));
+const AdminProjectView = lazy(() => import('../pages/admin/AdminProjectView'));
+const AdminPhaseView = lazy(() => import('../pages/admin/AdminPhaseView'));
+const ProjectAdminEdit = lazy(() => import('../pages/admin/ProjectAdminEdit'));
 
 // Loading component
 const RouteLoading: React.FC = () => (
@@ -69,16 +80,8 @@ export const OrbisRouter: React.FC = () => {
                 {/* Sub-app projects list */}
                 <Route path="projects" element={<SubAppProjectsList />} />
                 
-                {/* Individual project with work surfaces */}
-                <Route path="projects/:projectId" element={<ProjectDashboard />}>
-                  <Route element={<WorkSurfaceWrapper />}>
-                    <Route path="plan" element={<PlanSurface />} />
-                    <Route path="execute" element={<ExecuteSurface />} />
-                    <Route path="document" element={<DocumentSurface />} />
-                    <Route path="govern" element={<GovernSurface />} />
-                    <Route index element={<Navigate to="plan" replace />} />
-                  </Route>
-                </Route>
+                {/* Individual project details */}
+                <Route path="projects/:projectId" element={<SubAppProjectDetail />} />
                 
                 {/* Default to projects list when accessing sub-app */}
                 <Route index element={<Navigate to="projects" replace />} />
@@ -93,6 +96,12 @@ export const OrbisRouter: React.FC = () => {
               <Route path="admin/orphan-inspector" element={<AdminModeProvider><AdminDashboard initialView="orphan-inspector" /></AdminModeProvider>} />
               <Route path="admin/runtime-panel" element={<AdminModeProvider><AdminDashboard initialView="runtime-panel" /></AdminModeProvider>} />
               <Route path="admin/secrets-manager" element={<AdminModeProvider><AdminDashboard initialView="secrets-manager" /></AdminModeProvider>} />
+              <Route path="admin/editable-tables" element={<AdminModeProvider><AdminDashboard initialView="editable-tables" /></AdminModeProvider>} />
+              
+              {/* Admin Deep-Link Routes */}
+              <Route path="admin/projects/:projectId" element={<AdminModeProvider><AdminProjectView /></AdminModeProvider>} />
+              <Route path="admin/projects/:projectId/edit" element={<AdminModeProvider><ProjectAdminEdit /></AdminModeProvider>} />
+              <Route path="admin/phases/:phaseId" element={<AdminModeProvider><AdminPhaseView /></AdminModeProvider>} />
             </Route>
             
             {/* Catch all - redirect to Orbis */}
