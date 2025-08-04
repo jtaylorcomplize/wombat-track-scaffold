@@ -17,15 +17,9 @@ const AllProjectsDashboard = lazy(() => import('../components/strategic/AllProje
 const ProjectAnalyticsDashboard = lazy(() => import('../components/strategic/ProjectAnalyticsDashboard'));
 const TeamOverview = lazy(() => import('../components/strategic/TeamOverview'));
 const StrategicPlanning = lazy(() => import('../components/strategic/StrategicPlanning'));
-// Temporarily use direct import to debug lazy loading issue
-import SubAppOverviewComponent from '../components/operational/SubAppOverview';
-const SubAppOverview = SubAppOverviewComponent;
-// Temporarily use direct import to debug lazy loading issue
-import SubAppProjectsListComponent from '../components/operational/SubAppProjectsList';
-const SubAppProjectsList = SubAppProjectsListComponent;
-// Temporarily use direct import to debug lazy loading issue
-import { ProjectDashboard as ProjectDashboardComponent } from '../components/ProjectDashboard';
-const ProjectDashboard = ProjectDashboardComponent;
+const SubAppOverview = lazy(() => import('../components/operational/SubAppOverview'));
+const SubAppProjectsList = lazy(() => import('../components/operational/SubAppProjectsList'));
+const ProjectDashboard = lazy(() => import('../components/ProjectDashboard').then(module => ({ default: module.ProjectDashboard })));
 const PlanSurface = PlanSurfaceComponent;
 const ExecuteSurface = ExecuteSurfaceComponent;
 const DocumentSurface = DocumentSurfaceComponent;
