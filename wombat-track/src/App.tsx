@@ -1,7 +1,6 @@
 // wombat-track/src/App.tsx
 import React, { useState } from 'react';
 import { AppLayout } from './components/layout/AppLayout';
-import { AppRouter } from './router/AppRouter';
 import { OrbisRouter } from './router/OrbisRouter';
 import { PhasePlan } from './pages/PhasePlan';
 import { OrbisDashboard } from './pages/OrbisDashboard';

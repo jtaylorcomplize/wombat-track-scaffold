@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 type SetValue<T> = T | ((val: T) => T);
 

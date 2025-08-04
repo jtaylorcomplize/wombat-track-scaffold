@@ -1,0 +1,50 @@
+{
+  "integrationMap": {
+    "name": "oApp_Gizmo_Autonomous_Integration",
+    "version": "1.0.0",
+    "milestone": "OF-SDLC-IMP1",
+    "description": "Enable Gizmo as autonomous SDLC agent inside oApp, handling PhaseStep triggers, branch merges, governance closure, and MemoryPlugin anchors.",
+    "secrets": {
+      "githubToken": "USE_ENV_VAR_GITHUB_TOKEN",
+      "memoryPluginKey": "USE_ENV_VAR_MEMORYPLUGIN_KEY",
+      "driveMemoryKey": "PENDING_LOCAL_RAG"
+    },
+    "triggers": [
+      {
+        "event": "PhaseStepComplete",
+        "actions": [
+          "Validate step state",
+          "Generate GovernanceLog JSON",
+          "Push Memory Anchor to MemoryPlugin",
+          "Store interim log for DriveMemory batch"
+        ]
+      },
+      {
+        "event": "BranchMergeToMain",
+        "actions": [
+          "Trigger AutoAudit Agent",
+          "Generate closure Governance JSON",
+          "Push Memory Anchor",
+          "Optionally trigger Puppeteer evidence capture"
+        ]
+      },
+      {
+        "event": "UATClosure",
+        "actions": [
+          "Capture Puppeteer screenshots/logs",
+          "Finalize Governance JSON",
+          "Archive to DriveMemory when RAG available"
+        ]
+      }
+    ],
+    "governance": {
+      "memoryAnchorFormat": "wt-[project|phase]-[event]-[YYYYMMDD]",
+      "driveMemoryArchive": "DriveMemory/WT-IMP1/ClosureArtifacts",
+      "governanceLogType": "Closure"
+    },
+    "notes": {
+      "security": "Do not embed tokens in client code; keep in server env.",
+      "driveMemory": "Batch-import to RAG layer planned post-local integration."
+    }
+  }
+}

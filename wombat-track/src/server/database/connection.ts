@@ -1,7 +1,8 @@
-import sqlite3 from 'sqlite3';
-import { Database, open } from 'sqlite';
-import path from 'path';
-import fs from 'fs/promises';
+import * as sqlite3 from 'sqlite3';
+import type { Database} from 'sqlite';
+import { open } from 'sqlite';
+import * as path from 'path';
+import { promises as fs } from 'fs';
 
 interface DatabasePool {
   db: Database;
@@ -30,7 +31,7 @@ class DatabaseManager {
       
       const db = await open({
         filename: dbPath,
-        driver: sqlite3.Database
+        driver: sqlite3.default.Database
       });
 
       // Initialize schema if needed
@@ -231,13 +232,13 @@ class DatabaseManager {
   }
 
   async closeAllConnections(): Promise<void> {
-    for (const [dbName, pool] of this.pools) {
+    this.pools.forEach(async (pool, dbName) => {
       try {
         await pool.db.close();
       } catch (error) {
         console.error(`Failed to close database ${dbName}:`, error);
       }
-    }
+    });
     this.pools.clear();
   }
 }

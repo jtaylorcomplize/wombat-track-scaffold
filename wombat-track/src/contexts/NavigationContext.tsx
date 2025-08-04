@@ -220,8 +220,8 @@ export const NavigationContextProvider: React.FC<NavigationContextProviderProps>
     const names: Record<string, string> = {
       'prog-orbis-001': 'Orbis Intelligence',
       'prog-complize-001': 'Complize Platform',
-      'prog-spqr-001': 'SPQR Runtime',
-      'prog-visacalc-001': 'VisaCalc Pro'
+      'prog-spqr-001': 'SPQR', 
+      'prog-roam-001': 'Roam'
     };
     return names[subAppId] || subAppId;
   };

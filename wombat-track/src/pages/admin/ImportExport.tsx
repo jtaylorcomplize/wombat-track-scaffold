@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Download, Upload, FileText, Database, AlertCircle, CheckCircle } from 'lucide-react';
 
-interface ImportExportProps {}
-
 const TABLES = [
   { id: 'projects', name: 'Projects', description: 'Canonical projects (20 properties)' },
   { id: 'phases', name: 'Phases', description: 'Canonical phases (12 properties)' },
@@ -10,7 +8,7 @@ const TABLES = [
   { id: 'step_progress', name: 'Step Progress', description: 'Step tracking and progress' }
 ];
 
-export default function ImportExport({}: ImportExportProps) {
+export default function ImportExport() {
   const [selectedTable, setSelectedTable] = useState<string>('projects');
   const [importing, setImporting] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');

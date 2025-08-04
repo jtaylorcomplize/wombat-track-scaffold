@@ -10,7 +10,7 @@ interface RuntimeJob {
   endTime?: string;
   duration?: number;
   user?: string;
-  details?: any;
+  details?: unknown;
 }
 
 interface OrphanedTable {
@@ -41,7 +41,7 @@ export default function RuntimeStatus() {
   const [statusData, setStatusData] = useState<RuntimeStatusData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
-  const [refreshInterval, setRefreshInterval] = useState<number>(5000);
+  const [refreshInterval] = useState<number>(5000);
 
   const fetchRuntimeStatus = async () => {
     try {

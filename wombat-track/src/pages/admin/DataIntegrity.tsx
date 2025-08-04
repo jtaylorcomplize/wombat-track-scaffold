@@ -6,8 +6,8 @@ interface OrphanedRecord {
   table: string;
   field: string;
   missingReference: string;
-  currentValue: any;
-  record: any;
+  currentValue: unknown;
+  record: unknown;
 }
 
 interface IntegrityIssue {

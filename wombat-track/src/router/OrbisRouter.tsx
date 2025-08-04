@@ -1,13 +1,13 @@
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { NavigationContextProvider } from '../contexts/NavigationContext';
 import { AdminModeProvider } from '../contexts/AdminModeContext';
 
 // Temporarily use direct imports to isolate the lazy loading issue
-import PlanSurfaceComponent from '../components/surfaces/PlanSurface';
-import ExecuteSurfaceComponent from '../components/surfaces/ExecuteSurface';
-import DocumentSurfaceComponent from '../components/surfaces/DocumentSurface';
-import GovernSurfaceComponent from '../components/surfaces/GovernSurface';
+// import PlanSurfaceComponent from '../components/surfaces/PlanSurface';
+// import ExecuteSurfaceComponent from '../components/surfaces/ExecuteSurface';
+// import DocumentSurfaceComponent from '../components/surfaces/DocumentSurface';
+// import GovernSurfaceComponent from '../components/surfaces/GovernSurface';
 import IntegrateSurfaceComponent from '../components/surfaces/IntegrateSurface';
 
 // Lazy load all route components
@@ -19,11 +19,11 @@ const StrategicPlanning = lazy(() => import('../components/strategic/StrategicPl
 const SubAppOverview = lazy(() => import('../components/operational/SubAppOverview'));
 const SubAppProjectsList = lazy(() => import('../components/operational/SubAppProjectsList'));
 const SubAppProjectDetail = lazy(() => import('../components/operational/SubAppProjectDetail'));
-const ProjectDashboard = lazy(() => import('../components/ProjectDashboard').then(module => ({ default: module.ProjectDashboard })));
-const PlanSurface = PlanSurfaceComponent;
-const ExecuteSurface = ExecuteSurfaceComponent;
-const DocumentSurface = DocumentSurfaceComponent;
-const GovernSurface = GovernSurfaceComponent;
+// const ProjectDashboard = lazy(() => import('../components/ProjectDashboard').then(module => ({ default: module.ProjectDashboard })));
+// const PlanSurface = PlanSurfaceComponent;
+// const ExecuteSurface = ExecuteSurfaceComponent;
+// const DocumentSurface = DocumentSurfaceComponent;
+// const GovernSurface = GovernSurfaceComponent;
 const IntegrateSurface = IntegrateSurfaceComponent;
 const SPQRRuntimeDashboard = lazy(() => import('../components/SPQR/SPQRRuntimeDashboard'));
 const AdminDashboard = lazy(() => import('../components/admin/AdminDashboard'));
@@ -42,15 +42,15 @@ const RouteLoading: React.FC = () => (
 );
 
 // Work surface wrapper to ensure proper context
-const WorkSurfaceWrapper: React.FC = () => {
-  return (
-    <div className="flex-1 p-6">
-      <Suspense fallback={<RouteLoading />}>
-        <Outlet />
-      </Suspense>
-    </div>
-  );
-};
+// const WorkSurfaceWrapper: React.FC = () => {
+//   return (
+//     <div className="flex-1 p-6">
+//       <Suspense fallback={<RouteLoading />}>
+//         <Outlet />
+//       </Suspense>
+//     </div>
+//   );
+// };
 
 export const OrbisRouter: React.FC = () => {
   return (
@@ -96,6 +96,7 @@ export const OrbisRouter: React.FC = () => {
               <Route path="admin/orphan-inspector" element={<AdminModeProvider><AdminDashboard initialView="orphan-inspector" /></AdminModeProvider>} />
               <Route path="admin/runtime-panel" element={<AdminModeProvider><AdminDashboard initialView="runtime-panel" /></AdminModeProvider>} />
               <Route path="admin/secrets-manager" element={<AdminModeProvider><AdminDashboard initialView="secrets-manager" /></AdminModeProvider>} />
+              <Route path="admin/sdlc-dashboard" element={<AdminModeProvider><AdminDashboard initialView="sdlc-dashboard" /></AdminModeProvider>} />
               <Route path="admin/editable-tables" element={<AdminModeProvider><AdminDashboard initialView="editable-tables" /></AdminModeProvider>} />
               
               {/* Admin Deep-Link Routes */}

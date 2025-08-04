@@ -33,6 +33,20 @@ interface GovernanceLogEntry {
     page_type?: string;
     mode?: string;
   };
+  sdlc_context?: {
+    branch?: string;
+    commit_sha?: string;
+    ci_status?: 'pending' | 'running' | 'success' | 'failure';
+    phase_step?: 'Debug' | 'QA' | 'Governance' | 'Memory';
+    step_status?: 'pending' | 'in_progress' | 'completed' | 'blocked' | 'failed';
+    qa_evidence?: {
+      manual_qa_passed?: boolean;
+      screenshots_attached?: boolean;
+      test_results?: Record<string, unknown>;
+    };
+    merge_readiness?: boolean;
+    blocking_reasons?: string[];
+  };
   rag_metrics?: {
     score: 'red' | 'amber' | 'green' | 'blue';
     performance_grade: 'A' | 'B' | 'C' | 'D' | 'F';
@@ -286,6 +300,7 @@ class GovernanceLogger {
       performance_metrics: entry.performance_metrics,
       security_context: entry.security_context,
       runtime_context: entry.runtime_context || this.captureRuntimeContext(),
+      sdlc_context: entry.sdlc_context,
       rag_metrics: entry.rag_metrics
     };
 
@@ -1029,6 +1044,241 @@ class GovernanceLogger {
     }
     
     return recommendations;
+  }
+
+  // SDLC-specific logging methods
+  logSDLCPhaseStep(userId: string, userRole: string, branch: string, step: string, status: string, details: Record<string, unknown>): void {
+    this.log({
+      event_type: 'sdlc_phase_step',
+      user_id: userId,
+      user_role: userRole,
+      resource_type: 'dashboard',
+      resource_id: branch,
+      action: `${step.toLowerCase()}_${status}`,
+      success: status === 'completed',
+      details: {
+        ...details,
+        step,
+        status
+      },
+      sdlc_context: {
+        branch: branch,
+        phase_step: step as unknown,
+        step_status: status as unknown,
+        commit_sha: details.commit_sha as string,
+        ci_status: details.ci_status as unknown
+      }
+    });
+  }
+
+  logSDLCBranchCreated(userId: string, branch: string, commitSha: string): void {
+    this.log({
+      event_type: 'sdlc_branch_created',
+      user_id: userId,
+      user_role: 'developer',
+      resource_type: 'dashboard',
+      resource_id: branch,
+      action: 'branch_created',
+      success: true,
+      details: {
+        branch: branch,
+        commit_sha: commitSha,
+        trigger: 'git_hook'
+      },
+      sdlc_context: {
+        branch: branch,
+        commit_sha: commitSha,
+        phase_step: 'Debug',
+        step_status: 'in_progress'
+      }
+    });
+  }
+
+  logSDLCBuildCompleted(branch: string, buildId: string, status: 'success' | 'failure', details: Record<string, unknown>): void {
+    this.log({
+      event_type: 'sdlc_build_completed',
+      user_id: 'system',
+      user_role: 'ci',
+      resource_type: 'dashboard',
+      resource_id: branch,
+      action: 'build_completed',
+      success: status === 'success',
+      details: {
+        build_id: buildId,
+        status: status,
+        ...details
+      },
+      sdlc_context: {
+        branch: branch,
+        ci_status: status,
+        phase_step: 'Debug',
+        step_status: status === 'success' ? 'completed' : 'failed'
+      }
+    });
+  }
+
+  logSDLCQAResults(userId: string, branch: string, passed: boolean, evidence: { screenshots?: boolean; testResults?: Record<string, unknown> }): void {
+    this.log({
+      event_type: 'sdlc_qa_results',
+      user_id: userId,
+      user_role: 'qa',
+      resource_type: 'dashboard',
+      resource_id: branch,
+      action: 'qa_completed',
+      success: passed,
+      details: {
+        qa_passed: passed,
+        evidence: evidence
+      },
+      sdlc_context: {
+        branch: branch,
+        phase_step: 'QA',
+        step_status: passed ? 'completed' : 'failed',
+        qa_evidence: {
+          manual_qa_passed: passed,
+          screenshots_attached: !!evidence.screenshots,
+          test_results: evidence.testResults
+        }
+      }
+    });
+  }
+
+  logSDLCGovernanceEntry(userId: string, branch: string, summary: string, entryId: string): void {
+    this.log({
+      event_type: 'sdlc_governance_entry',
+      user_id: userId,
+      user_role: 'developer',
+      resource_type: 'dashboard',
+      resource_id: branch,
+      action: 'governance_logged',
+      success: true,
+      details: {
+        summary: summary,
+        entry_id: entryId,
+        branch: branch
+      },
+      sdlc_context: {
+        branch: branch,
+        phase_step: 'Governance',
+        step_status: 'completed'
+      }
+    });
+  }
+
+  logSDLCMemoryAnchor(branch: string, anchorId: string, status: 'created' | 'failed', details: Record<string, unknown>): void {
+    this.log({
+      event_type: 'sdlc_memory_anchor',
+      user_id: 'system',
+      user_role: 'agent',
+      resource_type: 'dashboard',
+      resource_id: branch,
+      action: 'memory_anchor_created',
+      success: status === 'created',
+      details: {
+        anchor_id: anchorId,
+        status: status,
+        ...details
+      },
+      sdlc_context: {
+        branch: branch,
+        phase_step: 'Memory',
+        step_status: status === 'created' ? 'completed' : 'failed'
+      }
+    });
+  }
+
+  logSDLCMergeAttempt(userId: string, branch: string, allowed: boolean, blockingReasons: string[]): void {
+    this.log({
+      event_type: 'sdlc_merge_attempt',
+      user_id: userId,
+      user_role: 'developer',
+      resource_type: 'dashboard',
+      resource_id: branch,
+      action: allowed ? 'merge_approved' : 'merge_blocked',
+      success: allowed,
+      details: {
+        merge_allowed: allowed,
+        blocking_reasons: blockingReasons
+      },
+      sdlc_context: {
+        branch: branch,
+        merge_readiness: allowed,
+        blocking_reasons: blockingReasons
+      }
+    });
+  }
+
+  generateSDLCReport(timeframe: 'day' | 'week' | 'month' = 'week'): {
+    timeframe: string;
+    branches_processed: number;
+    workflows_completed: number;
+    workflows_failed: number;
+    success_rate: number;
+    phase_breakdown: {
+      debug: { completed: number; failed: number };
+      qa: { completed: number; failed: number };
+      governance: { completed: number; failed: number };
+      memory: { completed: number; failed: number };
+    };
+    common_blocking_reasons: Array<{ reason: string; count: number }>;
+  } {
+    const windowMs = {
+      day: 24 * 60 * 60 * 1000,
+      week: 7 * 24 * 60 * 60 * 1000,
+      month: 30 * 24 * 60 * 60 * 1000
+    }[timeframe];
+
+    const cutoff = Date.now() - windowMs;
+    const sdlcLogs = this.logBuffer.filter(log => 
+      log.event_type.startsWith('sdlc_') && 
+      new Date(log.timestamp).getTime() >= cutoff
+    );
+
+    const branches = new Set(sdlcLogs.map(log => log.resource_id));
+    const completedWorkflows = sdlcLogs.filter(log => 
+      log.event_type === 'sdlc_memory_anchor' && log.success
+    ).length;
+    const failedWorkflows = branches.size - completedWorkflows;
+
+    const phaseBreakdown = {
+      debug: { completed: 0, failed: 0 },
+      qa: { completed: 0, failed: 0 },
+      governance: { completed: 0, failed: 0 },
+      memory: { completed: 0, failed: 0 }
+    };
+
+    sdlcLogs.forEach(log => {
+      const phaseStep = log.sdlc_context?.phase_step?.toLowerCase() as keyof typeof phaseBreakdown;
+      if (phaseStep && phaseBreakdown[phaseStep]) {
+        if (log.success) {
+          phaseBreakdown[phaseStep].completed++;
+        } else {
+          phaseBreakdown[phaseStep].failed++;
+        }
+      }
+    });
+
+    const blockingReasons = new Map<string, number>();
+    sdlcLogs
+      .filter(log => log.sdlc_context?.blocking_reasons)
+      .forEach(log => {
+        log.sdlc_context!.blocking_reasons!.forEach(reason => {
+          blockingReasons.set(reason, (blockingReasons.get(reason) || 0) + 1);
+        });
+      });
+
+    return {
+      timeframe,
+      branches_processed: branches.size,
+      workflows_completed: completedWorkflows,
+      workflows_failed: failedWorkflows,
+      success_rate: branches.size > 0 ? Math.round((completedWorkflows / branches.size) * 100) : 0,
+      phase_breakdown: phaseBreakdown,
+      common_blocking_reasons: Array.from(blockingReasons.entries())
+        .map(([reason, count]) => ({ reason, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10)
+    };
   }
 
   destroy(): void {

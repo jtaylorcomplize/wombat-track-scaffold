@@ -18,6 +18,8 @@ import mcpGsuiteRoutes from './api/mcp-gsuite';
 import secretsRoutes from './api/secrets';
 import adminDetailRoutes from './api/admin-detail';
 import adminEditRoutes from './api/admin-edit';
+import importRoutes from './api/import';
+import gizmoSecretsRoutes from './api/import/gizmo-secrets';
 import { getAllProjects, getSubApps, getSubAppRecentProjects, getRuntimeStatus, getProjectById } from './api/orbis';
 
 const app = express();
@@ -64,6 +66,14 @@ console.log('   ✓ /api/admin/csv/* - CSV/JSON import/export operations');
 app.use('/api/admin/json', jsonOperationsRoutes);
 console.log('   ✓ /api/admin/json/* - JSON import/export operations');
 
+// SDLC Import routes
+app.use('/api/admin/import', importRoutes);
+console.log('   ✓ /api/admin/import/* - SDLC canonical import operations');
+
+// Gizmo Secrets Integration Wizard routes
+app.use('/api/secrets/gizmo', gizmoSecretsRoutes);
+console.log('   ✓ /api/secrets/gizmo/* - Gizmo OAuth2 secrets integration wizard');
+
 // Orphan detection and repair routes
 app.use('/api/admin/orphans', orphanRoutes);
 console.log('   ✓ /api/admin/orphans/* - Orphan detection and repair');
@@ -99,7 +109,7 @@ app.get('/api/orbis/projects/:id', getProjectById);
 console.log('   ✓ /api/orbis/* - Cross-sub-app data aggregation (Enhanced Sidebar v3.1)');
 
 // Error handling middleware
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: unknown, req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Admin API Error:', err);
   res.status(500).json({
     error: 'Internal server error',
@@ -138,7 +148,7 @@ app.use((req, res) => {
 // Initialize database connection
 async function initializeDatabase() {
   try {
-    const dbManager = DatabaseManager.getInstance();
+    // const dbManager = DatabaseManager.getInstance();
     console.log('🗄️  Database connection initialized');
     return true;
   } catch (error) {

@@ -34,7 +34,7 @@ interface Project {
 interface EditableCell {
   projectId: string;
   field: string;
-  value: any;
+  value: unknown;
 }
 
 export default function EditableProjectsTable() {
@@ -77,7 +77,7 @@ export default function EditableProjectsTable() {
     }
   };
 
-  const handleCellEdit = useCallback((projectId: string, field: string, value: any) => {
+  const handleCellEdit = useCallback((projectId: string, field: string, value: unknown) => {
     const cellKey = `${projectId}-${field}`;
     setEditingCells(prev => {
       const newMap = new Map(prev);
@@ -91,8 +91,8 @@ export default function EditableProjectsTable() {
       setSavingStates(prev => new Map(prev).set(projectId, 'saving'));
 
       // Collect all edits for this project
-      const projectEdits: Record<string, any> = {};
-      editingCells.forEach((edit, key) => {
+      const projectEdits: Record<string, unknown> = {};
+      editingCells.forEach((edit) => {
         if (edit.projectId === projectId) {
           projectEdits[edit.field] = edit.value;
         }
@@ -178,29 +178,6 @@ export default function EditableProjectsTable() {
     }
   };
 
-  const getStatusColor = (status?: string, isDraft?: number) => {
-    if (isDraft === 1) return 'text-amber-600 bg-amber-50 border-amber-200';
-    
-    switch (status?.toLowerCase()) {
-      case 'completed': return 'text-green-600 bg-green-50 border-green-200';
-      case 'active': 
-      case 'in progress': return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'planning': return 'text-purple-600 bg-purple-50 border-purple-200';
-      case 'on hold': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'cancelled': return 'text-red-600 bg-red-50 border-red-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
-    }
-  };
-
-  const getRagColor = (rag?: string) => {
-    switch (rag?.toLowerCase()) {
-      case 'red': return 'text-red-600 bg-red-50 border-red-200';
-      case 'amber': 
-      case 'yellow': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'green': return 'text-green-600 bg-green-50 border-green-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
-    }
-  };
 
   const filteredProjects = projects.filter(project => {
     if (filter.status && project.status !== filter.status) return false;
@@ -220,7 +197,7 @@ export default function EditableProjectsTable() {
     const value = currentEdit?.value ?? project[field] ?? '';
     const [isEditing, setIsEditing] = useState(false);
 
-    const handleChange = (newValue: any) => {
+    const handleChange = (newValue: unknown) => {
       handleCellEdit(project.projectId, field as string, newValue);
     };
 

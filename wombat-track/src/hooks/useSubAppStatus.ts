@@ -59,14 +59,14 @@ export const useSubAppStatus = (): UseSubAppStatusReturn => {
   };
 
   // Transform API response to SubApp interface
-  const transformAPIResponse = (apiData: any[]): SubApp[] => {
-    return apiData.map((item: any) => ({
-      id: item.id || item.subapp_id,
-      name: item.name || item.display_name,
-      status: normalizeStatus(item.status),
-      lastUpdated: new Date(item.last_updated || item.updated_at || Date.now()),
-      launchUrl: item.launch_url || item.url || `https://${item.name?.toLowerCase().replace(/\s+/g, '-')}.app.com`,
-      description: item.description
+  const transformAPIResponse = (apiData: Record<string, unknown>[]): SubApp[] => {
+    return apiData.map((item: Record<string, unknown>) => ({
+      id: String(item.id || item.subapp_id || ''),
+      name: String(item.name || item.display_name || ''),
+      status: normalizeStatus(String(item.status || 'offline')),
+      lastUpdated: new Date(String(item.last_updated || item.updated_at) || Date.now()),
+      launchUrl: String(item.launch_url || item.url || `https://${String(item.name || '').toLowerCase().replace(/\s+/g, '-')}.app.com`),
+      description: String(item.description || '')
     }));
   };
 
@@ -106,7 +106,7 @@ export const useSubAppStatus = (): UseSubAppStatusReturn => {
         status: 'active',
         lastUpdated: new Date(now - Math.random() * 5 * 60 * 1000), // Last 5 minutes
         launchUrl: 'https://orbis.complize.com',
-        description: 'AI-powered business intelligence and analytics platform'
+        description: 'Core program for recursive AI-native development and Sub-App orchestration; 3D printer engine for SDLC and governance.'
       },
       {
         id: 'prog-complize-001',
@@ -114,23 +114,23 @@ export const useSubAppStatus = (): UseSubAppStatusReturn => {
         status: Math.random() > 0.7 ? 'warning' : 'active',
         lastUpdated: new Date(now - Math.random() * 30 * 60 * 1000), // Last 30 minutes
         launchUrl: 'https://app.complize.com',
-        description: 'Compliance management and regulatory tracking system'
+        description: 'Compliance suite Sub-App; includes Visa Management, Knowledge Base, and RAG/Compliance Tracker modules.'
       },
       {
         id: 'prog-spqr-001',
-        name: 'SPQR Runtime',
+        name: 'SPQR',
         status: Math.random() > 0.8 ? 'offline' : 'active',
         lastUpdated: new Date(now - Math.random() * 60 * 60 * 1000), // Last hour
         launchUrl: 'https://spqr.internal.com',
-        description: 'Real-time system monitoring and performance dashboard'
+        description: 'Sub-App for reporting and Looker Studio integration within Orbis Intelligence ecosystem.'
       },
       {
-        id: 'prog-visacalc-001',
-        name: 'VisaCalc Pro',
+        id: 'prog-roam-001',
+        name: 'Roam',
         status: 'active',
         lastUpdated: new Date(now - Math.random() * 2 * 60 * 1000), // Last 2 minutes
-        launchUrl: 'https://visacalc.complize.com',
-        description: 'Advanced visa processing and calculation engine'
+        launchUrl: 'https://roam.complize.com',
+        description: 'Formerly VisaCalcPro; business migration planning and visa calculation tool.'
       },
       {
         id: 'prog-dealflow-001',

@@ -34,7 +34,7 @@ async function ensureConfigDir() {
   const configDir = path.dirname(SECRETS_FILE_PATH);
   try {
     await fs.mkdir(configDir, { recursive: true });
-  } catch (error) {
+  } catch {
     // Directory might already exist, that's OK
   }
 }
@@ -70,7 +70,7 @@ async function loadSecrets(): Promise<Secret[]> {
       ...secret,
       value: secret.encrypted ? decrypt(secret.value) : secret.value
     }));
-  } catch (error) {
+  } catch {
     // File doesn't exist yet, return empty array
     return [];
   }
@@ -106,7 +106,7 @@ router.get('/', async (req, res) => {
       secrets: safeSecrets,
       count: secrets.length
     });
-  } catch (error) {
+  } catch {
     res.status(500).json({
       success: false,
       error: 'Failed to load secrets',
@@ -132,7 +132,7 @@ router.get('/:id', async (req, res) => {
       success: true,
       secret
     });
-  } catch (error) {
+  } catch {
     res.status(500).json({
       success: false,
       error: 'Failed to load secret',
@@ -184,7 +184,7 @@ router.post('/', async (req, res) => {
         value: '••••••••••••••••'
       }
     });
-  } catch (error) {
+  } catch {
     res.status(500).json({
       success: false,
       error: 'Failed to create secret',
@@ -226,7 +226,7 @@ router.put('/:id', async (req, res) => {
         value: '••••••••••••••••'
       }
     });
-  } catch (error) {
+  } catch {
     res.status(500).json({
       success: false,
       error: 'Failed to update secret',
@@ -259,7 +259,7 @@ router.delete('/:id', async (req, res) => {
         name: deletedSecret.name
       }
     });
-  } catch (error) {
+  } catch {
     res.status(500).json({
       success: false,
       error: 'Failed to delete secret',
@@ -300,7 +300,7 @@ router.post('/generate-env', async (req, res) => {
     res.setHeader('Content-Disposition', 'attachment; filename=".env.mcp"');
     res.send(envContent);
     
-  } catch (error) {
+  } catch {
     res.status(500).json({
       success: false,
       error: 'Failed to generate .env file',
@@ -336,7 +336,7 @@ router.get('/health', async (req, res) => {
       env_file_exists: await fs.access(ENV_OUTPUT_PATH).then(() => true).catch(() => false),
       timestamp: new Date().toISOString()
     });
-  } catch (error) {
+  } catch {
     res.status(500).json({
       success: false,
       error: 'Secrets system unhealthy',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Star, TrendingUp, TrendingDown, Clock, Award, AlertTriangle, Mail } from 'lucide-react';
+import { Users, Star, TrendingUp, Clock, Award, AlertTriangle, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { governanceLogger } from '../../services/governanceLogger';
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExternalLink, Activity, AlertTriangle, Wifi, WifiOff, RefreshCw } from 'lucide-react';
+import { ExternalLink, Activity, Wifi, WifiOff, RefreshCw } from 'lucide-react';
 
 export type SubAppStatus = 'active' | 'warning' | 'offline' | 'loading';
 

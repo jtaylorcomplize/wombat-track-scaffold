@@ -2,7 +2,7 @@ import React, { useEffect, Suspense } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { ChevronRight, Calendar, Target, AlertCircle } from 'lucide-react';
-import type { Phase, PhaseStep } from '../../types/phase';
+import type { PhaseStep } from '../../types/phase';
 
 const PhaseDashboard: React.FC = () => {
   const { projectId, phaseId } = useParams<{ projectId: string; phaseId: string }>();

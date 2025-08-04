@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, AlertCircle, CheckCircle, Clock, FileText, ListChecks, Shield } from 'lucide-react';
+import { ArrowLeft, AlertCircle, CheckCircle, FileText, ListChecks, Shield } from 'lucide-react';
 
 interface Phase {
   phaseid: string;
@@ -64,7 +64,7 @@ interface GovernanceLog {
   resource_id?: string;
   action?: string;
   success?: boolean;
-  details?: any;
+  details?: unknown;
 }
 
 export default function AdminPhaseView() {

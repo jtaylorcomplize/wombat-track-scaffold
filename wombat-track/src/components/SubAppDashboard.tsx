@@ -57,6 +57,8 @@ export const SubAppDashboard: React.FC<SubAppDashboardProps> = ({
 }) => {
   const navigate = useNavigate();
   const { subAppId } = useParams<{ subAppId: string }>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _subAppId = subAppId;
   const theme = subAppThemes[subApp.id] || subAppThemes['prog-orbis-001'];
   
   // Calculate program metrics

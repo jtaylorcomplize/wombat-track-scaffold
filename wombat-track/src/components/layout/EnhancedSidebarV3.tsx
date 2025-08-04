@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Layers, Rocket, LayoutGrid, Users, Target, ExternalLink, Wifi, WifiOff, Settings, Database, Activity } from 'lucide-react';
-import { useNavigationContext, NavigationLevel, StrategicSurface } from '../../contexts/NavigationContext';
+import type { StrategicSurface } from '../../contexts/NavigationContext';
+import { useNavigationContext } from '../../contexts/NavigationContext';
 import { useNavigate } from 'react-router-dom';
-import { useSubAppStatus } from '../../hooks/useSubAppStatus';
 import { useAccordionState } from '../../hooks/useAccordionState';
 import { governanceLogger } from '../../services/enhancedGovernanceLogger';
 import { useSubApps, useRuntimeStatus } from '../../hooks/useOrbisAPI';
@@ -10,7 +10,7 @@ import { useSubApps, useRuntimeStatus } from '../../hooks/useOrbisAPI';
 interface EnhancedSidebarV3Props {
   collapsed: boolean;
   onToggleCollapse: () => void;
-  navigationState: any;
+  navigationState: unknown;
 }
 
 // Strategic surfaces configuration
@@ -100,8 +100,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
 
   // Get runtime status for live health indicators
   const {
-    data: runtimeStatus,
-    isLive: runtimeLive
+    data: runtimeStatus
   } = useRuntimeStatus();
 
   // Debug: Log shapes before rendering
@@ -148,24 +147,24 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
     navigateToSubApp(subAppId);
   };
 
-  const handleSubAppSelect = (subAppId: string, subAppName: string) => {
-    const subApp = subApps?.find(s => s.id === subAppId);
-    const projectCount = subApp?.projects?.total || 0;
-    const recentProjects = Array.isArray(subApp?.projects?.recent)
-      ? subApp.projects.recent.map((p: any) => typeof p.name === 'string' ? p.name : '')
-      : [];
+  // const _handleSubAppSelect = (subAppId: string, subAppName: string) => {
+  //   const subApp = subApps?.find(s => s.id === subAppId);
+  //   const projectCount = subApp?.projects?.total || 0;
+  //   const recentProjects = Array.isArray(subApp?.projects?.recent)
+  //     ? subApp.projects.recent.map((p: unknown) => typeof (p as {name?: string})?.name === 'string' ? (p as {name: string}).name : '')
+  //     : [];
 
-    // Enhanced governance logging for sub-app selection
-    governanceLogger.logSubAppSelect(
-      subAppId,
-      subAppName,
-      projectCount,
-      recentProjects,
-      'sidebar_navigation'
-    );
+  //   // Enhanced governance logging for sub-app selection
+  //   governanceLogger.logSubAppSelect(
+  //     subAppId,
+  //     subAppName,
+  //     projectCount,
+  //     recentProjects,
+  //     'sidebar_navigation'
+  //   );
 
-    navigateToSubApp(subAppId);
-  };
+  //   navigateToSubApp(subAppId);
+  // };
 
   const handleStrategicSurfaceSelect = (surface: StrategicSurface) => {
     // Enhanced governance logging for strategic surface selection

@@ -56,8 +56,8 @@ interface GovernanceLog {
   resource_id?: string;
   action?: string;
   success?: boolean;
-  details?: any;
-  runtime_context?: any;
+  details?: unknown;
+  runtime_context?: unknown;
 }
 
 interface Document {
@@ -116,7 +116,7 @@ export default function ProjectAdminEdit() {
     }
   };
 
-  const handleFieldChange = (field: keyof Project, value: any) => {
+  const handleFieldChange = (field: keyof Project, value: unknown) => {
     setEditedProject(prev => ({
       ...prev,
       [field]: value

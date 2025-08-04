@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, FolderOpen, Settings, Rocket } from 'lucide-react';
+import { ChevronRight, FolderOpen, Settings, Rocket } from 'lucide-react';
 import type { Project } from '../../types/phase';
 import type { WorkSurface } from './AppLayout';
 

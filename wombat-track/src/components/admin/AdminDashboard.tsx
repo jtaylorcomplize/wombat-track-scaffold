@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Database, FileText, Search, Activity, Settings, Shield, Key, Edit3 } from 'lucide-react';
+import { Database, FileText, Search, Activity, Settings, Shield, Key, Edit3, GitBranch } from 'lucide-react';
 import { useAdminMode } from '../../contexts/AdminModeContext';
 import DataExplorer from '../../pages/admin/DataExplorer';
 import ImportExport from '../../pages/admin/ImportExport';
@@ -8,8 +8,9 @@ import RuntimeStatus from '../../pages/admin/RuntimeStatus';
 import { SecretsManager } from './SecretsManager';
 import EditableProjectsTable from './EditableProjectsTable';
 import EditablePhasesTable from './EditablePhasesTable';
+import SDLCDashboard from './SDLCDashboard';
 
-type AdminView = 'overview' | 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager' | 'editable-tables';
+type AdminView = 'overview' | 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager' | 'sdlc-dashboard' | 'editable-tables';
 
 interface AdminDashboardProps {
   initialView?: AdminView;
@@ -85,6 +86,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       description: 'MCP GSuite credential management'
     },
     {
+      id: 'sdlc-dashboard' as AdminView,
+      label: 'SDLC Dashboard',
+      icon: <GitBranch size={20} />,
+      description: 'SDLC governance and workflow management'
+    },
+    {
       id: 'editable-tables' as AdminView,
       label: 'Editable Tables',
       icon: <Edit3 size={20} />,
@@ -104,6 +111,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         return <RuntimeStatus />;
       case 'secrets-manager':
         return <SecretsManager />;
+      case 'sdlc-dashboard':
+        return <SDLCDashboard />;
       case 'editable-tables':
         return (
           <div className="space-y-8">

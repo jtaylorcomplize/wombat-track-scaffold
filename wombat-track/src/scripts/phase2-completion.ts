@@ -5,7 +5,7 @@
 
 import { enhancedGovernanceLogger } from '../services/enhancedGovernanceLogger';
 import { writeFileSync } from 'fs';
-import path from 'path';
+// import path from 'path';
 
 // Create Phase 2 completion anchor
 enhancedGovernanceLogger.createPhaseAnchor('phase2', 'complete');
@@ -101,22 +101,22 @@ try {
 }
 
 // Generate governance log entry for completion
-const completionEvent = {
-  event: 'phase_complete',
-  entityId: 'phase2-data-integration-governance',
-  timestamp: new Date().toISOString(),
-  context: {
-    phase: 'Phase 2: Data Integration & Governance',
-    deliverables: Object.keys(completionSummary.deliverables).length,
-    testCoverage: completionSummary.qaValidation.coverage.length,
-    artifactsCreated: Object.keys(completionSummary.artifacts).length
-  },
-  metadata: {
-    sessionId: enhancedGovernanceLogger.getCurrentSessionId(),
-    logFile: enhancedGovernanceLogger.getCurrentLogFile(),
-    nextPhase: completionSummary.nextPhase.phase
-  }
-};
+// const completionEvent = {
+//   event: 'phase_complete',
+//   entityId: 'phase2-data-integration-governance',
+//   timestamp: new Date().toISOString(),
+//   context: {
+//     phase: 'Phase 2: Data Integration & Governance',
+//     deliverables: Object.keys(completionSummary.deliverables).length,
+//     testCoverage: completionSummary.qaValidation.coverage.length,
+//     artifactsCreated: Object.keys(completionSummary.artifacts).length
+//   },
+//   metadata: {
+//     sessionId: enhancedGovernanceLogger.getCurrentSessionId(),
+//     logFile: enhancedGovernanceLogger.getCurrentLogFile(),
+//     nextPhase: completionSummary.nextPhase.phase
+//   }
+// };
 
 console.log('🎉 Enhanced Sidebar v3.1 Phase 2 - COMPLETE');
 console.log('📊 Data Integration & Governance Implementation');

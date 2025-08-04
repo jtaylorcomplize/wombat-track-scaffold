@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ExternalLink, Users, Calendar, TrendingUp, Filter, Search, Plus, ArrowLeft } from 'lucide-react';
+import { ExternalLink, Users, Calendar, Filter, Search, Plus, ArrowLeft } from 'lucide-react';
 import { governanceLogger } from '../../services/governanceLogger';
 
 interface Project {
@@ -349,10 +349,11 @@ const SubAppProjectsList: React.FC = () => {
       switch (sortBy) {
         case 'name':
           return a.name.localeCompare(b.name);
-        case 'priority':
+        case 'priority': {
           const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
           return (priorityOrder[b.priority as keyof typeof priorityOrder] || 0) - 
                  (priorityOrder[a.priority as keyof typeof priorityOrder] || 0);
+        }
         case 'completion':
           return b.completionPercentage - a.completionPercentage;
         case 'lastUpdated':

@@ -3,7 +3,7 @@ import { Search, Filter, ChevronLeft, ChevronRight, Database, FileText, Clock, U
 import { Link } from 'react-router-dom';
 
 interface TableData {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface TableMetadata {

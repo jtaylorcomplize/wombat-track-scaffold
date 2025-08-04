@@ -76,6 +76,13 @@ export interface Program {
   id: string;
   name: string;
   description: string;
-  status: 'Active' | 'Planning' | 'On-Hold' | 'Completed';
-  programType: 'Platform' | 'Security' | 'Analytics' | 'Development';
+  status: 'Active' | 'Planning' | 'On-Hold' | 'Completed' | 'Active Development' | 'Active / Transitioning to Orbis';
+  programType: 'Platform' | 'Security' | 'Analytics' | 'Development' | 'Core' | 'Sub-App';
+  launchDate?: string;
+  linkedProjects?: string[];
+  notes?: string;
+  orbisDependencyLevel?: 'Core' | 'High' | 'Medium' | 'Low';
+  platformIntegration?: string;
+  primaryLead?: string;
+  usesOrbisEngine?: boolean;
 }

@@ -3,18 +3,8 @@
  * Canonical navigation events for MemoryPlugin + GovernanceLog JSONL
  */
 
-// Conditional imports for server-side only
-let writeFileSync: any, appendFileSync: any, existsSync: any, mkdirSync: any, path: any;
-
-if (typeof window === 'undefined') {
-  // Server-side imports
-  const fs = require('fs');
-  writeFileSync = fs.writeFileSync;
-  appendFileSync = fs.appendFileSync;
-  existsSync = fs.existsSync;
-  mkdirSync = fs.mkdirSync;
-  path = require('path');
-}
+// Browser-safe conditional imports
+// File system operations are only available server-side
 
 // Base governance event interface
 export interface BaseGovernanceEvent {
@@ -23,8 +13,8 @@ export interface BaseGovernanceEvent {
   timestamp: string;
   userId?: string;
   sessionId?: string;
-  context: Record<string, any>;
-  metadata?: Record<string, any>;
+  context: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
 }
 
 // Navigation-specific event types
@@ -135,61 +125,56 @@ class EnhancedGovernanceLogger {
   private currentLogFile: string;
 
   constructor(config?: Partial<GovernanceLoggerConfig>) {
+    const baseDir = typeof window === 'undefined' && typeof process !== 'undefined' 
+      ? process.cwd() + '/logs/governance' 
+      : '/browser-env-no-logging';
+    const driveMemoryPath = typeof window === 'undefined' && typeof process !== 'undefined'
+      ? process.cwd() + '/logs/drive-memory'
+      : '/browser-env-no-logging';
+
     this.config = {
-      baseDir: '/OF-BEV/Phase4.0/NavigationLogs',
+      baseDir,
       memoryPluginEnabled: true,
-      consoleLoggingEnabled: import.meta.env.DEV,
-      driveMemoryPath: '/OF-BEV/Phase4.0/UAT/Sidebar-v3.1-Phase2',
+      consoleLoggingEnabled: typeof window !== 'undefined' || (typeof process !== 'undefined' && process.env.NODE_ENV === 'development'),
+      driveMemoryPath,
       ...config
     };
 
     this.sessionId = this.generateSessionId();
-    this.currentLogFile = this.initializeLogFile();
+    this.currentLogFile = this.initializeLogFileSync();
   }
 
   private generateSessionId(): string {
     return `sidebar-v3.1-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private initializeLogFile(): string {
+  private initializeLogFileSync(): string {
     if (typeof window !== 'undefined') {
       // Browser environment - return dummy path
       return '/browser-env-no-file-logging';
     }
 
+    // Server-side initialization will be done lazily when needed
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
     const filename = `${timestamp}.jsonl`;
-    const filepath = path.join(this.config.baseDir, filename);
-
-    // Ensure directory exists
-    this.ensureDirectoryExists(this.config.baseDir);
-    this.ensureDirectoryExists(this.config.driveMemoryPath);
-
-    // Create log file with header
-    const logHeader = {
-      logType: 'enhanced_sidebar_navigation',
-      version: '3.1.0',
-      sessionId: this.sessionId,
-      startTime: new Date().toISOString(),
-      phase: 'Phase2_DataIntegration_Governance'
-    };
-
-    if (writeFileSync) {
-      writeFileSync(filepath, JSON.stringify(logHeader) + '\n');
-    }
     
     if (this.config.consoleLoggingEnabled) {
-      console.log(`[GovernanceLogger] Initialized log file: ${filepath}`);
+      console.log(`[GovernanceLogger] Log file will be: ${filename}`);
     }
 
-    return filepath;
+    return `${this.config.baseDir}/${filename}`;
   }
 
-  private ensureDirectoryExists(dirPath: string): void {
-    if (typeof window === 'undefined' && existsSync && mkdirSync) {
-      if (!existsSync(dirPath)) {
-        mkdirSync(dirPath, { recursive: true });
+  private async ensureDirectoryExists(dirPath: string): Promise<void> {
+    if (typeof window !== 'undefined') return;
+
+    try {
+      const fs = await import('fs');
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
       }
+    } catch (error) {
+      console.warn('[GovernanceLogger] Directory creation failed:', error);
     }
   }
 
@@ -203,9 +188,7 @@ class EnhancedGovernanceLogger {
     };
 
     // Write to JSONL file (server-side only)
-    if (typeof window === 'undefined' && appendFileSync) {
-      appendFileSync(this.currentLogFile, JSON.stringify(enrichedEvent) + '\n');
-    }
+    this.writeToLogFile(enrichedEvent);
 
     // Console logging for development
     if (this.config.consoleLoggingEnabled) {
@@ -219,6 +202,17 @@ class EnhancedGovernanceLogger {
 
     // Save to DriveMemory for audit
     this.saveToDriveMemory(enrichedEvent);
+  }
+
+  private async writeToLogFile(event: unknown): Promise<void> {
+    if (typeof window !== 'undefined') return;
+
+    try {
+      const fs = await import('fs');
+      fs.appendFileSync(this.currentLogFile, JSON.stringify(event) + '\n');
+    } catch (error) {
+      console.warn('[GovernanceLogger] File write failed:', error);
+    }
   }
 
   private shouldCreateMemoryAnchor(event: GovernanceEvent): boolean {
@@ -254,16 +248,38 @@ class EnhancedGovernanceLogger {
     }
 
     // Save anchor to DriveMemory (server-side only)
-    if (typeof window === 'undefined' && appendFileSync && path) {
-      const anchorPath = path.join(this.config.driveMemoryPath, 'memory-anchors.jsonl');
-      appendFileSync(anchorPath, JSON.stringify(anchorData) + '\n');
+    this.writeToMemoryAnchors(anchorData);
+  }
+
+  private async saveToDriveMemory(event: GovernanceEvent): Promise<void> {
+    if (typeof window !== 'undefined') return;
+
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const driveMemoryFile = path.join(this.config.driveMemoryPath, 'governance-log.jsonl');
+      
+      // Ensure directory exists
+      await this.ensureDirectoryExists(this.config.driveMemoryPath);
+      fs.appendFileSync(driveMemoryFile, JSON.stringify(event) + '\n');
+    } catch (error) {
+      console.warn('[GovernanceLogger] DriveMemory write failed:', error);
     }
   }
 
-  private saveToDriveMemory(event: GovernanceEvent): void {
-    if (typeof window === 'undefined' && appendFileSync && path) {
-      const driveMemoryFile = path.join(this.config.driveMemoryPath, 'governance-log.jsonl');
-      appendFileSync(driveMemoryFile, JSON.stringify(event) + '\n');
+  private async writeToMemoryAnchors(anchorData: unknown): Promise<void> {
+    if (typeof window !== 'undefined') return;
+
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const anchorPath = path.join(this.config.driveMemoryPath, 'memory-anchors.jsonl');
+      
+      // Ensure directory exists
+      await this.ensureDirectoryExists(this.config.driveMemoryPath);
+      fs.appendFileSync(anchorPath, JSON.stringify(anchorData) + '\n');
+    } catch (error) {
+      console.warn('[GovernanceLogger] Memory anchor write failed:', error);
     }
   }
 
@@ -566,7 +582,7 @@ export const governanceLogger = {
     action: string;
     target: string;
     context: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }) => {
     // Map legacy calls to new structured events
     switch (params.action) {

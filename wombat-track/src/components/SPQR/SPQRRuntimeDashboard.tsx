@@ -362,13 +362,8 @@ export const SPQRRuntimeDashboard: React.FC = () => {
   }, [initializeUATSession, loadUsageSummaries]);
   
   // Health reports polling - separate effect with stable dependencies
-  const healthPollingStartedRef = useRef(false);
-  
   useEffect(() => {
-    
-    // Only start polling once after initialization
-    if (!initialized || healthPollingStartedRef.current) return;
-    healthPollingStartedRef.current = true;
+    if (!initialized) return;
     
     const startHealthPolling = () => {
       if (healthIntervalRef.current) {
@@ -392,31 +387,20 @@ export const SPQRRuntimeDashboard: React.FC = () => {
         clearInterval(healthIntervalRef.current);
         healthIntervalRef.current = null;
       }
-      healthPollingStartedRef.current = false;
     };
-  }, [initialized]); // ✅ Remove governanceLogger dependency since it's memoized singleton
+  }, [initialized, governanceLogger]);
   
-  // Session cleanup effect - use ref to prevent infinite loops
-  const sessionCleanupRef = useRef<string | null>(null);
-  
+  // Session cleanup effect
   useEffect(() => {
-    
-    // Only set up cleanup if session changed
-    const currentSessionId = uatSession?.sessionId || null;
-    if (sessionCleanupRef.current === currentSessionId) return;
-    
-    sessionCleanupRef.current = currentSessionId;
-    
     return () => {
-      // Use the session that was active when this cleanup was set up
-      if (currentSessionId && uatSession?.sessionId === currentSessionId) {
+      if (uatSession) {
         logUATInteraction('session_end', 'uat_session', {
           session_duration_ms: Date.now() - new Date(uatSession.startTime).getTime(),
           total_interactions: uatSession.interactions.length
         });
       }
     };
-  }, [uatSession?.sessionId]); // ✅ Only depend on session ID, not the whole session object
+  }, [uatSession, logUATInteraction]);
 
   const getFilteredCards = useCallback(() => {
     const userPermissions = userRoles.find(r => r.id === selectedRole)?.permissions || [];

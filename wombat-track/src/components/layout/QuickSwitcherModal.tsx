@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, ArrowRight, Hash, Folder, Settings, Rocket, Database } from 'lucide-react';
+import { Search, ArrowRight, Folder, Settings, Rocket, Database } from 'lucide-react';
 import type { Project } from '../../types/phase';
 import type { WorkSurface } from './AppLayout';
-import { SubAppStatusData } from './SubAppStatusBadge';
+import type { SubAppStatusData } from './SubAppStatusBadge';
 
 interface QuickSwitcherModalProps {
   isOpen: boolean;

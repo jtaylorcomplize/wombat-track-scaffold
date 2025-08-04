@@ -66,7 +66,7 @@ const getMockProjectsData = () => ({
       name: 'SPQR Runtime Monitoring',
       description: 'Real-time system performance monitoring',
       subAppId: 'prog-spqr-001', 
-      subAppName: 'SPQR Runtime',
+      subAppName: 'SPQR',
       status: 'active' as const,
       priority: 'critical' as const,
       completionPercentage: 40,
@@ -80,9 +80,29 @@ const getMockProjectsData = () => ({
         spent: 10000
       },
       tags: ['monitoring', 'performance', 'runtime']
+    },
+    {
+      id: 'proj-roam-001',
+      name: 'Business Migration Planning',
+      description: 'Visa calculation and business migration planning tool',
+      subAppId: 'prog-roam-001',
+      subAppName: 'Roam',
+      status: 'active' as const,
+      priority: 'medium' as const,
+      completionPercentage: 80,
+      owner: 'system',
+      teamSize: 4,
+      startDate: '2025-02-15',
+      endDate: '2025-06-01',
+      lastUpdated: new Date().toISOString(),
+      budget: {
+        allocated: 35000,
+        spent: 28000
+      },
+      tags: ['visa', 'migration', 'calculation']
     }
   ],
-  total: 3,
+  total: 4,
   page: 1,
   hasMore: false
 });
@@ -91,7 +111,7 @@ const getMockSubAppsData = () => [
   {
     id: 'prog-orbis-001',
     name: 'Orbis Intelligence',
-    description: 'AI-powered business intelligence and analytics platform',
+    description: 'Core program for recursive AI-native development and Sub-App orchestration; 3D printer engine for SDLC and governance.',
     version: 'v2.1.3',
     status: 'active' as const,
     launchUrl: 'https://orbis.complize.com',
@@ -122,7 +142,7 @@ const getMockSubAppsData = () => [
   {
     id: 'prog-complize-001',
     name: 'Complize Platform',
-    description: 'Compliance management and regulatory tracking system',
+    description: 'Compliance suite Sub-App; includes Visa Management, Knowledge Base, and RAG/Compliance Tracker modules.',
     version: 'v1.8.2',
     status: 'active' as const,
     launchUrl: 'https://app.complize.com',
@@ -152,8 +172,8 @@ const getMockSubAppsData = () => [
   },
   {
     id: 'prog-spqr-001',
-    name: 'SPQR Runtime',
-    description: 'Real-time system monitoring and performance dashboard',
+    name: 'SPQR',
+    description: 'Sub-App for reporting and Looker Studio integration within Orbis Intelligence ecosystem.',
     version: 'v3.0.1',
     status: 'warning' as const,
     launchUrl: 'https://spqr.internal.com',
@@ -177,6 +197,37 @@ const getMockSubAppsData = () => [
           id: 'proj-spqr-002',
           name: 'Performance Dashboard',
           completionPercentage: 25
+        }
+      ]
+    }
+  },
+  {
+    id: 'prog-roam-001',
+    name: 'Roam',
+    description: 'Formerly VisaCalcPro; business migration planning and visa calculation tool.',
+    version: 'v4.2.0',
+    status: 'active' as const,
+    launchUrl: 'https://roam.complize.com',
+    lastUpdated: new Date().toISOString(),
+    metrics: {
+      totalProjects: 6,
+      activeProjects: 5,
+      totalUsers: 28,
+      uptime: 99.9,
+      avgResponseTime: 85
+    },
+    projects: {
+      total: 6,
+      recent: [
+        {
+          id: 'proj-roam-001',
+          name: 'Business Migration Planning',
+          completionPercentage: 80
+        },
+        {
+          id: 'proj-roam-002',
+          name: 'Visa Calculation Engine',
+          completionPercentage: 90
         }
       ]
     }
@@ -218,9 +269,9 @@ interface ProjectsResponse {
   };
 }
 
-interface SubAppsResponse {
-  subApps: SubApp[];
-}
+// interface SubAppsResponse {
+//   subApps: SubApp[];
+// }
 
 interface RuntimeStatusResponse {
   runtimeStatuses: RuntimeStatus[];
@@ -287,7 +338,7 @@ export const useAllProjects = (filters?: {
       } else {
         throw new Error(result.error || 'Failed to fetch projects');
       }
-    } catch (err) {
+    } catch {
       console.warn('[useAllProjects] API failed, falling back to mock data:', err);
       // Fallback to mock data
       const mockData = getMockProjectsData();
@@ -386,7 +437,7 @@ export const useSubApps = (includeProjects: boolean = true) => {
       } else {
         throw new Error(result.error || 'Failed to fetch sub-apps');
       }
-    } catch (err) {
+    } catch {
       console.warn('[useSubApps] API failed, falling back to mock data:', err);
       // Fallback to mock data
       const mockData = getMockSubAppsData();
@@ -433,7 +484,7 @@ export const useSubApps = (includeProjects: boolean = true) => {
           if (update.type === 'sub_apps_update') {
             fetchSubApps();
           }
-        } catch (err) {
+        } catch {
           console.error('[WebSocket] Failed to parse message:', err);
         }
       };
@@ -449,7 +500,7 @@ export const useSubApps = (includeProjects: boolean = true) => {
       };
       
       wsRef.current = ws;
-    } catch (err) {
+    } catch {
       console.error('[WebSocket] Failed to connect, using polling:', err);
       setupPolling();
     }
@@ -491,7 +542,7 @@ export const useSubApps = (includeProjects: boolean = true) => {
  * Hook for fetching recent projects for a specific sub-app
  */
 export const useSubAppRecentProjects = (subAppId: string, limit: number = 5) => {
-  const [data, setData] = useState<{ subApp: any; projects: Project[]; summary: any } | null>(null);
+  const [data, setData] = useState<{ subApp: unknown; projects: Project[]; summary: unknown } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -508,7 +559,7 @@ export const useSubAppRecentProjects = (subAppId: string, limit: number = 5) => 
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      const result: APIResponse<any> = await response.json();
+      const result: APIResponse<unknown> = await response.json();
       
       if (result.success) {
         setData(result.data);
@@ -516,7 +567,7 @@ export const useSubAppRecentProjects = (subAppId: string, limit: number = 5) => 
       } else {
         throw new Error(result.error || 'Failed to fetch recent projects');
       }
-    } catch (err) {
+    } catch {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
     } finally {
       setLoading(false);
@@ -570,7 +621,7 @@ export const useRuntimeStatus = () => {
       } else {
         throw new Error(result.error || 'Failed to fetch runtime status');
       }
-    } catch (err) {
+    } catch {
       console.warn('[useRuntimeStatus] API failed, falling back to mock data:', err);
       // Fallback to mock data
       const mockData = getMockRuntimeStatus();
@@ -622,7 +673,7 @@ export const useRuntimeStatus = () => {
               fetchRuntimeStatus();
             }
           }
-        } catch (err) {
+        } catch {
           console.error('[WebSocket] Failed to parse message:', err);
         }
       };
@@ -638,7 +689,7 @@ export const useRuntimeStatus = () => {
       };
       
       wsRef.current = ws;
-    } catch (err) {
+    } catch {
       console.error('[WebSocket] Failed to connect, using polling:', err);
       setupPolling();
     }
@@ -702,7 +753,7 @@ export const useProject = (projectId: string) => {
       } else {
         throw new Error(result.error || 'Failed to fetch project');
       }
-    } catch (err) {
+    } catch {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
     } finally {
       setLoading(false);
@@ -736,11 +787,11 @@ export const useAPIHealth = () => {
       const response = await fetch(`${API_BASE_URL}/health`, {
         method: 'HEAD',
         timeout: 5000
-      } as any);
+      } as unknown);
       
       setIsHealthy(response.ok);
       setLastCheck(new Date());
-    } catch (err) {
+    } catch {
       setIsHealthy(false);
       setLastCheck(new Date());
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings, Database, Activity, BarChart3, GitBranch } from 'lucide-react';
+import { Settings, GitBranch } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { WorkSurface } from './AppLayout';
 
