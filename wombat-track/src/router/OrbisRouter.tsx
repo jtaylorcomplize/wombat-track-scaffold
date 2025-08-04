@@ -23,7 +23,7 @@ const SubAppOverview = SubAppOverviewComponent;
 import SubAppProjectsListComponent from '../components/operational/SubAppProjectsList';
 const SubAppProjectsList = SubAppProjectsListComponent;
 // Temporarily use direct import to debug lazy loading issue
-import ProjectDashboardComponent from '../components/ProjectDashboard';
+import { ProjectDashboard as ProjectDashboardComponent } from '../components/ProjectDashboard';
 const ProjectDashboard = ProjectDashboardComponent;
 const PlanSurface = PlanSurfaceComponent;
 const ExecuteSurface = ExecuteSurfaceComponent;
