@@ -4,16 +4,28 @@ import { ExternalLink, Activity, Users, Calendar, AlertTriangle, TrendingUp, Fol
 import { useNavigationContext } from '../../contexts/NavigationContext';
 import { governanceLogger } from '../../services/governanceLogger';
 
-// Icon mapping to prevent object-to-primitive conversion errors
-const iconMap: Record<string, React.ReactNode> = {
-  externalLink: <ExternalLink className="w-4 h-4" />,
-  folder: <Folder className="w-4 h-4" />,
-  plus: <Plus className="w-4 h-4" />,
-  settings: <Settings className="w-4 h-4" />,
-  fileText: <FileText className="w-4 h-4" />,
-  clock: <Clock className="w-4 h-4" />,
-  dollarSign: <DollarSign className="w-4 h-4" />,
-  target: <Target className="w-4 h-4" />
+// Icon mapping function to prevent object-to-primitive conversion errors
+const getIcon = (iconName: string): React.ReactNode => {
+  switch (iconName) {
+    case 'externalLink':
+      return <ExternalLink className="w-4 h-4" />;
+    case 'folder':
+      return <Folder className="w-4 h-4" />;
+    case 'plus':
+      return <Plus className="w-4 h-4" />;
+    case 'settings':
+      return <Settings className="w-4 h-4" />;
+    case 'fileText':
+      return <FileText className="w-4 h-4" />;
+    case 'clock':
+      return <Clock className="w-4 h-4" />;
+    case 'dollarSign':
+      return <DollarSign className="w-4 h-4" />;
+    case 'target':
+      return <Target className="w-4 h-4" />;
+    default:
+      return <ExternalLink className="w-4 h-4" />;
+  }
 };
 
 interface ProjectSummary {
@@ -606,7 +618,7 @@ const SubAppOverview: React.FC = () => {
                   onClick={() => handleQuickAction(action.action, action.url)}
                   className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
                 >
-                  {iconMap[action.icon] || iconMap.externalLink}
+                  {getIcon(action.icon)}
                   <span>{action.label}</span>
                 </button>
               ))}
@@ -707,7 +719,7 @@ const SubAppOverview: React.FC = () => {
                   onClick={() => handleQuickAction(action.action, action.url)}
                   className="w-full flex items-center space-x-3 p-3 text-left border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors"
                 >
-                  {iconMap[action.icon] || iconMap.externalLink}
+                  {getIcon(action.icon)}
                   <span className="font-medium text-gray-900">{action.label}</span>
                 </button>
               ))}
