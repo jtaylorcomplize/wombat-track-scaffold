@@ -4,6 +4,18 @@ import { ExternalLink, Activity, Users, Calendar, AlertTriangle, TrendingUp, Fol
 import { useNavigationContext } from '../../contexts/NavigationContext';
 import { governanceLogger } from '../../services/governanceLogger';
 
+// Icon mapping to prevent object-to-primitive conversion errors
+const iconMap: Record<string, React.ReactNode> = {
+  externalLink: <ExternalLink className="w-4 h-4" />,
+  folder: <Folder className="w-4 h-4" />,
+  plus: <Plus className="w-4 h-4" />,
+  settings: <Settings className="w-4 h-4" />,
+  fileText: <FileText className="w-4 h-4" />,
+  clock: <Clock className="w-4 h-4" />,
+  dollarSign: <DollarSign className="w-4 h-4" />,
+  target: <Target className="w-4 h-4" />
+};
+
 interface ProjectSummary {
   projectId: string;
   projectName: string;
@@ -45,7 +57,7 @@ interface SubAppInfo {
   quickActions: {
     id: string;
     label: string;
-    icon: React.ReactNode;
+    icon: string;
     action: string;
     url?: string;
   }[];
@@ -151,26 +163,26 @@ const SubAppOverview: React.FC = () => {
               {
                 id: 'qa-001',
                 label: 'Launch App',
-                icon: <ExternalLink className="w-4 h-4" />,
+                icon: 'externalLink',
                 action: 'launch_app',
                 url: 'https://orbis.intelligence.app'
               },
               {
                 id: 'qa-002',
                 label: 'View Projects',
-                icon: <Folder className="w-4 h-4" />,
+                icon: 'folder',
                 action: 'view_projects'
               },
               {
                 id: 'qa-003',
                 label: 'New Project',
-                icon: <Plus className="w-4 h-4" />,
+                icon: 'plus',
                 action: 'new_project'
               },
               {
                 id: 'qa-004',
                 label: 'Settings',
-                icon: <Settings className="w-4 h-4" />,
+                icon: 'settings',
                 action: 'settings'
               }
             ],
@@ -256,14 +268,14 @@ const SubAppOverview: React.FC = () => {
               {
                 id: 'qa-005',
                 label: 'Launch App',
-                icon: <ExternalLink className="w-4 h-4" />,
+                icon: 'externalLink',
                 action: 'launch_app',
                 url: 'https://complize.platform.app'
               },
               {
                 id: 'qa-006',
                 label: 'View Projects',
-                icon: <Folder className="w-4 h-4" />,
+                icon: 'folder',
                 action: 'view_projects'
               }
             ],
@@ -335,14 +347,14 @@ const SubAppOverview: React.FC = () => {
               {
                 id: 'qa-007',
                 label: 'Launch App',
-                icon: <ExternalLink className="w-4 h-4" />,
+                icon: 'externalLink',
                 action: 'launch_app',
                 url: 'https://visacalc.pro.app'
               },
               {
                 id: 'qa-008',
                 label: 'View Projects',
-                icon: <Folder className="w-4 h-4" />,
+                icon: 'folder',
                 action: 'view_projects'
               }
             ],
@@ -594,7 +606,7 @@ const SubAppOverview: React.FC = () => {
                   onClick={() => handleQuickAction(action.action, action.url)}
                   className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
                 >
-                  {action.icon}
+                  {iconMap[action.icon] || iconMap.externalLink}
                   <span>{action.label}</span>
                 </button>
               ))}
@@ -695,7 +707,7 @@ const SubAppOverview: React.FC = () => {
                   onClick={() => handleQuickAction(action.action, action.url)}
                   className="w-full flex items-center space-x-3 p-3 text-left border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors"
                 >
-                  {action.icon}
+                  {iconMap[action.icon] || iconMap.externalLink}
                   <span className="font-medium text-gray-900">{action.label}</span>
                 </button>
               ))}
