@@ -437,7 +437,12 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                               subAppStatus.status === 'warning' ? 'bg-amber-500' : 'bg-red-500'
                           }`} title={`Status: ${String(subAppStatus.status)} | Uptime: ${Number(subAppStatus.uptime).toFixed(1)}%`} />
                           <div>
-                            <h4 className="font-medium text-gray-900">{String(subApp.name)}</h4>
+                            <button
+                              onClick={() => navigate(`/orbis/sub-apps/${subApp.id}`)}
+                              className="font-medium text-gray-900 hover:text-purple-600 transition-colors text-left"
+                            >
+                              {String(subApp.name)}
+                            </button>
                             <p className="text-xs text-gray-500">
                               v{String(subApp.version)} • {Number(subAppStatus.responseTime).toFixed(0)}ms
                             </p>
@@ -502,7 +507,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
               )}
 
               {/* Refresh Button */}
-              <div className="pt-2">
+              <div className="pt-2 space-y-2">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -511,6 +516,12 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                   className="w-full text-xs text-purple-600 hover:text-purple-700 py-2 px-3 border border-purple-200 rounded-md hover:bg-purple-50 transition-colors"
                 >
                   Refresh Status
+                </button>
+                <button
+                  onClick={() => navigate('/orbis/sub-apps/overview')}
+                  className="w-full text-xs text-blue-600 hover:text-blue-700 py-2 px-3 border border-blue-200 rounded-md hover:bg-blue-50 transition-colors"
+                >
+                  View All Sub-Apps →
                 </button>
               </div>
             </div>

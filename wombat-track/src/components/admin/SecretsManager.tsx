@@ -212,7 +212,7 @@ export const SecretsManager: React.FC<SecretsManagerProps> = ({ className }) => 
   if (loading) return <div className="p-4">Loading secrets...</div>;
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`p-4 lg:p-6 space-y-6 max-w-none ${className}`}>
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-slate-800">Secrets Management</h2>

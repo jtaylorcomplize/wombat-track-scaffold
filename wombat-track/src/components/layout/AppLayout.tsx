@@ -482,7 +482,10 @@ const AppLayoutInner: React.FC<AppLayoutProps> = ({ initialProjects = mockProjec
               onWorkSurfaceSelect={handleWorkSurfaceSelect}
             />
           ) : (
-            <div className="wt-content-max-width" style={{ paddingTop: 'var(--wt-space-6)' }}>
+            <div 
+              className={selectedSurface?.startsWith('admin') ? "w-full" : "wt-content-max-width"} 
+              style={{ paddingTop: 'var(--wt-space-6)' }}
+            >
               {renderCurrentSurface()}
             </div>
           )}

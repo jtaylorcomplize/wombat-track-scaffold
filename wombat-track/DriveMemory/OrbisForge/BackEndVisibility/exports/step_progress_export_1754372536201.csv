@@ -1,0 +1,28 @@
+stepId,phaseId,stepName,status,progress,assignedTo,dueDate,completedAt,createdAt,updatedAt
+OF-8.4.4,OF-8.4,Strategic Planning sync & migration prep,Planned,0,Project Manager,,,2025-08-05T02:21:30.422Z,2025-08-05T02:21:30.422Z
+OF-8.4.3,OF-8.4,Governance & DriveMemory consolidation,Planned,0,Systems Architect,,,2025-08-05T02:21:25.078Z,2025-08-05T02:21:25.078Z
+OF-8.4.2,OF-8.4,Lint sweep & AutoAudit validation,Planned,0,System Automation,,,2025-08-05T02:21:19.862Z,2025-08-05T02:21:19.862Z
+OF-8.4.1b,OF-8.4,Sidebar production validation,Planned,0,QA Team,,,2025-08-05T02:21:13.619Z,2025-08-05T02:21:13.619Z
+OF-8.4.1,OF-8.4,React.lazy OrbisRouter refactor,Planned,0,Development Team,,,2025-08-05T02:21:06.742Z,2025-08-05T02:21:06.742Z
+OF-SDLC-IMP1-DEBUG-AUTO,OF-SDLC-IMP1-P1,Auto-Generated Debug Step,Completed,100,System Import,,,2025-08-04T07:57:41.204Z,2025-08-04T07:57:41.204Z
+OF-SDLC-IMP1-P4-S1,OF-SDLC-IMP1-P4,Auto-Anchor MemoryPlugin After QA,In Progress,50,System Import,,,2025-01-04T23:30:00Z,2025-08-04T07:57:41.203Z
+OF-SDLC-IMP1-P2-S2,OF-SDLC-IMP1-P2,CI/CD & Structured Logging Setup,In Progress,50,System Import,,,2025-01-04T17:30:00Z,2025-08-04T07:57:41.201Z
+ESB-1.1-STEP-1,ESB-1.1,Initialize Design Phase,Completed,100,system,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+ESB-1.1-STEP-2,ESB-1.1,Execute Design Phase tasks,In Progress,60,admin,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+ESB-1.1-STEP-3,ESB-1.1,Review Design Phase completion,Pending,0,reviewer,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+ESB-1.2-STEP-1,ESB-1.2,Initialize Implementation Phase,Completed,100,system,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+ESB-1.2-STEP-2,ESB-1.2,Execute Implementation Phase tasks,In Progress,60,admin,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+ESB-1.2-STEP-3,ESB-1.2,Review Implementation Phase completion,Pending,0,reviewer,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+ESB-1.3-STEP-1,ESB-1.3,Initialize Testing Phase,Completed,100,system,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+ESB-1.3-STEP-2,ESB-1.3,Execute Testing Phase tasks,In Progress,60,admin,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+ESB-1.3-STEP-3,ESB-1.3,Review Testing Phase completion,Pending,0,reviewer,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+AMV-1.1-STEP-1,AMV-1.1,Initialize Planning Phase,Completed,100,system,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+AMV-1.1-STEP-2,AMV-1.1,Execute Planning Phase tasks,In Progress,60,admin,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+AMV-1.1-STEP-3,AMV-1.1,Review Planning Phase completion,Pending,0,reviewer,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+DBM-2.1-STEP-1,DBM-2.1,Initialize Archive Phase,Completed,100,system,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+DBM-2.1-STEP-2,DBM-2.1,Execute Archive Phase tasks,In Progress,60,admin,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+DBM-2.1-STEP-3,DBM-2.1,Review Archive Phase completion,Pending,0,reviewer,,,2025-08-03 09:36:57,2025-08-03 09:36:57
+OF-SDLC-IMP1-P3-S1,OF-SDLC-IMP1-P3,Debug Enhanced Sidebar v3.1,Completed,100,System Import,,2025-01-04T23:30:00Z,2025-08-04T07:57:41.202Z,2025-01-04T23:30:00Z
+OF-SDLC-IMP1-P3-S2,OF-SDLC-IMP1-P3,Manual QA & Puppeteer Test,Completed,100,System Import,,2025-01-04T23:15:00Z,2025-08-04T07:57:41.203Z,2025-01-04T23:15:00Z
+OF-SDLC-IMP1-P2-S1,OF-SDLC-IMP1-P2,GitHub Branch & Claude Dispatch Setup,Completed,100,System Import,,2025-01-04T17:00:00Z,2025-08-04T07:57:41.201Z,2025-01-04T17:00:00Z
+OF-SDLC-IMP1-P1-S1,OF-SDLC-IMP1-P1,Project Initiation & Context,Completed,100,System Import,,2025-01-04T16:30:00Z,2025-08-04T07:57:41.200Z,2025-01-04T16:30:00Z

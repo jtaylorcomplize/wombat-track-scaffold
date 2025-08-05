@@ -99,14 +99,30 @@ const StrategicPlanning: React.FC = () => {
   const [initiatives, setInitiatives] = useState<StrategicInitiative[]>([]);
   const [roadmapData, setRoadmapData] = useState<RoadmapQuarter[]>([]);
 
-  // Fetch strategic planning data
+  // Fetch strategic planning data from canonical API
   useEffect(() => {
     const fetchStrategicData = async () => {
       setIsLoading(true);
       try {
-        await new Promise(resolve => setTimeout(resolve, 1200));
+        // Try to fetch from canonical strategic planning API first
+        const response = await fetch('/api/orbis/strategic-initiatives');
         
-        // Mock strategic initiatives
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            setInitiatives(result.data.initiatives || []);
+            setRoadmapData(result.data.roadmap || []);
+            return;
+          }
+        }
+        
+        // Fallback: Empty state instead of mock data
+        console.warn('No canonical strategic planning API available, showing empty state');
+        setInitiatives([]);
+        setRoadmapData([]);
+        
+        // Remove all mock data - keeping only structure for when real API is available
+        /*
         const mockInitiatives: StrategicInitiative[] = [
           {
             id: 'init-001',
@@ -310,7 +326,7 @@ const StrategicPlanning: React.FC = () => {
               {
                 projectId: 'proj-006',
                 projectName: 'Visa Processing Automation',
-                subAppId: 'prog-visacalc-001',
+                subAppId: 'prog-roam-001',
                 subAppName: 'VisaCalc Pro',
                 contribution: 50
               }
@@ -373,6 +389,7 @@ const StrategicPlanning: React.FC = () => {
 
         setInitiatives(mockInitiatives);
         setRoadmapData(mockRoadmap);
+        */
 
         // Log governance event
         governanceLogger.logSidebarInteraction({
@@ -381,9 +398,10 @@ const StrategicPlanning: React.FC = () => {
           context: 'sidebar_navigation',
           metadata: {
             view_type: selectedView,
-            initiatives_count: mockInitiatives.length,
+            initiatives_count: initiatives.length,
             status_filter: selectedStatus,
-            priority_filter: selectedPriority
+            priority_filter: selectedPriority,
+            data_source: 'canonical_api_fallback'
           }
         });
         
