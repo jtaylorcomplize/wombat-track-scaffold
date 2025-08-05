@@ -140,8 +140,8 @@ const SubAppProjectDetail: React.FC = () => {
               }
             ]
           },
-          'prog-visacalc-001': {
-            id: 'prog-visacalc-001',
+          'prog-roam-001': {
+            id: 'prog-roam-001',
             name: 'VisaCalc Pro',
             description: 'Advanced visa processing and immigration document management system',
             version: 'v3.0.1',

@@ -17,6 +17,7 @@ const ProjectAnalyticsDashboard = lazy(() => import('../components/strategic/Pro
 const TeamOverview = lazy(() => import('../components/strategic/TeamOverview'));
 const StrategicPlanning = lazy(() => import('../components/strategic/StrategicPlanning'));
 const SubAppOverview = lazy(() => import('../components/operational/SubAppOverview'));
+const SubAppsOverview = lazy(() => import('../components/operational/SubAppsOverview'));
 const SubAppProjectsList = lazy(() => import('../components/operational/SubAppProjectsList'));
 const SubAppProjectDetail = lazy(() => import('../components/operational/SubAppProjectDetail'));
 // const ProjectDashboard = lazy(() => import('../components/ProjectDashboard').then(module => ({ default: module.ProjectDashboard })));
@@ -76,15 +77,24 @@ export const OrbisRouter: React.FC = () => {
               </Route>
               
               {/* Operational Level Routes - Sub-Apps */}
-              <Route path="sub-apps/:subAppId" element={<SubAppOverview />}>
-                {/* Sub-app projects list */}
-                <Route path="projects" element={<SubAppProjectsList />} />
+              <Route path="sub-apps">
+                {/* Sub-Apps Overview - lists all SubApps */}
+                <Route path="overview" element={<SubAppsOverview />} />
                 
-                {/* Individual project details */}
-                <Route path="projects/:projectId" element={<SubAppProjectDetail />} />
+                {/* Individual Sub-App Routes */}
+                <Route path=":subAppId" element={<SubAppOverview />}>
+                  {/* Sub-app projects list */}
+                  <Route path="projects" element={<SubAppProjectsList />} />
+                  
+                  {/* Individual project details */}
+                  <Route path="projects/:projectId" element={<SubAppProjectDetail />} />
+                  
+                  {/* Default to projects list when accessing sub-app */}
+                  <Route index element={<Navigate to="projects" replace />} />
+                </Route>
                 
-                {/* Default to projects list when accessing sub-app */}
-                <Route index element={<Navigate to="projects" replace />} />
+                {/* Default sub-apps route goes to overview */}
+                <Route index element={<Navigate to="overview" replace />} />
               </Route>
 
               {/* System Level Routes - Platform Surfaces */}

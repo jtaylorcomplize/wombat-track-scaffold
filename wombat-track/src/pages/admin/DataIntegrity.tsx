@@ -146,7 +146,7 @@ export default function DataIntegrity() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 lg:p-6 space-y-6 max-w-none">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -231,7 +231,7 @@ export default function DataIntegrity() {
               </div>
             </div>
             
-            <div className="p-6">
+            <div className="p-4 lg:p-6 overflow-x-auto">
               {issue.orphanedRecords.slice(0, 5).map((orphan) => (
                 <div key={orphan.id} className="mb-6 last:mb-0 p-4 bg-gray-50 rounded-lg">
                   <div className="flex items-start justify-between">
@@ -247,15 +247,18 @@ export default function DataIntegrity() {
                       </div>
                       
                       {/* Fix UI */}
-                      <div className="flex items-center space-x-3">
-                        <Wrench size={16} className="text-gray-400" />
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                        <div className="flex items-center space-x-2">
+                          <Wrench size={16} className="text-gray-400" />
+                          <span className="text-sm text-gray-600">Fix:</span>
+                        </div>
                         <select
                           value={selectedFixes[orphan.id] || ''}
                           onChange={(e) => setSelectedFixes(prev => ({
                             ...prev,
                             [orphan.id]: e.target.value
                           }))}
-                          className="border border-gray-300 rounded px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500"
+                          className="border border-gray-300 rounded px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500 w-full sm:w-auto min-w-[200px]"
                           disabled={fixing === orphan.id}
                         >
                           {fixOptions[orphan.id]?.map(option => (
@@ -267,7 +270,7 @@ export default function DataIntegrity() {
                         <button
                           onClick={() => applyFix(orphan)}
                           disabled={!selectedFixes[orphan.id] || fixing === orphan.id}
-                          className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                         >
                           {fixing === orphan.id ? 'Applying...' : 'Apply Fix'}
                         </button>
@@ -280,7 +283,7 @@ export default function DataIntegrity() {
                     <summary className="text-sm text-gray-600 cursor-pointer hover:text-gray-800">
                       View full record
                     </summary>
-                    <pre className="mt-2 p-2 bg-white rounded text-xs overflow-x-auto">
+                    <pre className="mt-2 p-2 bg-white rounded text-xs overflow-x-auto max-w-full">
                       {JSON.stringify(orphan.record, null, 2)}
                     </pre>
                   </details>

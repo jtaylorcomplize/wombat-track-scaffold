@@ -20,7 +20,7 @@ import adminDetailRoutes from './api/admin-detail';
 import adminEditRoutes from './api/admin-edit';
 import importRoutes from './api/import';
 import gizmoSecretsRoutes from './api/import/gizmo-secrets';
-import { getAllProjects, getSubApps, getSubAppRecentProjects, getRuntimeStatus, getProjectById } from './api/orbis';
+import { getAllProjects, getSubApps, getSubAppById, getSubAppRecentProjects, getRuntimeStatus, getProjectById } from './api/orbis';
 
 const app = express();
 const PORT = process.env.ADMIN_PORT || 3002;
@@ -103,6 +103,7 @@ console.log('   ✓ /api/admin/edit/phases - Editable phases with draft/commit')
 // Orbis API routes for cross-sub-app data
 app.get('/api/orbis/projects/all', getAllProjects);
 app.get('/api/orbis/sub-apps', getSubApps);
+app.get('/api/orbis/sub-apps/:id', getSubAppById);
 app.get('/api/orbis/sub-apps/:id/projects/recent', getSubAppRecentProjects);
 app.get('/api/orbis/runtime/status', getRuntimeStatus);
 app.get('/api/orbis/projects/:id', getProjectById);

@@ -26,7 +26,13 @@
     "qa:framework:staging": "node scripts/qa-framework/run-qa-framework.js --environment staging",
     "qa:framework:dev": "node scripts/qa-framework/run-qa-framework.js --environment development",
     "qa:admin-ui": "node scripts/qa-framework/enhanced-admin-qa.js",
-    "qa:configurable": "node scripts/qa-framework/configurable-qa-framework.js"
+    "qa:configurable": "node scripts/qa-framework/configurable-qa-framework.js",
+    "of-8.5:init": "tsx scripts/initialize-of-8.5.ts",
+    "of-8.5:migrate": "tsx scripts/db-migration-of-8.5.ts migrate",
+    "of-8.5:rollback": "tsx scripts/db-migration-of-8.5.ts rollback",
+    "of-8.5:verify": "tsx scripts/db-migration-of-8.5.ts verify",
+    "uat:nightly": "tsx scripts/nightly-uat-automation.ts run",
+    "uat:cloud-validation": "jest tests/of-8.5-cloud-runtime-validation.spec.js --testTimeout=120000 --detectOpenHandles --forceExit"
   },
   "dependencies": {
     "@looker/embed-sdk": "^2.0.6",

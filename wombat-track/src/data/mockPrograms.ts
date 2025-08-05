@@ -32,17 +32,31 @@ export const mockPrograms: Program[] = [
     linkedProjects: ['proj-003']
   },
   {
-    id: 'prog-metaplatform-001',
-    name: 'MetaPlatform',
-    description: 'Universal platform integration and workflow orchestration system',
-    status: 'Planning',
+    id: 'prog-spqr-001',
+    name: 'SPQR',
+    description: 'Sub-App for reporting and Looker Studio integration within Orbis Intelligence ecosystem',
+    status: 'Active',
     programType: 'Sub-App',
     usesOrbisEngine: true,
-    orbisDependencyLevel: 'Full',
-    platformIntegration: ['Claude', 'GitHub', 'Notion', 'Vercel'],
-    primaryLead: 'Engineering Lead',
-    launchDate: new Date('2025-01-01'),
-    notes: 'Next-generation platform for cross-system integration and AI orchestration',
+    orbisDependencyLevel: 'High',
+    platformIntegration: ['Claude', 'Looker Studio', 'Notion'],
+    primaryLead: 'Analytics Lead',
+    launchDate: new Date('2024-09-01'),
+    notes: 'Reporting and analytics platform',
+    linkedProjects: []
+  },
+  {
+    id: 'prog-roam-001',
+    name: 'Roam',
+    description: 'Formerly VisaCalcPro; business migration planning and visa calculation tool',
+    status: 'Active',
+    programType: 'Sub-App',
+    usesOrbisEngine: true,
+    orbisDependencyLevel: 'Medium',
+    platformIntegration: ['Claude', 'Notion', 'DriveMemory'],
+    primaryLead: 'Migration Specialist',
+    launchDate: new Date('2024-08-01'),
+    notes: 'Renamed from VisaCalcPro as part of Sub-App rationalization',
     linkedProjects: []
   }
 ];
