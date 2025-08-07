@@ -88,3 +88,6 @@
 ✅ Loaded 27 records from live database table: step_progress
 🔍 Orphan Inspector: Checking 19 projects, 48 phases, 27 steps
 🔍 Orphan Inspector: Checking 19 projects, 48 phases, 27 steps
+
+🛑 Admin server shutting down...
+✅ Server closed gracefully

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Save, Edit3, Plus, Trash2, Link as LinkIcon, FileText, Clock, Shield, RefreshCw, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Save, Edit3, Plus, Trash2, Link as LinkIcon, FileText, Clock, Shield, RefreshCw, CheckCircle, XCircle, AlertTriangle, Play, Pause, AlertCircle as Alert, Zap } from 'lucide-react';
+import { TemplateSuggestionEngine } from '../components/admin/TemplateSuggestionEngine';
+import { PhaseStepTabsView } from '../components/admin/PhaseStepTabsView';
 
 interface Project {
   projectId: string;
@@ -44,6 +46,30 @@ interface Phase {
   actualDuration?: number;
   createdAt?: string;
   updatedAt?: string;
+  steps?: PhaseStep[];
+}
+
+interface PhaseStep {
+  stepId: string;
+  phaseId: string;
+  stepName: string;
+  status: 'not_started' | 'in_progress' | 'completed' | 'failed' | 'blocked';
+  description?: string;
+  stepInstruction?: string;
+  orchestrationStatus?: 'pending' | 'running' | 'complete' | 'failed';
+  memoryAnchors?: string[];
+  linkedDocuments?: string[];
+  governanceLogs?: number;
+  executionLog?: OrchestrationLog[];
+  aiSuggestedTemplates?: string[];
+}
+
+interface OrchestrationLog {
+  timestamp: string;
+  event: string;
+  executor: 'claude' | 'cc' | 'zoi' | 'user' | 'system';
+  status: 'success' | 'error' | 'warning' | 'info';
+  details: string;
 }
 
 interface GovernanceLog {
@@ -69,6 +95,31 @@ interface Document {
   uploadedBy?: string;
 }
 
+// Mock step data generation for demonstration
+const generateMockSteps = (phaseId: string, phaseName: string): PhaseStep[] => {
+  const stepTemplates = [
+    { name: 'Requirements Analysis', status: 'completed' as const, orchestrationStatus: 'complete' as const },
+    { name: 'System Design', status: 'in_progress' as const, orchestrationStatus: 'running' as const },
+    { name: 'Implementation', status: 'not_started' as const, orchestrationStatus: 'pending' as const },
+    { name: 'Testing & QA', status: 'not_started' as const, orchestrationStatus: 'pending' as const },
+    { name: 'Deployment', status: 'not_started' as const, orchestrationStatus: 'pending' as const }
+  ];
+
+  return stepTemplates.slice(0, Math.floor(Math.random() * 3) + 2).map((template, index) => ({
+    stepId: `${phaseId}-step-${index + 1}`,
+    phaseId: phaseId,
+    stepName: `${phaseName}: ${template.name}`,
+    status: template.status,
+    orchestrationStatus: template.orchestrationStatus,
+    description: `${template.name} for ${phaseName}`,
+    stepInstruction: `Complete ${template.name.toLowerCase()} phase activities`,
+    memoryAnchors: template.status === 'completed' ? ['anchor-1', 'anchor-2'] : template.status === 'in_progress' ? ['anchor-1'] : [],
+    linkedDocuments: template.status === 'completed' ? ['doc-1.pdf', 'doc-2.docx'] : template.status === 'in_progress' ? ['doc-1.pdf'] : [],
+    governanceLogs: template.status === 'completed' ? 3 : template.status === 'in_progress' ? 1 : 0,
+    aiSuggestedTemplates: ['Template suggestion available']
+  }));
+};
+
 export default function ProjectAdminEdit() {
   const { projectId } = useParams<{ projectId: string }>();
   const [project, setProject] = useState<Project | null>(null);
@@ -81,6 +132,8 @@ export default function ProjectAdminEdit() {
   const [editMode, setEditMode] = useState(false);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'details' | 'phases' | 'governance' | 'documents'>('details');
+  const [selectedStepForTemplate, setSelectedStepForTemplate] = useState<PhaseStep | null>(null);
+  const [selectedStepForDetails, setSelectedStepForDetails] = useState<PhaseStep | null>(null);
 
   useEffect(() => {
     fetchProjectData();
@@ -99,7 +152,13 @@ export default function ProjectAdminEdit() {
       const projectData = await projectResponse.json();
       setProject(projectData.project);
       setEditedProject(projectData.project);
-      setPhases(projectData.phases || []);
+      
+      // Enrich phases with orchestration data
+      const enrichedPhases = (projectData.phases || []).map((phase: Phase) => ({
+        ...phase,
+        steps: generateMockSteps(phase.phaseid, phase.phasename)
+      }));
+      setPhases(enrichedPhases);
       setGovernanceLogs(projectData.governanceLogs || []);
       
       // TODO: Fetch documents when API is ready
@@ -193,6 +252,32 @@ export default function ProjectAdminEdit() {
       cancelled: 'bg-red-100 text-red-800'
     };
     return colors[status?.toLowerCase() as keyof typeof colors] || 'bg-gray-100 text-gray-800';
+  };
+
+  // Orchestration status badge helper
+  const getOrchestrationStatusBadge = (status?: string) => {
+    switch (status) {
+      case 'pending': return { color: 'text-gray-800 bg-gray-100 border-gray-300', icon: Clock };
+      case 'running': return { color: 'text-blue-800 bg-blue-100 border-blue-300', icon: Play };
+      case 'complete': return { color: 'text-green-800 bg-green-100 border-green-300', icon: CheckCircle };
+      case 'failed': return { color: 'text-red-800 bg-red-100 border-red-300', icon: XCircle };
+      default: return { color: 'text-gray-800 bg-gray-100 border-gray-300', icon: Alert };
+    }
+  };
+
+  // Check for missing orchestration components
+  const getOrchestrationWarnings = (step: PhaseStep) => {
+    const warnings = [];
+    if (!step.memoryAnchors || step.memoryAnchors.length === 0) {
+      warnings.push('No memory anchors linked');
+    }
+    if (!step.governanceLogs || step.governanceLogs === 0) {
+      warnings.push('No governance logs');
+    }
+    if (!step.linkedDocuments || step.linkedDocuments.length === 0) {
+      warnings.push('No documents linked');
+    }
+    return warnings;
   };
 
   if (loading) {
@@ -588,10 +673,11 @@ export default function ProjectAdminEdit() {
               <p>No phases linked to this project yet.</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {phases.map((phase) => (
-                <div key={phase.phaseid} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                  <div className="flex items-center justify-between">
+                <div key={phase.phaseid} className="border rounded-lg p-6 bg-white">
+                  {/* Phase Header */}
+                  <div className="flex items-center justify-between mb-4">
                     <div>
                       <Link
                         to={`/orbis/admin/phases/${phase.phaseid}`}
@@ -617,6 +703,90 @@ export default function ProjectAdminEdit() {
                       </button>
                     </div>
                   </div>
+
+                  {/* Phase Steps - NEW ORCHESTRATION VIEW */}
+                  {phase.steps && phase.steps.length > 0 && (
+                    <div className="border-t pt-4">
+                      <h4 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+                        <Zap size={16} className="mr-2 text-blue-500" />
+                        Phase Steps & Orchestration Status
+                      </h4>
+                      <div className="space-y-3">
+                        {phase.steps.map((step) => {
+                          const orchestrationBadge = getOrchestrationStatusBadge(step.orchestrationStatus);
+                          const warnings = getOrchestrationWarnings(step);
+                          const IconComponent = orchestrationBadge.icon;
+                          
+                          return (
+                            <div key={step.stepId} className="bg-gray-50 rounded-lg p-4 border-l-4 border-l-blue-400">
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-3 mb-2">
+                                    <h5 className="font-medium text-gray-900">{step.stepName}</h5>
+                                    <span className={`px-2 py-1 text-xs rounded-full border ${orchestrationBadge.color}`}>
+                                      <IconComponent size={12} className="inline mr-1" />
+                                      {step.orchestrationStatus}
+                                    </span>
+                                    <span className={`px-2 py-1 text-xs rounded-full ${getStatusBadge(step.status)}`}>
+                                      {step.status}
+                                    </span>
+                                  </div>
+                                  
+                                  {/* Orchestration Details */}
+                                  <div className="text-sm text-gray-600 grid grid-cols-3 gap-4">
+                                    <div>
+                                      <span className="font-medium">Memory Anchors:</span> 
+                                      <span className={step.memoryAnchors?.length ? 'text-green-600' : 'text-red-600'}>
+                                        {step.memoryAnchors?.length || 0}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <span className="font-medium">Linked Docs:</span>
+                                      <span className={step.linkedDocuments?.length ? 'text-green-600' : 'text-red-600'}>
+                                        {step.linkedDocuments?.length || 0}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <span className="font-medium">Governance Logs:</span>
+                                      <span className={step.governanceLogs ? 'text-green-600' : 'text-red-600'}>
+                                        {step.governanceLogs || 0}
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                  {/* Warnings */}
+                                  {warnings.length > 0 && (
+                                    <div className="mt-2 flex items-center space-x-1">
+                                      <AlertTriangle size={14} className="text-yellow-500" />
+                                      <span className="text-xs text-yellow-600">
+                                        {warnings.join(', ')}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex items-center space-x-2 ml-4">
+                                  <button 
+                                    onClick={() => setSelectedStepForDetails(step)}
+                                    className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                                  >
+                                    View Details
+                                  </button>
+                                  <button 
+                                    onClick={() => setSelectedStepForTemplate(step)}
+                                    className="px-3 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
+                                  >
+                                    AI Templates
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -708,6 +878,58 @@ export default function ProjectAdminEdit() {
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Template Suggestion Engine Modal */}
+      {selectedStepForTemplate && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-4xl max-h-[90vh] overflow-y-auto w-full">
+            <div className="sticky top-0 bg-white border-b p-4 flex items-center justify-between">
+              <h2 className="text-xl font-semibold">
+                Template Suggestions for: {selectedStepForTemplate.stepName}
+              </h2>
+              <button
+                onClick={() => setSelectedStepForTemplate(null)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <XCircle size={24} />
+              </button>
+            </div>
+            <div className="p-4">
+              <TemplateSuggestionEngine
+                stepId={selectedStepForTemplate.stepId}
+                stepName={selectedStepForTemplate.stepName}
+                stepInstruction={selectedStepForTemplate.stepInstruction}
+                currentContext={{
+                  projectType: project?.category || 'General',
+                  phaseType: 'Development',
+                  compliance: ['ISO-27001', 'GDPR'],
+                  existingTemplates: selectedStepForTemplate.aiSuggestedTemplates || []
+                }}
+                onTemplateSave={(template) => {
+                  console.log('Template saved:', template);
+                  // Here you would integrate with the backend to save aiSuggestedTemplates
+                  // Update the step with new template
+                  setSelectedStepForTemplate(null);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Phase Step Details Modal - NEW TABBED VIEW */}
+      {selectedStepForDetails && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-5xl max-h-[90vh] overflow-y-auto w-full">
+            <div className="p-6">
+              <PhaseStepTabsView
+                step={selectedStepForDetails}
+                onClose={() => setSelectedStepForDetails(null)}
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>

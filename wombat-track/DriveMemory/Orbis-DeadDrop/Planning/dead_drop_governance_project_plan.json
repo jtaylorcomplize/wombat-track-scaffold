@@ -1,0 +1,57 @@
+{
+  "action": "CreateProjectPlan",
+  "date": "2025-08-06",
+  "project": {
+    "projectName": "Orbis Dead-Drop Governance System",
+    "projectId": "OF-DD1",
+    "status": "Future",
+    "objective": "Establish a write-only, immutable, compartmentalized governance storage system to ensure regulatory-grade audit and prevent any post-ingestion modification of critical artefacts.",
+    "memoryAnchor": "of-deaddrop-govspec-init-20250806",
+    "driveMemoryPath": "/DriveMemory/Orbis-DeadDrop/Planning/"
+  },
+  "phases": [
+    {
+      "phaseId": "OF-DD1.1",
+      "title": "Architecture & Spec Design",
+      "objective": "Define storage architecture, workflow, and hash anchoring mechanism",
+      "status": "Planned"
+    },
+    {
+      "phaseId": "OF-DD1.2",
+      "title": "CC Workflow Integration",
+      "objective": "Update CC to write governance batches to Dead-Drop and generate hashes",
+      "status": "Future"
+    },
+    {
+      "phaseId": "OF-DD1.3",
+      "title": "Immutable Storage Deployment",
+      "objective": "Deploy Azure Blob immutability or AWS S3 Object Lock with retention policy",
+      "status": "Future"
+    },
+    {
+      "phaseId": "OF-DD1.4",
+      "title": "Verification & Audit Pilot",
+      "objective": "Test ingestion, retrieval, and hash verification",
+      "status": "Future"
+    },
+    {
+      "phaseId": "OF-DD1.5",
+      "title": "Full RAG & oApp Integration",
+      "objective": "Link read-replica summaries to MemoryPlugin and Orbis Dashboard",
+      "status": "Future"
+    }
+  ],
+  "deliverables": [
+    "Dead-Drop Governance Specification (JSON + Markdown)",
+    "CC Workflow Update for Batch Logging",
+    "Immutable Blob Storage with lifecycle policy (3–5 year retention)",
+    "GovernanceLog Hash Anchoring",
+    "Pilot Verification Report with hash + RAG check"
+  ],
+  "recommendedActions": {
+    "pushToOApp": true,
+    "registerMemoryAnchor": true,
+    "createPhaseSteps": true,
+    "logToGovernance": true
+  }
+}

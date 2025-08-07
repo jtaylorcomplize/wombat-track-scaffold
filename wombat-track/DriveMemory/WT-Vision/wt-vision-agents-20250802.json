@@ -1,0 +1,10 @@
+{
+  "memoryAnchor": "wt-vision-agents-20250802",
+  "chatTitle": "Wombat Track Vision Agents Artefact",
+  "timestampAEST": "2025-08-02T18:00",
+  "projectPhase": "WT Vision Layer",
+  "artifactType": "VisionAgents",
+  "description": "Top 10 Vision Layer Agent use cases for Wombat Track",
+  "driveMemoryPath": "/DriveMemory/WT-Vision/",
+  "batchProcessed": "2025-08-06"
+}

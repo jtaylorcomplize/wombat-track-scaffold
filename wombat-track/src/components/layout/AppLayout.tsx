@@ -11,6 +11,8 @@ const ExecuteSurface = lazy(() => import('../surfaces/ExecuteSurface'));
 const DocumentSurface = lazy(() => import('../surfaces/DocumentSurface'));
 const GovernSurface = lazy(() => import('../surfaces/GovernSurface'));
 const IntegrateSurface = lazy(() => import('../surfaces/IntegrateSurface'));
+const CloudIDESurface = lazy(() => import('../surfaces/CloudIDESurface'));
+const MultiAgentOrchestrationSurface = lazy(() => import('../surfaces/MultiAgentOrchestrationSurface'));
 const SPQRRuntimeDashboard = lazy(() => import('../SPQR/SPQRRuntimeDashboard'));
 import { AdminModeProvider } from '../../contexts/AdminModeContext';
 import { ProjectProvider, useProjectContext } from '../../contexts/ProjectContext';
@@ -20,7 +22,7 @@ import type { Project, Phase, PhaseStep as Step } from '../../types/phase';
 import { mockPrograms } from '../../data/mockPrograms';
 import { fetchProjectsFromOApp } from '../../services/oappAPI';
 
-export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate' | 'spqr-runtime' | 'admin' | 'admin-data-explorer' | 'admin-import-export' | 'admin-orphan-inspector' | 'admin-runtime-panel' | 'admin-secrets-manager';
+export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate' | 'cloud-ide' | 'multi-agent-orchestration' | 'spqr-runtime' | 'admin' | 'admin-data-explorer' | 'admin-import-export' | 'admin-orphan-inspector' | 'admin-runtime-panel' | 'admin-secrets-manager';
 
 // Loading component for nested dashboards
 const DashboardLoading: React.FC = () => (
@@ -322,6 +324,18 @@ const AppLayoutInner: React.FC<AppLayoutProps> = ({ initialProjects = mockProjec
         return (
           <Suspense fallback={<DashboardLoading />}>
             <IntegrateSurface {...commonProps} />
+          </Suspense>
+        );
+      case 'cloud-ide':
+        return (
+          <Suspense fallback={<DashboardLoading />}>
+            <CloudIDESurface {...commonProps} />
+          </Suspense>
+        );
+      case 'multi-agent-orchestration':
+        return (
+          <Suspense fallback={<DashboardLoading />}>
+            <MultiAgentOrchestrationSurface {...commonProps} />
           </Suspense>
         );
       case 'spqr-runtime':

@@ -1,0 +1,45 @@
+{
+  "anchor_id": "subapp-complize-dgl-init",
+  "anchor_type": "SubAppRegistration",
+  "path": "SubApps/Complize.DGL/",
+  "purpose": "Register Sub-App metadata, SDLC compliance, and governance scope within Orbis Forge",
+  "created": "2025-08-07T12:45:00+11:00",
+  "linked_phase": "DGL-1.0",
+  "sub_app": "Complize.DGL",
+  "owner": "Complize",
+  "metadata": {
+    "initialization_status": "complete",
+    "deployment_model": "monorepo",
+    "backend_type": "shared",
+    "primary_functions": [
+      "document_deduplication",
+      "review_cycle_management",
+      "paligo_synchronization",
+      "actionstep_template_pointers"
+    ],
+    "governance_compliance": {
+      "sdlc_stage": "planning",
+      "review_status": "pending",
+      "audit_trail": true
+    }
+  },
+  "memory_links": [
+    {
+      "type": "config",
+      "path": "DriveMemory/SubApps/Complize.DGL/config.json"
+    },
+    {
+      "type": "phase",
+      "path": "DriveMemory/SubApps/Complize.DGL/phase_step.json"
+    },
+    {
+      "type": "governance",
+      "path": "logs/governance/complize-dgl-init.jsonl"
+    }
+  ],
+  "validation": {
+    "structural_integrity": "verified",
+    "orbis_integration": "ready",
+    "memory_plugin_compatible": true
+  }
+}

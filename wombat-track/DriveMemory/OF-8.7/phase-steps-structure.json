@@ -1,0 +1,103 @@
+{
+  "phaseId": "OF-8.7",
+  "totalSteps": 5,
+  "steps": [
+    {
+      "stepId": "OF-8.7.1",
+      "title": "Auto-Scaling & Load Testing",
+      "objective": "Configure Azure auto-scale & validate load performance",
+      "status": "Planned",
+      "memoryAnchor": "of-8.7.1-auto-scaling",
+      "description": "Implement horizontal and vertical scaling for Container Apps, configure auto-scaling rules, and perform load testing to validate performance under varying workloads.",
+      "deliverables": [
+        "Auto-scaling policies configured",
+        "Load testing framework deployed",
+        "Performance benchmarks established",
+        "Scaling triggers validated"
+      ],
+      "estimatedDuration": "5 days",
+      "dependencies": [],
+      "azureServices": ["Container Apps", "Application Gateway", "Load Testing"]
+    },
+    {
+      "stepId": "OF-8.7.2", 
+      "title": "Security & Compliance Hardening",
+      "objective": "Enable Defender for Cloud, private endpoints, alerts",
+      "status": "Planned",
+      "memoryAnchor": "of-8.7.2-security-hardening",
+      "description": "Implement advanced security monitoring with Microsoft Defender for Cloud, configure private endpoints for enhanced network security, and establish comprehensive security alerting.",
+      "deliverables": [
+        "Defender for Cloud enabled",
+        "Private endpoints configured",
+        "Security alerts and monitoring",
+        "Compliance baseline established"
+      ],
+      "estimatedDuration": "5 days",
+      "dependencies": ["OF-8.7.1"],
+      "azureServices": ["Defender for Cloud", "Private Link", "Security Center", "Key Vault"]
+    },
+    {
+      "stepId": "OF-8.7.3",
+      "title": "Monitoring & Observability", 
+      "objective": "Implement Application Insights & dashboards",
+      "status": "Planned",
+      "memoryAnchor": "of-8.7.3-monitoring-observability",
+      "description": "Deploy comprehensive monitoring with Application Insights, create performance dashboards, implement distributed tracing, and establish alerting for application health.",
+      "deliverables": [
+        "Application Insights configured",
+        "Performance dashboards deployed",
+        "Distributed tracing enabled",
+        "Custom alerts and metrics"
+      ],
+      "estimatedDuration": "5 days",
+      "dependencies": ["OF-8.7.2"],
+      "azureServices": ["Application Insights", "Azure Monitor", "Log Analytics", "Grafana"]
+    },
+    {
+      "stepId": "OF-8.7.4",
+      "title": "Cost Optimization & Alerts",
+      "objective": "Configure budget alerts and optimize cloud resources",
+      "status": "Planned", 
+      "memoryAnchor": "of-8.7.4-cost-optimization",
+      "description": "Implement cost monitoring and optimization strategies, configure budget alerts, optimize resource sizing, and establish cost governance policies.",
+      "deliverables": [
+        "Budget alerts configured",
+        "Resource optimization implemented",
+        "Cost analytics dashboard",
+        "Governance policies active"
+      ],
+      "estimatedDuration": "4 days",
+      "dependencies": ["OF-8.7.3"],
+      "azureServices": ["Cost Management", "Azure Advisor", "Policy", "Budgets"]
+    },
+    {
+      "stepId": "OF-8.7.5",
+      "title": "Governance & Final Validation",
+      "objective": "Execute QA + Nightly UAT & validate audit traceability", 
+      "status": "Planned",
+      "memoryAnchor": "of-8.7.5-governance-validation",
+      "description": "Perform comprehensive QA testing, validate nightly UAT processes, ensure complete audit traceability, and confirm all governance requirements are met.",
+      "deliverables": [
+        "QA validation complete",
+        "Nightly UAT operational",
+        "Audit trails verified",
+        "Governance compliance confirmed"
+      ],
+      "estimatedDuration": "5 days",
+      "dependencies": ["OF-8.7.4"],
+      "azureServices": ["Monitor", "Storage", "Log Analytics", "Compliance"]
+    }
+  ],
+  "successCriteria": [
+    "Auto-scaling responds correctly to load variations",
+    "Security score improved by 20% minimum",
+    "Application performance within SLA targets", 
+    "Monthly costs reduced by 15% through optimization",
+    "100% audit compliance achieved"
+  ],
+  "riskFactors": [
+    "Auto-scaling may cause cost spikes if misconfigured",
+    "Security changes could impact application availability",
+    "Monitoring overhead may affect performance"
+  ]
+}

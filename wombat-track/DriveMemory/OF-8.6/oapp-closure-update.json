@@ -1,0 +1,8 @@
+{
+  "phaseId": "OF-8.6",
+  "status": "Closed",
+  "completionDate": "2025-08-06T01:03:20.638Z",
+  "finalAnchor": "of-8.6-cloud-complete-2025-08-06",
+  "nextPhase": "OF-8.7",
+  "summary": "Cloud migration and orchestration complete"
+}

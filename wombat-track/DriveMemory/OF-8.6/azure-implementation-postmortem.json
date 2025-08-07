@@ -1,0 +1,13 @@
+{
+  "memoryAnchor": "azure-implementation-postmortem-20250806",
+  "chatTitle": "Azure implementation review",
+  "timestampAEST": "2025-08-06T09:57",
+  "projectPhase": "OF-8.6 Cloud Migration",
+  "task": "Azure implementation post-mortem",
+  "phaseId": "OF-8.6",
+  "driveMemoryPath": "/DriveMemory/OF-8.6/",
+  "governanceLog": {
+    "analysis": "Terminal text reviewed, all steps verified complete"
+  },
+  "batchProcessed": "2025-08-06"
+}

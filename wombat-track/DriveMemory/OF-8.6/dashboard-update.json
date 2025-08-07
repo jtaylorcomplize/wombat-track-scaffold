@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-08-06T00:29:43.196Z",
+  "type": "azure-integration",
+  "status": "active",
+  "metrics": {
+    "servicesDeployed": 6,
+    "securityScore": 85,
+    "complianceStatus": "compliant",
+    "costEstimate": "$150/month"
+  },
+  "alerts": [],
+  "recentActivity": [
+    {
+      "time": "2025-08-06T00:29:43.196Z",
+      "action": "Azure baseline deployed",
+      "status": "success"
+    }
+  ]
+}

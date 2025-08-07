@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { Plug, Activity, RefreshCw, Network } from 'lucide-react';
+import React, { useState, Suspense } from 'react';
+import { Plug, Activity, RefreshCw, Network, Code, Bot } from 'lucide-react';
 import { OrbisDashboard } from '../orbis/OrbisDashboard';
 import { AgentMesh } from '../mesh/AgentMesh';
 import { StatusCard } from '../common/StatusCard';
 import { ClaudePromptButton } from '../common/ClaudePromptButton';
+import CloudIDESurface from './CloudIDESurface';
+import MultiAgentOrchestrationSurface from './MultiAgentOrchestrationSurface';
 import type { Project, Phase, PhaseStep as Step } from '../../types/phase';
 
 interface IntegrateSurfaceProps {
@@ -16,12 +18,12 @@ interface IntegrateSurfaceProps {
 
 export const IntegrateSurface: React.FC<IntegrateSurfaceProps> = ({
   currentProject,
-  currentPhase: _currentPhase, // eslint-disable-line @typescript-eslint/no-unused-vars
-  currentStep: _currentStep, // eslint-disable-line @typescript-eslint/no-unused-vars
-  onPhaseChange: _onPhaseChange, // eslint-disable-line @typescript-eslint/no-unused-vars
-  onStepChange: _onStepChange // eslint-disable-line @typescript-eslint/no-unused-vars
+  currentPhase: _currentPhase,  
+  currentStep: _currentStep,  
+  onPhaseChange: _onPhaseChange,  
+  onStepChange: _onStepChange  
 }) => {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'mesh'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'mesh' | 'cloud-ide' | 'orchestration'>('dashboard');
   const handleClaudePrompt = async (prompt: string, _context?: Record<string, unknown>) => { // eslint-disable-line @typescript-eslint/no-unused-vars
     await new Promise(resolve => setTimeout(resolve, 2000));
     
@@ -125,19 +127,162 @@ What would you like help with today?`;
             />
           </div>
 
-          {/* Integration Dashboard */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">System Integration Dashboard</h2>
-              <button
-                onClick={handleHealthCheck}
-                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                <RefreshCw className="w-4 h-4" />
-                <span>Health Check</span>
-              </button>
+          {/* Tab Navigation for System Level */}
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm mb-6">
+            <div className="border-b border-gray-200">
+              <nav className="flex space-x-8 px-6">
+                <button
+                  onClick={() => setActiveTab('dashboard')}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === 'dashboard'
+                      ? 'border-purple-500 text-purple-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2">
+                    <Activity className="w-4 h-4" />
+                    <span>Integration Dashboard</span>
+                  </div>
+                </button>
+                <button
+                  onClick={() => setActiveTab('mesh')}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === 'mesh'
+                      ? 'border-purple-500 text-purple-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2">
+                    <Network className="w-4 h-4" />
+                    <span>Agent Mesh</span>
+                  </div>
+                </button>
+                <button
+                  onClick={() => setActiveTab('cloud-ide')}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === 'cloud-ide'
+                      ? 'border-purple-500 text-purple-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2">
+                    <Code className="w-4 h-4" />
+                    <span>Cloud IDE</span>
+                  </div>
+                </button>
+                <button
+                  onClick={() => setActiveTab('orchestration')}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === 'orchestration'
+                      ? 'border-purple-500 text-purple-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2">
+                    <Bot className="w-4 h-4" />
+                    <span>Multi-Agent Orchestration</span>
+                  </div>
+                </button>
+              </nav>
             </div>
-            <OrbisDashboard />
+            
+            <div className="p-6">
+              {activeTab === 'dashboard' && (
+                <div>
+                  <div className="mb-6">
+                    <h2 className="text-lg font-semibold text-gray-900 flex items-center space-x-2 mb-2">
+                      <Activity className="w-5 h-5 text-purple-600" />
+                      <span>System Integration Dashboard</span>
+                    </h2>
+                    <p className="text-sm text-gray-600">
+                      System-wide integration health and connectivity monitoring
+                    </p>
+                  </div>
+                  <div className="mb-4">
+                    <button
+                      onClick={handleHealthCheck}
+                      className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      <span>Health Check</span>
+                    </button>
+                  </div>
+                  <OrbisDashboard />
+                </div>
+              )}
+              
+              {activeTab === 'mesh' && (
+                <AgentMesh />
+              )}
+
+              {activeTab === 'cloud-ide' && (
+                <div>
+                  <div className="mb-6">
+                    <h2 className="text-lg font-semibold text-gray-900 flex items-center space-x-2 mb-2">
+                      <Code className="w-5 h-5 text-purple-600" />
+                      <span>Cloud IDE</span>
+                    </h2>
+                    <p className="text-sm text-gray-600">
+                      Browser-based development environment with GitHub integration
+                    </p>
+                  </div>
+                  <div className="bg-white border border-gray-200 rounded-lg p-8">
+                    <div className="text-center">
+                      <Code className="w-16 h-16 text-purple-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">Cloud IDE Environment</h3>
+                      <p className="text-gray-600 mb-4">Browser-based development with GitHub integration, CI/CD hooks, and governance logging.</p>
+                      <Suspense fallback={
+                        <div className="flex items-center justify-center py-8">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                        </div>
+                      }>
+                        <CloudIDESurface
+                          currentProject={null}
+                          currentPhase={null}
+                          currentStep={null}
+                          onPhaseChange={() => {}}
+                          onStepChange={() => {}}
+                        />
+                      </Suspense>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'orchestration' && (
+                <div>
+                  <div className="mb-6">
+                    <h2 className="text-lg font-semibold text-gray-900 flex items-center space-x-2 mb-2">
+                      <Bot className="w-5 h-5 text-purple-600" />
+                      <span>Multi-Agent Orchestration</span>
+                    </h2>
+                    <p className="text-sm text-gray-600">
+                      Agent coordination dashboard with context-aware chat
+                    </p>
+                  </div>
+                  <div className="bg-white border border-gray-200 rounded-lg p-8">
+                    <div className="text-center">
+                      <Bot className="w-16 h-16 text-purple-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">Multi-Agent Orchestration Dashboard</h3>
+                      <p className="text-gray-600 mb-4">Agent coordination with real-time status, task management, and governance logging.</p>
+                      <Suspense fallback={
+                        <div className="flex items-center justify-center py-8">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                        </div>
+                      }>
+                        <MultiAgentOrchestrationSurface
+                          currentProject={null}
+                          currentPhase={null}
+                          currentStep={null}
+                          onPhaseChange={() => {}}
+                          onStepChange={() => {}}
+                        />
+                      </Suspense>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Claude Integration Assistant */}
@@ -253,6 +398,32 @@ What would you like help with today?`;
                 <span>Agent Mesh</span>
               </div>
             </button>
+            <button
+              onClick={() => setActiveTab('cloud-ide')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'cloud-ide'
+                  ? 'border-purple-500 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <Code className="w-4 h-4" />
+                <span>Cloud IDE</span>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('orchestration')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'orchestration'
+                  ? 'border-purple-500 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <Bot className="w-4 h-4" />
+                <span>Multi-Agent Orchestration</span>
+              </div>
+            </button>
           </nav>
         </div>
         
@@ -274,6 +445,74 @@ What would you like help with today?`;
           
           {activeTab === 'mesh' && (
             <AgentMesh />
+          )}
+
+          {activeTab === 'cloud-ide' && (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-900 flex items-center space-x-2 mb-2">
+                  <Code className="w-5 h-5 text-purple-600" />
+                  <span>Cloud IDE</span>
+                </h2>
+                <p className="text-sm text-gray-600">
+                  Browser-based development environment with GitHub integration
+                </p>
+              </div>
+              <div className="bg-white border border-gray-200 rounded-lg p-8">
+                <div className="text-center">
+                  <Code className="w-16 h-16 text-purple-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Cloud IDE Environment</h3>
+                  <p className="text-gray-600 mb-4">Browser-based development with GitHub integration, CI/CD hooks, and governance logging.</p>
+                  <Suspense fallback={
+                    <div className="flex items-center justify-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                    </div>
+                  }>
+                    <CloudIDESurface
+                      currentProject={currentProject}
+                      currentPhase={_currentPhase}
+                      currentStep={_currentStep}
+                      onPhaseChange={_onPhaseChange}
+                      onStepChange={_onStepChange}
+                    />
+                  </Suspense>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'orchestration' && (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-900 flex items-center space-x-2 mb-2">
+                  <Bot className="w-5 h-5 text-purple-600" />
+                  <span>Multi-Agent Orchestration</span>
+                </h2>
+                <p className="text-sm text-gray-600">
+                  Agent coordination dashboard with context-aware chat
+                </p>
+              </div>
+              <div className="bg-white border border-gray-200 rounded-lg p-8">
+                <div className="text-center">
+                  <Bot className="w-16 h-16 text-purple-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Multi-Agent Orchestration Dashboard</h3>
+                  <p className="text-gray-600 mb-4">Agent coordination with real-time status, task management, and governance logging.</p>
+                  <Suspense fallback={
+                    <div className="flex items-center justify-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                    </div>
+                  }>
+                    <MultiAgentOrchestrationSurface
+                      currentProject={currentProject}
+                      currentPhase={_currentPhase}
+                      currentStep={_currentStep}
+                      onPhaseChange={_onPhaseChange}
+                      onStepChange={_onStepChange}
+                    />
+                  </Suspense>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>

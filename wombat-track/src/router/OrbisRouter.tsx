@@ -31,6 +31,7 @@ const AdminDashboard = lazy(() => import('../components/admin/AdminDashboard'));
 const AdminProjectView = lazy(() => import('../pages/admin/AdminProjectView'));
 const AdminPhaseView = lazy(() => import('../pages/admin/AdminPhaseView'));
 const ProjectAdminEdit = lazy(() => import('../pages/admin/ProjectAdminEdit'));
+const AdminProjectEdit = lazy(() => import('../pages/admin/AdminProjectEdit'));
 
 // Loading component
 const RouteLoading: React.FC = () => (
@@ -111,7 +112,7 @@ export const OrbisRouter: React.FC = () => {
               
               {/* Admin Deep-Link Routes */}
               <Route path="admin/projects/:projectId" element={<AdminModeProvider><AdminProjectView /></AdminModeProvider>} />
-              <Route path="admin/projects/:projectId/edit" element={<AdminModeProvider><ProjectAdminEdit /></AdminModeProvider>} />
+              <Route path="admin/projects/:projectId/edit" element={<AdminModeProvider><AdminProjectEdit /></AdminModeProvider>} />
               <Route path="admin/phases/:phaseId" element={<AdminModeProvider><AdminPhaseView /></AdminModeProvider>} />
             </Route>
             

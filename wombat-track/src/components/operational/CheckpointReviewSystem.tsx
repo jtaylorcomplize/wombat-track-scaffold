@@ -20,7 +20,7 @@ import {
   Archive,
   ExternalLink
 } from 'lucide-react';
-import { PhaseStep } from '../../services/continuousOrchestrator';
+import type { PhaseStep } from '../../services/continuousOrchestrator';
 import { enhancedGovernanceLogger } from '../../services/enhancedGovernanceLogger';
 
 interface CheckpointReview {

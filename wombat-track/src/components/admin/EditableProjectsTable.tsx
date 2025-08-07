@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Edit3, Save, GitCommit, RefreshCw, Filter, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { Edit3, Save, GitCommit, RefreshCw, Filter, AlertTriangle, CheckCircle, Clock, Loader, X } from 'lucide-react';
 
 interface Project {
   projectId: string;
@@ -59,6 +59,7 @@ export default function EditableProjectsTable() {
     showDraftsOnly: false
   });
   const [savingStates, setSavingStates] = useState<Map<string, 'saving' | 'committing'>>(new Map());
+  const [subAppSaveStates, setSubAppSaveStates] = useState<Map<string, 'saving' | 'success' | 'error'>>(new Map());
 
   useEffect(() => {
     fetchProjects();
@@ -138,6 +139,59 @@ export default function EditableProjectsTable() {
     }
   };
 
+  const saveSubAppImmediately = async (projectId: string, subApp_ref: string) => {
+    try {
+      setSubAppSaveStates(prev => new Map(prev).set(projectId, 'saving'));
+      
+      const response = await fetch(`/api/admin/edit/projects/${projectId}/link-subapp`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ subApp_ref })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save SubApp: ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        // Update the project in our local state to reflect the change
+        setProjects(prev => prev.map(p => 
+          p.projectId === projectId 
+            ? { ...p, subApp_ref: subApp_ref, updatedAt: new Date().toISOString() }
+            : p
+        ));
+        
+        setSubAppSaveStates(prev => new Map(prev).set(projectId, 'success'));
+        
+        // Clear success state after 3 seconds
+        setTimeout(() => {
+          setSubAppSaveStates(prev => {
+            const newMap = new Map(prev);
+            newMap.delete(projectId);
+            return newMap;
+          });
+        }, 3000);
+      } else {
+        throw new Error(result.error || 'Failed to save SubApp');
+      }
+    } catch (error) {
+      console.error('Error saving SubApp:', error);
+      setSubAppSaveStates(prev => new Map(prev).set(projectId, 'error'));
+      
+      // Clear error state after 5 seconds
+      setTimeout(() => {
+        setSubAppSaveStates(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(projectId);
+          return newMap;
+        });
+      }, 5000);
+    }
+  };
+
   const handleCellEdit = useCallback((projectId: string, field: string, value: unknown) => {
     const cellKey = `${projectId}-${field}`;
     setEditingCells(prev => {
@@ -145,6 +199,11 @@ export default function EditableProjectsTable() {
       newMap.set(cellKey, { projectId, field, value });
       return newMap;
     });
+
+    // Trigger immediate save for SubApp_ref changes
+    if (field === 'subApp_ref') {
+      saveSubAppImmediately(projectId, value as string);
+    }
   }, []);
 
   const saveDraft = async (projectId: string) => {
@@ -492,12 +551,31 @@ export default function EditableProjectsTable() {
                 </td>
                 
                 <td className="px-4 py-2">
-                  <EditableCell 
-                    project={project} 
-                    field="subApp_ref" 
-                    type="select"
-                    options={['', ...subApps.map(sa => sa.subAppId)]}
-                  />
+                  <div className="flex items-center space-x-2">
+                    <EditableCell 
+                      project={project} 
+                      field="subApp_ref" 
+                      type="select"
+                      options={['', ...subApps.map(sa => sa.subAppId)]}
+                    />
+                    {(() => {
+                      const saveState = subAppSaveStates.get(project.projectId);
+                      if (saveState === 'saving') {
+                        return (
+                          <Loader size={14} className="text-blue-500 animate-spin" title="Saving SubApp..." />
+                        );
+                      } else if (saveState === 'success') {
+                        return (
+                          <CheckCircle size={14} className="text-green-500" title="SubApp saved successfully" />
+                        );
+                      } else if (saveState === 'error') {
+                        return (
+                          <X size={14} className="text-red-500" title="Failed to save SubApp" />
+                        );
+                      }
+                      return null;
+                    })()}
+                  </div>
                 </td>
                 
                 <td className="px-4 py-2">

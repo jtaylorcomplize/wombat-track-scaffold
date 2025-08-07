@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, AlertCircle, CheckCircle, FileText, Shield } from 'lucide-react';
+import { ArrowLeft, AlertCircle, CheckCircle, FileText, Shield, Bookmark, LinkIcon } from 'lucide-react';
 import PhaseStepList from '../../components/admin/PhaseStepList';
 
 interface Phase {
@@ -16,6 +16,7 @@ interface Phase {
   actualDuration?: number;
   createdAt?: string;
   updatedAt?: string;
+  memoryAnchor?: string;
 }
 
 interface Project {
@@ -152,6 +153,52 @@ export default function AdminPhaseView() {
     }
   };
 
+  const renderMemoryAnchorChip = (anchor: string) => {
+    const anchorMetadata = getMemoryAnchorMetadata(anchor);
+    
+    return (
+      <span
+        key={anchor}
+        className="inline-flex items-center space-x-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full hover:bg-blue-200 cursor-pointer transition-colors"
+        title={`Memory Anchor: ${anchor}\n${anchorMetadata.description}`}
+      >
+        <Bookmark size={10} />
+        <span>{anchor}</span>
+        <LinkIcon size={8} className="opacity-70" />
+      </span>
+    );
+  };
+
+  const getMemoryAnchorMetadata = (anchor: string) => {
+    // Memory anchor metadata - would typically be fetched from API
+    const knownAnchors: Record<string, { description: string; category: string }> = {
+      'of-9.0.7-schema-migration': {
+        description: 'Phase 9.0.7 PhaseStep Schema Migration completion',
+        category: 'phase_completion'
+      },
+      'of-9.0.7.2-subapp-dropdown-bugfix': {
+        description: 'SubApp dropdown persistence fix',
+        category: 'bug_fix'
+      },
+      'WT-ANCHOR-GOVERNANCE': {
+        description: 'Policy framework and compliance automation',
+        category: 'governance'
+      },
+      'WT-ANCHOR-IMPLEMENTATION': {
+        description: 'Technical implementation patterns and AI workflows',
+        category: 'implementation'
+      },
+      'WT-ANCHOR-QUALITY': {
+        description: 'Code quality standards and validation',
+        category: 'quality'
+      }
+    };
+
+    return knownAnchors[anchor] || {
+      description: 'Memory anchor for project tracking and governance',
+      category: 'general'
+    };
+  };
 
   if (loading) {
     return (
@@ -250,6 +297,35 @@ export default function AdminPhaseView() {
           <div className="mt-4 p-4 bg-gray-50 rounded-lg">
             <h3 className="font-medium text-gray-700 mb-1">Notes</h3>
             <p className="text-gray-600 whitespace-pre-wrap">{phase.notes}</p>
+          </div>
+        )}
+
+        {/* Memory Anchors */}
+        {phase.memoryAnchor && (
+          <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+            <h3 className="font-medium text-gray-700 mb-2 flex items-center space-x-2">
+              <Bookmark size={16} />
+              <span>Memory Anchor</span>
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {renderMemoryAnchorChip(phase.memoryAnchor)}
+            </div>
+          </div>
+        )}
+
+        {/* Phase Steps Memory Anchors */}
+        {phaseSteps.some(step => step.memoryAnchor) && (
+          <div className="mt-4 p-4 bg-green-50 rounded-lg">
+            <h3 className="font-medium text-gray-700 mb-2 flex items-center space-x-2">
+              <Bookmark size={16} />
+              <span>Step Memory Anchors</span>
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {phaseSteps
+                .filter(step => step.memoryAnchor)
+                .map(step => renderMemoryAnchorChip(step.memoryAnchor!))
+              }
+            </div>
           </div>
         )}
       </div>

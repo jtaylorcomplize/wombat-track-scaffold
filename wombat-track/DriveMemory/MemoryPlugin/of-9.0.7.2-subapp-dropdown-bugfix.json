@@ -1,0 +1,13 @@
+{
+  "id": "of-9.0.7.2-subapp-dropdown-bugfix",
+  "timestamp": "2025-08-07T01:27:54.932Z",
+  "context": {
+    "projectId": "WT-UX16",
+    "oldSubApp": null,
+    "newSubApp": "Orbis",
+    "userId": "admin",
+    "logId": 384,
+    "timestamp": "2025-08-07T01:27:54.932Z"
+  },
+  "type": "admin-table-operation"
+}

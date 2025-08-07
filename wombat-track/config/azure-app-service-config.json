@@ -1,0 +1,133 @@
+{
+  "deployment": {
+    "appServiceName": "of-integration-service",
+    "resourceGroup": "wombat-track-au-rg", 
+    "subscription": "${AZURE_SUBSCRIPTION_ID}",
+    "region": "Australia East",
+    "tier": "Standard",
+    "sku": "S1"
+  },
+  "runtime": {
+    "stack": "node",
+    "version": "18-lts",
+    "startupCommand": "npm run start:integration"
+  },
+  "identity": {
+    "type": "SystemAssigned",
+    "roleAssignments": [
+      {
+        "role": "Key Vault Secrets User",
+        "scope": "/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/wombat-track-au-rg/providers/Microsoft.KeyVault/vaults/wt-keyvault-au"
+      },
+      {
+        "role": "Reader",
+        "scope": "/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/wombat-track-au-rg"
+      }
+    ]
+  },
+  "appSettings": [
+    {
+      "name": "NODE_ENV",
+      "value": "production"
+    },
+    {
+      "name": "AZURE_KEYVAULT_URL",
+      "value": "https://wt-keyvault-au.vault.azure.net/"
+    },
+    {
+      "name": "RATE_LIMIT_RPM",
+      "value": "60"
+    },
+    {
+      "name": "RATE_LIMIT_BURST", 
+      "value": "10"
+    },
+    {
+      "name": "ALLOWED_ORIGINS",
+      "value": "https://wombat-track-openai-au.openai.azure.com"
+    },
+    {
+      "name": "LOG_LEVEL",
+      "value": "info"
+    },
+    {
+      "name": "AUDIT_RETENTION_DAYS",
+      "value": "90"
+    }
+  ],
+  "networking": {
+    "httpsOnly": true,
+    "minimumTlsVersion": "1.2",
+    "ipSecurityRestrictions": [
+      {
+        "action": "Allow",
+        "name": "Azure OpenAI Service",
+        "description": "Allow access from Azure OpenAI service endpoints",
+        "ipAddress": "20.0.0.0/8",
+        "priority": 100
+      },
+      {
+        "action": "Allow", 
+        "name": "Azure Services",
+        "description": "Allow access from other Azure services",
+        "tag": "AzureCloud.AustraliaEast",
+        "priority": 200
+      }
+    ]
+  },
+  "monitoring": {
+    "applicationInsights": {
+      "name": "wt-appinsights-au",
+      "instrumentationKey": "${APPINSIGHTS_INSTRUMENTATION_KEY}"
+    },
+    "logging": {
+      "level": "Information",
+      "applicationLogs": {
+        "fileSystem": {
+          "level": "Information"
+        },
+        "azureBlobStorage": {
+          "level": "Information",
+          "retentionInDays": 90
+        }
+      },
+      "httpLogs": {
+        "fileSystem": {
+          "enabled": true,
+          "retentionInDays": 7
+        }
+      }
+    }
+  },
+  "security": {
+    "cors": {
+      "allowedOrigins": [
+        "https://wombat-track-openai-au.openai.azure.com"
+      ],
+      "allowedMethods": ["GET", "POST", "OPTIONS"],
+      "allowedHeaders": ["Content-Type", "Authorization", "X-Request-ID"],
+      "allowCredentials": true
+    },
+    "headers": {
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY", 
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'self'; script-src 'self'; object-src 'none'"
+    }
+  },
+  "scaling": {
+    "minWorkers": 1,
+    "maxWorkers": 3,
+    "scaleOutCpuThreshold": 70,
+    "scaleInCpuThreshold": 30,
+    "scaleOutMemoryThreshold": 80
+  },
+  "healthCheck": {
+    "path": "/health",
+    "intervalInSeconds": 30,
+    "timeoutInSeconds": 10,
+    "unhealthyThreshold": 3,
+    "healthyThreshold": 2
+  }
+}

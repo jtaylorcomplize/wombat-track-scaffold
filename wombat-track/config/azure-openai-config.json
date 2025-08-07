@@ -1,0 +1,127 @@
+{
+  "deployment": {
+    "project_id": "OF-8.6",
+    "name": "wombat-track-azure-openai",
+    "region": "australiaeast",
+    "resource_group": "wombat-track-au-rg",
+    "subscription_id": "${AZURE_SUBSCRIPTION_ID}",
+    "tenant_id": "${AZURE_TENANT_ID}"
+  },
+  "openai_service": {
+    "name": "wombat-track-openai-au",
+    "sku": "S0",
+    "models": [
+      {
+        "name": "gpt-4o",
+        "version": "2024-11-20",
+        "deployment_name": "gpt-4o-2024-11-20",
+        "capacity": 150
+      },
+      {
+        "name": "text-embedding-3-large",
+        "version": "1",
+        "deployment_name": "text-embedding-3-large",
+        "capacity": 50
+      }
+    ],
+    "network_acls": {
+      "default_action": "Allow",
+      "virtual_network_rules": [],
+      "ip_rules": []
+    },
+    "public_network_access": "Enabled"
+  },
+  "key_vault": {
+    "name": "wt-keyvault-au",
+    "sku": "standard",
+    "tenant_id": "${AZURE_TENANT_ID}",
+    "access_policies": [
+      {
+        "tenant_id": "${AZURE_TENANT_ID}",
+        "object_id": "${AZURE_SERVICE_PRINCIPAL_OBJECT_ID}",
+        "permissions": {
+          "secrets": ["get", "list", "set"],
+          "keys": ["get", "list", "create"],
+          "certificates": ["get", "list"]
+        }
+      }
+    ],
+    "secrets": [
+      {
+        "name": "openai-api-key",
+        "description": "Azure OpenAI API Key for Wombat Track"
+      },
+      {
+        "name": "claude-api-key", 
+        "description": "Claude API Key for hybrid orchestration"
+      },
+      {
+        "name": "mcp-connection-string",
+        "description": "MCP Server connection string"
+      }
+    ]
+  },
+  "identity": {
+    "type": "SystemAssigned",
+    "rbac_assignments": [
+      {
+        "role": "Cognitive Services OpenAI User",
+        "scope": "/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/wombat-track-au-rg"
+      },
+      {
+        "role": "Key Vault Secrets User",
+        "scope": "/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/wombat-track-au-rg/providers/Microsoft.KeyVault/vaults/wt-keyvault-au"
+      }
+    ]
+  },
+  "monitoring": {
+    "application_insights": {
+      "name": "wt-appinsights-au",
+      "application_type": "web"
+    },
+    "log_analytics": {
+      "name": "wt-loganalytics-au",
+      "sku": "PerGB2018"
+    }
+  },
+  "compliance": {
+    "data_residency": "australia_east",
+    "encryption": "microsoft_managed",
+    "audit_logging": true,
+    "retention_days": 90
+  },
+  "runtime_config": {
+    "production": {
+      "retryOptions": {
+        "maxRetries": 3,
+        "backoffMultiplier": 2,
+        "maxBackoffMs": 30000,
+        "retryableStatusCodes": [429, 500, 502, 503, 504]
+      },
+      "monitoring": {
+        "enableLogging": true,
+        "logLevel": "info",
+        "metricsEnabled": true,
+        "healthCheckInterval": 30000
+      },
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "tokensPerMinute": 40000,
+        "enableThrottling": true
+      }
+    },
+    "development": {
+      "retryOptions": {
+        "maxRetries": 2,
+        "backoffMultiplier": 1.5,
+        "maxBackoffMs": 10000
+      },
+      "monitoring": {
+        "enableLogging": true,
+        "logLevel": "debug",
+        "metricsEnabled": true,
+        "healthCheckInterval": 60000
+      }
+    }
+  }
+}

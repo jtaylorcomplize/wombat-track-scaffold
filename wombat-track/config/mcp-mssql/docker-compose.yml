@@ -1,0 +1,146 @@
+# MCP MSSQL Server - Docker Compose Configuration
+# OF-8.6 Azure OpenAI & MCP Integration
+
+version: '3.8'
+
+services:
+  mcp-mssql-server:
+    build:
+      context: ../../
+      dockerfile: config/mcp-mssql/Dockerfile
+    container_name: wt-mcp-mssql-server
+    restart: unless-stopped
+    ports:
+      - "8002:8002"
+    environment:
+      # Server Configuration
+      - NODE_ENV=production
+      - PORT=8002
+      - MCP_SERVER_NAME=mcp-mssql-server
+      
+      # Azure SQL Database Configuration
+      - AZURE_SQL_SERVER=${AZURE_SQL_SERVER}
+      - AZURE_SQL_DATABASE=${AZURE_SQL_DATABASE}
+      - AZURE_SQL_CONNECTION_STRING=${AZURE_SQL_CONNECTION_STRING}
+      
+      # Azure Identity Configuration
+      - AZURE_TENANT_ID=${AZURE_TENANT_ID}
+      - AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
+      - AZURE_USE_MANAGED_IDENTITY=true
+      
+      # Compliance Configuration
+      - DATA_RESIDENCY=australia_east
+      - AUDIT_LOGGING=enabled
+      - ENCRYPTION_AT_REST=enabled
+      - ENCRYPTION_IN_TRANSIT=enabled
+      
+      # Monitoring Configuration
+      - AZURE_APPINSIGHTS_INSTRUMENTATION_KEY=${AZURE_APPINSIGHTS_INSTRUMENTATION_KEY}
+      - AZURE_APPINSIGHTS_CONNECTION_STRING=${AZURE_APPINSIGHTS_CONNECTION_STRING}
+      
+      # Feature Flags
+      - ENABLE_GOVERNANCE_SYNC=true
+      - ENABLE_PHASE_STEP_AUTO_CREATION=true
+      - ENABLE_MEMORY_ANCHOR_LINKING=true
+      
+      # Performance Configuration
+      - DB_POOL_MIN=2
+      - DB_POOL_MAX=20
+      - DB_REQUEST_TIMEOUT=30000
+      - MCP_REQUEST_TIMEOUT=30000
+      
+    volumes:
+      - mcp-mssql-logs:/app/logs
+      - mcp-mssql-cache:/app/cache
+      - ./config:/app/config:ro
+    
+    networks:
+      - wombat-track-network
+      - mcp-network
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    
+    depends_on:
+      - azure-sql-proxy
+    
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mcp-mssql.rule=PathPrefix(`/api/mcp/mssql`)"
+      - "traefik.http.services.mcp-mssql.loadbalancer.server.port=8002"
+      - "project=OF-8.6"
+      - "service=mcp-mssql-server"
+      - "compliance=AU-resident"
+      - "data-classification=canonical"
+
+  # Azure SQL Database Proxy for secure connection
+  azure-sql-proxy:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: wt-azure-sql-proxy
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${AZURE_SQL_SA_PASSWORD}
+      - MSSQL_PID=Developer
+      - MSSQL_DATA_DIR=/var/opt/mssql/data
+      - MSSQL_LOG_DIR=/var/opt/mssql/log
+      - MSSQL_BACKUP_DIR=/var/opt/mssql/backup
+    ports:
+      - "1433:1433"
+    volumes:
+      - azure-sql-data:/var/opt/mssql/data
+      - azure-sql-logs:/var/opt/mssql/log
+      - azure-sql-backups:/var/opt/mssql/backup
+      - ./sql-scripts:/var/opt/mssql/scripts:ro
+    networks:
+      - mcp-network
+    labels:
+      - "project=OF-8.6"
+      - "service=azure-sql-proxy"
+      - "compliance=AU-resident"
+
+  # MCP Event Bus for inter-service communication
+  mcp-event-bus:
+    image: redis:7-alpine
+    container_name: wt-mcp-event-bus
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - mcp-redis-data:/data
+    networks:
+      - mcp-network
+    command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes
+    labels:
+      - "project=OF-8.6"
+      - "service=mcp-event-bus"
+      - "compliance=AU-resident"
+
+volumes:
+  mcp-mssql-logs:
+    driver: local
+  mcp-mssql-cache:
+    driver: local
+  azure-sql-data:
+    driver: local
+  azure-sql-logs:
+    driver: local
+  azure-sql-backups:
+    driver: local
+  mcp-redis-data:
+    driver: local
+
+networks:
+  wombat-track-network:
+    external: true
+  mcp-network:
+    driver: bridge
+    labels:
+      - "project=OF-8.6"
+      - "service=mcp-network"

@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { EnhancedSidebarV3 } from './EnhancedSidebarV3';
 import { OrbisHeader } from './OrbisHeader';
+import { GlobalOrchestratorChat } from './GlobalOrchestratorChat';
 import { useNavigationContext } from '../../contexts/NavigationContext';
 import { useSidebarState } from '../../hooks/useLocalStorage';
 import { ErrorBoundary } from '../common/ErrorBoundary';
@@ -35,6 +36,9 @@ export const OrbisLayout: React.FC = () => {
           </ErrorBoundary>
         </main>
       </div>
+
+      {/* Global Orchestrator Chat - Available Everywhere */}
+      <GlobalOrchestratorChat />
     </div>
   );
 };

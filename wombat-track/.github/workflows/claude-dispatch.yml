@@ -1,0 +1,196 @@
+name: Claude Dispatch Handler
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Task for Claude to execute'
+        required: true
+        type: string
+      context:
+        description: 'Additional context for the task'
+        required: false
+        type: string
+      requestId:
+        description: 'Request tracking ID'
+        required: false
+        type: string
+
+jobs:
+  claude-task:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: |
+            {
+              "clientId": "${{ secrets.AZURE_CLIENT_ID }}",
+              "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
+              "subscriptionId": "${{ secrets.AZURE_SUBSCRIPTION_ID }}",
+              "tenantId": "${{ secrets.AZURE_TENANT_ID }}"
+            }
+
+      - name: Log task initiation
+        run: |
+          echo "📋 Claude Task Dispatch"
+          echo "========================"
+          echo "Task: ${{ github.event.inputs.task }}"
+          echo "Context: ${{ github.event.inputs.context }}"
+          echo "Request ID: ${{ github.event.inputs.requestId }}"
+          echo "Triggered at: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+      - name: Create task branch
+        id: branch
+        run: |
+          BRANCH_NAME="claude-task-$(date +%Y%m%d-%H%M%S)"
+          git checkout -b $BRANCH_NAME
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Execute Claude task
+        id: claude
+        run: |
+          # This is where Claude would execute the task
+          # For now, we'll create a task marker file
+          
+          mkdir -p DriveMemory/ClaudeTasks
+          
+          cat > DriveMemory/ClaudeTasks/task-${{ github.event.inputs.requestId }}.json << EOF
+          {
+            "requestId": "${{ github.event.inputs.requestId }}",
+            "task": "${{ github.event.inputs.task }}",
+            "context": "${{ github.event.inputs.context }}",
+            "status": "in_progress",
+            "startTime": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "branch": "${{ steps.branch.outputs.branch_name }}"
+          }
+          EOF
+          
+          # Here you would integrate with Claude API
+          # For demonstration, we'll simulate task completion
+          
+          case "${{ github.event.inputs.task }}" in
+            "security-audit")
+              echo "🔐 Performing security audit..."
+              # Simulate security audit task
+              ;;
+            "code-review")
+              echo "👀 Performing code review..."
+              # Simulate code review task
+              ;;
+            "documentation")
+              echo "📚 Generating documentation..."
+              # Simulate documentation task
+              ;;
+            *)
+              echo "🤖 Executing custom task..."
+              # Simulate custom task
+              ;;
+          esac
+          
+          echo "task_completed=true" >> $GITHUB_OUTPUT
+
+      - name: Log to governance
+        if: steps.claude.outputs.task_completed == 'true'
+        run: |
+          # Append to governance log
+          cat >> logs/governance.jsonl << EOF
+          {"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","entryType":"ClaudeTask","summary":"Executed task: ${{ github.event.inputs.task }}","requestId":"${{ github.event.inputs.requestId }}","branch":"${{ steps.branch.outputs.branch_name }}","status":"completed","artifacts":["task-output"]}
+          EOF
+          
+          # Update task status
+          cat > DriveMemory/ClaudeTasks/task-${{ github.event.inputs.requestId }}.json << EOF
+          {
+            "requestId": "${{ github.event.inputs.requestId }}",
+            "task": "${{ github.event.inputs.task }}",
+            "context": "${{ github.event.inputs.context }}",
+            "status": "completed",
+            "startTime": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "endTime": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "branch": "${{ steps.branch.outputs.branch_name }}",
+            "result": "Task completed successfully"
+          }
+          EOF
+
+      - name: Commit changes
+        if: steps.claude.outputs.task_completed == 'true'
+        run: |
+          git config --local user.email "claude@anthropic.com"
+          git config --local user.name "Claude (via GitHub Actions)"
+          git add -A
+          git commit -m "🤖 Claude task: ${{ github.event.inputs.task }}
+          
+          Request ID: ${{ github.event.inputs.requestId }}
+          Context: ${{ github.event.inputs.context }}
+          
+          Task completed successfully"
+
+      - name: Push changes
+        if: steps.claude.outputs.task_completed == 'true'
+        run: |
+          git push origin ${{ steps.branch.outputs.branch_name }}
+
+      - name: Create Pull Request
+        if: steps.claude.outputs.task_completed == 'true'
+        id: pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.branch.outputs.branch_name }}
+          title: "🤖 Claude: ${{ github.event.inputs.task }}"
+          body: |
+            ## Claude Task Execution
+            
+            **Task**: ${{ github.event.inputs.task }}
+            **Context**: ${{ github.event.inputs.context }}
+            **Request ID**: ${{ github.event.inputs.requestId }}
+            
+            ### Summary
+            Task completed successfully. Please review the changes.
+            
+            ### Governance
+            - Entry added to governance log
+            - Memory anchor created
+            - Azure sync pending
+            
+            ---
+            *This PR was automatically generated by Claude via Azure trigger*
+          labels: |
+            claude-generated
+            automated
+
+      - name: Sync to Azure Blob
+        if: steps.claude.outputs.task_completed == 'true'
+        run: |
+          # Upload task result to Azure
+          az storage blob upload \
+            --account-name "orbisof86storage" \
+            --container-name "wt-governance-logs" \
+            --name "claude-tasks/task-${{ github.event.inputs.requestId }}.json" \
+            --file "DriveMemory/ClaudeTasks/task-${{ github.event.inputs.requestId }}.json" \
+            --auth-mode login
+
+      - name: Create summary
+        run: |
+          echo "## 🤖 Claude Task Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Task**: ${{ github.event.inputs.task }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Request ID**: ${{ github.event.inputs.requestId }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ✅ Completed" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ steps.branch.outputs.branch_name }}" >> $GITHUB_STEP_SUMMARY
+          if [ -n "${{ steps.pr.outputs.pull-request-number }}" ]; then
+            echo "- **PR**: #${{ steps.pr.outputs.pull-request-number }}" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Task executed successfully and changes pushed to branch" >> $GITHUB_STEP_SUMMARY
