@@ -1,0 +1,274 @@
+{
+  "ingestion_config": {
+    "version": "1.0",
+    "created": "2025-08-07T00:00:00Z",
+    "purpose": "DriveMemory automatic ingestion rules for MemoryPlugin anchored directories",
+    "phase_association": "WT-8.9.2"
+  },
+  
+  "anchored_folders": {
+    "docs/governance/": {
+      "memory_anchor": "WT-ANCHOR-GOVERNANCE",
+      "classification": "governance_framework",
+      "semantic_tags": [
+        "policy_management",
+        "ai_governance", 
+        "compliance_framework",
+        "audit_standards"
+      ],
+      "relevance_base": 1.0,
+      "ingestion_rules": {
+        "include_patterns": ["*.md", "*.json"],
+        "exclude_patterns": ["*.tmp", "*.bak"],
+        "depth_limit": 3,
+        "follow_symlinks": false
+      },
+      "metadata_extraction": {
+        "extract_headers": true,
+        "extract_code_blocks": true,
+        "extract_links": true,
+        "parse_frontmatter": true
+      },
+      "memory_processing": {
+        "chunking_strategy": "semantic_sections",
+        "max_chunk_size": 2048,
+        "overlap_size": 128,
+        "context_preservation": true
+      }
+    },
+    
+    "docs/quality/": {
+      "memory_anchor": "WT-ANCHOR-QUALITY",
+      "classification": "quality_assurance",
+      "semantic_tags": [
+        "code_standards",
+        "lint_results",
+        "audit_compliance",
+        "quality_metrics"
+      ],
+      "relevance_base": 0.9,
+      "ingestion_rules": {
+        "include_patterns": ["*.md", "*.json", "*.log"],
+        "exclude_patterns": ["*.tmp", "node_modules/"],
+        "depth_limit": 2,
+        "follow_symlinks": false
+      },
+      "metadata_extraction": {
+        "extract_headers": true,
+        "extract_json_schemas": true,
+        "extract_metrics": true,
+        "parse_error_logs": true
+      },
+      "memory_processing": {
+        "chunking_strategy": "document_sections",
+        "max_chunk_size": 1536,
+        "overlap_size": 96,
+        "context_preservation": true
+      }
+    },
+    
+    "docs/deployment/": {
+      "memory_anchor": "WT-ANCHOR-DEPLOYMENT",
+      "classification": "deployment_lifecycle",
+      "semantic_tags": [
+        "uat_procedures",
+        "deployment_guides",
+        "environment_config",
+        "automation_scripts"
+      ],
+      "relevance_base": 0.9,
+      "ingestion_rules": {
+        "include_patterns": ["*.md", "*.yaml", "*.yml", "*.json"],
+        "exclude_patterns": ["*.tmp", "*.secret"],
+        "depth_limit": 3,
+        "follow_symlinks": false
+      },
+      "metadata_extraction": {
+        "extract_headers": true,
+        "extract_yaml_configs": true,
+        "extract_command_blocks": true,
+        "parse_deployment_steps": true
+      },
+      "memory_processing": {
+        "chunking_strategy": "procedural_steps",
+        "max_chunk_size": 2048,
+        "overlap_size": 256,
+        "context_preservation": true
+      }
+    },
+    
+    "docs/releases/": {
+      "memory_anchor": "WT-ANCHOR-RELEASES",
+      "classification": "milestone_tracking",
+      "semantic_tags": [
+        "completion_reports",
+        "phase_milestones",
+        "release_notes",
+        "historical_records"
+      ],
+      "relevance_base": 0.8,
+      "ingestion_rules": {
+        "include_patterns": ["*.md"],
+        "exclude_patterns": ["archive/*.md"],
+        "depth_limit": 1,
+        "follow_symlinks": false
+      },
+      "metadata_extraction": {
+        "extract_headers": true,
+        "extract_phase_ids": true,
+        "extract_completion_status": true,
+        "parse_milestone_data": true
+      },
+      "memory_processing": {
+        "chunking_strategy": "completion_sections",
+        "max_chunk_size": 1024,
+        "overlap_size": 64,
+        "context_preservation": true
+      }
+    },
+    
+    "data/exports/": {
+      "memory_anchor": "WT-ANCHOR-DATA-EXPORTS",
+      "classification": "structured_data",
+      "semantic_tags": [
+        "csv_exports",
+        "data_snapshots",
+        "canonical_models",
+        "platform_integration"
+      ],
+      "relevance_base": 0.7,
+      "ingestion_rules": {
+        "include_patterns": ["*.csv", "*.json", "*.md"],
+        "exclude_patterns": ["*.tmp", "*.lock"],
+        "depth_limit": 1,
+        "follow_symlinks": false
+      },
+      "metadata_extraction": {
+        "extract_csv_headers": true,
+        "extract_json_schemas": true,
+        "extract_row_counts": true,
+        "parse_data_relationships": true
+      },
+      "memory_processing": {
+        "chunking_strategy": "data_schema",
+        "max_chunk_size": 512,
+        "overlap_size": 32,
+        "context_preservation": false
+      }
+    }
+  },
+  
+  "global_ingestion_settings": {
+    "scan_frequency": {
+      "high_priority": "15_minutes",
+      "standard": "1_hour", 
+      "archival": "24_hours"
+    },
+    "change_detection": {
+      "method": "file_hash",
+      "ignore_whitespace": true,
+      "track_renames": true
+    },
+    "memory_storage": {
+      "compression_enabled": true,
+      "deduplication": true,
+      "version_tracking": true
+    },
+    "ai_processing": {
+      "semantic_analysis": true,
+      "cross_reference_linking": true,
+      "context_enhancement": true,
+      "relevance_scoring": true
+    }
+  },
+  
+  "agent_integration": {
+    "claude_code": {
+      "access_level": "read_write",
+      "context_depth": 5,
+      "memory_threshold": 0.6,
+      "cross_anchor_queries": true
+    },
+    "governance_log_summariser": {
+      "access_level": "read_only",
+      "context_depth": 3,
+      "memory_threshold": 0.7,
+      "focus_anchors": ["WT-ANCHOR-GOVERNANCE", "WT-ANCHOR-QUALITY"]
+    },
+    "deployment_trigger_agent": {
+      "access_level": "read_only", 
+      "context_depth": 4,
+      "memory_threshold": 0.8,
+      "focus_anchors": ["WT-ANCHOR-DEPLOYMENT", "WT-ANCHOR-QUALITY"]
+    }
+  },
+  
+  "validation_rules": {
+    "anchor_consistency": {
+      "required_fields": ["memory_anchor", "classification", "semantic_tags"],
+      "anchor_id_format": "^WT-ANCHOR-[A-Z_]+$",
+      "classification_vocabulary": [
+        "governance_framework",
+        "quality_assurance", 
+        "deployment_lifecycle",
+        "milestone_tracking",
+        "structured_data"
+      ]
+    },
+    "ingestion_quality": {
+      "min_file_size": 100,
+      "max_file_size": 10485760,
+      "allowed_encodings": ["utf-8", "ascii"],
+      "content_validation": true
+    },
+    "memory_integrity": {
+      "duplicate_detection": true,
+      "broken_link_detection": true,
+      "anchor_reference_validation": true,
+      "semantic_consistency_check": true
+    }
+  },
+  
+  "monitoring": {
+    "ingestion_metrics": {
+      "files_processed_per_hour": true,
+      "memory_creation_rate": true,
+      "anchor_distribution": true,
+      "error_rates": true
+    },
+    "performance_tracking": {
+      "processing_latency": true,
+      "memory_storage_growth": true,
+      "query_response_times": true,
+      "resource_utilization": true
+    },
+    "governance_logging": {
+      "all_ingestion_events": true,
+      "configuration_changes": true,
+      "access_patterns": true,
+      "error_conditions": true
+    }
+  },
+  
+  "test_validation": {
+    "dry_run_mode": true,
+    "sample_ingestion": {
+      "test_files": [
+        "docs/governance/index.md",
+        "docs/quality/GIT_HYGIENE_QA_CHECKLIST.md", 
+        "docs/deployment/UAT-TEST-PLAN.md"
+      ],
+      "expected_anchors": [
+        "WT-ANCHOR-GOVERNANCE",
+        "WT-ANCHOR-QUALITY",
+        "WT-ANCHOR-DEPLOYMENT"
+      ],
+      "validation_criteria": {
+        "anchor_assignment": true,
+        "semantic_tagging": true,
+        "memory_creation": true,
+        "cross_reference_linking": true
+      }
+    }
+  }
+}
