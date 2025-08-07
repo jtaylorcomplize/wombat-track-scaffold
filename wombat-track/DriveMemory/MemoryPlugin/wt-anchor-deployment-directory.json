@@ -1,0 +1,38 @@
+{
+  "anchor_id": "WT-ANCHOR-DEPLOYMENT",
+  "timestamp": "2025-08-07T00:00:00Z",
+  "classification": "deployment_lifecycle",
+  "location": "docs/deployment/",
+  "purpose": "Deployment process automation and environment lifecycle management",
+  "description": "Deployment documentation directory containing UAT plans, deployment guides, staging procedures, and production release documentation",
+  "agent_integrations": [
+    "Deployment Trigger Agent",
+    "GovernanceLog Validator",
+    "Environment Health Monitor"
+  ],
+  "deployment_components": {
+    "uat_planning": "User acceptance testing procedures and validation checklists",
+    "dev_setup": "Local development environment configuration",
+    "staging_procedures": "Pre-production deployment validation",
+    "production_releases": "Live deployment procedures and rollback strategies"
+  },
+  "environment_management": {
+    "development": "Local setup and debugging configurations",
+    "staging": "Integration testing and pre-flight checks",
+    "production": "Live deployment and monitoring",
+    "azure_integration": "Cloud deployment and infrastructure management"
+  },
+  "memory_relevance": {
+    "deployment_automation": 1.0,
+    "environment_lifecycle": 0.9,
+    "uat_validation": 0.8,
+    "infrastructure_management": 0.8
+  },
+  "linked_anchors": [
+    "WT-ANCHOR-GOVERNANCE",
+    "WT-ANCHOR-QUALITY",
+    "WT-ANCHOR-IMPLEMENTATION"
+  ],
+  "phase_association": "WT-8.9",
+  "step_reference": "File Cleanup + Reorg"
+}
