@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Save, Edit3, Plus, Trash2, Link as LinkIcon, FileText, Clock, Shield, RefreshCw, CheckCircle, XCircle, AlertTriangle, Play, Pause, AlertCircle as Alert, Zap } from 'lucide-react';
-import { TemplateSuggestionEngine } from '../components/admin/TemplateSuggestionEngine';
-import { PhaseStepTabsView } from '../components/admin/PhaseStepTabsView';
+import { TemplateSuggestionEngine } from '../../components/admin/TemplateSuggestionEngine';
+import { PhaseStepTabsView } from '../../components/admin/PhaseStepTabsView';
 
 interface Project {
   projectId: string;
