@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Database, FileText, Search, Activity, Settings, Shield, Key, Edit3, GitBranch } from 'lucide-react';
+import { Database, FileText, Search, Activity, Settings, Shield, Key, Edit3, GitBranch, BookOpen } from 'lucide-react';
 import { useAdminMode } from '../../contexts/AdminModeContext';
 import DataExplorer from '../../pages/admin/DataExplorer';
 import ImportExport from '../../pages/admin/ImportExport';
@@ -10,8 +10,9 @@ import EditableProjectsTable from './EditableProjectsTable';
 import EditablePhasesTable from './EditablePhasesTable';
 import EditableSubAppsTable from './EditableSubAppsTable';
 import SDLCDashboard from './SDLCDashboard';
+import AdminGovernancePolicies from './AdminGovernancePolicies';
 
-type AdminView = 'overview' | 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager' | 'sdlc-dashboard' | 'editable-tables';
+type AdminView = 'overview' | 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager' | 'sdlc-dashboard' | 'editable-tables' | 'governance-index';
 
 interface AdminDashboardProps {
   initialView?: AdminView;
@@ -97,6 +98,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       label: 'Editable Tables',
       icon: <Edit3 size={20} />,
       description: 'Edit projects and phases with draft/commit workflow'
+    },
+    {
+      id: 'governance-index' as AdminView,
+      label: 'Governance Index',
+      icon: <BookOpen size={20} />,
+      description: 'Policy documentation and memory anchor management'
     }
   ];
 
@@ -122,6 +129,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <EditablePhasesTable />
           </div>
         );
+      case 'governance-index':
+        return <AdminGovernancePolicies />;
       case 'overview':
       default:
         return (

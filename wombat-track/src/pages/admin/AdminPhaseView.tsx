@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, AlertCircle, CheckCircle, FileText, ListChecks, Shield } from 'lucide-react';
+import { ArrowLeft, AlertCircle, CheckCircle, FileText, Shield } from 'lucide-react';
+import PhaseStepList from '../../components/admin/PhaseStepList';
 
 interface Phase {
   phaseid: string;
@@ -27,14 +28,20 @@ interface Project {
 interface PhaseStep {
   stepId: string;
   phaseId: string;
-  stepNumber: number;
-  stepInstruction: string;
-  isSideQuest?: boolean;
-  status?: string;
+  stepName: string;
+  stepInstruction?: string;
+  status: string;
+  RAG: string;
+  priority: string;
+  isSideQuest: boolean;
   assignedTo?: string;
-  dueDate?: string;
+  expectedStart?: string;
+  expectedEnd?: string;
   completedAt?: string;
-  progress?: number;
+  governanceLogId?: string;
+  memoryAnchor?: string;
+  lastUpdated: string;
+  executor?: 'claude' | 'cc' | 'zoi' | 'user' | 'system';
 }
 
 interface CheckpointReview {
@@ -82,6 +89,7 @@ export default function AdminPhaseView() {
     fetchPhaseData();
   }, [phaseId]);
 
+
   const fetchPhaseData = async () => {
     try {
       setLoading(true);
@@ -95,10 +103,26 @@ export default function AdminPhaseView() {
       const phaseData = await phaseResponse.json();
       setPhase(phaseData.phase);
       setProject(phaseData.project);
-      setPhaseSteps(phaseData.phaseSteps || []);
       setCheckpoints(phaseData.checkpoints || []);
       setTemplates(phaseData.templates || []);
       setGovernanceLogs(phaseData.governanceLogs || []);
+
+      // Fetch phase steps from new table
+      try {
+        const stepsResponse = await fetch(`/api/admin/live/phase_steps`);
+        if (stepsResponse.ok) {
+          const stepsData = await stepsResponse.json();
+          // Filter steps for this phase
+          const phaseStepsFiltered = stepsData.data?.filter((step: PhaseStep) => 
+            step.phaseId === phaseId
+          ) || [];
+          setPhaseSteps(phaseStepsFiltered);
+        }
+      } catch (stepError) {
+        console.warn('Failed to fetch phase steps:', stepError);
+        // Keep any existing steps from phase data
+        setPhaseSteps(phaseData.phaseSteps || []);
+      }
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load phase data');
@@ -127,6 +151,7 @@ export default function AdminPhaseView() {
       default: return 'text-gray-600 bg-gray-50';
     }
   };
+
 
   if (loading) {
     return (
@@ -229,80 +254,13 @@ export default function AdminPhaseView() {
         )}
       </div>
 
-      {/* Phase Steps Table */}
-      <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-        <h2 className="text-xl font-semibold mb-4 flex items-center space-x-2">
-          <ListChecks size={20} />
-          <span>Phase Steps ({phaseSteps.length})</span>
-        </h2>
-
-        {phaseSteps.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Step #
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Instruction
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Type
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Progress
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Assigned To
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {phaseSteps.map((step) => (
-                  <tr key={step.stepId} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">
-                      {step.stepNumber}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-600 max-w-md">
-                      <p className="truncate">{step.stepInstruction}</p>
-                    </td>
-                    <td className="px-4 py-3 text-sm">
-                      {step.isSideQuest ? (
-                        <span className="text-purple-600">Side Quest</span>
-                      ) : (
-                        <span className="text-gray-600">Main Step</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-sm">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(step.status)}`}>
-                        {step.status || 'Pending'}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-sm">
-                      <div className="w-24 bg-gray-200 rounded-full h-2">
-                        <div
-                          className="bg-blue-600 h-2 rounded-full"
-                          style={{ width: `${step.progress || 0}%` }}
-                        />
-                      </div>
-                      <span className="text-xs text-gray-500">{step.progress || 0}%</span>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
-                      {step.assignedTo || 'Unassigned'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p className="text-gray-500 italic">No steps defined for this phase</p>
-        )}
-      </div>
+      {/* Phase Steps */}
+      <PhaseStepList 
+        phaseSteps={phaseSteps} 
+        governanceLogs={governanceLogs}
+        showExecutor={true}
+        className="mb-6"
+      />
 
       {/* Checkpoint Reviews Table */}
       <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
