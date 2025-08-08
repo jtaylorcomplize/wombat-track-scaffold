@@ -4,7 +4,8 @@
  */
 
 import express from 'express';
-import { governanceLogsService, GovernanceLog, CreateGovernanceLogRequest, UpdateGovernanceLogRequest, GovernanceLogsQuery } from '../../services/governanceLogsService';
+import type { CreateGovernanceLogRequest, UpdateGovernanceLogRequest, GovernanceLogsQuery } from '../../services/governanceLogsService';
+import { governanceLogsService, GovernanceLog } from '../../services/governanceLogsService';
 
 const router = express.Router();
 

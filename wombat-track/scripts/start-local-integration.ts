@@ -6,7 +6,7 @@
  */
 
 import OFIntegrationService from '../src/services/ofIntegrationService';
-import { AuthConfig } from '../src/services/ofIntegrationAuth';
+import type { AuthConfig } from '../src/services/ofIntegrationAuth';
 
 class LocalOFIntegrationService {
   

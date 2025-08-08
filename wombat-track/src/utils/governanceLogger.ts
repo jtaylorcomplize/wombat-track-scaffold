@@ -1,5 +1,6 @@
 // Utility for logging governance events
 import type { GovernanceEvent } from '../types/governance';
+import GovernanceProjectIntegration from '../services/governanceProjectIntegration';
 
 export const createGovernanceEvent = (
   event: Omit<GovernanceEvent, 'id' | 'timestamp'>
@@ -8,6 +9,23 @@ export const createGovernanceEvent = (
   id: `gov-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
   timestamp: new Date().toISOString()
 });
+
+// Enhanced logging function with automatic project registration
+export const logGovernanceEventWithProjectSync = async (
+  event: Omit<GovernanceEvent, 'id' | 'timestamp'>
+): Promise<GovernanceEvent> => {
+  const governanceEvent = createGovernanceEvent(event);
+  
+  // Trigger automatic project registration if this event references a project
+  try {
+    const integration = new GovernanceProjectIntegration();
+    await integration.processGovernanceEntry(governanceEvent);
+  } catch (error) {
+    console.warn('Failed to sync governance event with project registration:', error);
+  }
+  
+  return governanceEvent;
+};
 
 export const logSelfManagementInitiative = () => {
   return createGovernanceEvent({

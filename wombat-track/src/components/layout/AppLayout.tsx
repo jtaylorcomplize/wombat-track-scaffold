@@ -425,28 +425,20 @@ const AppLayoutInner: React.FC<AppLayoutProps> = ({ initialProjects = mockProjec
       data-testid="app-layout"
       style={{ background: 'var(--wt-neutral-50)' }}
     >
-      {/* Enhanced Sidebar v3.1 with Three-Tier Architecture */}
+      {/* Ultra-Simplified Static Sidebar */}
       <EnhancedSidebar
-        projects={projects}
-        currentProject={currentProject}
-        selectedSurface={selectedSurface}
-        collapsed={sidebarCollapsed}
-        currentSubApp={currentSubApp}
-        onProjectChange={handleProjectChange}
+        currentSurface={selectedSurface}
         onSurfaceChange={(surface) => {
           setSelectedSurface(surface);
           setShowSubAppDashboard(false);
         }}
-        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
-        onSubAppChange={setCurrentSubApp}
       />
 
-      {/* Main Content Area */}
+      {/* Main Content Area - Fixed margin for static sidebar */}
       <div 
         className={`flex-1 flex flex-col`}
         style={{ 
-          marginLeft: sidebarCollapsed ? 'var(--wt-sidebar-collapsed)' : 'var(--wt-sidebar-width)',
-          transition: 'margin-left var(--wt-transition-normal)'
+          marginLeft: '16rem' /* Fixed w-64 sidebar width */
         }}
       >
         {/* Sticky Breadcrumb Header */}

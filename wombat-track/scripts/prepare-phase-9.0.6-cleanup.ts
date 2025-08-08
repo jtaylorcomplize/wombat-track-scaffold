@@ -637,7 +637,7 @@ class Phase906PreparationManager {
         '**/*.log'
       ];
 
-      let cleanedFiles = 0;
+      const cleanedFiles = 0;
       const filesToClean: string[] = [];
 
       // Find temp files (but don't actually delete them without explicit confirmation)

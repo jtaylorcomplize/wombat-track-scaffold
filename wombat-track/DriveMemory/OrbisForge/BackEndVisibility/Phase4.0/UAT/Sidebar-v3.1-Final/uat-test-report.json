@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-08-07T05:09:15.139Z",
+  "timestamp": "2025-08-07T05:58:37.702Z",
   "testSuite": "Enhanced Sidebar v3.1 Final Phase 3 UAT",
-  "baseUrl": "http://localhost:5176",
+  "baseUrl": "http://localhost:5174",
   "artifacts": {
     "screenshots": [],
     "governanceEvents": [],

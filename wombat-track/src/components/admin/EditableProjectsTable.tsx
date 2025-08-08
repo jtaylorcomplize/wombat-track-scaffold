@@ -361,6 +361,9 @@ export default function EditableProjectsTable() {
       if (e.key === 'Enter') {
         setIsEditing(false);
       }
+      if (e.key === 'Escape') {
+        setIsEditing(false);
+      }
     };
 
     if (isEditing) {
@@ -370,7 +373,8 @@ export default function EditableProjectsTable() {
             value={value}
             onChange={(e) => handleChange(e.target.value)}
             onBlur={handleBlur}
-            className="w-full p-1 border rounded text-sm"
+            onKeyDown={handleKeyPress}
+            className="w-full p-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             autoFocus
           >
             <option value="">Select...</option>
@@ -397,8 +401,8 @@ export default function EditableProjectsTable() {
           value={value}
           onChange={(e) => handleChange(type === 'number' ? Number(e.target.value) : e.target.value)}
           onBlur={handleBlur}
-          onKeyPress={handleKeyPress}
-          className="w-full p-1 border rounded text-sm"
+          onKeyDown={handleKeyPress}
+          className="w-full p-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           autoFocus
         />
       );
@@ -413,11 +417,22 @@ export default function EditableProjectsTable() {
 
     return (
       <div
-        onClick={() => setIsEditing(true)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsEditing(true);
+        }}
         className={`p-2 cursor-pointer hover:bg-gray-50 rounded min-h-[32px] ${
           currentEdit ? 'bg-yellow-50 border border-yellow-200' : ''
         }`}
         title="Click to edit"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsEditing(true);
+          }
+        }}
       >
         {displayValue || <span className="text-gray-400">-</span>}
       </div>

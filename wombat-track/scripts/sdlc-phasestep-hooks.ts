@@ -184,6 +184,7 @@ class SDLCPhaseStepHooks {
 
       const orchestratorTask = await this.orchestratorGenerator.generateOrchestratorTask({
         ...hook.orchestratorConfig,
+        taskDescription: hook.orchestratorConfig.stepDescription,
         outputPath: orchestratorTaskPath
       });
 
@@ -546,4 +547,5 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(console.error);
 }
 
-export { SDLCPhaseStepHooks, PhaseStepHook, PhaseStepConfig };
+export { SDLCPhaseStepHooks };
+export type { PhaseStepHook, PhaseStepConfig };

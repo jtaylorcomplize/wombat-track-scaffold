@@ -452,7 +452,7 @@ export class AutoAuditAgent extends EventEmitter {
       const completedSteps = phase.steps.filter(s => s.status === 'complete').length;
       const totalSteps = phase.steps.length;
       
-      if (phase.status === 'complete' && completedSteps < totalSteps) {
+      if (phase.status === 'completed' && completedSteps < totalSteps) {
         findings.push({
           id: 'phase-step-status-mismatch',
           severity: 'medium',

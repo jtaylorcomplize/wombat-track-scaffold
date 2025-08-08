@@ -5,7 +5,8 @@
  * Minimal service for immediate testing without Azure dependencies
  */
 
-import express, { Request, Response } from 'express';
+import type { Request} from 'express';
+import express, { Response } from 'express';
 import cors from 'cors';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -194,7 +195,7 @@ class SimpleOpenAIIntegration {
         }
 
         // Simple knowledge extraction from governance logs and files
-        let answer = await this.generateSimpleAnswer(query, scope);
+        const answer = await this.generateSimpleAnswer(query, scope);
 
         await this.logToGovernance('memory_query', {
           query,

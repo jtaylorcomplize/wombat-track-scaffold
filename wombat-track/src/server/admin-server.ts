@@ -22,6 +22,7 @@ import importRoutes from './api/import';
 import gizmoSecretsRoutes from './api/import/gizmo-secrets';
 import governanceDbRoutes from './api/governance-db';
 import governanceLogsRoutes from './api/governance-logs';
+import governanceProjectRoutes from './api/governance-project-integration';
 import { getAllProjects, getSubApps, getSubAppById, getSubAppRecentProjects, getRuntimeStatus, getProjectById } from './api/orbis';
 
 const app = express();
@@ -111,6 +112,13 @@ console.log('   ✓ /api/admin/phases/:id - Phase detail view');
 app.use('/api/admin/edit', adminEditRoutes);
 console.log('   ✓ /api/admin/edit/projects - Editable projects with draft/commit');
 console.log('   ✓ /api/admin/edit/phases - Editable phases with draft/commit');
+
+// Governance-Project Integration routes
+app.use('/api/admin/governance', governanceProjectRoutes);
+app.use('/api/admin/projects', governanceProjectRoutes);
+console.log('   ✓ /api/admin/governance/process-entry - Process governance log for project registration');
+console.log('   ✓ /api/admin/projects/backfill - Backfill missing projects from governance logs');
+console.log('   ✓ /api/admin/governance/validate-integrity - Validate project registration integrity');
 
 // Orbis API routes for cross-sub-app data
 app.get('/api/orbis/projects/all', getAllProjects);

@@ -288,7 +288,7 @@ class WTDatabaseAuditor {
     if (phases.length === 0) return 0;
 
     let integrityScore = 0;
-    let maxScore = phases.length;
+    const maxScore = phases.length;
 
     for (const phase of phases) {
       // Check if phase has proper structure

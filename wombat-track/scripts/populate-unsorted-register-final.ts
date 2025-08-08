@@ -2,7 +2,7 @@
 
 import dotenv from 'dotenv';
 import { createNotionClient } from '../src/utils/notionClient.ts';
-import { Client } from '@notionhq/client';
+import type { Client } from '@notionhq/client';
 
 dotenv.config();
 

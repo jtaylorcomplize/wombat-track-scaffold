@@ -1,0 +1,38 @@
+{
+  "sidebar_version": "v3.1",
+  "tests_run": [],
+  "issues_found": [
+    {
+      "type": "navigation_error",
+      "message": "Failed to navigate to http://localhost:5174: net::ERR_CONNECTION_REFUSED at http://localhost:5174",
+      "timestamp": "2025-08-07T06:04:24.076Z"
+    },
+    {
+      "type": "navigation_error",
+      "message": "Failed to navigate to http://localhost:5174: net::ERR_CONNECTION_REFUSED at http://localhost:5174",
+      "timestamp": "2025-08-07T06:04:26.371Z"
+    },
+    {
+      "type": "navigation_error",
+      "message": "Failed to navigate to http://localhost:5174: net::ERR_CONNECTION_REFUSED at http://localhost:5174",
+      "timestamp": "2025-08-07T06:04:26.419Z"
+    },
+    {
+      "type": "navigation_error",
+      "message": "Failed to navigate to http://localhost:5174: net::ERR_CONNECTION_REFUSED at http://localhost:5174",
+      "timestamp": "2025-08-07T06:04:26.436Z"
+    },
+    {
+      "type": "navigation_error",
+      "message": "Failed to navigate to http://localhost:5174: net::ERR_CONNECTION_REFUSED at http://localhost:5174",
+      "timestamp": "2025-08-07T06:04:26.449Z"
+    },
+    {
+      "type": "navigation_error",
+      "message": "Failed to navigate to http://localhost:5174: net::ERR_CONNECTION_REFUSED at http://localhost:5174",
+      "timestamp": "2025-08-07T06:04:26.464Z"
+    }
+  ],
+  "components_tested": [],
+  "timestamp": "2025-08-07T06:04:01.982Z"
+}

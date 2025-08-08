@@ -21,7 +21,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import type { PhaseStep } from '../../services/continuousOrchestrator';
-import { enhancedGovernanceLogger } from '../../services/enhancedGovernanceLogger';
+import { governanceLogger as enhancedGovernanceLogger } from '../../services/governanceLoggerBrowser';
 
 interface CheckpointReview {
   id: string;

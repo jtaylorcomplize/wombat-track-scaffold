@@ -14,8 +14,8 @@ import { ragGovernanceService } from './ragGovernanceService';
 import { visionLayerAgentFramework } from './visionLayerAgent';
 import { agenticCloudOrchestrator } from './agenticCloudOrchestrator';
 import { enhancedGovernanceLogger } from './enhancedGovernanceLogger';
-import * as fs from 'fs/promises';
-import * as path from 'path';
+import fs from 'fs/promises';
+import path from 'path';
 
 export interface GovernanceQueryRequest {
   projectId?: string;

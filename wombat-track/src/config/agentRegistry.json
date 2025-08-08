@@ -1,0 +1,75 @@
+{
+  "version": "1.0.0",
+  "agentRegistryConfig": {
+    "allowAgentInjection": true,
+    "defaultAgent": "claude",
+    "communicationChannels": ["chat-ui", "governance-log", "github-actions"]
+  },
+  "agents": [
+    {
+      "id": "claude",
+      "label": "Claude (Assistant)",
+      "permissions": ["analyze", "code_generation", "documentation"],
+      "type": "assistant",
+      "status": "active"
+    },
+    {
+      "id": "zoi", 
+      "label": "Zoi (Autonomous Agent)",
+      "permissions": ["execute", "communicate", "dispatch", "governance", "orchestration"],
+      "type": "autonomous",
+      "status": "active",
+      "capabilities": [
+        "code_generation",
+        "testing", 
+        "deployment",
+        "monitoring",
+        "analysis",
+        "orchestration"
+      ],
+      "endpoints": {
+        "oApp": "https://localhost:3001/api/agents/zoi",
+        "github": "workflow_dispatch", 
+        "chat": "direct_ai_model",
+        "aiModel": {
+          "provider": "azure_openai_simple",
+          "servicePath": "../services/zoiSimpleAI",
+          "modelName": "gpt-4o", 
+          "systemPrompt": "You are Zoi, an autonomous coding agent with natural language capabilities like Claude or Gizmo. You maintain conversation context, provide technical assistance, and respond in a professional but friendly manner.",
+          "temperature": 0.7,
+          "maxTokens": 2000
+        }
+      },
+      "accessPaths": {
+        "oApp": "admin_panel",
+        "github": "actions_dispatch", 
+        "chat": "agent_selector"
+      },
+      "communicationSettings": {
+        "responseChannels": ["chat-ui", "governance-log", "github-actions"],
+        "naturalLanguageChat": true,
+        "directChatResponses": true,
+        "chatResponseFormat": "natural_language",
+        "governanceLogging": true,
+        "memoryAnchorCreation": true,
+        "azureBlobSync": true,
+        "chatIntegration": {
+          "responseMethod": "direct_injection",
+          "messageFormat": "conversational",
+          "contextAware": true,
+          "personalityMode": "autonomous_agent"
+        }
+      },
+      "governanceConfig": {
+        "logLocation": "logs/governance.jsonl",
+        "memoryAnchorPath": "logs/agents/",
+        "entryType": "ZoiCommunication"
+      }
+    }
+  ],
+  "fallbackSettings": {
+    "memoryPluginPath": "logs/memoryplugin/agent_comm.jsonl",
+    "responseTimeout": 30000,
+    "maxRetries": 3
+  }
+}

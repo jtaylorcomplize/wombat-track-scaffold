@@ -662,6 +662,76 @@ app.get('/api/integration/dashboard-status', async (req, res) => {
   }
 });
 
+// Missing API endpoints for browser compatibility
+
+// GET /api/governance/logs - Get governance logs
+app.get('/api/governance/logs', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Governance logs moved to /api/admin/governance_logs',
+    redirect: '/api/admin/governance_logs',
+    data: []
+  });
+});
+
+// GET /api/agents/available - Get available agents
+app.get('/api/agents/available', (req, res) => {
+  res.json({
+    success: true,
+    data: [
+      {
+        id: 'claude',
+        name: 'Claude',
+        status: 'available',
+        description: 'Primary AI assistant for code generation and analysis',
+        capabilities: ['code-generation', 'debugging', 'documentation']
+      },
+      {
+        id: 'zoi',
+        name: 'Zoi AI',
+        status: 'available',
+        description: 'Autonomous AI agent for task execution',
+        capabilities: ['task-automation', 'workflow-management', 'monitoring']
+      }
+    ],
+    timestamp: new Date().toISOString()
+  });
+});
+
+// GET /api/zoi/active-tasks - Get Zoi active tasks
+app.get('/api/zoi/active-tasks', (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      activeTasks: [],
+      queuedTasks: [],
+      completedTasks: [],
+      totalTasks: 0
+    },
+    message: 'Zoi AI Service - No active tasks'
+  });
+});
+
+// GET /api/orbis/teams - Get teams (placeholder endpoint)
+app.get('/api/orbis/teams', (req, res) => {
+  res.json({
+    success: true,
+    data: [],
+    message: 'Teams API endpoint - planned for future development',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// GET /api/orbis/strategic-initiatives - Get strategic initiatives (placeholder endpoint)
+app.get('/api/orbis/strategic-initiatives', (req, res) => {
+  res.json({
+    success: true,
+    data: [],
+    message: 'Strategic initiatives API endpoint - planned for future development',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
@@ -670,6 +740,11 @@ app.listen(PORT, () => {
   console.log(`POST /api/claude/chat - Claude Code chat proxy (Step 9.0.2.3)`);
   console.log(`POST /api/governance/log - Receive governance logs from browser`);
   console.log(`GET  /api/governance/health - Governance logging health check`);
+  console.log(`GET  /api/governance/logs - Governance logs (redirect to admin server)`);
+  console.log(`GET  /api/agents/available - Available agents`);
+  console.log(`GET  /api/zoi/active-tasks - Zoi active tasks`);
+  console.log(`GET  /api/orbis/teams - Teams (placeholder)`);
+  console.log(`GET  /api/orbis/strategic-initiatives - Strategic initiatives (placeholder)`);
   console.log(`POST /api/orchestrator/execute - Execute signed instruction (OES)`);
   console.log(`POST /api/orchestrator/status - Get execution status (OES)`);
   console.log(`POST /api/integration/nightly-report - Receive nightly QA reports (Phase 9.0.5)`);

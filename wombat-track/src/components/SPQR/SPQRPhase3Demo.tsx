@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SPQRDashboardContainer } from './SPQRDashboardContainer';
-import { GovernanceLogger } from '../../services/governance-logger';
+import { GovernanceLogger } from '../../services/governanceLoggerBrowser';
 import { UserAccessControlService, type UserProfile } from '../../services/user-access-control';
 
 interface DemoProps {

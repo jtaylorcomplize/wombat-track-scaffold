@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Folder, ExternalLink, Clock, Users, TrendingUp, Filter, Search, Wifi, WifiOff, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { governanceLogger } from '../../services/enhancedGovernanceLogger';
+import { governanceLogger } from '../../services/governanceLoggerBrowser';
 import { useAllProjects } from '../../hooks/useOrbisAPI';
 
 interface ProjectData {

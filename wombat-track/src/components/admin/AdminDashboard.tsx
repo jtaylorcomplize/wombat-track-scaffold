@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Database, FileText, Search, Activity, Settings, Shield, Key, Edit3, GitBranch, BookOpen } from 'lucide-react';
+import { Database, FileText, Search, Activity, Settings, Shield, Key, Edit3, GitBranch, BookOpen, Bot } from 'lucide-react';
 import { useAdminMode } from '../../contexts/AdminModeContext';
 import DataExplorer from '../../pages/admin/DataExplorer';
 import ImportExport from '../../pages/admin/ImportExport';
@@ -11,8 +11,10 @@ import EditablePhasesTable from './EditablePhasesTable';
 import EditableSubAppsTable from './EditableSubAppsTable';
 import SDLCDashboard from './SDLCDashboard';
 import AdminGovernancePolicies from './AdminGovernancePolicies';
+import AdminPhaseView from './AdminPhaseView';
+import AgentSelector from '../agents/AgentSelector';
 
-type AdminView = 'overview' | 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager' | 'sdlc-dashboard' | 'editable-tables' | 'governance-index';
+type AdminView = 'overview' | 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager' | 'sdlc-dashboard' | 'editable-tables' | 'governance-index' | 'phase-view' | 'agent-communication';
 
 interface AdminDashboardProps {
   initialView?: AdminView;
@@ -104,6 +106,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       label: 'Governance Index',
       icon: <BookOpen size={20} />,
       description: 'Policy documentation and memory anchor management'
+    },
+    {
+      id: 'phase-view' as AdminView,
+      label: 'Phase View',
+      icon: <GitBranch size={20} />,
+      description: 'Live governance data integration and phase visibility'
+    },
+    {
+      id: 'agent-communication' as AdminView,
+      label: 'Agent Communication',
+      icon: <Bot size={20} />,
+      description: 'Direct communication with autonomous agents like Zoi'
     }
   ];
 
@@ -131,6 +145,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         );
       case 'governance-index':
         return <AdminGovernancePolicies />;
+      case 'phase-view':
+        return <AdminPhaseView />;
+      case 'agent-communication':
+        return (
+          <div className="p-6">
+            <AgentSelector />
+          </div>
+        );
       case 'overview':
       default:
         return (

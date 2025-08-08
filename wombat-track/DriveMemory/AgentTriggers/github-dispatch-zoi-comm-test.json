@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-08-07T15:31:00+10:00",
+  "requestId": "zoi-comm-test-20250807",
+  "targetAgent": "zoi",
+  "action": "agent_communication",
+  "inputs": {
+    "task": "status-check and communication test",
+    "context": "pre-9.1 cleanup and architecture review readiness verification",
+    "requestId": "zoi-comm-test-20250807"
+  },
+  "triggerType": "manual",
+  "expectedResponse": {
+    "channels": ["governance-log", "chat-ui", "github-actions"],
+    "timeout": 30000
+  }
+}

@@ -6,8 +6,8 @@
 import { getAzureOpenAIService } from './azureOpenAIService';
 import { enhancedGovernanceLogger } from './enhancedGovernanceLogger';
 import { visionLayerAgentFramework } from './visionLayerAgent';
-import * as fs from 'fs/promises';
-import * as path from 'path';
+import fs from 'fs/promises';
+import path from 'path';
 
 export interface RAGQuery {
   id: string;

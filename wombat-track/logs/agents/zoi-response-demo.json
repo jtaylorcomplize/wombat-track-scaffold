@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-08-07T15:50:00+10:00",
+  "requestId": "zoi-chat-demo-001",
+  "sourceAgent": "zoi",
+  "responseType": "natural_language",
+  "message": "👋 Hello! I'm Zoi, your autonomous coding agent. I can help you with development tasks, code reviews, and architecture planning. What would you like me to work on today?",
+  "status": "online",
+  "capabilities": [
+    "🔨 Code generation and refactoring",
+    "🧪 Test creation and validation", 
+    "🚀 CI/CD pipeline management",
+    "📊 Performance analysis",
+    "🔍 Security audits",
+    "📝 Documentation generation"
+  ],
+  "metadata": {
+    "chatEnabled": true,
+    "naturalLanguage": true,
+    "conversationalMode": "active",
+    "responseTime": "immediate"
+  }
+}

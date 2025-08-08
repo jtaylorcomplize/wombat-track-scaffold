@@ -59,7 +59,32 @@ const AdminGovernancePolicies: React.FC = () => {
     try {
       setLoading(true);
       
-      // Mock governance documents - in a real implementation, these would be fetched from the server
+      // Fetch governance logs from database to extract memory anchors
+      let databaseAnchors: string[] = [];
+      try {
+        const response = await fetch('/api/admin/governance_logs');
+        if (response.ok) {
+          const data = await response.json();
+          const logs = data.data || [];
+          
+          // Extract unique memory anchors from governance logs
+          const anchorSet = new Set<string>();
+          logs.forEach((log: any) => {
+            if (log.details?.memory_anchors && Array.isArray(log.details.memory_anchors)) {
+              log.details.memory_anchors.forEach((anchor: string) => anchorSet.add(anchor));
+            }
+            if (log.details?.memoryAnchor) {
+              anchorSet.add(log.details.memoryAnchor);
+            }
+          });
+          databaseAnchors = Array.from(anchorSet);
+          console.log('📊 Found memory anchors in database:', databaseAnchors);
+        }
+      } catch (error) {
+        console.error('Failed to fetch governance logs:', error);
+      }
+      
+      // Governance documents with live database integration
       const governanceDocs: GovernanceDocument[] = [
         {
           name: 'GPT-USAGE-POLICY.md',
@@ -268,17 +293,38 @@ This document defines the MemoryPlugin anchor system for semantic classification
 
   const renderMemoryAnchorChip = (anchorId: string) => {
     const anchor = memoryAnchors[anchorId];
-    if (!anchor) return null;
+    
+    const handleAnchorClick = async () => {
+      try {
+        // Fetch memory anchor resolution from API
+        const response = await fetch(`/api/admin/memory/${anchorId}`);
+        if (response.ok) {
+          const data = await response.json();
+          // Open the resolved file location in a new tab
+          if (data.location) {
+            console.log(`📍 Memory anchor ${anchorId} resolved to:`, data.location);
+            // Show the file content in an alert or modal (in production, use a proper modal)
+            alert(`Memory Anchor: ${anchorId}\nLocation: ${data.location}\n\nContent Preview:\n${data.content}`);
+          }
+        } else {
+          console.warn(`Memory anchor ${anchorId} not found in DriveMemory`);
+          alert(`Memory anchor ${anchorId} not found in DriveMemory. This anchor may need to be created.`);
+        }
+      } catch (error) {
+        console.error('Error resolving memory anchor:', error);
+      }
+    };
 
     return (
-      <span
+      <button
         key={anchorId}
+        onClick={handleAnchorClick}
         className="inline-flex items-center space-x-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full hover:bg-blue-200 cursor-pointer transition-colors"
-        title={`${anchor.purpose}\nCategory: ${anchor.category}`}
+        title={anchor ? `${anchor.purpose}\nCategory: ${anchor.category}\nClick to resolve` : `Click to resolve ${anchorId}`}
       >
         <Bookmark size={10} />
         <span>{anchorId}</span>
-      </span>
+      </button>
     );
   };
 

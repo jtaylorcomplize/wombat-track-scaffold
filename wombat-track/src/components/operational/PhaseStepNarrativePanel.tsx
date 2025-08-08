@@ -26,7 +26,7 @@ import {
   TrendingUp
 } from 'lucide-react';
 import type { PhaseStep, StepProgress } from '../../services/continuousOrchestrator';
-import { enhancedGovernanceLogger } from '../../services/enhancedGovernanceLogger';
+import { governanceLogger as enhancedGovernanceLogger } from '../../services/governanceLoggerBrowser';
 
 interface NarrativeEntry {
   id: string;

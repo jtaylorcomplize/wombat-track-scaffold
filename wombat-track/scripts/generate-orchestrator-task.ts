@@ -507,4 +507,5 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(console.error);
 }
 
-export { DualOrchestratorGenerator, OrchestratorTask, OrchestratorRole };
+export { DualOrchestratorGenerator };
+export type { OrchestratorTask, OrchestratorRole };

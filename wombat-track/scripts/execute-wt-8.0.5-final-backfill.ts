@@ -35,7 +35,7 @@ interface BackfillResult {
 
 // ID Generation counters
 let projectIdCounter = 1;
-let phaseIdCounters: Record<string, number> = {};
+const phaseIdCounters: Record<string, number> = {};
 
 // User attribution pool
 const USER_POOL = ['Jackson', 'Gizmo', 'Claude', 'CC-UX Designer'];

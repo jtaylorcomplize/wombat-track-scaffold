@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { GovernanceLogger, type AlertRule, type RuntimeObservabilityConfig } from '../../services/governance-logger';
+import { GovernanceLogger } from '../../services/governanceLoggerBrowser';
+
+// Import types separately - we'll need to define these locally or create interfaces
+type RuntimeObservabilityConfig = {
+  alerts?: {
+    enabled?: boolean;
+    rules?: any[];
+  };
+};
 
 interface AlertConfig {
   slackWebhookUrl?: string;
