@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-08-08T06:56:00.640Z",
+  "appService": "wombat-track-ui-prod",
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": "build",
+  "startupCommand": "serve -s build -l 8080 --single",
+  "environmentVariables": {
+    "REACT_APP_API_URL": "/api",
+    "REACT_APP_CDN_URL": "https://wombat-track-assets.azureedge.net",
+    "REACT_APP_ENVIRONMENT": "production",
+    "GENERATE_SOURCEMAP": "false",
+    "INLINE_RUNTIME_CHUNK": "false"
+  }
+}

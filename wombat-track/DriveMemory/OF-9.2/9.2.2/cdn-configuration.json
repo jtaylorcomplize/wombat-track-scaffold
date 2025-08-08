@@ -1,0 +1,33 @@
+{
+  "timestamp": "2025-08-08T06:55:47.201Z",
+  "cdnProfile": "wombat-track-cdn",
+  "cdnEndpoint": "wombat-track-assets",
+  "cdnUrl": "https://wombat-track-assets.azureedge.net",
+  "origin": "wombat-track-ui-prod.azurewebsites.net",
+  "cachingRules": [
+    {
+      "path": "/static/*",
+      "cacheDuration": "1year"
+    },
+    {
+      "path": "/assets/*",
+      "cacheDuration": "1year"
+    },
+    {
+      "path": "*.js",
+      "cacheDuration": "1year"
+    },
+    {
+      "path": "*.css",
+      "cacheDuration": "1year"
+    },
+    {
+      "path": "*.woff*",
+      "cacheDuration": "1year"
+    },
+    {
+      "path": "/api/*",
+      "cacheDuration": "no-cache"
+    }
+  ]
+}

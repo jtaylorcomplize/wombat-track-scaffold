@@ -1,0 +1,66 @@
+{
+  "timestamp": "2025-08-08T06:58:04.606Z",
+  "phase": "OF-9.2.2.4",
+  "cicdPipeline": "Full Test Suite",
+  "summary": {
+    "status": "FAILED",
+    "totalTests": 1,
+    "passed": 0,
+    "failed": 1,
+    "successRate": "0%",
+    "totalDuration": "21s",
+    "criticalIssues": 1
+  },
+  "detailedResults": [
+    {
+      "name": "ESLint",
+      "status": "failed",
+      "duration": 21386,
+      "attempts": 2,
+      "error": "Command failed: npm run lint\n",
+      "stdout": "\n> wombat-track@0.1.0 lint\n> eslint src --ext .ts,.tsx\n\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/agents/MemoryAnchorAgent.ts\n  356:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  372:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  373:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  374:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  632:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/GovLogManagerModal.tsx\n    19:13   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n    52:81   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n    53:58   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n    55:79   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   135:37   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   798:11   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   801:108  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   805:54   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   834:47   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   834:64   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   927:38   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  1011:65   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/RelationshipGraph.tsx\n  142:46  error  'i' is defined but never used  @typescript-eslint/no-unused-vars\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/SPQR/SPQRDashboardAlerts.tsx\n  8:13  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/SPQR/SPQRDashboardMetrics.tsx\n  407:3  error  'onErrorCapture' is defined but never used  @typescript-eslint/no-unused-vars\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/SPQR/SPQRPhase4Demo.tsx\n  102:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  106:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/AdminGovernancePolicies.tsx\n  72:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/AdminPhaseView.tsx\n    8:3   error  'Clock' is defined but never used                    @typescript-eslint/no-unused-vars\n   13:3   error  'Filter' is defined but never used                   @typescript-eslint/no-unused-vars\n   28:13  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any\n   29:21  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any\n   64:10  error  'governanceLogs' is assigned a value but never used  @typescript-eslint/no-unused-vars\n   72:64  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any\n  125:67  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any\n  132:14  error  'error' is defined but never used                    @typescript-eslint/no-unused-vars\n  462:70  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/EditableProjectsTable.tsx\n  101:63  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/EditableSubAppsTable.tsx\n  20:11  error  An empty interface declaration allows any non-nullish value, including literals like `0` and `\"\"`.\n- If that's what you want, disable this lint rule with an inline comment or configure the 'allowInterfaces' rule option.\n- If you want a type meaning \"any object\", you probably want `object` instead.\n- If you want a type meaning \"any value\", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/PhaseStepTabsView.tsx\n  16:3  error  'Clock' is defined but never used  @typescript-eslint/no-unused-vars\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/TemplateSuggestionEngine.tsx\n  79:13  error  'prompt' is assigned a value but never used  @typescript-eslint/no-unused-vars\n\n/home/jtaylor/",
+      "stderr": "",
+      "timestamp": "2025-08-08T06:58:04.599Z",
+      "critical": true
+    }
+  ],
+  "analysis": {
+    "timestamp": "2025-08-08T06:58:04.603Z",
+    "totalTests": 1,
+    "passed": 0,
+    "failed": 1,
+    "criticalFailed": 1,
+    "totalDuration": 21386,
+    "averageDuration": 21386,
+    "successRate": 0,
+    "testBreakdown": {
+      "linting": {
+        "name": "ESLint",
+        "status": "failed",
+        "duration": 21386,
+        "attempts": 2,
+        "error": "Command failed: npm run lint\n",
+        "stdout": "\n> wombat-track@0.1.0 lint\n> eslint src --ext .ts,.tsx\n\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/agents/MemoryAnchorAgent.ts\n  356:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  372:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  373:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  374:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  632:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/GovLogManagerModal.tsx\n    19:13   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n    52:81   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n    53:58   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n    55:79   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   135:37   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   798:11   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   801:108  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   805:54   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   834:47   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   834:64   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n   927:38   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  1011:65   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/RelationshipGraph.tsx\n  142:46  error  'i' is defined but never used  @typescript-eslint/no-unused-vars\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/SPQR/SPQRDashboardAlerts.tsx\n  8:13  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/SPQR/SPQRDashboardMetrics.tsx\n  407:3  error  'onErrorCapture' is defined but never used  @typescript-eslint/no-unused-vars\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/SPQR/SPQRPhase4Demo.tsx\n  102:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  106:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/AdminGovernancePolicies.tsx\n  72:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/AdminPhaseView.tsx\n    8:3   error  'Clock' is defined but never used                    @typescript-eslint/no-unused-vars\n   13:3   error  'Filter' is defined but never used                   @typescript-eslint/no-unused-vars\n   28:13  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any\n   29:21  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any\n   64:10  error  'governanceLogs' is assigned a value but never used  @typescript-eslint/no-unused-vars\n   72:64  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any\n  125:67  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any\n  132:14  error  'error' is defined but never used                    @typescript-eslint/no-unused-vars\n  462:70  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/EditableProjectsTable.tsx\n  101:63  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/EditableSubAppsTable.tsx\n  20:11  error  An empty interface declaration allows any non-nullish value, including literals like `0` and `\"\"`.\n- If that's what you want, disable this lint rule with an inline comment or configure the 'allowInterfaces' rule option.\n- If you want a type meaning \"any object\", you probably want `object` instead.\n- If you want a type meaning \"any value\", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/PhaseStepTabsView.tsx\n  16:3  error  'Clock' is defined but never used  @typescript-eslint/no-unused-vars\n\n/home/jtaylor/wombat-track-scaffold/wombat-track/src/components/admin/TemplateSuggestionEngine.tsx\n  79:13  error  'prompt' is assigned a value but never used  @typescript-eslint/no-unused-vars\n\n/home/jtaylor/",
+        "stderr": "",
+        "timestamp": "2025-08-08T06:58:04.599Z",
+        "critical": true
+      }
+    }
+  },
+  "mergeReadiness": {
+    "status": "BLOCKED",
+    "blockers": [
+      "ESLint: Command failed: npm run lint\n"
+    ],
+    "warnings": []
+  },
+  "recommendations": [
+    "Fix all critical test failures before attempting merge",
+    "Run \"npm run lint --fix\" to automatically fix linting issues"
+  ],
+  "nextSteps": [
+    "Fix critical test failures",
+    "Re-run CI/CD pipeline",
+    "Do not merge until all critical tests pass"
+  ]
+}

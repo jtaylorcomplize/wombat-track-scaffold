@@ -6,6 +6,10 @@
 import express from 'express';
 import type { CreateGovernanceLogRequest, UpdateGovernanceLogRequest, GovernanceLogsQuery } from '../../services/governanceLogsService';
 import { governanceLogsService, GovernanceLog } from '../../services/governanceLogsService';
+import { logClassifierService } from '../../services/automation/logClassifierService';
+import { semanticSearchService } from '../../services/automation/semanticSearchService';
+import { linkIntegrityService } from '../../services/automation/linkIntegrityService';
+import type { RepairRequest } from '../../services/automation/linkIntegrityService';
 
 const router = express.Router();
 
@@ -169,6 +173,200 @@ router.delete('/:id', asyncHandler(async (req: express.Request, res: express.Res
     console.error('Error archiving governance log:', error);
     res.status(500).json({
       error: 'Failed to archive governance log',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}));
+
+// POST /api/admin/governance_logs/classify - Auto-classify governance log content
+router.post('/classify', asyncHandler(async (req: express.Request, res: express.Response) => {
+  try {
+    const { summary, gptDraftEntry, currentClassification, relatedPhase } = req.body;
+
+    if (!summary) {
+      return res.status(400).json({
+        error: 'Missing required field: summary'
+      });
+    }
+
+    const classificationResult = await logClassifierService.classifyGovernanceLog({
+      summary,
+      gptDraftEntry,
+      currentClassification,
+      relatedPhase
+    });
+
+    res.json(classificationResult);
+  } catch (error) {
+    console.error('Error classifying governance log:', error);
+    res.status(500).json({
+      error: 'Failed to classify governance log',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}));
+
+// GET /api/admin/governance_logs/search/semantic - Semantic search governance logs
+router.get('/search/semantic', asyncHandler(async (req: express.Request, res: express.Response) => {
+  try {
+    const query = req.query.q as string;
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const threshold = req.query.threshold ? parseFloat(req.query.threshold as string) : 0.7;
+
+    if (!query) {
+      return res.status(400).json({
+        error: 'Missing required parameter: q'
+      });
+    }
+
+    // Parse filters if provided
+    let filters;
+    if (req.query.filters) {
+      try {
+        filters = JSON.parse(req.query.filters as string);
+      } catch (e) {
+        return res.status(400).json({
+          error: 'Invalid filters JSON format'
+        });
+      }
+    }
+
+    const searchRequest = {
+      query,
+      limit,
+      threshold,
+      filters
+    };
+
+    const results = await semanticSearchService.searchLogs(searchRequest);
+    
+    res.json({
+      data: results,
+      total: results.length,
+      query: query,
+      threshold,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error performing semantic search:', error);
+    res.status(500).json({
+      error: 'Failed to perform semantic search',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}));
+
+// GET /api/admin/governance_logs/suggestions - Get classification/search suggestions
+router.get('/suggestions', asyncHandler(async (req: express.Request, res: express.Response) => {
+  try {
+    const text = req.query.text as string;
+    const type = req.query.type as string; // 'classification' or 'search'
+
+    if (!text || !type) {
+      return res.status(400).json({
+        error: 'Missing required parameters: text, type'
+      });
+    }
+
+    let suggestions: string[] = [];
+
+    if (type === 'classification') {
+      suggestions = await logClassifierService.getSuggestions(text);
+    } else if (type === 'search') {
+      suggestions = await semanticSearchService.getSuggestions(text);
+    } else {
+      return res.status(400).json({
+        error: 'Invalid type parameter. Must be "classification" or "search"'
+      });
+    }
+
+    res.json({
+      suggestions,
+      text,
+      type
+    });
+  } catch (error) {
+    console.error('Error getting suggestions:', error);
+    res.status(500).json({
+      error: 'Failed to get suggestions',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}));
+
+// GET /api/admin/governance_logs/link-integrity - Get link integrity report
+router.get('/link-integrity', asyncHandler(async (req: express.Request, res: express.Response) => {
+  try {
+    const report = await linkIntegrityService.performIntegrityScan();
+    res.json(report);
+  } catch (error) {
+    console.error('Error performing link integrity scan:', error);
+    res.status(500).json({
+      error: 'Failed to perform link integrity scan',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}));
+
+// GET /api/admin/governance_logs/link-integrity/last - Get last integrity report
+router.get('/link-integrity/last', asyncHandler(async (req: express.Request, res: express.Response) => {
+  try {
+    const report = linkIntegrityService.getLastReport();
+    if (!report) {
+      return res.status(404).json({
+        error: 'No integrity scan available',
+        message: 'Please run a scan first using /link-integrity endpoint'
+      });
+    }
+    res.json(report);
+  } catch (error) {
+    console.error('Error retrieving last integrity report:', error);
+    res.status(500).json({
+      error: 'Failed to retrieve integrity report',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}));
+
+// POST /api/admin/governance_logs/link-integrity/repair - Apply link integrity repair
+router.post('/link-integrity/repair', asyncHandler(async (req: express.Request, res: express.Response) => {
+  try {
+    const repairRequest: RepairRequest = req.body;
+    
+    // Validate required fields
+    if (!repairRequest.issueId || !repairRequest.newValue || !repairRequest.repairSource) {
+      return res.status(400).json({
+        error: 'Missing required fields',
+        required: ['issueId', 'newValue', 'repairSource']
+      });
+    }
+
+    const result = await linkIntegrityService.applyRepair(repairRequest);
+    
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(400).json(result);
+    }
+  } catch (error) {
+    console.error('Error applying link integrity repair:', error);
+    res.status(500).json({
+      error: 'Failed to apply repair',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}));
+
+// GET /api/admin/governance_logs/:id/integrity - Get integrity summary for specific log
+router.get('/:id/integrity', asyncHandler(async (req: express.Request, res: express.Response) => {
+  try {
+    const { id } = req.params;
+    const summary = await linkIntegrityService.getLogIntegritySummary(id);
+    res.json(summary);
+  } catch (error) {
+    console.error('Error getting log integrity summary:', error);
+    res.status(500).json({
+      error: 'Failed to get integrity summary',
       message: error instanceof Error ? error.message : 'Unknown error'
     });
   }

@@ -1,0 +1,54 @@
+Azure Resources Created - OF-9.2.2 App Service & API Deployment
+================================================================
+
+Resource Group: of-8-6-cloud-rg
+Location: Australia East
+Subscription: 6a59d7ff-a5d9-415e-a8e8-7248265c482c
+
+App Service Plan:
+- Name: wombat-track-plan
+- SKU: P1V2 (Premium)
+- OS: Linux
+
+Backend API App Service:
+- Name: wombat-track-api-prod
+- URL: https://wombat-track-api-prod.azurewebsites.net
+- Runtime: NODE:20-lts
+- Managed Identity: Enabled
+- State: Running
+
+Frontend App Service:
+- Name: wombat-track-ui-prod
+- URL: https://wombat-track-ui-prod.azurewebsites.net
+- Runtime: NODE:20-lts
+- State: Running
+
+Key Vault:
+- Name: wt-keyvault-au
+- SKU: Standard
+- RBAC Authorization: Enabled
+- Secrets: 7 configured
+  * azure-sql-connection-string
+  * azure-storage-connection-string
+  * notion-token
+  * github-token
+  * openai-api-key
+  * session-secret
+  * jwt-secret
+
+CDN Profile:
+- Name: wombat-track-cdn
+- SKU: Standard_Microsoft
+- Endpoint: wombat-track-assets.azureedge.net
+
+Redis Cache (Session Storage):
+- Name: wombat-track-redis
+- SKU: Basic
+- Size: c0
+
+Role Assignments:
+- App Service Managed Identity → Key Vault Secrets User
+- Current User → Key Vault Secrets Officer
+
+Status: ✅ Infrastructure deployment completed successfully
+Next: Deploy application code via CI/CD pipeline

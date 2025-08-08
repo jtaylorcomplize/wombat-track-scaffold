@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-08-08T06:54:22.235Z",
+  "appService": "wombat-track-api-prod",
+  "repository": "https://github.com/wombat-track/wombat-track-scaffold",
+  "branch": "feature/of-cloudmig-final",
+  "runtime": "NODE:20-lts",
+  "sku": "P1V2",
+  "deploymentMethod": "CI/CD Pipeline (GitHub Actions)",
+  "buildCommand": "npm install && npm run build",
+  "startCommand": "npm run server"
+}

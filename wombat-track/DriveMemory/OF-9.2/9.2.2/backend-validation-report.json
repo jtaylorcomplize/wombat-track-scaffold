@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-08-08T06:54:31.718Z",
+  "appServiceName": "wombat-track-api-prod",
+  "hostName": "wombat-track-api-prod.azurewebsites.net",
+  "state": "Running",
+  "location": "Australia East",
+  "sku": "P1V2",
+  "keyVaultIntegration": "configured",
+  "managedIdentity": "enabled",
+  "secretReferences": 7,
+  "healthEndpoint": "https://wombat-track-api-prod.azurewebsites.net/api/health",
+  "deploymentUrl": "https://wombat-track-api-prod.azurewebsites.net",
+  "validationStatus": "passed"
+}

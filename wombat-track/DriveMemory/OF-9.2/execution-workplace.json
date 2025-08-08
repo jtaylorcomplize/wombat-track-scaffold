@@ -1,0 +1,84 @@
+{
+  "timestamp": "2025-08-08T12:17:00+10:00",
+  "title": "OF-9.2 Cloud Migration - Execution Workplace",
+  "status": "Migration track restarted from OF-9.2.2",
+  "dependencies": {
+    "completed": ["OF-9.3", "OF-9.4"],
+    "sandboxed": ["OF-9.5"],
+    "clean": true
+  },
+  "branchPolicy": {
+    "active": "feature/of-cloudmig-final",
+    "restricted": ["feature/of-9.5-automation"],
+    "mergePolicy": "No merges from sandbox branches until OF-9.2.6 complete"
+  },
+  "phaseGovernanceMapping": {
+    "OF-9.2.2": {
+      "action": "App Service & API Deployment",
+      "requirements": [
+        "Commit SHA",
+        "PR link", 
+        "artefact path /DriveMemory/OF-9.2/9.2.2/",
+        "CI/CD test pass confirmation"
+      ]
+    },
+    "OF-9.2.3": {
+      "action": "CI/CD Cloud Pipeline Cut-Over",
+      "requirements": [
+        "Commit SHA",
+        "PR link",
+        "rollback artefact location",
+        "Azure agent confirmation"
+      ]
+    },
+    "OF-9.2.4": {
+      "action": "Observability & Governance Integration", 
+      "requirements": [
+        "Commit SHA",
+        "PR link",
+        "App Insights → GovernanceLog ingestion test results"
+      ]
+    },
+    "OF-9.2.5": {
+      "action": "Security & Compliance",
+      "requirements": [
+        "Commit SHA",
+        "PR link", 
+        "security policy diff",
+        "MFA/IP allow-list validation"
+      ]
+    },
+    "OF-9.2.6": {
+      "action": "Post-Migration Optimisation",
+      "requirements": [
+        "Commit SHA",
+        "PR link",
+        "performance metrics", 
+        "Claude Dispatcher activation proof"
+      ]
+    }
+  },
+  "executionRules": {
+    "governance": {
+      "logPhaseCompletion": "immediately after merge",
+      "includeRequired": ["commit SHA", "PR link", "artefact location", "validation notes"]
+    },
+    "testing": {
+      "mandatory": ["lint", "TS check", "Puppeteer"],
+      "timing": "before merge to main",
+      "validation": "GovernanceLog ingestion after OF-9.2.4"
+    }
+  },
+  "commitLoggingChecklist": [
+    "Add GovernanceLog entry (entryType: Implementation, phaseRef, projectRef)",
+    "Include commit SHA & PR link in summary", 
+    "Upload all phase artefacts to /DriveMemory/OF-9.2/<phase>/",
+    "Attach validation notes to GovernanceLog entry"
+  ],
+  "governanceLogRestart": {
+    "status": "appended",
+    "entries": 6,
+    "phases": ["9.2.2", "9.2.3", "9.2.4", "9.2.5", "9.2.6"],
+    "planning": "Migration track restarted with clear dependencies"
+  }
+}

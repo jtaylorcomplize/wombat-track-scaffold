@@ -1,0 +1,25 @@
+{
+  "timestamp": "2025-08-08T06:55:57.612Z",
+  "rules": [
+    {
+      "name": "React Router",
+      "match": ".*",
+      "conditions": [
+        "not a file",
+        "not a directory",
+        "not an API route"
+      ],
+      "action": "rewrite to index.html"
+    },
+    {
+      "name": "API Proxy",
+      "match": "/api/*",
+      "action": "proxy to backend service"
+    },
+    {
+      "name": "Static Assets",
+      "match": "/static/*",
+      "action": "serve directly with long cache headers"
+    }
+  ]
+}
