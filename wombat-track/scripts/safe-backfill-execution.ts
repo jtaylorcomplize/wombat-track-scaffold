@@ -97,8 +97,8 @@ function determineSafeValue(databaseName: string, fieldName: string, record: any
   
   // Apply deterministic rules based on database and field type
   let proposedValue: string | null = null;
-  let dataSource: SafeBackfillTask['dataSource'] = 'deterministic';
-  let confidence: SafeBackfillTask['confidence'] = 'high';
+  const dataSource: SafeBackfillTask['dataSource'] = 'deterministic';
+  const confidence: SafeBackfillTask['confidence'] = 'high';
   let autoPatchable = false;
   let reasoning = '';
   
@@ -383,7 +383,7 @@ async function executeSafeModeBackfill() {
   
   const allResults: SafeBackfillResult[] = [];
   let totalRecordsScanned = 0;
-  let safePatchTasks: SafeBackfillTask[] = [];
+  const safePatchTasks: SafeBackfillTask[] = [];
   
   // Scan each target database for safe backfill opportunities
   for (const [dbName, dbId] of Object.entries(TARGET_DATABASES)) {

@@ -1,0 +1,108 @@
+{
+  "phaseId": "OF-9.0",
+  "stepId": "9.0.2",
+  "status": "In Progress",
+  "memoryAnchor": "of-9.0-init-20250806",
+  "objective": "Implement Multi-Agent Orchestration Dashboard and context-aware sidebar chat with full governance traceability and UI guidance.",
+  "tasks": [
+    {
+      "id": "9.0.2-T1",
+      "name": "Build Multi-Agent Orchestration Dashboard",
+      "description": "Create dashboard showing all orchestrators, task queues, and live statuses with governance links.",
+      "dependencies": [],
+      "governanceTriggers": ["Dashboard deployed", "First task queued & tracked"]
+    },
+    {
+      "id": "9.0.2-T2",
+      "name": "Implement Context-Aware Sidebar Chat",
+      "description": "Right-hand collapsible sidebar with tabs for Claude, Gizmo, CC, AzOAI, and All-Orchestrators. Auto-tags ProjectID/PhaseID/StepID for governance.",
+      "dependencies": ["9.0.2-T1"],
+      "governanceTriggers": ["First orchestrator message logged", "Auto-context tagging verified"]
+    },
+    {
+      "id": "9.0.2-T3",
+      "name": "Enable Auto-Governance Logging",
+      "description": "Auto-log all sidebar interactions to GovernanceLog JSONL and MemoryPlugin; maintain DriveMemory sync until 9.0.4.",
+      "dependencies": ["9.0.2-T2"],
+      "governanceTriggers": ["Memory anchor updated on chat", "DriveMemory log entry created"]
+    },
+    {
+      "id": "9.0.2-T4",
+      "name": "Orchestrator Interaction QA",
+      "description": "Verify sidebar chat triggers governance entries and preserves multi-agent context.",
+      "dependencies": ["9.0.2-T3"],
+      "governanceTriggers": ["QA report generated", "All orchestrators responsive"]
+    },
+    {
+      "id": "9.0.2-T5",
+      "name": "Prepare Native Storage Transition",
+      "description": "Ensure all chat and orchestration events can map to oApp DB. Prepare for deprecating DriveMemory/MemoryPlugin in 9.0.3/9.0.4.",
+      "dependencies": ["9.0.2-T3"],
+      "governanceTriggers": ["Migration mapping document created", "CC flag for 9.0.3-9.0.4 execution"]
+    }
+  ],
+  "uiSpec": {
+    "sidebarChat": {
+      "position": "right",
+      "width": "340px",
+      "collapsible": true,
+      "tabs": ["Claude", "Gizmo", "CC", "AzOAI", "All-Orchestrators"],
+      "contextAware": true,
+      "headerDisplay": "ProjectID > PhaseID > StepID",
+      "messageComposer": {
+        "placeholder": "Message orchestrators...",
+        "aiReplyIndicator": true,
+        "dualLoggingIcon": true
+      },
+      "quickAccess": ["Cmd+K", "Sidebar Icon"]
+    },
+    "orchestrationDashboard": {
+      "layout": {
+        "topPanel": "Phase progress bar with active step highlight",
+        "centerGrid": "Agent tiles showing status, active tasks, last message snippet",
+        "rightPanel": "Sidebar chat toggle or integrated chat"
+      },
+      "agentTile": {
+        "statusIndicators": {
+          "idle": "⚪",
+          "active": "🟢",
+          "processing": "🟡",
+          "error": "🔴"
+        },
+        "fields": ["AgentName", "Status", "ActiveTaskCount", "LastMessageSnippet"]
+      },
+      "taskQueue": {
+        "collapsible": true,
+        "clickToGovernance": true
+      },
+      "governanceOverlay": {
+        "clickable": ["Task", "Step", "AgentTile"],
+        "actions": ["Open GovernanceLog entry", "Highlight Memory Anchor"]
+      }
+    }
+  },
+  "sidebarChatFeatures": {
+    "contextSensitive": true,
+    "autoLogging": ["GovernanceLog JSONL", "MemoryPlugin", "DriveMemory (until migration)"],
+    "governanceMetadata": ["projectId", "phaseId", "stepId", "timestamp"]
+  },
+  "nextSteps": [
+    "Step 9.0.3: GitHub Sync & Merge Automation (with native storage migration)",
+    "Step 9.0.4: Azure Ephemeral Deployment & K8s testing (final storage migration)"
+  ],
+  "storageMigrationFlag": true,
+  "references": {
+    "driveMemoryPath": "/DriveMemory/OF-9.0/",
+    "governanceLogPath": "/DriveMemory/OF-9.0/Phase_9.0_Governance.jsonl",
+    "memoryPluginAnchor": "of-9.0-init-20250806"
+  },
+  "tags": [
+    "phase-9.0",
+    "multi-agent-orchestration",
+    "sidebar-chat",
+    "AzOAI",
+    "governance",
+    "storage-migration",
+    "ui-spec"
+  ]
+}

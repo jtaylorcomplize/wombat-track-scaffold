@@ -1,0 +1,38 @@
+{
+  "anchor_id": "WT-ANCHOR-QUALITY",
+  "timestamp": "2025-08-07T00:00:00Z",
+  "classification": "quality_assurance",
+  "location": "docs/quality/",
+  "purpose": "Code quality standards and continuous improvement tracking",
+  "description": "Quality assurance documentation directory containing code quality reports, linting configurations, git hygiene checklists, and audit result documentation",
+  "agent_integrations": [
+    "Auto-Audit Trigger Agent",
+    "Claude PR Validator", 
+    "Quality Gate Monitor"
+  ],
+  "quality_metrics": {
+    "lint_reports": "ESLint, TypeScript, and code style validation",
+    "git_hygiene": "Commit standards, branch management, repository cleanliness",
+    "audit_results": "Security scans, dependency checks, compliance reports",
+    "code_reviews": "Pull request standards and review guidelines"
+  },
+  "standards_guidelines": {
+    "code_formatting": "Consistent TypeScript/React codebase formatting",
+    "git_standards": "Commit message standards and branch naming conventions",
+    "security_audits": "Regular dependency audits and vulnerability assessments",
+    "ci_cd_gates": "Automated quality gates in pipeline"
+  },
+  "memory_relevance": {
+    "code_quality": 1.0,
+    "security_compliance": 0.9,
+    "git_hygiene": 0.8,
+    "continuous_improvement": 0.8
+  },
+  "linked_anchors": [
+    "WT-ANCHOR-GOVERNANCE",
+    "WT-ANCHOR-DEPLOYMENT",
+    "WT-ANCHOR-IMPLEMENTATION"
+  ],
+  "phase_association": "WT-8.9",
+  "step_reference": "File Cleanup + Reorg"
+}

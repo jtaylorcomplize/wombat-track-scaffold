@@ -1,0 +1,57 @@
+{
+  "sidebar_version_detected": null,
+  "admin_components_tested": [
+    "AdminDashboardTabs"
+  ],
+  "issues_found": [
+    {
+      "type": "navigation_test_failure",
+      "message": "Navigation test failed: net::ERR_CONNECTION_REFUSED at http://localhost:5174",
+      "timestamp": "2025-08-07T06:08:07.344Z"
+    },
+    {
+      "type": "admin_tabs_missing",
+      "message": "No admin dashboard tabs found",
+      "timestamp": "2025-08-07T06:08:07.491Z"
+    },
+    {
+      "type": "tab_click_failure",
+      "message": "Failed to click Data Explorer tab: SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:has-text(\"Data Explorer\")' is not a valid selector.",
+      "timestamp": "2025-08-07T06:08:07.674Z"
+    },
+    {
+      "type": "tab_click_failure",
+      "message": "Failed to click Import/Export tab: SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:has-text(\"Import/Export\")' is not a valid selector.",
+      "timestamp": "2025-08-07T06:08:07.678Z"
+    },
+    {
+      "type": "tab_click_failure",
+      "message": "Failed to click Editable Tables tab: SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:has-text(\"Editable Tables\")' is not a valid selector.",
+      "timestamp": "2025-08-07T06:08:07.682Z"
+    },
+    {
+      "type": "editable_tables_test_failure",
+      "message": "Editable tables test failed: SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:has-text(\"Editable Tables\")' is not a valid selector.",
+      "timestamp": "2025-08-07T06:08:07.686Z"
+    },
+    {
+      "type": "modal_test_failure",
+      "message": "Modal test failed: page.waitForTimeout is not a function",
+      "timestamp": "2025-08-07T06:08:07.696Z"
+    },
+    {
+      "type": "sidebar_toggle_missing",
+      "message": "Sidebar collapse/expand button not found",
+      "severity": "high",
+      "timestamp": "2025-08-07T06:08:07.700Z"
+    }
+  ],
+  "form_interactions_tested": [
+    "EditableTablesTest"
+  ],
+  "modal_behaviors_tested": [
+    "ModalDialogTest"
+  ],
+  "navigation_paths_tested": [],
+  "timestamp": "2025-08-07T06:08:01.720Z"
+}

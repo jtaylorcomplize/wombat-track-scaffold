@@ -20,7 +20,10 @@ import adminDetailRoutes from './api/admin-detail';
 import adminEditRoutes from './api/admin-edit';
 import importRoutes from './api/import';
 import gizmoSecretsRoutes from './api/import/gizmo-secrets';
-import { getAllProjects, getSubApps, getSubAppRecentProjects, getRuntimeStatus, getProjectById } from './api/orbis';
+import governanceDbRoutes from './api/governance-db';
+import governanceLogsRoutes from './api/governance-logs';
+import governanceProjectRoutes from './api/governance-project-integration';
+import { getAllProjects, getSubApps, getSubAppById, getSubAppRecentProjects, getRuntimeStatus, getProjectById } from './api/orbis';
 
 const app = express();
 const PORT = process.env.ADMIN_PORT || 3002;
@@ -49,6 +52,16 @@ app.get('/health', (req, res) => {
 
 // Admin route registration
 console.log('🔐 Registering admin API routes...');
+
+// Governance database routes (live database integration) - MUST be first for proper route matching
+app.use('/api/admin', governanceDbRoutes);
+console.log('   ✓ /api/admin/governance_logs - Live governance log database access');
+console.log('   ✓ /api/admin/phases - Phase data with governance links');
+console.log('   ✓ /api/admin/memory/:anchor - Memory anchor resolution');
+
+// Enhanced Governance Logs API routes (OF-GOVLOG)
+app.use('/api/admin/governance_logs', governanceLogsRoutes);
+console.log('   ✓ /api/admin/governance_logs/* - Enhanced governance logs API (CRUD, search, linking)');
 
 // Data Explorer routes (CRUD operations)
 app.use('/api/admin/live', liveAdminRoutes);
@@ -100,9 +113,17 @@ app.use('/api/admin/edit', adminEditRoutes);
 console.log('   ✓ /api/admin/edit/projects - Editable projects with draft/commit');
 console.log('   ✓ /api/admin/edit/phases - Editable phases with draft/commit');
 
+// Governance-Project Integration routes
+app.use('/api/admin/governance', governanceProjectRoutes);
+app.use('/api/admin/projects', governanceProjectRoutes);
+console.log('   ✓ /api/admin/governance/process-entry - Process governance log for project registration');
+console.log('   ✓ /api/admin/projects/backfill - Backfill missing projects from governance logs');
+console.log('   ✓ /api/admin/governance/validate-integrity - Validate project registration integrity');
+
 // Orbis API routes for cross-sub-app data
 app.get('/api/orbis/projects/all', getAllProjects);
 app.get('/api/orbis/sub-apps', getSubApps);
+app.get('/api/orbis/sub-apps/:id', getSubAppById);
 app.get('/api/orbis/sub-apps/:id/projects/recent', getSubAppRecentProjects);
 app.get('/api/orbis/runtime/status', getRuntimeStatus);
 app.get('/api/orbis/projects/:id', getProjectById);

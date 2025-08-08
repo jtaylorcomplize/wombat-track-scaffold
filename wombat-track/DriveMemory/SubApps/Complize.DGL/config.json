@@ -1,0 +1,46 @@
+{
+  "subAppId": "Complize.DGL",
+  "displayName": "Complize Document Governance Layer",
+  "description": "Sub-App within Orbis Forge to manage document deduplication, review cycles, Paligo integration, and Actionstep workflows.",
+  "owner": "Complize",
+  "status": "active",
+  "deployment": "monorepo",
+  "backend": "shared",
+  "pii_handling": false,
+  "phase": "DGL-1.0",
+  "created_at": "2025-08-07T12:45:00+11:00",
+  "tags": [
+    "document-governance",
+    "paligo",
+    "actionstep",
+    "complize"
+  ],
+  "capabilities": {
+    "document_management": true,
+    "review_cycles": true,
+    "paligo_integration": true,
+    "actionstep_workflows": true,
+    "deduplication": true
+  },
+  "integration_points": {
+    "paligo": {
+      "enabled": true,
+      "webhook_endpoint": "/api/complize/paligo/webhook",
+      "sync_frequency": "realtime"
+    },
+    "actionstep": {
+      "enabled": true,
+      "template_pointers": true,
+      "optional": true
+    },
+    "google_drive": {
+      "enabled": true,
+      "folder_structure": "hierarchical"
+    }
+  },
+  "governance": {
+    "review_required": true,
+    "approval_levels": 2,
+    "audit_logging": true
+  }
+}

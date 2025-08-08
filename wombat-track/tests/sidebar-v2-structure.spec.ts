@@ -1,4 +1,5 @@
-import { test, expect, Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('Enhanced Sidebar v2.0 Structure Tests', () => {
   let page: Page;

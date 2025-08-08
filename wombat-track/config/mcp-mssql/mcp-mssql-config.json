@@ -1,0 +1,216 @@
+{
+  "server": {
+    "name": "mcp-mssql-server",
+    "version": "1.0.0",
+    "description": "MCP Server for MSSQL canonical cloud database integration",
+    "transport": "http",
+    "port": 8002,
+    "host": "0.0.0.0"
+  },
+  "database": {
+    "type": "mssql",
+    "server": "${AZURE_SQL_SERVER}",
+    "database": "${AZURE_SQL_DATABASE}",
+    "authentication": {
+      "type": "azure_ad",
+      "managedIdentity": true,
+      "connectionString": "${AZURE_SQL_CONNECTION_STRING}"
+    },
+    "pool": {
+      "min": 2,
+      "max": 20,
+      "idleTimeoutMillis": 30000,
+      "requestTimeout": 30000
+    },
+    "options": {
+      "encrypt": true,
+      "trustServerCertificate": false,
+      "enableArithAbort": true
+    }
+  },
+  "compliance": {
+    "dataResidency": "australia_east",
+    "auditLogging": true,
+    "encryption": "TDE",
+    "backupRetention": 35,
+    "pointInTimeRestore": true
+  },
+  "mcp": {
+    "capabilities": [
+      "resources/read",
+      "resources/write", 
+      "resources/subscribe",
+      "tools/execute"
+    ],
+    "resources": [
+      {
+        "uri": "mssql://projects",
+        "name": "Projects",
+        "description": "Canonical project records",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "mssql://phases", 
+        "name": "Phases",
+        "description": "Project phase records",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "mssql://phase_steps",
+        "name": "PhaseSteps", 
+        "description": "Individual phase step records",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "mssql://governance_logs",
+        "name": "GovernanceLogs",
+        "description": "Governance event logs",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "mssql://memory_anchors",
+        "name": "MemoryAnchors",
+        "description": "Memory anchor references", 
+        "mimeType": "application/json"
+      }
+    ],
+    "tools": [
+      {
+        "name": "create_phase_step",
+        "description": "Create new PhaseStep from governance event",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "projectId": {"type": "string"},
+            "phaseId": {"type": "string"},
+            "stepName": {"type": "string"},
+            "description": {"type": "string"},
+            "governanceEventId": {"type": "string"},
+            "priority": {"type": "string", "enum": ["low", "medium", "high", "critical"]},
+            "assignedTo": {"type": "string"},
+            "dueDate": {"type": "string", "format": "date-time"}
+          },
+          "required": ["projectId", "phaseId", "stepName", "governanceEventId"]
+        }
+      },
+      {
+        "name": "update_step_progress",
+        "description": "Update PhaseStep progress and sync governance",
+        "inputSchema": {
+          "type": "object", 
+          "properties": {
+            "stepId": {"type": "string"},
+            "progress": {"type": "number", "minimum": 0, "maximum": 100},
+            "status": {"type": "string", "enum": ["not_started", "in_progress", "completed", "blocked", "cancelled"]},
+            "notes": {"type": "string"},
+            "completedBy": {"type": "string"}
+          },
+          "required": ["stepId", "progress", "status"]
+        }
+      },
+      {
+        "name": "sync_governance_events",
+        "description": "Sync governance events to canonical database",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "eventId": {"type": "string"},
+                  "timestamp": {"type": "string", "format": "date-time"},
+                  "eventType": {"type": "string"},
+                  "projectId": {"type": "string"},
+                  "phaseId": {"type": "string"},
+                  "data": {"type": "object"},
+                  "memoryAnchor": {"type": "string"}
+                }
+              }
+            }
+          },
+          "required": ["events"]
+        }
+      },
+      {
+        "name": "query_canonical_data",
+        "description": "Query canonical database with SQL",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {"type": "string"},
+            "parameters": {"type": "object"},
+            "timeout": {"type": "number", "default": 30000}
+          },
+          "required": ["query"]
+        }
+      },
+      {
+        "name": "create_memory_anchor",
+        "description": "Create memory anchor with canonical DB reference",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "anchorId": {"type": "string"},
+            "projectId": {"type": "string"}, 
+            "phaseId": {"type": "string"},
+            "stepId": {"type": "string"},
+            "anchorType": {"type": "string"},
+            "content": {"type": "object"},
+            "tags": {"type": "array", "items": {"type": "string"}}
+          },
+          "required": ["anchorId", "projectId", "anchorType", "content"]
+        }
+      }
+    ]
+  },
+  "events": {
+    "subscriptions": [
+      "governance_log_created",
+      "phase_step_updated", 
+      "project_status_changed",
+      "memory_anchor_created"
+    ],
+    "publishers": [
+      "phase_step_auto_created",
+      "governance_sync_completed", 
+      "canonical_data_updated"
+    ]
+  },
+  "monitoring": {
+    "healthCheck": {
+      "enabled": true,
+      "interval": 30000,
+      "timeout": 5000
+    },
+    "metrics": {
+      "enabled": true,
+      "endpoint": "/metrics",
+      "collectInterval": 60000
+    },
+    "logging": {
+      "level": "info",
+      "format": "json",
+      "destination": "azure_monitor"
+    }
+  },
+  "security": {
+    "authentication": {
+      "required": true,
+      "methods": ["azure_ad", "api_key"]
+    },
+    "authorization": {
+      "enabled": true,
+      "rbac": true
+    },
+    "encryption": {
+      "inTransit": true,
+      "atRest": true
+    },
+    "auditTrail": {
+      "enabled": true,
+      "retention": 90
+    }
+  }
+}

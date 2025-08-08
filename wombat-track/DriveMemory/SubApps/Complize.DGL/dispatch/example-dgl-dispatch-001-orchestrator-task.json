@@ -1,0 +1,35 @@
+{
+  "dispatchId": "dgl-dispatch-001-1754567890123",
+  "projectId": "complize-ui-retrofit",
+  "phaseId": "wt-3.3.1-dashboard-restore",
+  "stepId": "step-1-requirements-analysis",
+  "memoryAnchor": "of-9.0.8-orchestration-anchor",
+  "dglKeywords": ["DGL", "dispatch-ready", "complize-integration", "requirements-analysis"],
+  "dispatchType": "claude_task",
+  "coder": {
+    "agent": "claude",
+    "model": "claude-3.5-sonnet",
+    "temperature": 0.1,
+    "systemPrompt": "You are a technical analyst helping with requirements analysis for Complize.DGL integration"
+  },
+  "tester": {
+    "agent": "cc",
+    "testFramework": "jest",
+    "coverage": true,
+    "testTypes": ["unit", "integration", "dgl-specific"]
+  },
+  "governance": {
+    "required": true,
+    "memoryPluginUpdate": true,
+    "driveMemoryLogging": true,
+    "complianceChecks": ["ISO-27001", "GDPR", "AU-resident-data"]
+  },
+  "createdAt": "2025-08-07T14:45:00.000Z",
+  "status": "ready_for_execution",
+  "metadata": {
+    "phase": "OF-9.0.8",
+    "executorHooks": ["sdlc-phasestep-hooks.ts"],
+    "integrationPoints": ["complizeIntegrationService.ts"],
+    "dglDispatchReady": true
+  }
+}

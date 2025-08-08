@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { GovernanceLogger } from '../../services/governance-logger';
+import { GovernanceLogger } from '../../services/governanceLoggerBrowser';
 import type { RAGStatus } from '../../types/feature';
 
 interface MetricsData {

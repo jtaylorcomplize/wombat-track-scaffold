@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { SPQRDashboardContainer } from './SPQRDashboardContainer';
 import { SPQRDashboardMetrics } from './SPQRDashboardMetrics';
 import { SPQRDashboardAlerts } from './SPQRDashboardAlerts';
-import { GovernanceLogger, type DashboardHealthReport } from '../../services/governance-logger';
+import { GovernanceLogger } from '../../services/governanceLoggerBrowser';
 import { RAGBadge } from '../composer/RAGBadge';
 import type { RAGStatus } from '../../types/feature';
 

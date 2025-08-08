@@ -1,0 +1,15 @@
+{
+  "memoryAnchor": "of-8.6-cloud-migration-complete",
+  "chatTitle": "CC governance troubleshooting",
+  "timestampAEST": "2025-08-05T10:53",
+  "projectPhase": "OF-8.6 Cloud Migration",
+  "governanceLog": {
+    "steps": [
+      "Azure SQL Database Provisioned",
+      "CI/CD Merge Completed"
+    ],
+    "status": "Complete"
+  },
+  "driveMemoryPath": "/DriveMemory/OF-8.6/",
+  "batchProcessed": "2025-08-06"
+}

@@ -11,6 +11,8 @@ const ExecuteSurface = lazy(() => import('../surfaces/ExecuteSurface'));
 const DocumentSurface = lazy(() => import('../surfaces/DocumentSurface'));
 const GovernSurface = lazy(() => import('../surfaces/GovernSurface'));
 const IntegrateSurface = lazy(() => import('../surfaces/IntegrateSurface'));
+const CloudIDESurface = lazy(() => import('../surfaces/CloudIDESurface'));
+const MultiAgentOrchestrationSurface = lazy(() => import('../surfaces/MultiAgentOrchestrationSurface'));
 const SPQRRuntimeDashboard = lazy(() => import('../SPQR/SPQRRuntimeDashboard'));
 import { AdminModeProvider } from '../../contexts/AdminModeContext';
 import { ProjectProvider, useProjectContext } from '../../contexts/ProjectContext';
@@ -20,7 +22,7 @@ import type { Project, Phase, PhaseStep as Step } from '../../types/phase';
 import { mockPrograms } from '../../data/mockPrograms';
 import { fetchProjectsFromOApp } from '../../services/oappAPI';
 
-export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate' | 'spqr-runtime' | 'admin' | 'admin-data-explorer' | 'admin-import-export' | 'admin-orphan-inspector' | 'admin-runtime-panel' | 'admin-secrets-manager';
+export type WorkSurface = 'plan' | 'execute' | 'document' | 'govern' | 'integrate' | 'cloud-ide' | 'multi-agent-orchestration' | 'spqr-runtime' | 'admin' | 'admin-data-explorer' | 'admin-import-export' | 'admin-orphan-inspector' | 'admin-runtime-panel' | 'admin-secrets-manager';
 
 // Loading component for nested dashboards
 const DashboardLoading: React.FC = () => (
@@ -324,6 +326,18 @@ const AppLayoutInner: React.FC<AppLayoutProps> = ({ initialProjects = mockProjec
             <IntegrateSurface {...commonProps} />
           </Suspense>
         );
+      case 'cloud-ide':
+        return (
+          <Suspense fallback={<DashboardLoading />}>
+            <CloudIDESurface {...commonProps} />
+          </Suspense>
+        );
+      case 'multi-agent-orchestration':
+        return (
+          <Suspense fallback={<DashboardLoading />}>
+            <MultiAgentOrchestrationSurface {...commonProps} />
+          </Suspense>
+        );
       case 'spqr-runtime':
         return (
           <Suspense fallback={<DashboardLoading />}>
@@ -411,28 +425,20 @@ const AppLayoutInner: React.FC<AppLayoutProps> = ({ initialProjects = mockProjec
       data-testid="app-layout"
       style={{ background: 'var(--wt-neutral-50)' }}
     >
-      {/* Enhanced Sidebar v3.1 with Three-Tier Architecture */}
+      {/* Ultra-Simplified Static Sidebar */}
       <EnhancedSidebar
-        projects={projects}
-        currentProject={currentProject}
-        selectedSurface={selectedSurface}
-        collapsed={sidebarCollapsed}
-        currentSubApp={currentSubApp}
-        onProjectChange={handleProjectChange}
+        currentSurface={selectedSurface}
         onSurfaceChange={(surface) => {
           setSelectedSurface(surface);
           setShowSubAppDashboard(false);
         }}
-        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
-        onSubAppChange={setCurrentSubApp}
       />
 
-      {/* Main Content Area */}
+      {/* Main Content Area - Fixed margin for static sidebar */}
       <div 
         className={`flex-1 flex flex-col`}
         style={{ 
-          marginLeft: sidebarCollapsed ? 'var(--wt-sidebar-collapsed)' : 'var(--wt-sidebar-width)',
-          transition: 'margin-left var(--wt-transition-normal)'
+          marginLeft: '16rem' /* Fixed w-64 sidebar width */
         }}
       >
         {/* Sticky Breadcrumb Header */}
@@ -482,7 +488,10 @@ const AppLayoutInner: React.FC<AppLayoutProps> = ({ initialProjects = mockProjec
               onWorkSurfaceSelect={handleWorkSurfaceSelect}
             />
           ) : (
-            <div className="wt-content-max-width" style={{ paddingTop: 'var(--wt-space-6)' }}>
+            <div 
+              className={selectedSurface?.startsWith('admin') ? "w-full" : "wt-content-max-width"} 
+              style={{ paddingTop: 'var(--wt-space-6)' }}
+            >
               {renderCurrentSurface()}
             </div>
           )}

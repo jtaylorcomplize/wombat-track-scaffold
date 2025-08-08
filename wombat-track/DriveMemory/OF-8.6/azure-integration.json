@@ -1,0 +1,65 @@
+{
+  "anchorId": "wt-azure-baseline-of-infra-0.5",
+  "timestamp": "2025-08-06T00:29:43.196Z",
+  "phase": "OF-Infra-0.5",
+  "summary": "Azure baseline (RG, SP, Storage, VNet, Container) created with security hardening",
+  "artifacts": [
+    "ServicePrincipal",
+    "StorageAccount",
+    "VNet",
+    "ContainerInstance",
+    "KeyVault",
+    "LogAnalytics"
+  ],
+  "cloudInfra": {
+    "provider": "Azure",
+    "resourceGroup": "of-8-6-cloud-rg",
+    "region": "australiaeast",
+    "services": [
+      "KeyVault",
+      "Storage",
+      "ContainerInstance",
+      "LogAnalytics",
+      "ServiceBus",
+      "EventGrid"
+    ]
+  },
+  "governanceLogEntry": {
+    "timestamp": "2025-08-06T00:29:43.196Z",
+    "entryType": "CloudInfra",
+    "summary": "Azure baseline (RG, SP, Storage, VNet, Container) created with security hardening",
+    "phaseId": "OF-Infra-0.5",
+    "artifacts": [
+      "ServicePrincipal",
+      "StorageAccount",
+      "VNet",
+      "ContainerInstance",
+      "KeyVault",
+      "LogAnalytics"
+    ],
+    "riskLevel": "Low",
+    "nextStep": "Production Container Apps deployment",
+    "cloudInfra": {
+      "provider": "Azure",
+      "resourceGroup": "of-8-6-cloud-rg",
+      "region": "australiaeast",
+      "services": [
+        "KeyVault",
+        "Storage",
+        "ContainerInstance",
+        "LogAnalytics",
+        "ServiceBus",
+        "EventGrid"
+      ]
+    },
+    "memoryAnchor": "wt-azure-baseline-of-infra-0.5",
+    "prUrl": "https://github.com/orbis-platform/wombat-track/pull/azure-integration"
+  },
+  "status": "completed",
+  "nextActions": [
+    "Deploy production Container Apps",
+    "Configure CI/CD pipeline",
+    "Enable advanced monitoring",
+    "Implement disaster recovery"
+  ]
+}

@@ -137,7 +137,7 @@ function generateVisualizationConfig(cardId: string, visualType: string, fields:
   const category = cardId.split('_')[0];
   
   // Use the visual_type from master card library, or default logic
-  let chart_type = visualType || 'table';
+  const chart_type = visualType || 'table';
   
   // Color scheme based on category
   const colorSchemes: Record<string, string> = {

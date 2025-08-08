@@ -17,6 +17,7 @@ const ProjectAnalyticsDashboard = lazy(() => import('../components/strategic/Pro
 const TeamOverview = lazy(() => import('../components/strategic/TeamOverview'));
 const StrategicPlanning = lazy(() => import('../components/strategic/StrategicPlanning'));
 const SubAppOverview = lazy(() => import('../components/operational/SubAppOverview'));
+const SubAppsOverview = lazy(() => import('../components/operational/SubAppsOverview'));
 const SubAppProjectsList = lazy(() => import('../components/operational/SubAppProjectsList'));
 const SubAppProjectDetail = lazy(() => import('../components/operational/SubAppProjectDetail'));
 // const ProjectDashboard = lazy(() => import('../components/ProjectDashboard').then(module => ({ default: module.ProjectDashboard })));
@@ -30,6 +31,7 @@ const AdminDashboard = lazy(() => import('../components/admin/AdminDashboard'));
 const AdminProjectView = lazy(() => import('../pages/admin/AdminProjectView'));
 const AdminPhaseView = lazy(() => import('../pages/admin/AdminPhaseView'));
 const ProjectAdminEdit = lazy(() => import('../pages/admin/ProjectAdminEdit'));
+const AdminProjectEdit = lazy(() => import('../pages/admin/AdminProjectEdit'));
 
 // Loading component
 const RouteLoading: React.FC = () => (
@@ -76,15 +78,24 @@ export const OrbisRouter: React.FC = () => {
               </Route>
               
               {/* Operational Level Routes - Sub-Apps */}
-              <Route path="sub-apps/:subAppId" element={<SubAppOverview />}>
-                {/* Sub-app projects list */}
-                <Route path="projects" element={<SubAppProjectsList />} />
+              <Route path="sub-apps">
+                {/* Sub-Apps Overview - lists all SubApps */}
+                <Route path="overview" element={<SubAppsOverview />} />
                 
-                {/* Individual project details */}
-                <Route path="projects/:projectId" element={<SubAppProjectDetail />} />
+                {/* Individual Sub-App Routes */}
+                <Route path=":subAppId" element={<SubAppOverview />}>
+                  {/* Sub-app projects list */}
+                  <Route path="projects" element={<SubAppProjectsList />} />
+                  
+                  {/* Individual project details */}
+                  <Route path="projects/:projectId" element={<SubAppProjectDetail />} />
+                  
+                  {/* Default to projects list when accessing sub-app */}
+                  <Route index element={<Navigate to="projects" replace />} />
+                </Route>
                 
-                {/* Default to projects list when accessing sub-app */}
-                <Route index element={<Navigate to="projects" replace />} />
+                {/* Default sub-apps route goes to overview */}
+                <Route index element={<Navigate to="overview" replace />} />
               </Route>
 
               {/* System Level Routes - Platform Surfaces */}
@@ -98,10 +109,11 @@ export const OrbisRouter: React.FC = () => {
               <Route path="admin/secrets-manager" element={<AdminModeProvider><AdminDashboard initialView="secrets-manager" /></AdminModeProvider>} />
               <Route path="admin/sdlc-dashboard" element={<AdminModeProvider><AdminDashboard initialView="sdlc-dashboard" /></AdminModeProvider>} />
               <Route path="admin/editable-tables" element={<AdminModeProvider><AdminDashboard initialView="editable-tables" /></AdminModeProvider>} />
+              <Route path="admin/agent-communication" element={<AdminModeProvider><AdminDashboard initialView="agent-communication" /></AdminModeProvider>} />
               
               {/* Admin Deep-Link Routes */}
               <Route path="admin/projects/:projectId" element={<AdminModeProvider><AdminProjectView /></AdminModeProvider>} />
-              <Route path="admin/projects/:projectId/edit" element={<AdminModeProvider><ProjectAdminEdit /></AdminModeProvider>} />
+              <Route path="admin/projects/:projectId/edit" element={<AdminModeProvider><AdminProjectEdit /></AdminModeProvider>} />
               <Route path="admin/phases/:phaseId" element={<AdminModeProvider><AdminPhaseView /></AdminModeProvider>} />
             </Route>
             

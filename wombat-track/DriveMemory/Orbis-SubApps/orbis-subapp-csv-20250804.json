@@ -1,0 +1,10 @@
+{
+  "memoryAnchor": "orbis-subapp-csv-20250804",
+  "chatTitle": "Sub-App CSV summary",
+  "timestampAEST": "2025-08-04T12:00",
+  "projectPhase": "Orbis Intelligence - Sub-App Reconciliation",
+  "artifactType": "CSV",
+  "description": "Sub-App Project Merge/Reconciliation CSV for oApp link",
+  "driveMemoryPath": "/DriveMemory/Orbis-SubApps/",
+  "batchProcessed": "2025-08-06"
+}

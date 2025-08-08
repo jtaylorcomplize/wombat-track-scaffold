@@ -1,0 +1,136 @@
+{
+  "anchorId": "of-8.7.4-cost-optimization",
+  "timestamp": "2025-08-06T01:35:00+10:00",
+  "phaseId": "OF-8.7",
+  "stepId": "OF-8.7.4",
+  "title": "Cost Optimization & Alerts",
+  "status": "Planned", 
+  "objective": "Configure budget alerts and optimize cloud resources",
+  "description": "Implement cost monitoring and optimization strategies, configure budget alerts, optimize resource sizing, and establish cost governance policies.",
+  "scope": {
+    "costMonitoring": {
+      "budgets": [
+        "Monthly budget: $500 (with 80% alert)",
+        "Resource group budget: $300",
+        "Per-service budgets for major components",
+        "Development vs Production cost separation"
+      ],
+      "alerts": [
+        "Budget threshold alerts (50%, 80%, 100%)",
+        "Unusual spending pattern detection",
+        "Resource utilization alerts",
+        "Cost anomaly detection"
+      ]
+    },
+    "resourceOptimization": {
+      "containerApps": [
+        "Right-size CPU and memory allocation",
+        "Optimize scaling policies for cost",
+        "Use spot instances where appropriate",
+        "Implement efficient container packing"
+      ],
+      "databases": [
+        "SQL Database tier optimization",
+        "Reserved capacity for predictable workloads",
+        "Auto-pause for development databases",
+        "Storage optimization and cleanup"
+      ],
+      "storage": [
+        "Lifecycle management policies",
+        "Archive old data to cool/cold tiers",
+        "Optimize blob storage redundancy",
+        "Clean up unused snapshots and backups"
+      ]
+    },
+    "costGovernance": {
+      "policies": [
+        "Resource tagging enforcement for cost tracking",
+        "Automatic shutdown of dev resources",
+        "Size restrictions on expensive resources",
+        "Approval workflows for high-cost deployments"
+      ]
+    }
+  },
+  "deliverables": [
+    {
+      "name": "Budget alerts configured",
+      "description": "Comprehensive budget monitoring with proactive alerts",
+      "acceptance": "Budget alerts tested and notifications working"
+    },
+    {
+      "name": "Resource optimization implemented",
+      "description": "Resource right-sizing and cost optimization applied",
+      "acceptance": "15% cost reduction achieved from baseline"
+    },
+    {
+      "name": "Cost analytics dashboard",
+      "description": "Real-time cost monitoring and trend analysis",
+      "acceptance": "Dashboard provides actionable cost insights"
+    },
+    {
+      "name": "Governance policies active",
+      "description": "Automated cost controls and approval processes",
+      "acceptance": "Policies prevent unexpected cost increases"
+    }
+  ],
+  "implementation": {
+    "azureServices": [
+      "Azure Cost Management + Billing",
+      "Azure Advisor",
+      "Azure Policy",
+      "Azure Budgets",
+      "Azure Resource Graph"
+    ],
+    "optimization": {
+      "immediate": [
+        "Review and rightsize Container Apps",
+        "Optimize SQL Database service tier",
+        "Configure storage lifecycle policies",
+        "Clean up unused resources"
+      ],
+      "ongoing": [
+        "Implement reserved capacity where beneficial", 
+        "Monitor and adjust auto-scaling policies",
+        "Regular cost review meetings",
+        "Continuous optimization recommendations"
+      ]
+    },
+    "targets": {
+      "costReduction": "15% from current baseline",
+      "budgetCompliance": "Stay within monthly $500 budget", 
+      "utilizationImprovement": "Increase resource utilization to 70%+",
+      "wasteElimination": "Zero idle resources during business hours"
+    },
+    "scripts": [
+      "configure-budgets.sh",
+      "optimize-resources.sh", 
+      "setup-cost-policies.sh",
+      "generate-cost-report.sh"
+    ]
+  },
+  "successCriteria": [
+    "Monthly costs reduced by 15% or more",
+    "Budget alerts trigger before 100% spend",
+    "Resource utilization improved to 70%+",
+    "Zero cost surprises or unexpected charges",
+    "Cost per transaction decreased"
+  ],
+  "risks": [
+    {
+      "description": "Aggressive cost optimization may impact performance",
+      "mitigation": "Implement gradual optimization with performance monitoring",
+      "likelihood": "Medium", 
+      "impact": "High"
+    },
+    {
+      "description": "Budget constraints may limit scalability",
+      "mitigation": "Design budget policies with emergency overrides",
+      "likelihood": "Low",
+      "impact": "Medium"
+    }
+  ],
+  "dependencies": ["OF-8.7.3"],
+  "estimatedEffort": "4 person-days",
+  "plannedStartDate": "2025-08-24",
+  "plannedEndDate": "2025-08-28"
+}

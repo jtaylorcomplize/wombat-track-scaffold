@@ -4,7 +4,7 @@ import type { StrategicSurface } from '../../contexts/NavigationContext';
 import { useNavigationContext } from '../../contexts/NavigationContext';
 import { useNavigate } from 'react-router-dom';
 import { useAccordionState } from '../../hooks/useAccordionState';
-import { governanceLogger } from '../../services/enhancedGovernanceLogger';
+import { governanceLogger } from '../../services/governanceLoggerBrowser';
 import { useSubApps, useRuntimeStatus } from '../../hooks/useOrbisAPI';
 
 interface EnhancedSidebarV3Props {
@@ -103,18 +103,8 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
     data: runtimeStatus
   } = useRuntimeStatus();
 
-  // Debug: Log shapes before rendering
-  console.log('Sidebar subApps:', subApps);
-  if (subApps && Array.isArray(subApps)) {
-    subApps.forEach((subApp, i) => {
-      console.log(`subApp[${i}]`, subApp);
-      if (subApp.projects && Array.isArray(subApp.projects.recent)) {
-        subApp.projects.recent.forEach((project, j) => {
-          console.log(`subApp[${i}].projects.recent[${j}]`, project);
-        });
-      }
-    });
-  }
+  // Data validation without console logging
+  const validSubApps = subApps && Array.isArray(subApps) ? subApps : [];
 
   const handleAccordionToggle = (sectionId: string) => {
     const willBeExpanded = !expandedSections[sectionId];
@@ -236,11 +226,15 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
   const handleSidebarToggle = () => {
     const action = collapsed ? 'expand' : 'collapse';
 
-    // Enhanced governance logging for sidebar toggle
-    governanceLogger.logSidebarToggle(
-      action,
-      window.location.pathname
-    );
+    // Enhanced governance logging for sidebar toggle (with error handling)
+    try {
+      governanceLogger.logSidebarToggle(
+        action,
+        window.location.pathname
+      );
+    } catch (error) {
+      // Silently handle governance logging errors
+    }
 
     onToggleCollapse();
   };
@@ -265,8 +259,10 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
         <div className="p-4 border-b border-gray-200">
           <button
             onClick={handleSidebarToggle}
-            className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+            className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
             aria-label="Expand sidebar"
+            tabIndex={0}
+            type="button"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -295,8 +291,10 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
           <h1 className="text-xl font-bold text-gray-900">🏢 Orbis Platform</h1>
           <button
             onClick={handleSidebarToggle}
-            className="p-2 text-gray-500 hover:text-gray-700 hover:bg-white/50 rounded-md transition-colors"
+            className="p-2 text-gray-500 hover:text-gray-700 hover:bg-white/50 rounded-md transition-colors cursor-pointer"
             aria-label="Collapse sidebar"
+            tabIndex={0}
+            type="button"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
@@ -437,7 +435,12 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                               subAppStatus.status === 'warning' ? 'bg-amber-500' : 'bg-red-500'
                           }`} title={`Status: ${String(subAppStatus.status)} | Uptime: ${Number(subAppStatus.uptime).toFixed(1)}%`} />
                           <div>
-                            <h4 className="font-medium text-gray-900">{String(subApp.name)}</h4>
+                            <button
+                              onClick={() => navigate(`/orbis/sub-apps/${subApp.id}`)}
+                              className="font-medium text-gray-900 hover:text-purple-600 transition-colors text-left"
+                            >
+                              {String(subApp.name)}
+                            </button>
                             <p className="text-xs text-gray-500">
                               v{String(subApp.version)} • {Number(subAppStatus.responseTime).toFixed(0)}ms
                             </p>
@@ -502,7 +505,7 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
               )}
 
               {/* Refresh Button */}
-              <div className="pt-2">
+              <div className="pt-2 space-y-2">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -511,6 +514,12 @@ export const EnhancedSidebarV3: React.FC<EnhancedSidebarV3Props> = ({
                   className="w-full text-xs text-purple-600 hover:text-purple-700 py-2 px-3 border border-purple-200 rounded-md hover:bg-purple-50 transition-colors"
                 >
                   Refresh Status
+                </button>
+                <button
+                  onClick={() => navigate('/orbis/sub-apps/overview')}
+                  className="w-full text-xs text-blue-600 hover:text-blue-700 py-2 px-3 border border-blue-200 rounded-md hover:bg-blue-50 transition-colors"
+                >
+                  View All Sub-Apps →
                 </button>
               </div>
             </div>

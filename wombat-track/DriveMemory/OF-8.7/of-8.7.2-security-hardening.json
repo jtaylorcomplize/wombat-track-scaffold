@@ -1,0 +1,122 @@
+{
+  "anchorId": "of-8.7.2-security-hardening",
+  "timestamp": "2025-08-06T01:35:00+10:00",
+  "phaseId": "OF-8.7",
+  "stepId": "OF-8.7.2", 
+  "title": "Security & Compliance Hardening",
+  "status": "Planned",
+  "objective": "Enable Defender for Cloud, private endpoints, alerts",
+  "description": "Implement advanced security monitoring with Microsoft Defender for Cloud, configure private endpoints for enhanced network security, and establish comprehensive security alerting.",
+  "scope": {
+    "defenderForCloud": {
+      "services": [
+        "Container Apps Security",
+        "SQL Database Protection",
+        "Key Vault Security",
+        "Storage Account Protection"
+      ],
+      "features": [
+        "Threat detection and response",
+        "Vulnerability assessment",
+        "Security recommendations",
+        "Compliance dashboard"
+      ]
+    },
+    "privateEndpoints": {
+      "services": [
+        "Azure SQL Database",
+        "Key Vault",
+        "Storage Account",
+        "Container Registry"
+      ],
+      "networkSecurity": [
+        "Private DNS zones",
+        "Network security groups",
+        "Service endpoint policies",
+        "Firewall rules"
+      ]
+    },
+    "securityAlerting": {
+      "alertTypes": [
+        "Suspicious authentication attempts",
+        "Unusual data access patterns", 
+        "Security policy violations",
+        "Vulnerability discoveries"
+      ],
+      "channels": [
+        "Azure Security Center alerts",
+        "Email notifications",
+        "SIEM integration",
+        "Teams notifications"
+      ]
+    }
+  },
+  "deliverables": [
+    {
+      "name": "Defender for Cloud enabled",
+      "description": "Microsoft Defender for Cloud configured for all Azure services",
+      "acceptance": "Security score > 85% and threat protection active"
+    },
+    {
+      "name": "Private endpoints configured",
+      "description": "Private endpoints deployed for all critical services",
+      "acceptance": "Network traffic flows through private endpoints only"
+    },
+    {
+      "name": "Security alerts and monitoring",
+      "description": "Comprehensive security alerting and incident response",
+      "acceptance": "Security alerts tested and notifications working"
+    },
+    {
+      "name": "Compliance baseline established",
+      "description": "Security compliance policies and monitoring",
+      "acceptance": "Compliance dashboard shows 100% adherence"
+    }
+  ],
+  "implementation": {
+    "azureServices": [
+      "Microsoft Defender for Cloud",
+      "Private Link",
+      "Azure Security Center",
+      "Azure Policy",
+      "Network Watcher"
+    ],
+    "securityStandards": [
+      "Azure Security Benchmark",
+      "CIS Microsoft Azure Foundations",
+      "ISO 27001 controls",
+      "NIST Cybersecurity Framework"
+    ],
+    "scripts": [
+      "enable-defender-cloud.sh",
+      "configure-private-endpoints.sh", 
+      "setup-security-alerts.sh",
+      "validate-compliance.sh"
+    ]
+  },
+  "successCriteria": [
+    "Security score improved to 85%+ from baseline",
+    "All network traffic uses private endpoints",
+    "Security alerts trigger within 5 minutes",
+    "Zero high-severity security findings",
+    "Compliance policies 100% enforced"
+  ],
+  "risks": [
+    {
+      "description": "Private endpoints may break existing connectivity", 
+      "mitigation": "Phased rollout with connectivity validation",
+      "likelihood": "Medium",
+      "impact": "High"
+    },
+    {
+      "description": "Security monitoring may generate false positives",
+      "mitigation": "Tune alert thresholds and implement suppression rules",
+      "likelihood": "High",
+      "impact": "Low"
+    }
+  ],
+  "dependencies": ["OF-8.7.1"],
+  "estimatedEffort": "5 person-days",
+  "plannedStartDate": "2025-08-12",
+  "plannedEndDate": "2025-08-17"
+}

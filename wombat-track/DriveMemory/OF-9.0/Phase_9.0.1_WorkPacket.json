@@ -1,0 +1,56 @@
+{
+  "phaseId": "OF-9.0",
+  "stepId": "9.0.1",
+  "status": "In Progress",
+  "memoryAnchor": "of-9.0-init-20250806",
+  "objective": "Provision oApp Cloud IDE with GitHub PR workflows, CI/CD hooks, and governance traceability. Prepare storage migration for 9.0.3/9.0.4.",
+  "tasks": [
+    {
+      "id": "9.0.1-T1",
+      "name": "Provision oApp Cloud IDE",
+      "description": "Deploy browser-accessible IDE in oApp (VS Code Remote / Codespaces-style). Enable ephemeral branch creation.",
+      "dependencies": [],
+      "governanceTriggers": ["IDE provisioned", "First ephemeral branch created"]
+    },
+    {
+      "id": "9.0.1-T2",
+      "name": "Connect IDE to GitHub",
+      "description": "Enable branch → PR workflow. Verify claude-scaffold-enhanced.yml triggers CI/CD from IDE commits.",
+      "dependencies": ["9.0.1-T1"],
+      "governanceTriggers": ["First PR opened", "CI/CD workflow triggered successfully"]
+    },
+    {
+      "id": "9.0.1-T3",
+      "name": "Enable Governance & Memory Traceability",
+      "description": "Ensure IDE actions log to MemoryPlugin (of-9.0-init-20250806) and GovernanceLog JSONL. Confirm DriveMemory sync.",
+      "dependencies": ["9.0.1-T1", "9.0.1-T2"],
+      "governanceTriggers": ["First branch commit logged", "MemoryPlugin anchor updated"]
+    },
+    {
+      "id": "9.0.1-T4",
+      "name": "Storage Migration Prep",
+      "description": "Map MemoryPlugin anchors and DriveMemory artefacts for future oApp native storage migration in 9.0.3/9.0.4.",
+      "dependencies": ["9.0.1-T3"],
+      "governanceTriggers": ["Migration plan document stored in DriveMemory", "CC flagged 9.0.3-9.0.4 migration dependency"]
+    },
+    {
+      "id": "9.0.1-T5",
+      "name": "QA & Verification",
+      "description": "Run Puppeteer/MCP tests for IDE stability. Confirm GovernanceLog and MemoryPlugin entries generate automatically.",
+      "dependencies": ["9.0.1-T2", "9.0.1-T3"],
+      "governanceTriggers": ["QA report generated", "All governance entries validated"]
+    }
+  ],
+  "nextSteps": [
+    "Step 9.0.2: Multi-Agent Orchestration Dashboard",
+    "Step 9.0.3: GitHub Sync & Merge Automation (with storage migration)",
+    "Step 9.0.4: Azure Ephemeral Branch Deployment & Docker/K8s testing (with storage migration)"
+  ],
+  "storageMigrationFlag": true,
+  "references": {
+    "driveMemoryPath": "/DriveMemory/OF-9.0/",
+    "governanceLogPath": "/DriveMemory/OF-9.0/Phase_9.0_Governance.jsonl",
+    "memoryPluginAnchor": "of-9.0-init-20250806"
+  },
+  "tags": ["phase-9.0", "cloud-ide", "github-integration", "storage-migration", "governance"]
+}

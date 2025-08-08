@@ -191,7 +191,7 @@ async function verifyImplementation() {
     ];
 
     let accessibleCount = 0;
-    let totalCount = requiredDatabases.length;
+    const totalCount = requiredDatabases.length;
 
     requiredDatabases.forEach(dbName => {
       if (verificationResults[dbName]?.status === 'accessible') {

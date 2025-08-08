@@ -154,7 +154,7 @@ class OAppDedupOrphanLinker {
       }
 
       // This appears to be a fragment - try to reconstruct
-      let reconstructed = { ...current };
+      const reconstructed = { ...current };
       let j = i + 1;
       
       // Merge fragments until we find a valid project or reach end

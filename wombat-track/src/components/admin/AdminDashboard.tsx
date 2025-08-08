@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Database, FileText, Search, Activity, Settings, Shield, Key, Edit3, GitBranch } from 'lucide-react';
+import { Database, FileText, Search, Activity, Settings, Shield, Key, Edit3, GitBranch, BookOpen, Bot } from 'lucide-react';
 import { useAdminMode } from '../../contexts/AdminModeContext';
 import DataExplorer from '../../pages/admin/DataExplorer';
 import ImportExport from '../../pages/admin/ImportExport';
@@ -8,9 +8,13 @@ import RuntimeStatus from '../../pages/admin/RuntimeStatus';
 import { SecretsManager } from './SecretsManager';
 import EditableProjectsTable from './EditableProjectsTable';
 import EditablePhasesTable from './EditablePhasesTable';
+import EditableSubAppsTable from './EditableSubAppsTable';
 import SDLCDashboard from './SDLCDashboard';
+import AdminGovernancePolicies from './AdminGovernancePolicies';
+import AdminPhaseView from './AdminPhaseView';
+import AgentSelector from '../agents/AgentSelector';
 
-type AdminView = 'overview' | 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager' | 'sdlc-dashboard' | 'editable-tables';
+type AdminView = 'overview' | 'data-explorer' | 'import-export' | 'orphan-inspector' | 'runtime-panel' | 'secrets-manager' | 'sdlc-dashboard' | 'editable-tables' | 'governance-index' | 'phase-view' | 'agent-communication';
 
 interface AdminDashboardProps {
   initialView?: AdminView;
@@ -96,6 +100,24 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       label: 'Editable Tables',
       icon: <Edit3 size={20} />,
       description: 'Edit projects and phases with draft/commit workflow'
+    },
+    {
+      id: 'governance-index' as AdminView,
+      label: 'Governance Index',
+      icon: <BookOpen size={20} />,
+      description: 'Policy documentation and memory anchor management'
+    },
+    {
+      id: 'phase-view' as AdminView,
+      label: 'Phase View',
+      icon: <GitBranch size={20} />,
+      description: 'Live governance data integration and phase visibility'
+    },
+    {
+      id: 'agent-communication' as AdminView,
+      label: 'Agent Communication',
+      icon: <Bot size={20} />,
+      description: 'Direct communication with autonomous agents like Zoi'
     }
   ];
 
@@ -117,7 +139,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         return (
           <div className="space-y-8">
             <EditableProjectsTable />
+            <EditableSubAppsTable />
             <EditablePhasesTable />
+          </div>
+        );
+      case 'governance-index':
+        return <AdminGovernancePolicies />;
+      case 'phase-view':
+        return <AdminPhaseView />;
+      case 'agent-communication':
+        return (
+          <div className="p-6">
+            <AgentSelector />
           </div>
         );
       case 'overview':
@@ -244,7 +277,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     <div className="min-h-screen bg-gray-50 admin-theme">
       {/* Admin Navigation Tabs */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className={activeView === 'overview' ? "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" : "w-full px-4 sm:px-6 lg:px-8"}>
           <nav className="flex space-x-8 overflow-x-auto py-4">
             {adminTabs.map((tab) => (
               <button
@@ -265,7 +298,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className={activeView === 'overview' ? "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" : "w-full px-4 sm:px-6 lg:px-8 py-6"}>
         {renderActiveView()}
       </div>
     </div>

@@ -1,0 +1,41 @@
+{
+  "phaseId": "OF-8.7",
+  "linkedSubApp": {
+    "subAppId": "prog-orbis-001",
+    "subAppName": "Orbis Forge",
+    "description": "Primary Orbis development and orchestration platform",
+    "role": "Runtime optimization and scaling management"
+  },
+  "integration": {
+    "dashboards": [
+      "Performance monitoring dashboard",
+      "Cost optimization dashboard", 
+      "Security compliance dashboard",
+      "Governance validation dashboard"
+    ],
+    "endpoints": [
+      {
+        "name": "Phase Status API",
+        "url": "/api/phases/OF-8.7/status",
+        "description": "Real-time phase progress and metrics"
+      },
+      {
+        "name": "Step Completion Webhook",
+        "url": "/api/phases/OF-8.7/steps/complete",
+        "description": "Notifications for completed steps"
+      }
+    ],
+    "dataFlow": [
+      "Phase progress → Orbis Forge dashboard",
+      "Performance metrics → Sub-app analytics",
+      "Cost data → Financial reporting",
+      "Compliance status → Governance dashboard"
+    ]
+  },
+  "governanceSync": {
+    "enabled": true,
+    "syncInterval": "5 minutes",
+    "syncEndpoint": "https://oapp.orbis.com/sync/governance",
+    "authentication": "Azure AD managed identity"
+  }
+}

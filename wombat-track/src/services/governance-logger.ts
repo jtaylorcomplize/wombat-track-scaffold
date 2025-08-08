@@ -459,6 +459,32 @@ class GovernanceLogger {
     console.log('SPQR Phase 3 Logging Summary:', phaseCompleteEntry);
   }
 
+  // Method to log cloud migration specific entries
+  logCloudMigrationEntry(
+    entryType: 'Planning' | 'Implementation', 
+    summary: string, 
+    phaseRef: string, 
+    projectRef: string, 
+    gptDraftEntry: string
+  ): void {
+    this.log({
+      event_type: 'cloud_migration',
+      user_id: 'system',
+      user_role: 'system',
+      resource_type: 'dashboard',
+      resource_id: projectRef,
+      action: entryType.toLowerCase(),
+      success: true,
+      details: {
+        entryType,
+        summary,
+        phaseRef,
+        projectRef,
+        gptDraftEntry
+      }
+    });
+  }
+
   private checkAlerts(): void {
     const now = Date.now();
     
@@ -820,7 +846,7 @@ class GovernanceLogger {
     });
   }
 
-  async triggerAlert(rule: AlertRule, metricValue: number, context: Record<string, unknown>): Promise<void> {
+  async triggerAdvancedAlert(rule: AlertRule, metricValue: number, context: Record<string, unknown>): Promise<void> {
     for (const action of rule.actions) {
       switch (action.type) {
         case 'slack':

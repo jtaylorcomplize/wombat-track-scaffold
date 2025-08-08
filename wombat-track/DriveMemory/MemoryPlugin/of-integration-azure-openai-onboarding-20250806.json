@@ -1,0 +1,69 @@
+{
+  "anchorId": "of-integration-azure-openai-onboarding-20250806",
+  "type": "Integration",
+  "context": "Azure OpenAI (AzOAI) fully onboarded into oApp SDLC as Senior Developer role with governance logging enabled.",
+  "linkedGovernanceLog": "OF-INTEGRATION/Azure OpenAI Onboarding",
+  "artefacts": [
+    "azure-openai-briefing.md",
+    "azure-openai-system-prompt.txt",
+    "azure-openai-onboarding.sh"
+  ],
+  "relatedProjects": [
+    "OF-SDLC-IMP2",
+    "OF-8.8",
+    "OF-INTEGRATION",
+    "WT-*"
+  ],
+  "manualEntryRequired": true,
+  "created": "2025-08-06T14:33:00+10:00",
+  "status": "Active",
+  "integrationDetails": {
+    "systemAccess": {
+      "integrationService": "http://localhost:3001",
+      "apiEndpoints": 6,
+      "healthMonitoring": true,
+      "governanceLogging": true,
+      "codebaseAccess": "Full TypeScript/JavaScript",
+      "knowledgeSystem": "RAG enabled"
+    },
+    "teamIntegration": {
+      "role": "Senior Developer",
+      "teamMembers": ["Jackson (CEO)", "Gizmo (Product Manager)", "ClaudeCode (Systems Architect)", "GitHub Co-Pilot (Tester & Security)"],
+      "collaborationMethod": "API-driven with governance logging"
+    },
+    "compliance": {
+      "frameworks": ["ISO 27001", "AU Data Residency", "NIST Cybersecurity"],
+      "auditRetention": "7 years",
+      "dataResidency": "Australia East",
+      "securityLogging": "Complete"
+    },
+    "capabilities": [
+      "Code analysis and technical recommendations",
+      "Architecture guidance and design patterns", 
+      "Problem-solving and debugging support",
+      "Documentation generation and review",
+      "Integration support and API development"
+    ],
+    "immediateActions": [
+      "Health monitoring via /health endpoint",
+      "Codebase queries via /api/codebase/query",
+      "Governance access via /api/governance/query", 
+      "Knowledge queries via /api/memory/query",
+      "Recommendation logging via /api/governance/append"
+    ]
+  },
+  "documentation": {
+    "briefingDocument": "DriveMemory/OF-Integration/azure-openai-briefing.md",
+    "systemPrompt": "config/azure-openai-system-prompt.txt",
+    "onboardingScript": "scripts/azure-openai-onboarding.sh",
+    "apiDocumentation": "docs/of-integration-api.yaml",
+    "deploymentGuide": "DriveMemory/OF-Integration/deployment-guide.md"
+  },
+  "testResults": {
+    "integrationTest": "Passed",
+    "apiAccess": "Verified",
+    "governanceLogging": "Confirmed",
+    "complianceCheck": "Aligned",
+    "onboardingComplete": true
+  }
+}

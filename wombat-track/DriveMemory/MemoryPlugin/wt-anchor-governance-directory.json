@@ -1,0 +1,32 @@
+{
+  "anchor_id": "WT-ANCHOR-GOVERNANCE",
+  "timestamp": "2025-08-07T00:00:00Z",
+  "classification": "governance_framework",
+  "location": "docs/governance/",
+  "purpose": "Governance framework evolution and compliance automation",
+  "description": "Canonical governance documentation directory containing GovernanceLog schemas, MemoryPlugin anchor definitions, AI usage policies, and SDLC compliance frameworks",
+  "agent_integrations": [
+    "GovernanceLog Summariser",
+    "RAG Classifier", 
+    "Meeting → Decision Tracker"
+  ],
+  "schema_components": {
+    "governance_log_format": "Standardized audit trail and decision tracking",
+    "memory_anchor_schema": "Memory classification and anchor point management",
+    "ai_usage_guidelines": "Claude/GPT integration policies and best practices",
+    "sdlc_compliance": "Phase management and process governance"
+  },
+  "memory_relevance": {
+    "governance_policies": 1.0,
+    "ai_development_ethics": 0.9,
+    "audit_compliance": 0.9,
+    "process_standards": 0.8
+  },
+  "linked_anchors": [
+    "WT-ANCHOR-DEPLOYMENT",
+    "WT-ANCHOR-QUALITY", 
+    "WT-ANCHOR-IMPLEMENTATION"
+  ],
+  "phase_association": "WT-8.9",
+  "step_reference": "File Cleanup + Reorg"
+}

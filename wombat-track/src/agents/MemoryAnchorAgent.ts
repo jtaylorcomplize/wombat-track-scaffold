@@ -353,7 +353,7 @@ export class MemoryAnchorAgent extends EventEmitter {
 
       case 'decision':
         content.decisions.push(
-          `Critical decision documented: ${data.decision || 'Decision details in context'}`,
+          `Critical decision documented: ${(data as any)?.decision || 'Decision details in context'}`,
           `Decision rationale and impact assessed`,
           `Stakeholder consensus achieved`
         );
@@ -369,9 +369,9 @@ export class MemoryAnchorAgent extends EventEmitter {
 
       case 'governance':
         content.governanceData = {
-          compliance_status: data.compliance || 'verified',
-          audit_trail: data.auditTrail || 'documented',
-          approval_status: data.approval || 'pending'
+          compliance_status: (data as any)?.compliance || 'verified',
+          audit_trail: (data as any)?.auditTrail || 'documented',
+          approval_status: (data as any)?.approval || 'pending'
         };
         break;
 
@@ -611,11 +611,11 @@ ${JSON.stringify(anchor.metadata, null, 2)}
       case 'equals':
         return value === condition.value;
       case 'contains':
-        return typeof value === 'string' && value.toLowerCase().includes(condition.value.toLowerCase());
+        return typeof value === 'string' && value.toLowerCase().includes(String(condition.value).toLowerCase());
       case 'greater_than':
-        return typeof value === 'number' && value > condition.value;
+        return typeof value === 'number' && value > Number(condition.value);
       case 'less_than':
-        return typeof value === 'number' && value < condition.value;
+        return typeof value === 'number' && value < Number(condition.value);
       case 'exists':
         return value !== undefined && value !== null;
       case 'not_exists':
@@ -629,7 +629,7 @@ ${JSON.stringify(anchor.metadata, null, 2)}
    * Get nested value from object using dot notation
    */
   private getNestedValue(obj: unknown, path: string): unknown {
-    return path.split('.').reduce((current, key) => current?.[key], obj);
+    return path.split('.').reduce((current: any, key) => current?.[key], obj);
   }
 
   /**

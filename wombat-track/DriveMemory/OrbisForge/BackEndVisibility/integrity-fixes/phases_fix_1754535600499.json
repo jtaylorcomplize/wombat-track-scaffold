@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-08-07T03:00:00.499Z",
+  "fix": {
+    "operation": "Orphan Database Fix",
+    "table": "phases",
+    "recordId": "PM-1.1",
+    "field": "project_ref",
+    "oldValue": "Post-mortem - sidebar rendering failure (https://www.notion.so/Post-mortem-sidebar-rendering-failure-23ee1901e36e8000a4e2f117bb1bbfad?pvs=21)",
+    "newValue": "WT-UX11",
+    "action": "update",
+    "method": "live_database_update"
+  },
+  "memoryplugin_anchor": "of-bev-integrity-fix-1754535600499"
+}

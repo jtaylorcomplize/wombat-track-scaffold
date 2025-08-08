@@ -186,15 +186,9 @@ const PhasePlanContent: React.FC<{
   
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar Panel */}
+      {/* Static Legacy Sidebar Panel */}
       {showSidebar && (
-        <div className="w-80 flex-shrink-0">
-          <ProjectSidebarSimple
-            projects={sidebarProjects}
-            selectedProjectId={activeProjectId || ''}
-            onProjectSelect={setActiveProjectId}
-          />
-        </div>
+        <ProjectSidebarSimple />
       )}
       
       {/* Main Dashboard Area */}

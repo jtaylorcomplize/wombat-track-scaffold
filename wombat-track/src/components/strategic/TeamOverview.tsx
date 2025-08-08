@@ -66,14 +66,30 @@ const TeamOverview: React.FC = () => {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [teamMetrics, setTeamMetrics] = useState<TeamMetrics | null>(null);
 
-  // Fetch team data
+  // Fetch team data from canonical API
   useEffect(() => {
     const fetchTeamData = async () => {
       setIsLoading(true);
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Try to fetch from canonical team API first
+        const response = await fetch('/api/orbis/teams');
         
-        // Mock team data
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            setTeamMembers(result.data.members || []);
+            setTeamMetrics(result.data.metrics || null);
+            return;
+          }
+        }
+        
+        // Fallback: Empty state instead of mock data
+        console.warn('No canonical team API available, showing empty state');
+        setTeamMembers([]);
+        setTeamMetrics(null);
+        
+        // Remove all mock data - keeping only structure for when real API is available
+        /*
         const mockTeamMembers: TeamMember[] = [
           {
             id: 'tm-001',
@@ -184,7 +200,7 @@ const TeamOverview: React.FC = () => {
               {
                 projectId: 'proj-006',
                 projectName: 'Visa Processing Automation',
-                subAppId: 'prog-visacalc-001',
+                subAppId: 'prog-roam-001',
                 subAppName: 'VisaCalc Pro',
                 role: 'DevOps Support',
                 allocation: 40
@@ -266,6 +282,7 @@ const TeamOverview: React.FC = () => {
 
         setTeamMembers(mockTeamMembers);
         setTeamMetrics(mockMetrics);
+        */
 
         // Log governance event
         governanceLogger.logSidebarInteraction({
@@ -273,9 +290,10 @@ const TeamOverview: React.FC = () => {
           target: 'team-overview',
           context: 'sidebar_navigation',
           metadata: {
-            total_members: totalMembers,
+            total_members: teamMembers.length,
             department_filter: selectedDepartment,
-            sort_by: sortBy
+            sort_by: sortBy,
+            data_source: 'canonical_api_fallback'
           }
         });
         

@@ -1,0 +1,70 @@
+{
+  "memoryAnchor": "outstanding-subapp-data-20250806",
+  "category": "Sub-App and Orbis Data Hygiene",
+  "timestamp": "2025-08-06T12:45:00+11:00", 
+  "batchHandoverNumber": 3,
+  "description": "Tasks for Sub-App reconciliation, canonicalization, and orphan resolution in oApp",
+  "outstandingActions": [
+    {
+      "title": "Sub-App CSV Merge/Reconciliation",
+      "priority": "High",
+      "detail": "Ensure CSV ingestion to oApp and manual linkage of Sub-Apps to Projects and Phases.",
+      "estimatedEffort": "2-3 days",
+      "dependencies": ["CSV validation", "Data mapping rules", "oApp ingestion pipeline"],
+      "targetPhase": "Data Reconciliation & Integration",
+      "dataQualityChecks": [
+        "Duplicate Sub-App detection",
+        "Missing project linkages",
+        "Phase alignment validation",
+        "Orphaned record identification"
+      ]
+    },
+    {
+      "title": "Project/Phase Canonicalisation",
+      "priority": "High",
+      "detail": "Verify canonical counts, orphan resolution, and alignment of Projects and Phases in Admin DB.",
+      "estimatedEffort": "1-2 days",
+      "dependencies": ["Database schema validation", "Canonical counts verification", "Orphan resolution rules"],
+      "targetPhase": "Data Canonicalization & Cleanup",
+      "canonicalizationRules": [
+        "Unique project identification",
+        "Phase hierarchy validation", 
+        "Cross-reference integrity checks",
+        "Historical data preservation"
+      ]
+    }
+  ],
+  "riskLevel": "Medium",
+  "impactIfNotCompleted": "Data inconsistency, orphaned records, unclear project-phase relationships",
+  "dataQualityMetrics": {
+    "targetAccuracy": "99%+",
+    "allowedOrphanRate": "<1%",
+    "duplicateThreshold": "0%",
+    "linkageCompleteness": "95%+"
+  },
+  "recommendedPhaseSteps": [
+    {
+      "stepId": "DATA-1",
+      "title": "Sub-App CSV Validation and Quality Assessment",
+      "estimatedDuration": "1 day"
+    },
+    {
+      "stepId": "DATA-2", 
+      "title": "CSV Ingestion Pipeline Implementation and Testing",
+      "estimatedDuration": "2 days"
+    },
+    {
+      "stepId": "DATA-3",
+      "title": "Project/Phase Canonicalization and Orphan Resolution",
+      "estimatedDuration": "1 day"
+    },
+    {
+      "stepId": "DATA-4",
+      "title": "Data Integrity Validation and Reporting",
+      "estimatedDuration": "1 day"
+    }
+  ],
+  "relatedMemoryAnchors": ["orbis-subapp-csv-20250804"],
+  "dataGovernance": "Ensure GDPR compliance and data retention policies",
+  "driveMemoryPath": "/DriveMemory/OutstandingActions/20250806/"
+}

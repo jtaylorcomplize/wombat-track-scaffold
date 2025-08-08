@@ -1,0 +1,279 @@
+{
+  "server": {
+    "name": "mcp-azure-server",
+    "version": "1.0.0",
+    "description": "MCP Server for Azure Storage, Monitor, and CosmosDB integration",
+    "transport": "http",
+    "port": 8003,
+    "host": "0.0.0.0"
+  },
+  "azure": {
+    "subscription_id": "${AZURE_SUBSCRIPTION_ID}",
+    "tenant_id": "${AZURE_TENANT_ID}",
+    "resource_group": "${AZURE_RESOURCE_GROUP}",
+    "region": "australiaeast",
+    "identity": {
+      "type": "managed_identity",
+      "client_id": "${AZURE_CLIENT_ID}"
+    }
+  },
+  "storage": {
+    "account_name": "${AZURE_STORAGE_ACCOUNT}",
+    "containers": [
+      {
+        "name": "governance-artifacts",
+        "description": "Governance logs and audit artifacts",
+        "access_tier": "Hot",
+        "public_access": "None"
+      },
+      {
+        "name": "memory-anchors",
+        "description": "Memory anchor content and metadata",
+        "access_tier": "Cool",
+        "public_access": "None"
+      },
+      {
+        "name": "project-artifacts",
+        "description": "Project deliverables and documentation",
+        "access_tier": "Hot",
+        "public_access": "None"
+      },
+      {
+        "name": "backup-exports",
+        "description": "Database and system backups",
+        "access_tier": "Archive",
+        "public_access": "None"
+      }
+    ],
+    "compliance": {
+      "encryption": "microsoft_managed",
+      "versioning": true,
+      "soft_delete": true,
+      "retention_days": 90,
+      "audit_logging": true
+    }
+  },
+  "cosmosdb": {
+    "account_name": "${AZURE_COSMOSDB_ACCOUNT}",
+    "databases": [
+      {
+        "name": "WombatTrackComplize",
+        "description": "Complize canonical memory system",
+        "throughput": 400,
+        "containers": [
+          {
+            "name": "Projects",
+            "partition_key": "/projectId",
+            "indexing_policy": "default"
+          },
+          {
+            "name": "MemoryAnchors",
+            "partition_key": "/projectId",
+            "indexing_policy": "custom"
+          },
+          {
+            "name": "GovernanceEvents",
+            "partition_key": "/projectId",
+            "indexing_policy": "default"
+          },
+          {
+            "name": "PhaseSteps",
+            "partition_key": "/projectId",
+            "indexing_policy": "default"
+          }
+        ]
+      }
+    ],
+    "consistency_level": "Session",
+    "multi_region": false,
+    "backup": {
+      "type": "Continuous",
+      "retention_hours": 720
+    }
+  },
+  "monitoring": {
+    "application_insights": {
+      "instrumentation_key": "${AZURE_APPINSIGHTS_INSTRUMENTATION_KEY}",
+      "connection_string": "${AZURE_APPINSIGHTS_CONNECTION_STRING}"
+    },
+    "log_analytics": {
+      "workspace_id": "${AZURE_LOG_ANALYTICS_WORKSPACE_ID}",
+      "shared_key": "${AZURE_LOG_ANALYTICS_SHARED_KEY}"
+    },
+    "metrics": {
+      "custom_metrics": true,
+      "performance_counters": true,
+      "dependency_tracking": true
+    }
+  },
+  "mcp": {
+    "capabilities": [
+      "resources/read",
+      "resources/write",
+      "resources/subscribe",
+      "tools/execute",
+      "logging/write"
+    ],
+    "resources": [
+      {
+        "uri": "azure://storage/governance-artifacts",
+        "name": "GovernanceArtifacts",
+        "description": "Azure Blob Storage governance artifacts",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "azure://storage/memory-anchors",
+        "name": "MemoryAnchorsStorage",
+        "description": "Azure Blob Storage memory anchors",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "azure://cosmosdb/projects",
+        "name": "ComplizeProjects",
+        "description": "CosmosDB canonical project records",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "azure://cosmosdb/memory-anchors",
+        "name": "ComplizeMemoryAnchors",
+        "description": "CosmosDB memory anchor records",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "azure://monitor/metrics",
+        "name": "AzureMonitorMetrics",
+        "description": "Azure Monitor performance metrics",
+        "mimeType": "application/json"
+      }
+    ],
+    "tools": [
+      {
+        "name": "upload_governance_artifact",
+        "description": "Upload governance artifact to Azure Storage",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filename": {"type": "string"},
+            "content": {"type": "string"},
+            "contentType": {"type": "string"},
+            "metadata": {"type": "object"},
+            "container": {"type": "string", "default": "governance-artifacts"}
+          },
+          "required": ["filename", "content"]
+        }
+      },
+      {
+        "name": "store_memory_anchor_complize",
+        "description": "Store memory anchor in Complize CosmosDB",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "anchorId": {"type": "string"},
+            "projectId": {"type": "string"},
+            "phaseId": {"type": "string"},
+            "content": {"type": "object"},
+            "tags": {"type": "array", "items": {"type": "string"}},
+            "metadata": {"type": "object"}
+          },
+          "required": ["anchorId", "projectId", "content"]
+        }
+      },
+      {
+        "name": "sync_project_to_complize",
+        "description": "Sync project data to Complize canonical system",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "projectId": {"type": "string"},
+            "projectData": {"type": "object"},
+            "includePhases": {"type": "boolean", "default": true},
+            "includeSteps": {"type": "boolean", "default": true},
+            "includeGovernance": {"type": "boolean", "default": true}
+          },
+          "required": ["projectId", "projectData"]
+        }
+      },
+      {
+        "name": "query_complize_data",
+        "description": "Query Complize canonical data from CosmosDB",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "container": {"type": "string"},
+            "query": {"type": "string"},
+            "parameters": {"type": "array"},
+            "maxItems": {"type": "number", "default": 100}
+          },
+          "required": ["container", "query"]
+        }
+      },
+      {
+        "name": "send_custom_metric",
+        "description": "Send custom metric to Azure Monitor",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "metricName": {"type": "string"},
+            "value": {"type": "number"},
+            "dimensions": {"type": "object"},
+            "timestamp": {"type": "string", "format": "date-time"}
+          },
+          "required": ["metricName", "value"]
+        }
+      },
+      {
+        "name": "archive_to_storage",
+        "description": "Archive data to Azure Storage with lifecycle management",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {"type": "object"},
+            "archiveType": {"type": "string", "enum": ["governance", "memory", "project", "backup"]},
+            "retentionYears": {"type": "number", "default": 7},
+            "accessTier": {"type": "string", "enum": ["Hot", "Cool", "Archive"], "default": "Cool"}
+          },
+          "required": ["data", "archiveType"]
+        }
+      }
+    ]
+  },
+  "compliance": {
+    "dataResidency": "australia_east",
+    "encryption": {
+      "atRest": "microsoft_managed",
+      "inTransit": true,
+      "keyManagement": "azure_keyvault"
+    },
+    "backup": {
+      "enabled": true,
+      "retention": "90_days",
+      "geo_redundancy": false
+    },
+    "audit": {
+      "enabled": true,
+      "storage": "azure_monitor",
+      "retention": "2_years"
+    },
+    "access_control": {
+      "rbac": true,
+      "managed_identity": true,
+      "network_restrictions": true
+    }
+  },
+  "performance": {
+    "connection_pooling": {
+      "min_connections": 2,
+      "max_connections": 50,
+      "idle_timeout": 300000
+    },
+    "caching": {
+      "enabled": true,
+      "ttl": 300,
+      "max_size": 1000
+    },
+    "rate_limiting": {
+      "requests_per_minute": 1000,
+      "burst_size": 50
+    }
+  }
+}

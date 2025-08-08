@@ -1,0 +1,11 @@
+{
+  "memoryAnchor": "ai-guardrails-init-20250805",
+  "chatTitle": "AI guardrails summary",
+  "timestampAEST": "2025-08-05T13:39",
+  "projectPhase": "AI Guardrails Project (Planned)",
+  "projectName": "AI Privacy and Data Security - AU Guardrails",
+  "phase": "Planning",
+  "objective": "Identify and embed best practice guardrails for AI dev & deployment",
+  "driveMemoryPath": "/DriveMemory/AI-Guardrails/",
+  "batchProcessed": "2025-08-06"
+}

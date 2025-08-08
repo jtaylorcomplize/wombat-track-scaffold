@@ -1,7 +1,7 @@
 #!/usr/bin/env npx tsx
 
 import dotenv from 'dotenv';
-import { Client } from '@notionhq/client';
+import type { Client } from '@notionhq/client';
 import { createNotionClient } from '../src/utils/notionClient.ts';
 
 dotenv.config();

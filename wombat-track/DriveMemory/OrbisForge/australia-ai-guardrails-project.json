@@ -1,0 +1,125 @@
+{
+  "project": {
+    "projectId": "OF-AI-001",
+    "projectName": "Australia AI Guardrails – Ethical Product Lifecycle Integration",
+    "owner": "AI Governance Team",
+    "status": "Planning",
+    "category": "Regulatory Compliance",
+    "department": "Legal & Compliance",
+    "priority": "High",
+    "subApp_ref": "OrbisCore",
+    "RAG": "Green",
+    "startDate": "2025-08-10",
+    "endDate": "2026-02-02",
+    "overview": {
+      "purpose": "Embed best-practice guardrails for ethical, safe AI development & deployment aligned to Australia's proposed mandatory & voluntary standards.",
+      "scope": "Define, audit, and implement AI lifecycle governance processes across design, development, deployment, monitoring.",
+      "stakeholders": ["AI Governance Team", "Product Development", "Legal & Compliance", "Privacy & Security"],
+      "timelineEstimate": "Q3–Q4 2025",
+      "risks": ["Regulatory non-compliance", "Ethical breaches", "Bias or privacy incidents"]
+    },
+    "regulatoryContext": {
+      "mandatoryGuardrails": {
+        "status": "Proposed",
+        "count": 10,
+        "coverage": ["Risk management", "Human oversight", "Transparency", "Record-keeping", "Conformity assessments"],
+        "applicability": "High-risk AI systems for both developers and deployers"
+      },
+      "voluntaryStandard": {
+        "status": "In Effect",
+        "count": 10,
+        "overlap": 9,
+        "recommendation": "Early adoption ahead of formal regulation"
+      }
+    },
+    "phases": [
+      {
+        "phaseId": 1,
+        "name": "Discover & Align Voluntary Standard",
+        "startDate": "2025-08-10",
+        "endDate": "2025-09-07",
+        "goal": "Review and align current internal AI policies to the 10 voluntary guardrails.",
+        "deliverables": ["Gap analysis", "Adoption plan for voluntary guardrails", "Training materials"]
+      },
+      {
+        "phaseId": 2,
+        "name": "Map to Proposed Mandatory Guardrails",
+        "startDate": "2025-09-08",
+        "endDate": "2025-10-05",
+        "goal": "Interpret the 10 proposed mandatory guardrails and map organisational obligations.",
+        "deliverables": ["High-risk AI usage mapping", "Mandatory guardrail requirement matrix", "Conformity assessment plan"]
+      },
+      {
+        "phaseId": 3,
+        "name": "Governance & Process Design",
+        "startDate": "2025-10-06",
+        "endDate": "2025-11-02",
+        "goal": "Design or update governance workflows (oversight, risk management, transparency, record-keeping).",
+        "deliverables": ["Governance process flows", "Audit trail & record policy", "Human oversight and appeal mechanisms"]
+      },
+      {
+        "phaseId": 4,
+        "name": "Implementation & Training",
+        "startDate": "2025-11-03",
+        "endDate": "2025-12-14",
+        "goal": "Deploy policies and tools, train teams and integrate into product lifecycle.",
+        "deliverables": ["Updated policies/procedures", "Tooling integration (logging, assessment)", "Training sessions completed"]
+      },
+      {
+        "phaseId": 5,
+        "name": "Pilot & Compliance Assessment",
+        "startDate": "2026-01-05",
+        "endDate": "2026-02-02",
+        "goal": "Run pilot AI deployments, perform conformity assessments, iterate governance as needed.",
+        "deliverables": ["Pilot case studies", "Compliance audit reports", "Project governance log"]
+      }
+    ],
+    "milestones": [
+      {
+        "milestoneId": "M1",
+        "title": "Voluntary Guardrails Aligned",
+        "phaseId": 1,
+        "date": "2025-09-07"
+      },
+      {
+        "milestoneId": "M2",
+        "title": "Mandatory Guardrail Interpretation Complete",
+        "phaseId": 2,
+        "date": "2025-10-05"
+      },
+      {
+        "milestoneId": "M3",
+        "title": "Governance Process Finalised",
+        "phaseId": 3,
+        "date": "2025-11-02"
+      },
+      {
+        "milestoneId": "M4",
+        "title": "Rollout & Training Completed",
+        "phaseId": 4,
+        "date": "2025-12-14"
+      },
+      {
+        "milestoneId": "M5",
+        "title": "Pilot Compliance Certified",
+        "phaseId": 5,
+        "date": "2026-02-02"
+      }
+    ],
+    "metrics": {
+      "guardrailsAdopted": 0,
+      "highRiskUseCasesCovered": 0,
+      "governanceTrainingCompletion": 0,
+      "conformityAssessmentsCompleted": 0
+    },
+    "alignmentFeatures": {
+      "earlyLifecycleIntegration": "Focus on design, governance, testing, deployment, and monitoring from the outset",
+      "ethicalLegalAlignment": "Maps and operationalises both the voluntary and proposed mandatory guardrails",
+      "governanceAuditPreparedness": "Designed to capture audit logs, conformity assessments, governance entries, and transparency",
+      "iterationFriendly": "Piloting phase included to reflect evolving regulation and compliance mechanisms",
+      "traceabilityAccountability": "Incorporates oversight, record-keeping, right to challenge, bias mitigation, human control"
+    },
+    "createdAt": "2025-08-05T00:00:00Z",
+    "notionUrl": "https://www.notion.so/246e1901e36e8191aca9e363d90aeb77"
+  }
+}

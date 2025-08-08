@@ -476,6 +476,24 @@ class EnhancedGovernanceLogger {
     }
   }
 
+  logAgentAction(
+    agentId: string,
+    action: string,
+    context: Record<string, unknown> = {}
+  ): void {
+    const event = {
+      event: 'agent_action',
+      entityId: agentId,
+      timestamp: new Date().toISOString(),
+      context: {
+        action,
+        ...context
+      }
+    };
+
+    this.logEvent(event as GovernanceEvent);
+  }
+
   exportSessionSummary(): object {
     return {
       sessionId: this.sessionId,

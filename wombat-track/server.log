@@ -1,0 +1,17 @@
+[dotenv@17.2.1] injecting env (20) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+Server running on port 3001
+POST /api/github/trigger - Trigger GitHub workflow
+POST /api/azure-openai/chat - Azure OpenAI chat proxy (Step 9.0.2.2)
+POST /api/claude/chat - Claude Code chat proxy (Step 9.0.2.3)
+POST /api/governance/log - Receive governance logs from browser
+GET  /api/governance/health - Governance logging health check
+GET  /api/governance/logs - Governance logs (redirect to admin server)
+GET  /api/agents/available - Available agents
+GET  /api/zoi/active-tasks - Zoi active tasks
+GET  /api/orbis/teams - Teams (placeholder)
+GET  /api/orbis/strategic-initiatives - Strategic initiatives (placeholder)
+POST /api/orchestrator/execute - Execute signed instruction (OES)
+POST /api/orchestrator/status - Get execution status (OES)
+POST /api/integration/nightly-report - Receive nightly QA reports (Phase 9.0.5)
+GET  /api/integration/dashboard-status - Integration dashboard status (Phase 9.0.5)
+GET  /health - Health check
