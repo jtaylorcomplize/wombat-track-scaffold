@@ -16,7 +16,7 @@ interface GovernanceLogEntry {
   summary: string;
   status?: string;
   gptDraftEntry?: string;
-  details?: any;
+  details?: Record<string, unknown>;
   links?: string[];
   memory_anchor_id?: string;
   source?: string;
@@ -49,10 +49,10 @@ export const GovLogManagerModal: React.FC<GovLogManagerModalProps> = ({
   const [showLinkIntegrity, setShowLinkIntegrity] = useState(false);
   const [selectedLog, setSelectedLog] = useState<GovernanceLogEntry | null>(null);
   const [isCreating, setIsCreating] = useState(false);
-  const [autoClassifications, setAutoClassifications] = useState<Record<string, any>>({});
-  const [integrityReport, setIntegrityReport] = useState<any>(null);
+  const [autoClassifications, setAutoClassifications] = useState<Record<string, unknown>>({});
+  const [integrityReport, setIntegrityReport] = useState<Record<string, unknown> | null>(null);
   const [integrityLoading, setIntegrityLoading] = useState(false);
-  const [logIntegrityStatus, setLogIntegrityStatus] = useState<Record<string, any>>({});
+  const [logIntegrityStatus, setLogIntegrityStatus] = useState<Record<string, unknown>>({});
   
   // Filter options
   const [availablePhases, setAvailablePhases] = useState<string[]>([]);

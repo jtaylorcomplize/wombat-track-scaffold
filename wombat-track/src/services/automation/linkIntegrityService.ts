@@ -559,7 +559,7 @@ export class LinkIntegrityService {
       }
 
       // Prepare update data
-      const updateData: any = {};
+      const updateData: Partial<GovernanceLog> = {};
       
       switch (issue.field) {
         case 'related_phase':
