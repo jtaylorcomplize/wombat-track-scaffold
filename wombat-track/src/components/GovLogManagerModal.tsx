@@ -49,10 +49,10 @@ export const GovLogManagerModal: React.FC<GovLogManagerModalProps> = ({
   const [showLinkIntegrity, setShowLinkIntegrity] = useState(false);
   const [selectedLog, setSelectedLog] = useState<GovernanceLogEntry | null>(null);
   const [isCreating, setIsCreating] = useState(false);
-  const [autoClassifications, setAutoClassifications] = useState<Record<string, unknown>>({});
-  const [integrityReport, setIntegrityReport] = useState<Record<string, unknown> | null>(null);
+  const [autoClassifications, setAutoClassifications] = useState<Record<string, { entryType: string; classification: string; confidence: number; reasoning: string } | undefined>>({});
+  const [integrityReport, setIntegrityReport] = useState<LinkIntegrityReport | null>(null);
   const [integrityLoading, setIntegrityLoading] = useState(false);
-  const [logIntegrityStatus, setLogIntegrityStatus] = useState<Record<string, unknown>>({});
+  const [logIntegrityStatus, setLogIntegrityStatus] = useState<Record<string, { issueCount: number; severity: 'none' | 'info' | 'warning' | 'critical' }>>({});
   
   // Filter options
   const [availablePhases, setAvailablePhases] = useState<string[]>([]);
@@ -132,7 +132,7 @@ export const GovLogManagerModal: React.FC<GovLogManagerModalProps> = ({
     });
 
     const statuses = await Promise.all(statusPromises);
-    const statusMap: Record<string, any> = {};
+    const statusMap: Record<string, { issueCount: number; severity: 'none' | 'info' | 'warning' | 'critical' }> = {};
     statuses.forEach(({ logId, status }) => {
       statusMap[logId] = status;
     });
@@ -794,15 +794,38 @@ export const GovLogManagerModal: React.FC<GovLogManagerModalProps> = ({
 };
 
 // Link Integrity Tab Component
+interface LinkIntegrityReport {
+  totalIssues: number;
+  criticalIssues: number;
+  warningIssues: number;
+  infoIssues: number;
+  issues: Array<{
+    id: string;
+    severity: 'critical' | 'warning' | 'info';
+    description: string;
+    currentValue: string;
+    issueType: string;
+    field: string;
+    suggestions?: Array<{
+      value: string;
+      confidence: number;
+      reasoning: string;
+    }>;
+  }>;
+  scanDuration: number;
+  scannedLogs: number;
+  lastScan: string;
+}
+
 interface LinkIntegrityTabProps {
-  report: any;
+  report: LinkIntegrityReport | null;
   loading: boolean;
   onRefresh: () => void;
-  onRepair: (issueId: string, newValue: string, repairSource: 'auto' | 'manual' | 'suggestion') => Promise<any>;
+  onRepair: (issueId: string, newValue: string, repairSource: 'auto' | 'manual' | 'suggestion') => Promise<{ success: boolean; message: string }>;
 }
 
 const LinkIntegrityTab: React.FC<LinkIntegrityTabProps> = ({ report, loading, onRefresh, onRepair }) => {
-  const [selectedIssue, setSelectedIssue] = useState<any>(null);
+  const [selectedIssue, setSelectedIssue] = useState<LinkIntegrityReport['issues'][0] | null>(null);
   const [manualValue, setManualValue] = useState('');
 
   const getSeverityIcon = (severity: string) => {
@@ -831,7 +854,7 @@ const LinkIntegrityTab: React.FC<LinkIntegrityTabProps> = ({ report, loading, on
     }
   };
 
-  const handleApplySuggestion = async (issue: any, suggestion: any) => {
+  const handleApplySuggestion = async (issue: LinkIntegrityReport['issues'][0], suggestion: { value: string; confidence: number; reasoning: string }) => {
     try {
       await onRepair(issue.id, suggestion.value, 'suggestion');
       setSelectedIssue(null);
@@ -924,7 +947,7 @@ const LinkIntegrityTab: React.FC<LinkIntegrityTabProps> = ({ report, loading, on
         </div>
       ) : (
         <div className="space-y-3">
-          {report.issues.map((issue: any) => (
+          {report.issues.map((issue: LinkIntegrityReport['issues'][0]) => (
             <div key={issue.id} className={`rounded-lg border-2 p-4 ${getSeverityColor(issue.severity)}`}>
               <div className="flex items-start justify-between">
                 <div className="flex-1">
@@ -959,14 +982,14 @@ const LinkIntegrityTab: React.FC<LinkIntegrityTabProps> = ({ report, loading, on
               </div>
               
               {/* Auto-repair for high confidence suggestions */}
-              {issue.suggestions && issue.suggestions[0]?.confidence > 0.9 && (
+              {issue.suggestions && issue.suggestions[0]?.confidence && issue.suggestions[0].confidence > 0.9 && (
                 <div className="mt-3 pt-3 border-t border-gray-200">
                   <div className="flex items-center gap-2">
                     <CheckCircle size={16} className="text-green-500" />
                     <span className="text-sm text-green-700">Auto-repair available:</span>
                     <code className="px-2 py-1 bg-white rounded text-sm">{issue.suggestions[0].value}</code>
                     <button
-                      onClick={() => handleApplySuggestion(issue, issue.suggestions[0])}
+                      onClick={() => issue.suggestions?.[0] && handleApplySuggestion(issue, issue.suggestions[0])}
                       className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors"
                     >
                       Apply Fix
@@ -1008,7 +1031,7 @@ const LinkIntegrityTab: React.FC<LinkIntegrityTabProps> = ({ report, loading, on
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Suggested Repairs:</h4>
                   <div className="space-y-2">
-                    {selectedIssue.suggestions.map((suggestion: any, index: number) => (
+                    {selectedIssue.suggestions.map((suggestion: { value: string; confidence: number; reasoning: string }, index: number) => (
                       <div key={index} className="border border-gray-200 rounded p-3">
                         <div className="flex items-center justify-between">
                           <div className="flex-1">

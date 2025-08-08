@@ -347,7 +347,7 @@ export class LinkIntegrityService {
     try {
       switch (issue.issueType) {
         case 'phase':
-          suggestions.push(...await this.getPhasesuggestions(issue.currentValue));
+          suggestions.push(...await this.getPhaseSuggestions(issue.currentValue));
           break;
         case 'step':
           suggestions.push(...await this.getStepSuggestions(issue.currentValue, issue.logId));
@@ -369,7 +369,7 @@ export class LinkIntegrityService {
   /**
    * Get phase repair suggestions
    */
-  private async getPhasesuggestions(currentValue: string): Promise<LinkRepairSuggestion[]> {
+  private async getPhaseSuggestions(currentValue: string): Promise<LinkRepairSuggestion[]> {
     const suggestions: LinkRepairSuggestion[] = [];
 
     // Try to find similar phases using semantic search

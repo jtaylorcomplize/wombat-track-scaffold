@@ -1,0 +1,12 @@
+🚀 Starting 30-second load test...
+Endpoint: http://localhost:3002/health
+Concurrent requests: 5
+
+📊 Load Test Results:
+Duration: 30.16s
+Total Requests: 972
+Successful: 972
+Failed: 0
+Success Rate: 100.00%
+Average RPS: 32.23
+Average Response Time: 5.05ms
