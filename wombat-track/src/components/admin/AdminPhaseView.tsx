@@ -10,8 +10,11 @@ import {
   Link2,
   RefreshCw,
   Search,
-  Filter
+  Filter,
+  Eye
 } from 'lucide-react';
+import { GovLogManagerModal } from '../GovLogManagerModal';
+import HealthMetricsPanel from './HealthMetricsPanel';
 
 interface GovernanceLogEntry {
   id: number;
@@ -66,6 +69,8 @@ const AdminPhaseView: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'linked' | 'unlinked'>('all');
   const [refreshKey, setRefreshKey] = useState(0);
+  const [showGovLogModal, setShowGovLogModal] = useState(false);
+  const [govLogModalFilters, setGovLogModalFilters] = useState<any>({});
 
   // Fetch governance logs from database via API
   const fetchGovernanceLogs = async (): Promise<GovernanceLogEntry[]> => {
@@ -362,6 +367,11 @@ const AdminPhaseView: React.FC = () => {
         </div>
       </div>
 
+      {/* Health Metrics Panel */}
+      <div className="mb-6">
+        <HealthMetricsPanel />
+      </div>
+
       {currentPhase && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Statistics Panel */}
@@ -432,6 +442,16 @@ const AdminPhaseView: React.FC = () => {
                 </h2>
                 
                 <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => {
+                      setGovLogModalFilters({ phase_id: selectedPhase });
+                      setShowGovLogModal(true);
+                    }}
+                    className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors flex items-center space-x-1"
+                  >
+                    <Eye size={14} />
+                    <span>View All Logs</span>
+                  </button>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
                     <input
@@ -559,6 +579,17 @@ const AdminPhaseView: React.FC = () => {
                             )}
                             
                             {step.memoryAnchor && renderMemoryAnchor(step.memoryAnchor)}
+                            
+                            <button
+                              onClick={() => {
+                                setGovLogModalFilters({ step_id: step.stepId });
+                                setShowGovLogModal(true);
+                              }}
+                              className="text-xs text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+                            >
+                              <Eye size={12} />
+                              <span>View Logs</span>
+                            </button>
                           </div>
                         </div>
                         
@@ -575,6 +606,14 @@ const AdminPhaseView: React.FC = () => {
           </div>
         </div>
       )}
+      
+      {/* GovLog Manager Modal */}
+      <GovLogManagerModal
+        isOpen={showGovLogModal}
+        onClose={() => setShowGovLogModal(false)}
+        initialFilters={govLogModalFilters}
+        onLogUpdate={() => setRefreshKey(prev => prev + 1)}
+      />
     </div>
   );
 };

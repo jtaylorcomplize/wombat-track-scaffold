@@ -5,31 +5,37 @@ import { ProjectDashboard } from '../components/ProjectDashboard';
 import { SubAppDashboard } from '../components/SubAppDashboard';
 import { ProjectProvider } from '../contexts/ProjectContext';
 import { mockPrograms } from '../data/mockPrograms';
+import { logDebug } from '../utils/logger';
 
-// Lazy load nested dashboards with console logging
+// Lazy load nested dashboards with structured logging
 const PhaseDashboard = lazy(() => {
-  console.log('Loading PhaseDashboard component...');
+  logDebug('AppRouter', 'Loading PhaseDashboard component');
   return import('../components/projects/PhaseDashboard').then(module => ({ 
     default: module.PhaseDashboard 
   }));
 });
 
+const GovernanceLogsPage = lazy(() => {
+  logDebug('AppRouter', 'Loading GovernanceLogsPage component');
+  return import('../pages/GovernanceLogsPage');
+});
+
 const StepDashboard = lazy(() => {
-  console.log('Loading StepDashboard component...');
+  logDebug('AppRouter', 'Loading StepDashboard component');
   return import('../components/projects/StepDashboard').then(module => ({ 
     default: module.StepDashboard 
   }));
 });
 
 const SubAppMainDashboard = lazy(() => {
-  console.log('Loading SubAppMainDashboard component...');
+  logDebug('AppRouter', 'Loading SubAppMainDashboard component');
   return import('../components/subapps/SubAppMainDashboard').then(module => ({ 
     default: module.SubAppMainDashboard 
   }));
 });
 
 const SubAppAnalyticsDashboard = lazy(() => {
-  console.log('Loading SubAppAnalyticsDashboard component...');
+  logDebug('AppRouter', 'Loading SubAppAnalyticsDashboard component');
   return import('../components/subapps/SubAppAnalyticsDashboard').then(module => ({ 
     default: module.SubAppAnalyticsDashboard 
   }));
@@ -151,6 +157,14 @@ export const router = createBrowserRouter([
                 )
               }
             ]
+          },
+          {
+            path: 'governance',
+            element: (
+              <Suspense fallback={<DashboardLoading />}>
+                <GovernanceLogsPage />
+              </Suspense>
+            )
           }
         ]
       }

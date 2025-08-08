@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-08-08T06:56:04.286Z",
+  "baseUrl": "https://wombat-track-ui-prod.azurewebsites.net",
+  "cdnUrl": "https://wombat-track-assets.azureedge.net",
+  "scenarios": [
+    {
+      "name": "Home Page",
+      "url": "https://wombat-track-ui-prod.azurewebsites.net/",
+      "expectedStatus": 200,
+      "cacheHeaders": "public, max-age=300",
+      "status": "configured",
+      "notes": "Manual testing required after deployment"
+    },
+    {
+      "name": "React Router Route",
+      "url": "https://wombat-track-ui-prod.azurewebsites.net/projects",
+      "expectedStatus": 200,
+      "expectedContent": "should serve index.html",
+      "status": "configured",
+      "notes": "Manual testing required after deployment"
+    },
+    {
+      "name": "Static Asset",
+      "url": "https://wombat-track-ui-prod.azurewebsites.net/static/js/main.js",
+      "expectedStatus": 200,
+      "cacheHeaders": "public, max-age=31536000",
+      "status": "configured",
+      "notes": "Manual testing required after deployment"
+    },
+    {
+      "name": "API Route",
+      "url": "https://wombat-track-ui-prod.azurewebsites.net/api/health",
+      "expectedStatus": 200,
+      "cacheHeaders": "no-cache",
+      "status": "configured",
+      "notes": "Manual testing required after deployment"
+    }
+  ]
+}

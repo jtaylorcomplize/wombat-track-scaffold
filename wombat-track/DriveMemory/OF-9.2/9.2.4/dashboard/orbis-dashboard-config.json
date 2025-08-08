@@ -1,0 +1,99 @@
+{
+  "phase": "OF-9.2.4.4",
+  "summary": "Orbis Dashboard Health Panel Configuration",
+  "timestamp": "2025-08-08T11:30:00Z",
+  "components": {
+    "AppInsightsHealthPanel": {
+      "file": "src/components/orbis/AppInsightsHealthPanel.tsx",
+      "description": "React component for displaying live App Insights metrics and health status",
+      "features": [
+        "Real-time service health monitoring",
+        "Key performance indicators (KPIs)",
+        "Response time and request rate tracking",
+        "Error rate and availability metrics",
+        "Auto-refresh every 30 seconds",
+        "MCP integration status display"
+      ],
+      "services": [
+        {
+          "name": "WT-Backend-API",
+          "instrumentationKey": "e772a6e3-86c9-48f6-a220-e4fff3d32f25",
+          "appId": "6b7f280c-cf44-4fda-9985-215c272b3ad9",
+          "metrics": ["CPU Usage", "Memory Usage", "Active Connections", "Database Queries/min"]
+        },
+        {
+          "name": "WT-Frontend-UI",
+          "instrumentationKey": "919391a9-ea0c-4aac-97da-804672a75c19",
+          "appId": "8404bd9a-2eda-40de-a2d5-11015a59d55f",
+          "metrics": ["Page Load Time", "JavaScript Errors", "User Sessions", "Bounce Rate"]
+        }
+      ]
+    },
+    "AppInsightsAPI": {
+      "file": "src/api/appInsightsAPI.ts",
+      "description": "TypeScript service for interfacing with Azure Application Insights",
+      "functions": [
+        "queryAppInsights() - Execute KQL queries",
+        "getServiceHealth() - Get health metrics for specific service",
+        "getAllServicesHealth() - Get health for all services",
+        "sendCustomEvent() - Send custom telemetry events",
+        "testAppInsightsConnection() - Test API connectivity"
+      ],
+      "integrations": [
+        "Azure App Insights REST API",
+        "Governance logging API (/api/admin/governance_logs)",
+        "KQL (Kusto Query Language) support"
+      ]
+    },
+    "OrbisDashboard": {
+      "file": "src/components/orbis/OrbisDashboard.tsx",
+      "description": "Enhanced main dashboard with integrated App Insights health panel",
+      "modifications": [
+        "Added AppInsightsHealthPanel import",
+        "Integrated health panel above existing status rollup",
+        "Maintained existing integration health functionality"
+      ]
+    }
+  },
+  "healthMetrics": {
+    "backend": {
+      "primary": ["Response Time", "Request Rate", "Error Rate", "Availability"],
+      "detailed": ["CPU Usage", "Memory Usage", "Active Connections", "Database Queries/min"],
+      "thresholds": {
+        "cpuUsage": { "warning": 70, "error": 90 },
+        "memoryUsage": { "warning": 60, "error": 85 },
+        "responseTime": { "warning": 1000, "error": 2000 }
+      }
+    },
+    "frontend": {
+      "primary": ["Page Load Time", "Request Rate", "Error Rate", "Availability"],
+      "detailed": ["Page Load Time", "JavaScript Errors", "User Sessions", "Bounce Rate"],
+      "thresholds": {
+        "pageLoadTime": { "warning": 3, "error": 5 },
+        "bounceRate": { "warning": 40, "error": 60 }
+      }
+    }
+  },
+  "mcpIntegration": {
+    "governanceLogForwarder": {
+      "status": "configured",
+      "endpoint": "/api/governance-forwarder",
+      "description": "Azure Function for forwarding App Insights telemetry to governance logs"
+    },
+    "telemetryPipeline": {
+      "status": "active",
+      "flow": "App Insights → Function → Governance API → Dashboard",
+      "refreshRate": "30 seconds"
+    }
+  },
+  "deployment": {
+    "status": "completed",
+    "changes": [
+      "Created AppInsightsHealthPanel component with real-time metrics",
+      "Implemented appInsightsAPI service with KQL query support",
+      "Integrated health panel into main OrbisDashboard",
+      "Added auto-refresh and error handling",
+      "Configured MCP status integration display"
+    ]
+  }
+}

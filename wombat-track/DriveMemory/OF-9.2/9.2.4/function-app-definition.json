@@ -1,0 +1,124 @@
+{
+  "functionAppDefinition": {
+    "name": "wt-governancelog-forwarder",
+    "runtime": "node",
+    "version": "4",
+    "location": "australiaeast",
+    "resourceGroup": "of-8-6-cloud-rg",
+    "consumptionPlan": true,
+    "functions": [
+      {
+        "name": "governance-forwarder",
+        "triggerType": "httpTrigger",
+        "authLevel": "function",
+        "methods": ["POST"],
+        "description": "Forward App Insights telemetry to Governance Logs API"
+      }
+    ]
+  },
+  "codeStructure": {
+    "rootPath": "azure-functions/",
+    "files": [
+      {
+        "path": "host.json",
+        "purpose": "Function runtime configuration",
+        "features": [
+          "App Insights integration",
+          "5-minute function timeout",
+          "Extension bundle v2.x"
+        ]
+      },
+      {
+        "path": "governance-forwarder/function.json",
+        "purpose": "Function binding configuration",
+        "bindings": [
+          "HTTP trigger (POST)",
+          "HTTP response output"
+        ]
+      },
+      {
+        "path": "governance-forwarder/index.js", 
+        "purpose": "Main function logic",
+        "functionality": [
+          "Extract App Insights telemetry data",
+          "Transform to governance log format",
+          "Forward to /api/admin/governance_logs",
+          "Error handling and retry logic",
+          "Response formatting"
+        ]
+      },
+      {
+        "path": "governance-forwarder/package.json",
+        "purpose": "Dependencies and metadata",
+        "dependencies": ["axios@^1.6.0"]
+      }
+    ]
+  },
+  "deploymentConfiguration": {
+    "appSettings": [
+      {
+        "name": "GOVERNANCE_API_URL",
+        "value": "https://wombat-track-api-prod.azurewebsites.net/api/admin/governance_logs",
+        "description": "Target API endpoint for governance log forwarding"
+      },
+      {
+        "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+        "value": "InstrumentationKey=e772a6e3-86c9-48f6-a220-e4fff3d32f25;IngestionEndpoint=https://australiaeast-1.in.applicationinsights.azure.com/;LiveEndpoint=https://australiaeast.livediagnostics.monitor.azure.com/;ApplicationId=6b7f280c-cf44-4fda-9985-215c272b3ad9",
+        "description": "App Insights connection for function telemetry"
+      }
+    ],
+    "storageAccount": "Required for Azure Functions runtime",
+    "deploymentMethod": "ZIP deployment from built artifacts"
+  },
+  "telemetryTransformation": {
+    "inputFormat": "App Insights telemetry JSON",
+    "outputFormat": "Governance log entry",
+    "transformationLogic": {
+      "timestamp": "Current ISO timestamp",
+      "source": "azure-app-insights",
+      "level": "info",
+      "category": "observability", 
+      "event": "telemetry-ingestion",
+      "details": {
+        "resourceName": "From input.resourceName",
+        "metricName": "From input.metricName",
+        "value": "From input.value",
+        "timestamp": "From input.timestamp",
+        "dimensions": "From input.dimensions",
+        "rawTelemetry": "Complete input object"
+      },
+      "metadata": {
+        "forwardedFrom": "azure-function",
+        "functionName": "governance-forwarder",
+        "phase": "OF-9.2.4"
+      }
+    }
+  },
+  "errorHandling": {
+    "httpTimeout": "10 seconds",
+    "retryLogic": "Built into axios HTTP client",
+    "fallbackBehavior": "Return error response with details",
+    "logging": "All errors logged to Function App logs"
+  },
+  "testing": {
+    "testEndpoint": "/api/testForward",
+    "testMethod": "Manual trigger via HTTP POST",
+    "validationSteps": [
+      "Send sample telemetry to function",
+      "Verify transformation logic",
+      "Confirm governance API receives data",
+      "Check function execution logs"
+    ]
+  },
+  "integrationPoints": {
+    "appInsights": "Receives telemetry events via HTTP triggers",
+    "governanceAPI": "Posts transformed events to /api/admin/governance_logs",
+    "adminDashboard": "Telemetry events appear in governance logs panel"
+  },
+  "productionReadiness": {
+    "codeComplete": "✅ Function logic implemented",
+    "configurationReady": "✅ Bindings and settings defined",
+    "deploymentReady": "⚠️ Requires Azure Function App creation",
+    "testingRequired": "⚠️ Integration testing pending deployment"
+  }
+}

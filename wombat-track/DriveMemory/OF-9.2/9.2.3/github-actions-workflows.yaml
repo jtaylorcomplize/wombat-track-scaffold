@@ -1,0 +1,82 @@
+# GitHub Actions Workflows Summary - OF-9.2.3
+
+workflows:
+  - name: azure-app-service-deploy.yml
+    description: Main deployment pipeline for Azure App Service
+    triggers:
+      - push to main, feature/of-cloudmig-final, feature/of-9.2.3-lintfix
+      - pull_request to main
+      - workflow_dispatch with environment selection
+    jobs:
+      - quality-checks:
+          - Install dependencies
+          - Run linting (non-blocking)
+          - Run TypeScript check (non-blocking)
+          - Run tests
+          - Build application
+          - Archive artifacts
+      - deploy-staging:
+          - Deploy to staging slots
+          - Run smoke tests
+          - Save deployment manifest
+      - swap-to-production:
+          - Save rollback state
+          - Swap staging to production
+          - Verify production deployment
+      - rollback:
+          - Manual trigger for emergency rollback
+      - governance-logging:
+          - Create governance entries
+          - Upload artifacts
+    features:
+      - Blue-green deployment via slot swapping
+      - Automated rollback capability
+      - Non-blocking linting for infrastructure
+      - Governance log integration
+
+  - name: rollback.yml
+    description: Emergency rollback workflow
+    triggers:
+      - workflow_dispatch only
+    inputs:
+      - target: both/backend/frontend
+      - reason: Required text input
+    features:
+      - Capture pre-rollback state
+      - Swap production and staging slots
+      - Health check verification
+      - Governance logging
+      - Rollback artifacts preservation
+
+  - name: cloud-cicd-pipeline.yml
+    description: Existing Container Apps pipeline (preserved)
+    status: Active for Container Apps deployment
+    
+configuration:
+  environments:
+    - staging:
+        protection_rules: none
+        auto_deploy: true
+    - production:
+        protection_rules: required_reviewers
+        auto_deploy: false
+    - production-rollback:
+        protection_rules: manual_approval
+        
+  secrets_required:
+    - AZURE_CLIENT_ID
+    - AZURE_CLIENT_SECRET
+    - AZURE_SUBSCRIPTION_ID
+    - AZURE_TENANT_ID
+    - GITHUB_TOKEN (automatic)
+
+deployment_strategy:
+  type: Blue-Green via Slot Swapping
+  staging_validation: Smoke tests
+  production_gate: Manual approval for main branch
+  rollback_method: Slot swap reversal
+  
+artifact_retention:
+  build_artifacts: 30 days
+  governance_artifacts: 90 days
+  rollback_artifacts: 90 days

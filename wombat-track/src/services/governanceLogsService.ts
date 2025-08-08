@@ -6,6 +6,7 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import path from 'path';
+import { GovernanceProjectHooks } from './governanceProjectHooks';
 
 const DB_PATH = path.join(process.cwd(), 'databases', 'production.db');
 
@@ -77,6 +78,11 @@ export interface PaginationResult<T> {
 
 export class GovernanceLogsService {
   private db: any = null;
+  private projectHooks: GovernanceProjectHooks;
+
+  constructor() {
+    this.projectHooks = GovernanceProjectHooks.getInstance();
+  }
 
   async init() {
     if (!this.db) {
@@ -110,7 +116,15 @@ export class GovernanceLogsService {
       await this.createLinks(id, data.links);
     }
 
-    return await this.getGovernanceLog(id) as GovernanceLog;
+    // Try to create/update project from governance log
+    const createdLog = await this.getGovernanceLog(id) as GovernanceLog;
+    try {
+      await this.projectHooks.processGovernanceEntry(createdLog);
+    } catch (error) {
+      console.warn('Failed to process governance entry for project creation:', error);
+    }
+
+    return createdLog;
   }
 
   async getGovernanceLog(id: string): Promise<GovernanceLog | null> {

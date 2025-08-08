@@ -1,0 +1,92 @@
+[
+  {
+    "name": "NODE_ENV",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "AZURE_REGION",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "AZURE_KEYVAULT_NAME",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "AZURE_STORAGE_ACCOUNT",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "GOVERNANCE_LOGGING_ENABLED",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "ORBIS_ENVIRONMENT",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "API_VERSION",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "CORS_ENABLED",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "WEBSOCKET_ENABLED",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "RATE_LIMITING_ENABLED",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "DATABASE_URL",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "AZURE_STORAGE_CONNECTION_STRING",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "NOTION_TOKEN",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "GITHUB_TOKEN",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "OPENAI_API_KEY",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "SESSION_SECRET",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "JWT_SECRET",
+    "slotSetting": false,
+    "value": null
+  }
+]

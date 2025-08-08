@@ -1,0 +1,20 @@
+{
+  "name": "wt-governance-forwarder",
+  "version": "1.0.0",
+  "description": "Azure Function to forward App Insights telemetry to Wombat Track governance logs",
+  "main": "index.js",
+  "scripts": {
+    "start": "func start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.0.0"
+  },
+  "devDependencies": {
+    "@azure/functions-core-tools": "^4.0.0",
+    "jest": "^29.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

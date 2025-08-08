@@ -1,0 +1,8 @@
+
+> wombat-track@0.1.0 mcp:health
+> curl -f http://localhost:8002/health && curl -f http://localhost:8003/health 2
+
+
+> wombat-track@0.1.0 mcp:health
+> curl -f http://localhost:8002/health && curl -f http://localhost:8003/health 2
+

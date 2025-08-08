@@ -1,0 +1,11 @@
+{
+  "name": "wombat-track-ui-prod",
+  "resourceGroup": "of-8-6-cloud-rg",
+  "state": "Running", 
+  "defaultHostName": "wombat-track-ui-prod.azurewebsites.net",
+  "lastModified": "2025-08-08T11:07:20Z",
+  "slotSwapStatus": {
+    "current": "production",
+    "target": "staging"
+  }
+}

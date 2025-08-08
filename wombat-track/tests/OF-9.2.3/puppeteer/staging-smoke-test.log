@@ -1,0 +1,48 @@
+
+> wombat-track@0.1.0 qa:framework:staging
+> node scripts/qa-framework/run-qa-framework.js --environment staging 2
+
+🚀 Initializing QA Framework Runner...
+Environment: staging
+Config: /home/jtaylor/wombat-track-scaffold/wombat-track/scripts/qa-framework/qa-config.json
+🧠 Memory Plugin Integration initialized
+
+🏁 Starting Complete QA Pipeline...
+🚀 Initializing Configurable QA Framework...
+✅ Configuration loaded: Enhanced Admin UI QA Framework v1.0
+🌐 Launching browser for QA testing...
+
+🏁 Starting Configurable QA Test Suite...
+
+🧪 Running test suite: Admin UI Core Routes
+📝 Core admin functionality testing
+  🔍 Testing route: /admin
+    ❌ /admin: FAILED - net::ERR_NAME_NOT_RESOLVED at http://staging.wombat-track.local/admin
+  🔍 Testing route: /admin/data
+    ❌ /admin/data: FAILED - net::ERR_NAME_NOT_RESOLVED at http://staging.wombat-track.local/admin/data
+  🔍 Testing route: /admin/runtime
+    ❌ /admin/runtime: FAILED - net::ERR_NAME_NOT_RESOLVED at http://staging.wombat-track.local/admin/runtime
+
+📦 Generating QA bundle...
+
+🤖 Performing AI-assisted verification...
+
+📊 AI Verification Summary:
+AI Verification PASSED (Confidence: 100%)
+
+Console Analysis:
+  - 0 total log entries
+  - 0 critical errors
+  - 0 warnings
+
+Screenshot Analysis:
+  - 0 screenshots analyzed
+  - 0 total issues found
+  - 0 blank dashboards
+  - 0 error banners
+
+
+
+🧹 Cleaning up QA framework...
+
+🚨 QA FRAMEWORK PIPELINE FAILED

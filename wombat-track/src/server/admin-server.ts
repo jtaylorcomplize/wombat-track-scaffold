@@ -23,6 +23,8 @@ import gizmoSecretsRoutes from './api/import/gizmo-secrets';
 import governanceDbRoutes from './api/governance-db';
 import governanceLogsRoutes from './api/governance-logs';
 import governanceProjectRoutes from './api/governance-project-integration';
+import driveMemoryWatcherRoutes from './api/drive-memory-watcher';
+import DriveMemoryWatcherService from './services/driveMemoryWatcherService';
 import { getAllProjects, getSubApps, getSubAppById, getSubAppRecentProjects, getRuntimeStatus, getProjectById } from './api/orbis';
 
 const app = express();
@@ -59,9 +61,17 @@ console.log('   ✓ /api/admin/governance_logs - Live governance log database ac
 console.log('   ✓ /api/admin/phases - Phase data with governance links');
 console.log('   ✓ /api/admin/memory/:anchor - Memory anchor resolution');
 
-// Enhanced Governance Logs API routes (OF-GOVLOG)
+// Enhanced Governance Logs API routes (OF-GOVLOG + OF-9.5 Automation)
 app.use('/api/admin/governance_logs', governanceLogsRoutes);
 console.log('   ✓ /api/admin/governance_logs/* - Enhanced governance logs API (CRUD, search, linking)');
+console.log('   ✓ /api/admin/governance_logs/classify - Auto-classification with AI (OF-9.5.1)');
+console.log('   ✓ /api/admin/governance_logs/search/semantic - Semantic search (OF-9.5.1)');
+console.log('   ✓ /api/admin/governance_logs/link-integrity - Link integrity scanning (OF-9.5.2)');
+console.log('   ✓ /api/admin/governance_logs/link-integrity/repair - Link repair workflows (OF-9.5.2)');
+
+// DriveMemory Watcher API routes (OF-9.3.1)
+app.use('/api/admin/drive-memory-watcher', driveMemoryWatcherRoutes);
+console.log('   ✓ /api/admin/drive-memory-watcher/* - DriveMemory file watcher control and monitoring');
 
 // Data Explorer routes (CRUD operations)
 app.use('/api/admin/live', liveAdminRoutes);
@@ -186,6 +196,15 @@ async function startServer() {
     console.warn('⚠️  Database not ready, some features may not work');
   }
 
+  // Initialize DriveMemory watcher
+  try {
+    const watcherService = DriveMemoryWatcherService.getInstance();
+    await watcherService.initialize();
+    console.log('📁 DriveMemory watcher initialized successfully');
+  } catch (error) {
+    console.warn('⚠️  DriveMemory watcher initialization failed:', error);
+  }
+
   const server = app.listen(PORT, () => {
     console.log(`🚀 Admin API Server running on http://localhost:${PORT}`);
     console.log(`🔐 Serving admin endpoints for OF-BEV Phase 3`);
@@ -194,10 +213,12 @@ async function startServer() {
     console.log(`   • Import/Export - CSV and JSON data operations`);
     console.log(`   • Orphan Inspector - Detect and fix orphaned records`);
     console.log(`   • Runtime Panel - System health and job monitoring`);
+    console.log(`   • DriveMemory Watcher - Automatic governance log syncing`);
     console.log(`🔗 Test endpoints:`);
     console.log(`   GET  http://localhost:${PORT}/health`);
     console.log(`   GET  http://localhost:${PORT}/api/admin/tables/projects`);
     console.log(`   GET  http://localhost:${PORT}/api/admin/runtime/status`);
+    console.log(`   GET  http://localhost:${PORT}/api/admin/drive-memory-watcher/status`);
   });
 
   // ✅ Keep TSX process alive

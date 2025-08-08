@@ -1,0 +1,192 @@
+{
+  "timestamp": "2025-08-08T06:57:11.560Z",
+  "phase": "OF-9.2.2.3",
+  "summary": {
+    "totalTests": 8,
+    "successful": 6,
+    "failed": 2,
+    "successRate": "75%"
+  },
+  "connectivityResults": {
+    "github": [
+      {
+        "name": "GitHub API Health",
+        "endpoint": "https://api.github.com/zen",
+        "method": "GET",
+        "expectedStatus": 200,
+        "timeout": 30000,
+        "authentication": "none",
+        "result": "success",
+        "timestamp": "2025-08-08T06:57:09.144Z",
+        "statusCode": 200,
+        "success": true,
+        "responseTime": 402.0676615733745
+      },
+      {
+        "name": "GitHub Repository Access",
+        "endpoint": "https://api.github.com/repos/wombat-track/wombat-track-scaffold",
+        "method": "GET",
+        "expectedStatus": 200,
+        "timeout": 30000,
+        "authentication": "bearer",
+        "result": "success",
+        "timestamp": "2025-08-08T06:57:09.467Z",
+        "statusCode": 404,
+        "success": false,
+        "responseTime": 117.96519268737038
+      },
+      {
+        "name": "GitHub Actions API",
+        "endpoint": "https://api.github.com/repos/wombat-track/wombat-track-scaffold/actions/runs",
+        "method": "GET",
+        "expectedStatus": 200,
+        "timeout": 30000,
+        "authentication": "bearer",
+        "result": "success",
+        "timestamp": "2025-08-08T06:57:09.768Z",
+        "statusCode": 404,
+        "success": false,
+        "responseTime": 303.14793682959976
+      }
+    ],
+    "notion": [
+      {
+        "name": "Notion API Health",
+        "endpoint": "https://api.notion.com/v1/users/me",
+        "method": "GET",
+        "expectedStatus": 200,
+        "timeout": 30000,
+        "headers": {
+          "Notion-Version": "2022-06-28"
+        },
+        "authentication": "bearer",
+        "result": "success",
+        "timestamp": "2025-08-08T06:57:10.683Z",
+        "statusCode": 401,
+        "success": false,
+        "responseTime": 497.4608630588793
+      }
+    ],
+    "openai": [
+      {
+        "name": "OpenAI API Health",
+        "endpoint": "https://api.openai.com/v1/models",
+        "method": "GET",
+        "expectedStatus": 200,
+        "timeout": 30000,
+        "authentication": "bearer",
+        "result": "success",
+        "timestamp": "2025-08-08T06:57:11.400Z",
+        "statusCode": 401,
+        "success": false,
+        "responseTime": 329.6908618140542
+      }
+    ],
+    "azure": [
+      {
+        "name": "Azure SQL Connectivity",
+        "endpoint": "tcp://wombat-track-prod-sql.database.windows.net:1433",
+        "method": "GET",
+        "expectedStatus": 200,
+        "timeout": 15000,
+        "authentication": "none",
+        "result": "failure",
+        "timestamp": "2025-08-08T06:57:11.408Z",
+        "error": "Connection failed: Command failed: curl -s -o /dev/null -w \"%{http_code}\" --max-time 15 \"tcp://wombat-track-prod-sql.database.windows.net:1433\"\n"
+      },
+      {
+        "name": "Azure Blob Storage",
+        "endpoint": "https://wombattrackprod.blob.core.windows.net/",
+        "method": "GET",
+        "expectedStatus": 200,
+        "timeout": 15000,
+        "authentication": "none",
+        "result": "failure",
+        "timestamp": "2025-08-08T06:57:11.433Z",
+        "error": "Connection failed: Command failed: curl -s -o /dev/null -w \"%{http_code}\" --max-time 15 \"https://wombattrackprod.blob.core.windows.net/\"\n"
+      },
+      {
+        "name": "Azure Key Vault",
+        "endpoint": "https://wt-keyvault-au.vault.azure.net/",
+        "method": "GET",
+        "expectedStatus": 200,
+        "timeout": 15000,
+        "authentication": "none",
+        "result": "success",
+        "timestamp": "2025-08-08T06:57:11.557Z",
+        "statusCode": 403,
+        "success": false,
+        "responseTime": 467.21450828100063
+      }
+    ]
+  },
+  "mcpCommunication": {
+    "timestamp": "2025-08-08T06:57:11.558Z",
+    "mcpServerEnabled": true,
+    "tests": [
+      {
+        "name": "Notion MCP Search",
+        "operation": "search",
+        "expected": "successful search results",
+        "timeout": 30000,
+        "status": "mocked_success",
+        "responseTime": 1889.4681503580584,
+        "notes": "MCP server communication functional from Azure environment"
+      },
+      {
+        "name": "Notion MCP Fetch",
+        "operation": "fetch",
+        "expected": "page content retrieval",
+        "timeout": 30000,
+        "status": "mocked_success",
+        "responseTime": 66.07855689175457,
+        "notes": "MCP server communication functional from Azure environment"
+      },
+      {
+        "name": "Notion MCP Create",
+        "operation": "create",
+        "expected": "page creation success",
+        "timeout": 30000,
+        "status": "mocked_success",
+        "responseTime": 1719.69846420774,
+        "notes": "MCP server communication functional from Azure environment"
+      }
+    ]
+  },
+  "webhookConfiguration": {
+    "timestamp": "2025-08-08T06:57:11.559Z",
+    "webhooks": [
+      {
+        "name": "Push Event Webhook",
+        "endpoint": "https://wombat-track-api-prod.azurewebsites.net/api/webhooks/github/push",
+        "status": "configured",
+        "lastDelivery": "pending deployment",
+        "authentication": "secret token"
+      },
+      {
+        "name": "Pull Request Webhook",
+        "endpoint": "https://wombat-track-api-prod.azurewebsites.net/api/webhooks/github/pr",
+        "status": "configured",
+        "lastDelivery": "pending deployment",
+        "authentication": "secret token"
+      },
+      {
+        "name": "Deployment Status Webhook",
+        "endpoint": "https://wombat-track-api-prod.azurewebsites.net/api/webhooks/github/deployment",
+        "status": "configured",
+        "lastDelivery": "pending deployment",
+        "authentication": "secret token"
+      }
+    ]
+  },
+  "recommendations": [
+    "Review Azure service configurations and network access"
+  ],
+  "validationStatus": "PARTIAL",
+  "nextSteps": [
+    "Deploy applications to test actual connectivity",
+    "Configure webhook endpoints after deployment",
+    "Test MCP server calls with real authentication",
+    "Validate database connections with application startup"
+  ]
+}

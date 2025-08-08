@@ -1,0 +1,72 @@
+
+> wombat-track@0.1.0 validate:governance
+> tsx scripts/oes-governance-validation.ts 2
+
+
+[36m═══ 🟢 OES GOVERNANCE VALIDATION STARTING ═══[0m
+
+
+[36m═══ Validating DriveMemory Logs ═══[0m
+
+[33m⚠️  DriveMemory validation issue: ENOENT: no such file or directory, access '/home/jtaylor/wombat-track-scaffold/wombat-track/DriveMemory/OF-9-0'[0m
+
+[36m═══ Validating MemoryPlugin Anchors ═══[0m
+
+[34mℹ️  Total memory anchors: 27[0m
+
+[36m═══ Validating Main Governance Log ═══[0m
+
+[32m✅ Found 3 entries in main governance log[0m
+[34mℹ️  Latest: 2025-08-06T09:48:00.000Z - INSTRUCTION_PROTOCOL_TEST[0m
+[34mℹ️  Step-specific files: 4[0m
+
+[36m═══ Validating oApp Database ═══[0m
+
+[32m✅ Found 5 OF-9.0 entries in mock database[0m
+[34mℹ️  Latest: undefined - undefined[0m
+Mock DB closed
+
+[36m═══ Validating Triple Logging Consistency ═══[0m
+
+[34mℹ️  Unique timestamps across logs: 1[0m
+[34mℹ️  Unique actions across logs: 1[0m
+[33m⚠️  Only 3/4 logging locations have entries[0m
+
+[36m═══ Testing Governance Logger Service ═══[0m
+
+Mock: Logging phase step {
+  phaseId: 'OF-9.0',
+  stepId: '9.0.4',
+  action: 'OES_VALIDATION_TEST',
+  agent: 'validator',
+  details: {
+    test: true,
+    timestamp: '2025-08-08T10:39:36.172Z',
+    message: 'OES governance validation test entry'
+  },
+  status: 'success',
+  memoryAnchor: 'of-9.0-init-20250806'
+}
+[32m✅ Test entry created: mock-1754649576173[0m
+Mock: Querying logs { phaseId: 'OF-9.0', limit: 5 }
+[34mℹ️  Found 1 recent OF-9.0 logs[0m
+Mock: Generating report for OF-9.0
+[32m✅ Phase report generated with 5 actions[0m
+
+[36m═══ Governance Validation Report ═══[0m
+
+[32m✅ Report saved to: /home/jtaylor/wombat-track-scaffold/wombat-track/logs/governance/oes-validation-report.json[0m
+
+════════════════════════════════════════════════════════════
+VALIDATION SUMMARY
+════════════════════════════════════════════════════════════
+⚠️ DriveMemory/OF-9-0: error
+✅ MemoryPlugin: found
+✅ logs/governance: found (3 entries)
+✅ databases/production.db: found (5 entries)
+════════════════════════════════════════════════════════════
+Total Entries: 8
+Coverage: 3/4 locations
+════════════════════════════════════════════════════════════
+[31m❌ 
+⚠️  GOVERNANCE VALIDATION INCOMPLETE. Review the report above.[0m

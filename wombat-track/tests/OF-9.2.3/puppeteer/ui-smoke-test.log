@@ -1,0 +1,4 @@
+
+> wombat-track@0.1.0 test:ui
+> jest tests/ui 2
+

@@ -1,0 +1,53 @@
+
+> wombat-track@0.1.0 test:oes
+> tsx scripts/test-orchestrator-execution.ts 2
+
+
+[36m═══ Initializing Test Environment ═══[0m
+
+Mock: Initialized default secrets
+[32m✅ Test environment initialized[0m
+[34mℹ️  API Key: mock-api...[0m
+
+[36m═══ Starting Orchestrator Execution Tests ═══[0m
+
+
+[36m═══ Testing Instruction Validation ═══[0m
+
+[31m❌ Validation failed: Invalid version: undefined, Missing instructionId, Missing agentId, Missing timestamp, Missing operation, Missing signature[0m
+[32m✅ Invalid instruction correctly rejected[0m
+
+[36m═══ Testing File Operations ═══[0m
+
+[34mℹ️  Created file sync instruction[0m
+[31m❌ File operation failed: Cannot read properties of undefined (reading 'type')[0m
+
+[36m═══ Testing Database Operations ═══[0m
+
+[34mℹ️  Created governance update instruction[0m
+[31m❌ Database operation failed: Cannot read properties of undefined (reading 'type')[0m
+
+[36m═══ Testing Execution Status ═══[0m
+
+[34mℹ️  Simulating status endpoint call[0m
+[32m✅ Retrieved execution status (simulated)[0m
+[34mℹ️  Total executions: 3[0m
+[34mℹ️  Recent executions:[0m
+  - test-1: success (2025-08-08T10:39:29.750Z)
+  - test-2: success (2025-08-08T10:39:29.750Z)
+  - test-3: pending (2025-08-08T10:39:29.750Z)
+
+[36m═══ Test Results Summary ═══[0m
+
+[32m✅ Instruction Validation: PASSED[0m
+[31m❌ File Operations: FAILED - Cannot read properties of undefined (reading 'type')[0m
+[31m❌ Database Operations: FAILED - Cannot read properties of undefined (reading 'type')[0m
+[32m✅ Execution Status: PASSED[0m
+
+══════════════════════════════════════════════════
+Total Tests: 4
+[32mPassed: 2[0m
+[31mFailed: 2[0m
+══════════════════════════════════════════════════
+[31m❌ 
+⚠️  2 test(s) failed. Please check the errors above.[0m

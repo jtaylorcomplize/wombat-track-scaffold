@@ -1,0 +1,45 @@
+{
+  "timestamp": "2025-08-08T12:45:00+10:00",
+  "phase": "OF-9.2",
+  "status": "Clean migration tracker updated",
+  "dependencies": {
+    "completed": ["OF-9.3", "OF-9.4"],
+    "sandboxed": ["OF-9.5"],
+    "notes": "OF-9.3 and OF-9.4 closed; OF-9.5 isolated in sandbox branch to prevent interference with migration track"
+  },
+  "branchPolicy": {
+    "activeBranch": "feature/of-cloudmig-final",
+    "restrictedBranches": ["feature/of-9.5-automation"],
+    "mergePrevention": "No merges from sandbox branches until OF-9.2.6 complete"
+  },
+  "updatedPhases": {
+    "OF-9.2.2": {
+      "steps": [
+        "OF-9.2.2.1: Deploy backend API with production Key Vault secrets",
+        "OF-9.2.2.2: Deploy frontend with routing, caching, session persistence tests",  
+        "OF-9.2.2.3: Validate MCP server and GitHub API connectivity from Azure",
+        "OF-9.2.2.4: Run full CI/CD tests (lint, TS check, Puppeteer) before merge"
+      ]
+    },
+    "OF-9.2.3": {
+      "steps": [
+        "OF-9.2.3.1: Update GitHub Actions to use Azure build agents",
+        "OF-9.2.3.2: Enable staging/prod deployment slots for blue/green releases", 
+        "OF-9.2.3.3: Implement rollback using last stable artefact from DriveMemory/OF-9.2"
+      ]
+    },
+    "OF-9.2.4": {
+      "steps": [
+        "OF-9.2.4.1: Integrate Azure App Insights for API/UI telemetry",
+        "OF-9.2.4.2: Forward App Insights logs to GovernanceLog JSONL",
+        "OF-9.2.4.3: Configure Orbis Dashboard health panel using App Insights + MCP checks"
+      ]
+    }
+  },
+  "governanceHooks": {
+    "required": "GovernanceLog entry with entryType: Implementation after each phase",
+    "includes": ["PR link", "commit SHA", "artefact path in DriveMemory/OF-9.2/"],
+    "testing": "Mandatory lint → TS check → Puppeteer before merge to main",
+    "validation": "Validate governance log ingestion after OF-9.2.4 deployment"
+  }
+}

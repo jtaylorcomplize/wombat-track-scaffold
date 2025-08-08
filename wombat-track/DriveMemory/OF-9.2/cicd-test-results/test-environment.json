@@ -1,0 +1,7 @@
+{
+  "NODE_ENV": "test",
+  "CI": "true",
+  "SKIP_PREFLIGHT_CHECK": "true",
+  "GENERATE_SOURCEMAP": "false",
+  "DISABLE_ESLINT_PLUGIN": "false"
+}

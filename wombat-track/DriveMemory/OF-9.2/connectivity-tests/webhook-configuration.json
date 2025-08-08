@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-08-08T06:57:11.559Z",
+  "webhooks": [
+    {
+      "name": "Push Event Webhook",
+      "endpoint": "https://wombat-track-api-prod.azurewebsites.net/api/webhooks/github/push",
+      "status": "configured",
+      "lastDelivery": "pending deployment",
+      "authentication": "secret token"
+    },
+    {
+      "name": "Pull Request Webhook",
+      "endpoint": "https://wombat-track-api-prod.azurewebsites.net/api/webhooks/github/pr",
+      "status": "configured",
+      "lastDelivery": "pending deployment",
+      "authentication": "secret token"
+    },
+    {
+      "name": "Deployment Status Webhook",
+      "endpoint": "https://wombat-track-api-prod.azurewebsites.net/api/webhooks/github/deployment",
+      "status": "configured",
+      "lastDelivery": "pending deployment",
+      "authentication": "secret token"
+    }
+  ]
+}

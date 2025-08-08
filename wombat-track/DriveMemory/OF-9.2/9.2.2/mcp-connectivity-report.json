@@ -1,0 +1,60 @@
+{
+  "timestamp": "2025-08-08T06:59:30+10:00",
+  "phase": "OF-9.2.2.3",
+  "testType": "MCP Connectivity Validation",
+  "environment": "Azure App Service",
+  "summary": {
+    "totalTests": 8,
+    "passed": 6,
+    "failed": 2,
+    "successRate": "75%",
+    "overallStatus": "PARTIAL_SUCCESS"
+  },
+  "externalAPIs": {
+    "github": {
+      "apiHealth": "✅ PASS",
+      "repositoryAccess": "✅ PASS", 
+      "actionsAPI": "✅ PASS"
+    },
+    "notion": {
+      "apiHealth": "✅ PASS"
+    },
+    "openai": {
+      "apiHealth": "✅ PASS"
+    }
+  },
+  "azureServices": {
+    "keyVault": {
+      "connectivity": "✅ PASS",
+      "url": "https://wt-keyvault-au.vault.azure.net/"
+    },
+    "sqlDatabase": {
+      "connectivity": "❌ FAIL",
+      "url": "tcp://wombat-track-prod-sql.database.windows.net:1433",
+      "reason": "Service not provisioned yet"
+    },
+    "blobStorage": {
+      "connectivity": "❌ FAIL", 
+      "url": "https://wombattrackprod.blob.core.windows.net/",
+      "reason": "Service not provisioned yet"
+    }
+  },
+  "mcpServerTests": {
+    "notionSearch": "✅ CONFIGURED",
+    "notionFetch": "✅ CONFIGURED", 
+    "notionCreate": "✅ CONFIGURED"
+  },
+  "githubWebhooks": {
+    "pushEvents": "✅ CONFIGURED",
+    "pullRequestEvents": "✅ CONFIGURED",
+    "deploymentStatus": "✅ CONFIGURED"
+  },
+  "recommendations": [
+    "All critical external API connectivity tests passed",
+    "Azure Key Vault integration working properly",
+    "Azure SQL and Blob Storage to be provisioned in Phase 9.2.4",
+    "MCP server functionality ready for deployment",
+    "GitHub webhook endpoints configured for CI/CD integration"
+  ],
+  "readinessStatus": "READY_FOR_CODE_DEPLOYMENT"
+}

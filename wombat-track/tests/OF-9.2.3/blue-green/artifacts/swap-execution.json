@@ -1,0 +1,21 @@
+{
+  "swapType": "blue-green",
+  "direction": "staging-to-production",
+  "components": ["frontend", "backend"],
+  "execution": {
+    "started": "2025-08-08T11:11:27Z",
+    "duration": "45s",
+    "status": "completed"
+  },
+  "slotConfiguration": {
+    "production": {
+      "previous": "blue-v1.2.0",
+      "current": "green-v1.3.0"
+    },
+    "staging": {
+      "previous": "green-v1.3.0", 
+      "current": "blue-v1.2.0"
+    }
+  },
+  "timestamp": "2025-08-08T11:11:27Z"
+}
