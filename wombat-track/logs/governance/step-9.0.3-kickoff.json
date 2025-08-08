@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-08-06T15:43:00+10:00",
+  "phaseId": "OF-9.0",
+  "stepId": "9.0.3",
+  "status": "In Progress",
+  "memoryAnchor": "of-9.0-init-20250806",
+  "summary": "Step 9.0.3 GitHub Sync & Merge Automation initiated. Objective: implement branch-based GitHub sync and automated merge workflow with initial native oApp storage migration.",
+  "details": {
+    "objectives": [
+      "Configure GitHub branch sync with automated PR creation and merge pipeline",
+      "Integrate with CI/CD workflows for lint/test/build/deploy",
+      "Begin migration of governance and memory logs from DriveMemory + MemoryPlugin to oApp native storage",
+      "Ensure all orchestration and chat events flow natively into oApp DB"
+    ],
+    "expectedOutcome": "GitHub automation operational, native storage path prepared for full migration in Step 9.0.4."
+  },
+  "tags": ["phase-9.0", "github-sync", "merge-automation", "storage-migration", "governance"]
+}

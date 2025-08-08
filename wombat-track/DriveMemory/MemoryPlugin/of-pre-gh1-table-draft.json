@@ -1,0 +1,40 @@
+{
+  "id": "of-pre-gh1-table-draft",
+  "timestamp": "2025-08-06T22:09:38.129Z",
+  "context": {
+    "projectId": "WT-UX14",
+    "changes": {
+      "projectId": "WT-UX14",
+      "projectName": "Enhanced Sidebar v3.1",
+      "owner": "system",
+      "status": "Completed",
+      "description": "\"The MetaPlatform Dashboard is the internal admin surface for the AI-powered system layer that governs Wombat Track and its subcomponents (e.g. Docs Module, Phase Tracker, DriveMemory, Claude dispatchers).\nIt serves as:\n• A control tower for system status, agent dispatches, memory sync, and module health\n• The operational cockpit for MetaPlatform-level services\n• The foundation for future agent deployment, governance alerts, and module orchestration\"",
+      "startDate": "2025-07-28",
+      "endDate": "2025-07-29",
+      "priority": "High",
+      "budget": null,
+      "actualCost": null,
+      "estimatedHours": null,
+      "actualHours": null,
+      "completionPercentage": 100,
+      "risk": "Low",
+      "stakeholders": "Development Team",
+      "tags": "ui",
+      "category": "",
+      "department": "",
+      "createdAt": "Frontend",
+      "updatedAt": "2025-08-03T08:12:06.630Z",
+      "goals": "\"Future expansions will include:\n• Agent RAG status\n• Live dispatch triggers\n• MemoryPlugin controls\n• GPT/Claude model switches\n• Integration maps (Drive, GitHub, Notion)\"",
+      "scopeNotes": "\"💻 What the Dashboard Will Include (v1.0 Scope)AreaFeature🎛️ Overview CardsStatus of MemoryPlugin, Claude, GitHub, CI/CD🧠 Agent TrackerWhich agents are active (e.g. ClaudeOps, GitMemoryAgent)🗃️ Modules ViewDocs Module, Phase Tracker, Orbis Integration health🔁 Dispatch LogsClaude prompts, actions, API sync logs🚦 System HealthMemory sync state, schema compliance, error flags\nFuture expansions will include:\n• Agent RAG status\n• Live dispatch triggers\n• MemoryPlugin controls\n• GPT/Claude model switches\n• Integration maps (Drive, GitHub, Notion)\"",
+      "RAG": "Green",
+      "isDraft": 0,
+      "draftEditedBy": null,
+      "draftEditedAt": null,
+      "subApp_ref": null,
+      "editableByAdmin": 1
+    },
+    "userId": "admin",
+    "logId": 325
+  },
+  "type": "admin-table-operation"
+}

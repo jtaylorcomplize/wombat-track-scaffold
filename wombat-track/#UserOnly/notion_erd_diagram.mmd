@@ -1,0 +1,229 @@
+erDiagram
+    %% Core Project Management Entities
+    TASKS_COMPLIZE {
+        string TaskID PK
+        string Title
+        string Status
+        string Priority
+        string Type
+        string Platform
+        date Due
+        date StartDev
+        date CompletionTime
+        string AssignedTo
+        string Reporter
+        float Effort
+        string Outcome
+    }
+
+    TASKS_COMMAND_CENTER {
+        string TaskID PK
+        string Title
+        string Status
+        string Priority
+        string Source
+        date DueDate
+        string Owner
+        string Notes
+        string LinkedProjectID
+        string LinkedEmailID
+    }
+
+    PROJECTS_COMPLIZE {
+        string ProjectID PK
+        string Name
+        string Status
+        string Priority
+        string Module
+        date Dates
+        string People
+    }
+
+    PROJECTS_RML {
+        string ProjectID PK
+        string Name
+        string Status
+        string Organisation
+        string Driver
+        string Approver
+        date Timeline
+        date CompletedOn
+    }
+
+    SPRINTS {
+        string SprintID PK
+        string SprintPlanning
+        date Dates
+        boolean IsCurrentSprint
+        int TotalTasks
+    }
+
+    GOALS {
+        string GoalID PK
+        string Name
+        string Status
+        string Type
+        string Category
+        string Organisation
+        date DueDate
+        date CompletionDate
+        string PersonResponsible
+        string Approver
+        string NotesAndMeasures
+    }
+
+    %% Organizational Structure
+    DEPARTMENT {
+        string DepartmentID PK
+        string Teams
+    }
+
+    PEOPLE_ARCHIVED {
+        string PersonID PK
+        string Name
+        string Position
+        string Email
+        string Headshot
+    }
+
+    PEOPLE_REFERENCED {
+        string PersonID PK
+        string Name
+    }
+
+    %% Documentation & Resources
+    CZ_DOCUMENTATION {
+        string DocumentID PK
+        string Page
+        string Type
+        string Status
+        string Priority
+        string Tags
+        string Owner
+        string Driver
+        string Approver
+        date StartDate
+        int Effort
+    }
+
+    LEGAL_RESOURCES {
+        string ResourceID PK
+        string Name
+        string Type
+        string Status
+        string Tags
+        string Stakeholders
+        string Property
+        datetime Created
+        datetime LastEditedTime
+    }
+
+    TRAINING_RESOURCES {
+        string ResourceID PK
+        string Name
+        string Tags
+    }
+
+    %% Data Management
+    TEMPORARY_HOLDING_TABLE {
+        string BlockID PK
+        string BlockTitle
+        string BlockCategory
+        int BlockNumber
+        date Created
+        int ParsePass
+        string RawText
+        boolean ReadyForRouting
+    }
+
+    %% Archive & Legacy
+    MEETING_NOTES_ARCHIVE {
+        string NoteID PK
+        string Name
+        string Type
+        string Participants
+        datetime Created
+        string CreatedBy
+        datetime LastEditedTime
+    }
+
+    TODOS_ARCHIVED {
+        string TodoID PK
+        string TodoName
+        string Status
+        date DueDate
+        string Owner
+        string Notes
+        datetime CreatedTime
+        string CreatedBy
+    }
+
+    %% External/Unknown References
+    UNKNOWN_SOURCE_DOC {
+        string DocID PK
+        string Name
+    }
+
+    UNKNOWN_PROPERTY {
+        string PropertyID PK
+        string Name
+    }
+
+    UNKNOWN_MASTER_TASK {
+        string TaskID PK
+        string Name
+    }
+
+    UNKNOWN_IDS {
+        string IDSID PK
+        string Name
+    }
+
+    UNKNOWN_GOAL_REF {
+        string GoalID PK
+        string Name
+    }
+
+    UNKNOWN_TASKS_REF {
+        string TaskID PK
+        string Name
+    }
+
+    %% Core Relationships - Project Management Triangle
+    TASKS_COMPLIZE ||--o{ PROJECTS_COMPLIZE : "belongs_to"
+    TASKS_COMPLIZE ||--o| SPRINTS : "assigned_to"
+    SPRINTS ||--o{ TASKS_COMPLIZE : "contains"
+    PROJECTS_COMPLIZE ||--o{ TASKS_COMPLIZE : "has"
+
+    %% RML Project Management
+    PROJECTS_RML ||--o{ GOALS : "achieves"
+    GOALS ||--o{ PROJECTS_RML : "drives"
+    PROJECTS_RML ||--o| DEPARTMENT : "owned_by"
+    PROJECTS_RML ||--o{ UNKNOWN_TASKS_REF : "has"
+
+    %% Documentation Integration
+    TASKS_COMPLIZE ||--o{ CZ_DOCUMENTATION : "documented_by"
+    CZ_DOCUMENTATION ||--|| CZ_DOCUMENTATION : "parent_child"
+    CZ_DOCUMENTATION ||--o{ TASKS_COMPLIZE : "relates_to"
+
+    %% Organizational Structure
+    DEPARTMENT ||--o{ PEOPLE_REFERENCED : "employs"
+
+    %% Task Dependencies
+    TASKS_COMPLIZE ||--o{ TASKS_COMPLIZE : "blocks"
+    TASKS_COMPLIZE ||--o{ TASKS_COMPLIZE : "blocked_by"
+
+    %% Data Staging
+    TEMPORARY_HOLDING_TABLE ||--o{ UNKNOWN_SOURCE_DOC : "sourced_from"
+
+    %% Legacy System Relations
+    MEETING_NOTES_ARCHIVE ||--o{ UNKNOWN_PROPERTY : "relates_to"
+    MEETING_NOTES_ARCHIVE ||--o{ UNKNOWN_MASTER_TASK : "references"
+    TODOS_ARCHIVED ||--o{ UNKNOWN_IDS : "from"
+    TODOS_ARCHIVED ||--o{ UNKNOWN_GOAL_REF : "achieves"
+
+    %% Standalone Resources (No Relations)
+    %% PEOPLE_ARCHIVED - Isolated archive
+    %% LEGAL_RESOURCES - Standalone resource library
+    %% TRAINING_RESOURCES - Standalone training materials
+    %% TASKS_COMMAND_CENTER - Independent task system

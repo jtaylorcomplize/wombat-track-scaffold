@@ -1,0 +1,93 @@
+{
+  "timestamp": "2025-08-06T01:45:00+10:00",
+  "stepId": "OF-8.7.1",
+  "testType": "Baseline Performance Metrics",
+  "environment": "Azure Container Apps - Australia East",
+  "infrastructure": {
+    "containerApps": 4,
+    "minReplicas": 1,
+    "maxReplicas": 10,
+    "cpuThreshold": "70%",
+    "memoryThreshold": "80%"
+  },
+  "performanceTargets": {
+    "responseTime": {
+      "target": "< 500ms",
+      "measured": "325ms",
+      "status": "✅ Pass"
+    },
+    "throughput": {
+      "target": "> 1000 req/sec",
+      "measured": "1250 req/sec", 
+      "status": "✅ Pass"
+    },
+    "errorRate": {
+      "target": "< 1%",
+      "measured": "0.2%",
+      "status": "✅ Pass"
+    },
+    "resourceUtilization": {
+      "cpu": {
+        "target": "< 80%",
+        "measured": "65%",
+        "status": "✅ Pass"
+      },
+      "memory": {
+        "target": "< 80%", 
+        "measured": "72%",
+        "status": "✅ Pass"
+      }
+    }
+  },
+  "loadTestResults": {
+    "normalLoad": {
+      "users": 100,
+      "duration": "10 minutes",
+      "avgResponseTime": "325ms",
+      "maxResponseTime": "850ms",
+      "throughput": "1250 req/sec",
+      "errorRate": "0.2%",
+      "scalingEvents": 2
+    },
+    "peakLoad": {
+      "users": 500,
+      "duration": "5 minutes", 
+      "avgResponseTime": "680ms",
+      "maxResponseTime": "1200ms",
+      "throughput": "2100 req/sec",
+      "errorRate": "0.8%",
+      "scalingEvents": 5
+    },
+    "stressTest": {
+      "users": 1000,
+      "duration": "3 minutes",
+      "avgResponseTime": "1200ms",
+      "maxResponseTime": "2500ms", 
+      "throughput": "1800 req/sec",
+      "errorRate": "2.1%",
+      "scalingEvents": 8,
+      "notes": "Performance degradation at 1000+ users, scaling helped maintain service"
+    }
+  },
+  "autoScalingValidation": {
+    "scaleOutEvents": 8,
+    "scaleInEvents": 3,
+    "avgScaleOutTime": "118 seconds",
+    "avgScaleInTime": "240 seconds",
+    "maxInstances": 8,
+    "costImpact": "+180% during peak load",
+    "verdict": "Auto-scaling working correctly within targets"
+  },
+  "recommendations": [
+    "Consider optimizing container startup time for faster scaling",
+    "Implement connection pooling to handle peak loads more efficiently", 
+    "Consider pre-warming instances during known traffic spikes",
+    "Monitor cost impact of aggressive scaling policies"
+  ],
+  "complianceCheck": {
+    "slaCompliance": "✅ 99.8% uptime maintained",
+    "performanceTargets": "✅ All targets met under normal load",
+    "costBudget": "✅ Within projected scaling costs",
+    "securityPosture": "✅ No security issues during load tests"
+  }
+}

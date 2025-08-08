@@ -1,0 +1,105 @@
+{
+  "anchorId": "of-8.7.1-auto-scaling",
+  "timestamp": "2025-08-06T01:35:00+10:00",
+  "phaseId": "OF-8.7",
+  "stepId": "OF-8.7.1",
+  "title": "Auto-Scaling & Load Testing",
+  "status": "Planned",
+  "objective": "Configure Azure auto-scale & validate load performance",
+  "description": "Implement horizontal and vertical scaling for Container Apps, configure auto-scaling rules, and perform load testing to validate performance under varying workloads.",
+  "scope": {
+    "autoScaling": {
+      "containerApps": [
+        "orbis-orchestrator",
+        "claude-relay-service", 
+        "orbis-mcp-server",
+        "orbis-app"
+      ],
+      "scalingRules": [
+        "CPU-based scaling (70% threshold)",
+        "Memory-based scaling (80% threshold)", 
+        "HTTP request queue scaling",
+        "Custom metric scaling"
+      ]
+    },
+    "loadTesting": {
+      "scenarios": [
+        "Normal load (100 concurrent users)",
+        "Peak load (500 concurrent users)",
+        "Stress test (1000+ concurrent users)",
+        "Spike testing (sudden load increases)"
+      ],
+      "metrics": [
+        "Response time < 500ms",
+        "Throughput > 1000 req/sec",
+        "Error rate < 1%",
+        "Resource utilization < 80%"
+      ]
+    }
+  },
+  "deliverables": [
+    {
+      "name": "Auto-scaling policies configured",
+      "description": "Container Apps configured with horizontal and vertical scaling rules",
+      "acceptance": "Scaling triggers tested and validated"
+    },
+    {
+      "name": "Load testing framework deployed",
+      "description": "Azure Load Testing service configured with test scenarios",
+      "acceptance": "Load tests execute successfully"
+    },
+    {
+      "name": "Performance benchmarks established",
+      "description": "Baseline performance metrics documented",
+      "acceptance": "SLA targets defined and measurable"
+    },
+    {
+      "name": "Scaling triggers validated",
+      "description": "Auto-scaling behavior verified under different load conditions",
+      "acceptance": "Scale-out and scale-in events logged"
+    }
+  ],
+  "implementation": {
+    "azureServices": [
+      "Container Apps",
+      "Application Gateway", 
+      "Azure Load Testing",
+      "Azure Monitor"
+    ],
+    "tools": [
+      "Azure CLI",
+      "Terraform/ARM Templates",
+      "JMeter/Artillery",
+      "Application Insights"
+    ],
+    "scripts": [
+      "configure-auto-scaling.sh",
+      "deploy-load-tests.sh",
+      "validate-scaling-rules.sh"
+    ]
+  },
+  "successCriteria": [
+    "Auto-scaling responds within 2 minutes of trigger",
+    "Load testing achieves target metrics",
+    "Cost increase during scaling < 200% of baseline",
+    "No service degradation during scaling events"
+  ],
+  "risks": [
+    {
+      "description": "Aggressive scaling may cause cost spikes",
+      "mitigation": "Configure maximum scale limits and cost alerts",
+      "likelihood": "Medium",
+      "impact": "High"
+    },
+    {
+      "description": "Cold start delays during scale-out",
+      "mitigation": "Configure minimum instance counts for critical services",
+      "likelihood": "High", 
+      "impact": "Medium"
+    }
+  ],
+  "dependencies": [],
+  "estimatedEffort": "5 person-days",
+  "plannedStartDate": "2025-08-06",
+  "plannedEndDate": "2025-08-11"
+}

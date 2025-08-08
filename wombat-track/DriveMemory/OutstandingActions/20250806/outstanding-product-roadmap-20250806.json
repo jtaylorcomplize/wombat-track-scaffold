@@ -1,0 +1,50 @@
+{
+  "memoryAnchor": "outstanding-product-roadmap-20250806",
+  "category": "Product Roadmap & Strategic Planning",
+  "timestamp": "2025-08-06T12:45:00+11:00",
+  "batchHandoverNumber": 3,
+  "description": "Outstanding actions for Orbis product roadmap, Sub-App reconciliation, and strategic planning",
+  "outstandingActions": [
+    {
+      "title": "Product Roadmap Update to oApp",
+      "priority": "High",
+      "detail": "Populate Orbis Dashboard with the unified product roadmap including Orbis Intelligence, Orbis Forge, Complize, and Sub-Apps. Each project should include full phase structure and step breakdown for SDLC alignment.",
+      "requiredActions": [
+        "Confirm canonical list of Sub-Apps and Projects",
+        "Attach all phases and steps with IDs and metadata", 
+        "Link to memory anchors for roadmap visibility"
+      ],
+      "estimatedEffort": "3-5 days",
+      "dependencies": ["Sub-App CSV reconciliation", "oApp phase structure"],
+      "targetPhase": "Strategic Planning & Product Alignment"
+    },
+    {
+      "title": "OF Strategic Planning Handover",
+      "priority": "High", 
+      "detail": "Complete merge of Orbis Forge, Orbis Intelligence, and Sub-App tracking into a single 3D-printer-style roadmap in oApp. Ensure CSV from Sub-App reconciliation is ingested and all project links established.",
+      "estimatedEffort": "2-3 days",
+      "dependencies": ["CSV ingestion", "Project canonicalization"],
+      "targetPhase": "Strategic Planning & Product Alignment"
+    }
+  ],
+  "riskLevel": "Medium",
+  "impactIfNotCompleted": "Fragmented product roadmap, unclear strategic priorities, Sub-App reconciliation gaps",
+  "recommendedPhaseSteps": [
+    {
+      "stepId": "ROADMAP-1",
+      "title": "Canonical Sub-App and Project List Confirmation", 
+      "estimatedDuration": "1 day"
+    },
+    {
+      "stepId": "ROADMAP-2",
+      "title": "oApp Population with Unified Roadmap",
+      "estimatedDuration": "2 days"
+    },
+    {
+      "stepId": "ROADMAP-3", 
+      "title": "Memory Anchor and RAG Integration",
+      "estimatedDuration": "1 day"
+    }
+  ],
+  "driveMemoryPath": "/DriveMemory/OutstandingActions/20250806/"
+}

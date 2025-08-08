@@ -162,7 +162,7 @@ const SubAppProjectsList: React.FC = () => {
               }
             ]
           },
-          'prog-visacalc-001': {
+          'prog-roam-001': {
             name: 'VisaCalc Pro',
             projects: [
               {

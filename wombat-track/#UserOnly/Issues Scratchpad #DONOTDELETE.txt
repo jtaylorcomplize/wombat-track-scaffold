@@ -1,0 +1,15 @@
+Roadmap from old G chat
+Privacy principles from old G chat
+Instruct G to check previous chats for any potentially unlogged DriveMemory content which G thought was pushed but was hallucinated
+Move to AzureOpenAI for direct communication with Claude
+Backend cleanup
+Merge multiple interfaces
+
+
+
+BKGM
+- implement
+- Paligo
+- Bubble
+
+- AL to start reviewing content

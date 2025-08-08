@@ -1,0 +1,10 @@
+{
+  "metadata": {
+    "table": "governance_logs",
+    "dataSource": "live_database",
+    "timestamp": "2025-08-05T00:46:40.320Z",
+    "recordCount": 0,
+    "exportType": "json"
+  },
+  "data": []
+}

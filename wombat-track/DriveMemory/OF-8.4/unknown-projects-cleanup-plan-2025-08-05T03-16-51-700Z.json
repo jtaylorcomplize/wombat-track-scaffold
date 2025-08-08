@@ -1,0 +1,279 @@
+{
+  "totalProjects": 19,
+  "orphanProjects": [
+    {
+      "projectId": "WT-UX7",
+      "projectName": "Agent Mesh Visualization",
+      "owner": "system",
+      "status": "Planning",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "OF-SDLC-IMP2",
+      "projectName": "Conversational SDLC Enablement",
+      "owner": "Jackson",
+      "status": "Active",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-DBM-2.0",
+      "projectName": "Database Migration Canonical",
+      "owner": "system",
+      "status": "In Progress",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX14",
+      "projectName": "Enhanced Sidebar v3.1",
+      "owner": "system",
+      "status": "Completed",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "OF-SDLC-IMP1",
+      "projectName": "OF-SDLC-imp1",
+      "owner": "System Import",
+      "status": "Planning",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX13",
+      "projectName": "Unknown Project",
+      "owner": "Jackson",
+      "status": "Completed",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX10",
+      "projectName": "Unknown Project",
+      "owner": "Gizmo",
+      "status": "Completed",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX8",
+      "projectName": "Unknown Project",
+      "owner": "Gizmo",
+      "status": "Planning",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX12",
+      "projectName": "Unknown Project",
+      "owner": "Jackson",
+      "status": "Completed",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX9",
+      "projectName": "Unknown Project",
+      "owner": "Claude",
+      "status": "Planning",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX16",
+      "projectName": "Unknown Project",
+      "owner": "Claude",
+      "status": "Completed",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX11",
+      "projectName": "Unknown Project",
+      "owner": "Claude",
+      "status": "Completed",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX5",
+      "projectName": "Unknown Project",
+      "owner": "Gizmo",
+      "status": "Completed",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX1",
+      "projectName": "Unknown Project",
+      "owner": "Claude",
+      "status": "Active",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX3",
+      "projectName": "Unknown Project",
+      "owner": "Claude",
+      "status": "Completed",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX2",
+      "projectName": "Unknown Project",
+      "owner": "Claude",
+      "status": "Planning",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX15",
+      "projectName": "Unknown Project",
+      "owner": "Claude",
+      "status": "Completed",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX6",
+      "projectName": "Unknown Project",
+      "owner": "Jackson",
+      "status": "Completed",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    },
+    {
+      "projectId": "WT-UX4",
+      "projectName": "Unknown Project",
+      "owner": "Jackson",
+      "status": "Completed",
+      "subApp_ref": null,
+      "reason": "null_subapp"
+    }
+  ],
+  "validSubApps": [
+    "MetaPlatform",
+    "Complize",
+    "Orbis",
+    "Roam"
+  ],
+  "suggestedActions": [
+    {
+      "projectId": "WT-UX7",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    },
+    {
+      "projectId": "OF-SDLC-IMP2",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    },
+    {
+      "projectId": "WT-DBM-2.0",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    },
+    {
+      "projectId": "WT-UX14",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    },
+    {
+      "projectId": "OF-SDLC-IMP1",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    },
+    {
+      "projectId": "WT-UX13",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    },
+    {
+      "projectId": "WT-UX10",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    },
+    {
+      "projectId": "WT-UX8",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    },
+    {
+      "projectId": "WT-UX12",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    },
+    {
+      "projectId": "WT-UX9",
+      "suggestedSubApp": "MetaPlatform",
+      "confidence": "medium",
+      "reason": "Owner suggests technical/platform work"
+    },
+    {
+      "projectId": "WT-UX16",
+      "suggestedSubApp": "MetaPlatform",
+      "confidence": "medium",
+      "reason": "Owner suggests technical/platform work"
+    },
+    {
+      "projectId": "WT-UX11",
+      "suggestedSubApp": "MetaPlatform",
+      "confidence": "medium",
+      "reason": "Owner suggests technical/platform work"
+    },
+    {
+      "projectId": "WT-UX5",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    },
+    {
+      "projectId": "WT-UX1",
+      "suggestedSubApp": "MetaPlatform",
+      "confidence": "medium",
+      "reason": "Owner suggests technical/platform work"
+    },
+    {
+      "projectId": "WT-UX3",
+      "suggestedSubApp": "MetaPlatform",
+      "confidence": "medium",
+      "reason": "Owner suggests technical/platform work"
+    },
+    {
+      "projectId": "WT-UX2",
+      "suggestedSubApp": "MetaPlatform",
+      "confidence": "medium",
+      "reason": "Owner suggests technical/platform work"
+    },
+    {
+      "projectId": "WT-UX15",
+      "suggestedSubApp": "MetaPlatform",
+      "confidence": "medium",
+      "reason": "Owner suggests technical/platform work"
+    },
+    {
+      "projectId": "WT-UX6",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    },
+    {
+      "projectId": "WT-UX4",
+      "suggestedSubApp": "Orbis",
+      "confidence": "low",
+      "reason": "Default assignment - requires manual review"
+    }
+  ]
+}

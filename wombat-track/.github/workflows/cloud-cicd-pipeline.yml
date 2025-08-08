@@ -1,0 +1,247 @@
+name: Cloud CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - feature/of-8.5-cloud-migration
+  pull_request:
+    branches:
+      - main
+  schedule:
+    # Nightly UAT run at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+env:
+  RESOURCE_GROUP: of-8-6-cloud-rg
+  ACR_NAME: orbisof86acr
+  CONTAINER_APP_ENV: orbis-of-86-env
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run linting
+        run: npm run lint
+      
+      - name: Run tests
+        run: npm test
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: dist/
+
+  deploy-to-azure:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feature/of-8.5-cloud-migration'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: dist/
+      
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: |
+            {
+              "clientId": "${{ secrets.AZURE_CLIENT_ID }}",
+              "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
+              "subscriptionId": "${{ secrets.AZURE_SUBSCRIPTION_ID }}",
+              "tenantId": "${{ secrets.AZURE_TENANT_ID }}"
+            }
+      
+      - name: Build container image
+        run: |
+          # Create Dockerfile for Orbis app
+          cat > Dockerfile << EOF
+          FROM node:18-alpine
+          WORKDIR /app
+          COPY package*.json ./
+          RUN npm ci --only=production
+          COPY dist/ ./dist/
+          COPY src/ ./src/
+          EXPOSE 3000
+          CMD ["npm", "start"]
+          EOF
+          
+          # Build and push to ACR
+          az acr build \
+            --registry $ACR_NAME \
+            --image orbis-app:${{ github.sha }} \
+            --image orbis-app:latest \
+            --file Dockerfile \
+            .
+      
+      - name: Deploy to Container Apps
+        run: |
+          az containerapp update \
+            --name orbis-app \
+            --resource-group $RESOURCE_GROUP \
+            --image $ACR_NAME.azurecr.io/orbis-app:${{ github.sha }}
+      
+      - name: Run health check
+        run: |
+          APP_URL=$(az containerapp show \
+            --name orbis-app \
+            --resource-group $RESOURCE_GROUP \
+            --query properties.configuration.ingress.fqdn -o tsv)
+          
+          # Wait for deployment
+          sleep 30
+          
+          # Health check
+          curl -f "https://$APP_URL/health" || exit 1
+
+  run-uat:
+    needs: deploy-to-azure
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install test dependencies
+        run: |
+          npm install puppeteer jest
+      
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: |
+            {
+              "clientId": "${{ secrets.AZURE_CLIENT_ID }}",
+              "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
+              "subscriptionId": "${{ secrets.AZURE_SUBSCRIPTION_ID }}",
+              "tenantId": "${{ secrets.AZURE_TENANT_ID }}"
+            }
+      
+      - name: Get app URL
+        id: app-url
+        run: |
+          APP_URL=$(az containerapp show \
+            --name orbis-app \
+            --resource-group $RESOURCE_GROUP \
+            --query properties.configuration.ingress.fqdn -o tsv)
+          echo "url=https://$APP_URL" >> $GITHUB_OUTPUT
+      
+      - name: Run UAT tests
+        env:
+          BASE_URL: ${{ steps.app-url.outputs.url }}
+        run: |
+          npm run test:uat
+      
+      - name: Capture screenshots
+        if: always()
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          mkdir -p DriveMemory/OF-8.6/NightlyUAT/$DATE
+          
+          # Screenshots are saved by Puppeteer tests
+          cp screenshots/*.png DriveMemory/OF-8.6/NightlyUAT/$DATE/ || true
+      
+      - name: Upload screenshots to Azure
+        if: always()
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          
+          az storage blob upload-batch \
+            --account-name orbisof86storage \
+            --destination uat-screenshots \
+            --source DriveMemory/OF-8.6/NightlyUAT/$DATE \
+            --auth-mode login
+      
+      - name: Generate evidence JSONL
+        if: always()
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          cat >> DriveMemory/OF-8.6/NightlyUAT/evidence.jsonl << EOF
+          {"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","type":"UAT","date":"$DATE","status":"${{ job.status }}","screenshots":$(ls DriveMemory/OF-8.6/NightlyUAT/$DATE/*.png 2>/dev/null | wc -l),"testResults":"${{ steps.uat.outcome }}"}
+          EOF
+      
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: uat-evidence-${{ github.run_id }}
+          path: DriveMemory/OF-8.6/NightlyUAT/
+
+  log-governance:
+    needs: [build, deploy-to-azure]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Create governance entry
+        run: |
+          STATUS="success"
+          if [ "${{ needs.deploy-to-azure.result }}" != "success" ]; then
+            STATUS="failed"
+          fi
+          
+          cat >> logs/governance.jsonl << EOF
+          {"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","entryType":"CICD","summary":"Cloud deployment pipeline executed","phaseId":"OF-8.6","status":"$STATUS","artifacts":["Build:${{ github.sha }}","Run:${{ github.run_id }}"],"riskLevel":"Low","deployment":{"environment":"production","region":"australiaeast"}}
+          EOF
+      
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: |
+            {
+              "clientId": "${{ secrets.AZURE_CLIENT_ID }}",
+              "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
+              "subscriptionId": "${{ secrets.AZURE_SUBSCRIPTION_ID }}",
+              "tenantId": "${{ secrets.AZURE_TENANT_ID }}"
+            }
+      
+      - name: Sync governance log
+        run: |
+          az storage blob upload \
+            --account-name orbisof86storage \
+            --container-name wt-governance-logs \
+            --name "cicd/run-${{ github.run_id }}.jsonl" \
+            --file logs/governance.jsonl \
+            --auth-mode login
+      
+      - name: Create summary
+        run: |
+          echo "## 🚀 Cloud CI/CD Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build**: ${{ needs.build.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deploy**: ${{ needs.deploy-to-azure.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Governance**: Logged to Azure" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,122 @@
+name: Azure Governance Sync
+
+on:
+  push:
+    branches:
+      - main
+      - feature/of-8.5-cloud-migration
+    paths:
+      - 'logs/governance.jsonl'
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  sync-governance:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: |
+            {
+              "clientId": "${{ secrets.AZURE_CLIENT_ID }}",
+              "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
+              "subscriptionId": "${{ secrets.AZURE_SUBSCRIPTION_ID }}",
+              "tenantId": "${{ secrets.AZURE_TENANT_ID }}"
+            }
+
+      - name: Get Key Vault secrets
+        uses: azure/get-keyvault-secrets@v1
+        with:
+          keyvault: "OrbisKeyVaultOF86"
+          secrets: 'sp-secret'
+        id: keyvault
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm install @azure/storage-blob @azure/identity
+
+      - name: Generate governance entry
+        if: github.event_name == 'pull_request'
+        run: |
+          npx tsx scripts/generate-governance-entry.ts
+        env:
+          AZURE_STORAGE_ACCOUNT: orbisof86storage
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+
+      - name: Sync governance log to Azure
+        run: |
+          # Upload governance.jsonl to Azure Blob Storage
+          STORAGE_ACCOUNT="orbisof86storage"
+          CONTAINER_NAME="wt-governance-logs"
+          
+          # Get current date for blob name
+          DATE=$(date +%Y%m%d-%H%M%S)
+          BLOB_NAME="governance-sync-${DATE}.jsonl"
+          
+          # Upload using Azure CLI
+          az storage blob upload \
+            --account-name "$STORAGE_ACCOUNT" \
+            --container-name "$CONTAINER_NAME" \
+            --name "$BLOB_NAME" \
+            --file logs/governance.jsonl \
+            --auth-mode login \
+            --metadata "sync_type=github_action" "branch=${{ github.ref_name }}"
+          
+          echo "✅ Governance log synced to Azure: $BLOB_NAME"
+
+      - name: Create sync summary
+        run: |
+          echo "## 📊 Governance Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp**: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Storage Account**: orbisof86storage" >> $GITHUB_STEP_SUMMARY
+          echo "- **Container**: wt-governance-logs" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "- **PR**: #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Governance log successfully synced to Azure Blob Storage" >> $GITHUB_STEP_SUMMARY
+
+      - name: Update Memory Plugin
+        if: github.event_name == 'pull_request'
+        run: |
+          # Create memory anchor update
+          ANCHOR_ID="wt-azure-sync-$(date +%Y%m%d-%H%M%S)"
+          
+          cat > DriveMemory/OF-8.6/latest-sync.json << EOF
+          {
+            "anchorId": "$ANCHOR_ID",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "syncType": "governance-log",
+            "source": "github-action",
+            "pr": {
+              "number": ${{ github.event.pull_request.number }},
+              "title": "${{ github.event.pull_request.title }}",
+              "url": "${{ github.event.pull_request.html_url }}"
+            },
+            "status": "synced"
+          }
+          EOF
+          
+          # Commit the memory anchor
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add DriveMemory/OF-8.6/latest-sync.json
+          git commit -m "🔄 Update Memory Plugin: Governance sync $ANCHOR_ID" || echo "No changes to commit"
+          git push origin ${{ github.ref_name }} || echo "No changes to push"

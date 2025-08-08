@@ -1,0 +1,756 @@
+openapi: 3.0.3
+info:
+  title: OF Integration Service API
+  description: |
+    Secure API gateway for AzureOpenAI → oApp (Orbis Forge) integration.
+    
+    This service provides multi-agent visibility, cross-checking capabilities, and audit-based context 
+    to prevent hallucinations in AI workflows. All endpoints require Azure AD Bearer token authentication.
+    
+    ## Authentication
+    All API endpoints (except `/health` and `/api-docs`) require Azure AD Bearer token authentication:
+    ```
+    Authorization: Bearer <azure-ad-token>
+    ```
+    
+    ## Rate Limiting  
+    - 60 requests per minute per client
+    - Burst limit of 10 requests
+    - Rate limit headers included in responses
+    
+    ## Audit Logging
+    All API requests are logged to:
+    - Governance logs (`logs/governance.jsonl`)
+    - DriveMemory telemetry (`DriveMemory/OF-Integration/telemetry/`)
+    
+  version: 1.0.0
+  contact:
+    name: OF Integration Service
+    url: https://github.com/wombat-track/of-integration
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://of-integration-service.azurewebsites.net
+    description: Production Azure App Service
+  - url: http://localhost:3001
+    description: Development server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /health:
+    get:
+      summary: Health Check
+      description: Returns service health status and component diagnostics
+      tags: [System]
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api-docs:
+    get:
+      summary: API Documentation
+      description: Returns API documentation in JSON format
+      tags: [System]
+      security: []
+      responses:
+        '200':
+          description: API documentation
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/governance/query:
+    get:
+      summary: Query Governance Logs
+      description: Retrieve governance log entries with optional filtering
+      tags: [Governance]
+      parameters:
+        - name: projectId
+          in: query
+          description: Filter by project ID
+          schema:
+            type: string
+            example: "OF-SDLC-IMP2"
+        - name: phaseId
+          in: query
+          description: Filter by phase ID
+          schema:
+            type: string
+            example: "OF-8.8"
+        - name: entryType
+          in: query
+          description: Filter by entry type
+          schema:
+            type: string
+            example: "Step Completion"
+        - name: limit
+          in: query
+          description: Maximum number of entries to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+            default: 100
+      responses:
+        '200':
+          description: Governance entries retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GovernanceQueryResponse'
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/governance/append:
+    post:
+      summary: Add Governance Entry
+      description: Append a new entry to the governance log
+      tags: [Governance]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GovernanceAppendRequest'
+      responses:
+        '200':
+          description: Governance entry added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GovernanceAppendResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/memory/query:
+    post:
+      summary: Execute RAG Query
+      description: |
+        Execute a RAG (Retrieval-Augmented Generation) query across governance logs, 
+        memory anchors, and agent insights
+      tags: [Memory & RAG]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemoryQueryRequest'
+      responses:
+        '200':
+          description: RAG query executed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemoryQueryResponse'
+        '400':
+          description: Invalid query request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/agent/execute:
+    post:
+      summary: Execute Vision Layer Agent
+      description: |
+        Execute a task using one of the Vision Layer Agents:
+        - project-inspector-001: Project structure and health analysis
+        - governance-auditor-001: Compliance and audit validation
+        - runtime-monitor-001: Performance and system monitoring  
+        - code-advisor-001: Code quality and architecture guidance
+        - risk-assessor-001: Risk identification and mitigation
+      tags: [Agents]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentExecuteRequest'
+      responses:
+        '200':
+          description: Agent task executed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentExecuteResponse'
+        '400':
+          description: Invalid agent request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Agent not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/orchestration/simulate:
+    post:
+      summary: Execute Orchestration Workflow
+      description: |
+        Trigger an orchestration workflow. Available workflows:
+        - code_generation_workflow: Governance-driven code generation
+        - governance_validation_workflow: Claude Enterprise governance validation
+        - cicd_execution_workflow: Automated CI/CD with governance gates
+      tags: [Orchestration]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrchestrationSimulateRequest'
+      responses:
+        '200':
+          description: Workflow execution started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrchestrationSimulateResponse'
+        '400':
+          description: Invalid orchestration request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Workflow not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/telemetry/log:
+    post:
+      summary: Log Telemetry Data
+      description: |
+        Store telemetry data from AzureOpenAI agents for monitoring and analysis.
+        Data is stored in DriveMemory/OF-Integration/telemetry/ for audit purposes.
+      tags: [Telemetry]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetryLogRequest'
+      responses:
+        '200':
+          description: Telemetry logged successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryLogResponse'
+        '400':
+          description: Invalid telemetry data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/admin/access-logs:
+    get:
+      summary: Get Access Logs (Admin)
+      description: Retrieve API access logs for governance reporting
+      tags: [Admin]
+      security:
+        - BearerAuth: [Integration.Admin]
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of logs to return
+          schema:
+            type: integer
+            default: 100
+            maximum: 1000
+      responses:
+        '200':
+          description: Access logs retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessLogsResponse'
+        '403':
+          description: Admin permissions required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/admin/system-status:
+    get:
+      summary: Get System Status (Admin)  
+      description: Comprehensive system status including all components
+      tags: [Admin]
+      security:
+        - BearerAuth: [Integration.Admin]
+      responses:
+        '200':
+          description: System status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemStatusResponse'
+        '403':
+          description: Admin permissions required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Azure AD Bearer token
+
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+        version:
+          type: string
+          example: "1.0.0"
+        components:
+          type: object
+          properties:
+            authentication:
+              type: string
+              enum: [healthy, degraded, unhealthy]
+            ragGovernance:
+              type: string
+              enum: [healthy, degraded, unhealthy]
+            visionAgents:
+              type: string
+              enum: [healthy, degraded, unhealthy]
+            orchestration:
+              type: string
+              enum: [healthy, degraded, unhealthy]
+        metrics:
+          type: object
+          properties:
+            uptime:
+              type: number
+            memoryUsage:
+              type: object
+            requestCount:
+              type: integer
+
+    GovernanceQueryResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        count:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GovernanceEntry'
+        requestId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    GovernanceEntry:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        entry_type:
+          type: string
+        project_id:
+          type: string
+        phase_id:
+          type: string
+        memory_anchor:
+          type: string
+        summary:
+          type: string
+        details:
+          type: object
+        audit_traceability:
+          type: boolean
+
+    GovernanceAppendRequest:
+      type: object
+      required: [entryType, projectId, summary]
+      properties:
+        entryType:
+          type: string
+          example: "agent_execution"
+        projectId:
+          type: string
+          example: "OF-SDLC-IMP2"
+        phaseId:
+          type: string
+          example: "OF-8.8"
+        summary:
+          type: string
+          example: "AzureOpenAI agent executed governance validation task"
+        details:
+          type: object
+          description: Additional structured data
+        memoryAnchor:
+          type: string
+          example: "azure-openai-validation-20250806"
+        agentId:
+          type: string
+          example: "governance-auditor-001"
+
+    GovernanceAppendResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        entryId:
+          type: string
+        requestId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    MemoryQueryRequest:
+      type: object
+      required: [query, scope, priority]
+      properties:
+        query:
+          type: string
+          example: "What is the current status of Phase 8.8?"
+        scope:
+          type: string
+          enum: [governance, memory, combined, agents]
+          example: "combined"
+        projectId:
+          type: string
+          example: "OF-SDLC-IMP2"
+        phaseId:
+          type: string
+          example: "OF-8.8"
+        priority:
+          type: string
+          enum: [low, medium, high]
+          default: medium
+
+    MemoryQueryResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        query:
+          type: string
+        answer:
+          type: string
+          description: AI-generated response based on RAG context
+        scope:
+          type: string
+        requestId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    AgentExecuteRequest:
+      type: object
+      required: [agentId, taskType]
+      properties:
+        agentId:
+          type: string
+          enum: 
+            - project-inspector-001
+            - governance-auditor-001
+            - runtime-monitor-001
+            - code-advisor-001
+            - risk-assessor-001
+          example: "governance-auditor-001"
+        taskType:
+          type: string
+          enum: [analysis, monitoring, validation, recommendation]
+          example: "validation"
+        priority:
+          type: string
+          enum: [low, medium, high]
+          default: medium
+        payload:
+          type: object
+          description: Task-specific data and parameters
+        context:
+          type: object
+          properties:
+            projectId:
+              type: string
+            phaseId:
+              type: string
+            memoryAnchor:
+              type: string
+
+    AgentExecuteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        taskId:
+          type: string
+        result:
+          type: object
+          properties:
+            success:
+              type: boolean
+            data:
+              type: object
+            recommendations:
+              type: array
+              items:
+                type: string
+            issues:
+              type: array
+              items:
+                type: object
+            artifacts:
+              type: array
+              items:
+                type: string
+        requestId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    OrchestrationSimulateRequest:
+      type: object
+      required: [workflowId, context]
+      properties:
+        workflowId:
+          type: string
+          enum:
+            - code_generation_workflow
+            - governance_validation_workflow  
+            - cicd_execution_workflow
+          example: "governance_validation_workflow"
+        context:
+          type: object
+          required: [projectId, phaseId, stepId, gitBranch, environment]
+          properties:
+            projectId:
+              type: string
+            phaseId:
+              type: string
+            stepId:
+              type: string
+            gitBranch:
+              type: string
+            environment:
+              type: string
+              enum: [development, staging, production]
+        inputs:
+          type: object
+          description: Workflow-specific input parameters
+        dryRun:
+          type: boolean
+          default: false
+          description: If true, validates workflow without executing
+
+    OrchestrationSimulateResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        workflowId:
+          type: string
+        executionId:
+          type: string
+        status:
+          type: string
+          enum: [executing, simulated, failed]
+        dryRun:
+          type: boolean
+        requestId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    TelemetryLogRequest:
+      type: object
+      required: [source, level, message, metadata]
+      properties:
+        source:
+          type: string
+          enum: [azure_openai, agent_execution, validation_report]
+          example: "azure_openai"
+        level:
+          type: string
+          enum: [info, warning, error]
+          example: "info"
+        message:
+          type: string
+          example: "Successfully completed governance validation task"
+        metadata:
+          type: object
+          description: Structured telemetry data
+        timestamp:
+          type: string
+          format: date-time
+          description: Optional timestamp (defaults to current time)
+
+    TelemetryLogResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        logFile:
+          type: string
+          description: Path to the log file where data was stored
+        requestId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    AccessLogsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        accessLogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessLog'
+        summary:
+          type: object
+          properties:
+            total_requests:
+              type: integer
+            successful_requests:
+              type: integer
+            failed_requests:
+              type: integer
+            unique_clients:
+              type: integer
+        requestId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    AccessLog:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        requestId:
+          type: string
+        endpoint:
+          type: string
+        method:
+          type: string
+        clientId:
+          type: string
+        identity:
+          type: string
+        success:
+          type: boolean
+        responseTime:
+          type: number
+        errorCode:
+          type: string
+        auditTrail:
+          type: boolean
+
+    SystemStatusResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        systemStatus:
+          type: object
+          properties:
+            timestamp:
+              type: string
+              format: date-time
+            overall:
+              type: string
+            components:
+              type: object
+            metrics:
+              type: object
+        requestId:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        requestId:
+          type: string
+          description: Unique request identifier for troubleshooting
+        timestamp:
+          type: string
+          format: date-time
+        details:
+          type: object
+          description: Additional error details (optional)
+
+tags:
+  - name: System
+    description: Health checks and system information
+  - name: Governance
+    description: Governance log operations
+  - name: Memory & RAG
+    description: RAG queries and memory access
+  - name: Agents
+    description: Vision Layer Agent execution
+  - name: Orchestration
+    description: Workflow orchestration
+  - name: Telemetry
+    description: Telemetry and logging
+  - name: Admin
+    description: Administrative operations (requires special permissions)

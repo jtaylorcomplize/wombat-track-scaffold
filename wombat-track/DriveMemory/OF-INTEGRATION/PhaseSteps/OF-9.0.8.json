@@ -1,0 +1,102 @@
+{
+  "phase_id": "OF-9.0.8",
+  "phase_title": "UI Orchestration UX, DGL Runtime Dispatch, and Template Engine",
+  "phase_description": "Complete UI orchestration indicators, template suggestion engine, expanded documentation tabs, and finalize Complize.DGL dispatch hooks for live testing",
+  "created_at": "2025-08-07T14:45:00.000Z",
+  "updated_at": "2025-08-07T14:45:00.000Z",
+  "status": "in_progress",
+  "executor": "claude",
+  "memory_anchor": "of-9.0.8-orchestration-anchor",
+  "governance_log": "logs/governance/phase-9.0.8-init.jsonl",
+  "steps": [
+    {
+      "step_id": "OF-9.0.8.1",
+      "title": "Workflow UX Refactor",
+      "description": "Expose PhaseStep orchestration status, anchor links, and linked documents directly in /admin/projects/:id/edit UI",
+      "status": "not_started",
+      "priority": "high",
+      "requirements": [
+        "Show runtime orchestration indicators (status chips: pending, running, complete, failed)",
+        "Flag errors/warnings if memory anchors or governance logs are missing",
+        "Display linked documents and anchors in step view"
+      ],
+      "target_files": ["src/pages/admin/ProjectAdminEdit.tsx"],
+      "implementation_notes": "Enhance existing project edit UI with orchestration visibility"
+    },
+    {
+      "step_id": "OF-9.0.8.2", 
+      "title": "Memory Anchor Auto-Tagger",
+      "description": "Auto-link step_documents, governance, and progress records to existing anchors",
+      "status": "completed",
+      "priority": "high",
+      "implementation_file": "src/server/api/live-admin.ts",
+      "completion_notes": "Auto-linking implemented with autoLinked = 1 flag in step_governance table"
+    },
+    {
+      "step_id": "OF-9.0.8.3",
+      "title": "PhaseStep Orchestration Hooks", 
+      "description": "Enable runtime hooks: Claude dispatch, governance logging, document prompting",
+      "status": "completed",
+      "priority": "high",
+      "implementation_file": "scripts/sdlc-phasestep-hooks.ts",
+      "completion_notes": "Full orchestration hooks with executeDualOrchestratorWorkflow() integration"
+    },
+    {
+      "step_id": "OF-9.0.8.4",
+      "title": "Template Suggestion Engine (v0)",
+      "description": "Add Suggest Template AI button to PhaseStep UI using usageType, stepInstruction, and system metadata",
+      "status": "not_started", 
+      "priority": "medium",
+      "requirements": [
+        "AI prompt: 'Based on step instruction and context, suggest template (usageType = Step Instruction or Compliance Trigger)'",
+        "Trigger Claude/ChatGPT and save into aiSuggestedTemplates field",
+        "Allow manual override and memory anchor lookup"
+      ],
+      "target_files": ["src/components/admin/TemplateSuggestionEngine.tsx"],
+      "api_integration": "Claude/OpenAI API"
+    },
+    {
+      "step_id": "OF-9.0.8.5",
+      "title": "Docs UI: Tab Expansion",
+      "description": "Expand Step-level UI with tabs for: Linked Docs, Linked Anchors, Orchestration Logs",
+      "status": "not_started",
+      "priority": "medium", 
+      "requirements": [
+        "Add tab group to PhaseStep admin view with: Governance Logs, Memory Anchors, Step Documents, Execution Log",
+        "Use tabbed display style consistent with other AdminDash components",
+        "Reuse existing tabs component architecture"
+      ],
+      "target_files": ["src/components/admin/PhaseStepTabsView.tsx"],
+      "reuse_components": ["existing tab architecture from ProjectAdminEdit.tsx"]
+    },
+    {
+      "step_id": "OF-9.0.8.6", 
+      "title": "Complize.DGL Dispatch Hooks",
+      "description": "Finalize DGL-specific triggers: Claude task dispatch, live orchestrator testing, and hook-in to PhaseStep engine",
+      "status": "in_progress",
+      "priority": "high",
+      "requirements": [
+        "Add DGL keyword tag and dispatch-ready flag",
+        "Hook into executeDualOrchestratorWorkflow() from DGL-1.0 phase", 
+        "Log Claude-generated output to DriveMemory/SubApps/Complize.DGL/dispatch/",
+        "Implement live testing flow (manual or simulated for now)"
+      ],
+      "target_files": [
+        "src/services/complizeDGLDispatcher.ts",
+        "DriveMemory/SubApps/Complize.DGL/dispatch/"
+      ],
+      "integration_points": ["sdlc-phasestep-hooks.ts", "complizeIntegrationService.ts"]
+    }
+  ],
+  "success_criteria": [
+    "PhaseStep orchestration status visible in admin UI",
+    "AI-powered template suggestions functional", 
+    "Expanded documentation tabs operational",
+    "DGL dispatch hooks ready for live testing"
+  ],
+  "canonical_artifacts": [
+    "DriveMemory/OF-INTEGRATION/PhaseSteps/OF-9.0.8.json",
+    "MemoryPlugin/of-9.0.8-orchestration-anchor.json",
+    "logs/governance/phase-9.0.8-init.jsonl"
+  ]
+}

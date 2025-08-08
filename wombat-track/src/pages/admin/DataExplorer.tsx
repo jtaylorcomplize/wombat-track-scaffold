@@ -34,6 +34,7 @@ export default function DataExplorer() {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: null, direction: 'asc' });
   const [tableCounts, setTableCounts] = useState<Record<string, number>>({});
+  const [showAllColumns, setShowAllColumns] = useState<boolean>(false);
   
   const itemsPerPage = 20;
 
@@ -182,10 +183,24 @@ export default function DataExplorer() {
     return Object.keys(firstRow);
   };
 
-  const columns = getTableColumns(safeTableData);
+  // Define key columns for each table to show by default
+  const getKeyColumns = (tableName: string, allColumns: string[]) => {
+    const keyColumnMaps: Record<string, string[]> = {
+      'projects': ['projectId', 'name', 'status', 'projectOwner', 'projectType', 'currentPhase', 'completionPercentage', 'createdAt'],
+      'phases': ['phaseid', 'name', 'status', 'projectId', 'order', 'completionPercentage', 'description'],
+      'governance_logs': ['timestamp', 'event_type', 'user_id', 'action', 'resource_type', 'success'],
+      'step_progress': ['stepId', 'phaseId', 'status', 'name', 'completionPercentage', 'updatedAt']
+    };
+    
+    const keyColumns = keyColumnMaps[tableName] || allColumns.slice(0, 6);
+    return keyColumns.filter(col => allColumns.includes(col));
+  };
+
+  const allColumns = getTableColumns(safeTableData);
+  const columns = showAllColumns ? allColumns : getKeyColumns(selectedTable, allColumns);
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 lg:p-6 space-y-6 max-w-none">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -274,10 +289,22 @@ export default function DataExplorer() {
 
       {/* Data Table */}
       <div className="bg-white rounded-lg shadow-sm border">
-        <div className="px-6 py-4 border-b border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <h3 className="text-lg font-semibold capitalize">
-            {selectedTable.replace('_', ' ')} Data
+            {selectedTable.replace('_', ' ')} Data ({columns.length} of {allColumns.length} columns)
           </h3>
+          {allColumns.length > 6 && (
+            <button
+              onClick={() => setShowAllColumns(!showAllColumns)}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                showAllColumns 
+                  ? 'bg-blue-100 text-blue-700 border border-blue-200' 
+                  : 'bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200'
+              }`}
+            >
+              {showAllColumns ? 'Show Key Columns' : 'Show All Columns'}
+            </button>
+          )}
         </div>
         
         {loading ? (
@@ -302,13 +329,14 @@ export default function DataExplorer() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="min-w-full" style={{ width: 'max-content' }}>
               <thead className="bg-gray-50">
                 <tr>
                   {columns.map((column) => (
                     <th
                       key={column}
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 whitespace-nowrap"
+                      style={{ minWidth: '120px', maxWidth: '200px' }}
                       onClick={() => handleSort(column)}
                     >
                       <div className="flex items-center space-x-1">
@@ -349,13 +377,13 @@ export default function DataExplorer() {
                         // Add deep-link for project and phase IDs
                         if (selectedTable === 'projects' && column === 'projectId' && cellValue) {
                           return (
-                            <td key={column} className="px-6 py-4 whitespace-nowrap text-sm">
+                            <td key={column} className="px-3 py-4 text-sm" style={{ minWidth: '120px', maxWidth: '200px' }}>
                               <Link 
                                 to={`/orbis/admin/projects/${cellValue}`}
                                 className="text-blue-600 hover:text-blue-800 flex items-center space-x-1"
                               >
-                                <span>{displayValue}</span>
-                                <ExternalLink size={14} />
+                                <span className="truncate" title={displayValue}>{displayValue}</span>
+                                <ExternalLink size={14} className="flex-shrink-0" />
                               </Link>
                             </td>
                           );
@@ -363,21 +391,21 @@ export default function DataExplorer() {
                         
                         if (selectedTable === 'phases' && column === 'phaseid' && cellValue) {
                           return (
-                            <td key={column} className="px-6 py-4 whitespace-nowrap text-sm">
+                            <td key={column} className="px-3 py-4 text-sm" style={{ minWidth: '120px', maxWidth: '200px' }}>
                               <Link 
                                 to={`/orbis/admin/phases/${cellValue}`}
                                 className="text-blue-600 hover:text-blue-800 flex items-center space-x-1"
                               >
-                                <span>{displayValue}</span>
-                                <ExternalLink size={14} />
+                                <span className="truncate" title={displayValue}>{displayValue}</span>
+                                <ExternalLink size={14} className="flex-shrink-0" />
                               </Link>
                             </td>
                           );
                         }
                         
                         return (
-                          <td key={column} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <div className="max-w-xs truncate" title={displayValue}>
+                          <td key={column} className="px-3 py-4 text-sm text-gray-900" style={{ minWidth: '120px', maxWidth: '200px' }}>
+                            <div className="truncate" title={displayValue}>
                               {displayValue}
                             </div>
                           </td>

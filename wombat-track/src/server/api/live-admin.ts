@@ -33,6 +33,28 @@ const TABLE_CONFIGS = {
     editableFields: ['stepName', 'phaseId', 'status', 'progress', 'assignedTo', 'dueDate'],
     tableName: 'step_progress'
   },
+  phase_steps: {
+    primaryKey: 'stepId',
+    requiredFields: ['stepName', 'phaseId'],
+    editableFields: [
+      'stepName', 'stepInstruction', 'status', 'RAG', 'priority', 
+      'isSideQuest', 'assignedTo', 'expectedStart', 'expectedEnd', 
+      'completedAt', 'governanceLogId', 'memoryAnchor'
+    ],
+    tableName: 'phase_steps'
+  },
+  step_documents: {
+    primaryKey: ['stepId', 'docId'],
+    requiredFields: ['stepId', 'docId'],
+    editableFields: ['linkedBy'],
+    tableName: 'step_documents'
+  },
+  step_governance: {
+    primaryKey: ['stepId', 'governanceLogId'],
+    requiredFields: ['stepId', 'governanceLogId'],
+    editableFields: ['autoLinked'],
+    tableName: 'step_governance'
+  },
   governance_logs: {
     primaryKey: 'id',
     requiredFields: ['event_type'],
@@ -105,6 +127,8 @@ router.get('/:tableName', async (req, res) => {
       orderBy = 'timestamp DESC';
     } else if (tableName === 'step_progress') {
       orderBy = 'createdAt DESC';
+    } else if (tableName === 'phase_steps') {
+      orderBy = 'lastUpdated DESC';
     }
     
     const query = `SELECT * FROM ${config.tableName} ORDER BY ${orderBy}`;
@@ -488,6 +512,136 @@ router.get('/:tableName/:recordId/history', async (req, res) => {
     res.status(500).json({ 
       error: 'Internal server error',
       message: 'Failed to fetch change history'
+    });
+  }
+});
+
+// Create a new record
+router.post('/:tableName', async (req, res) => {
+  const { tableName } = req.params;
+  const recordData = req.body;
+  const userId = req.headers['x-user-id'] as string || 'admin';
+  
+  if (!TABLE_CONFIGS[tableName as keyof typeof TABLE_CONFIGS]) {
+    return res.status(404).json({ error: 'Table not found' });
+  }
+
+  const config = TABLE_CONFIGS[tableName as keyof typeof TABLE_CONFIGS];
+  
+  // Check if table allows editing
+  if (config.editableFields.length === 0) {
+    return res.status(403).json({ error: 'Table is read-only' });
+  }
+
+  let transactionId: string | undefined;
+  
+  try {
+    // Begin transaction
+    transactionId = await dbManager.beginTransaction();
+    
+    // Validate required fields
+    for (const field of config.requiredFields) {
+      if (!recordData[field]) {
+        await dbManager.rollbackTransaction(transactionId);
+        return res.status(400).json({ 
+          error: `Missing required field: ${field}` 
+        });
+      }
+    }
+    
+    // Generate ID if needed and not provided
+    if (!recordData[config.primaryKey]) {
+      if (typeof config.primaryKey === 'string') {
+        recordData[config.primaryKey] = `${tableName}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      }
+    }
+    
+    // Set timestamp fields
+    recordData.lastUpdated = new Date().toISOString();
+    if (!recordData.createdAt) {
+      recordData.createdAt = new Date().toISOString();
+    }
+    
+    // Build insert query
+    const insertableFields = [...config.editableFields, config.primaryKey as string, 'lastUpdated'];
+    const filteredData = Object.fromEntries(
+      insertableFields
+        .filter(field => recordData[field] !== undefined)
+        .map(field => [field, recordData[field]])
+    );
+    
+    const fields = Object.keys(filteredData);
+    const placeholders = fields.map(() => '?').join(', ');
+    const values = Object.values(filteredData);
+    
+    const insertQuery = `
+      INSERT INTO ${config.tableName} (${fields.join(', ')})
+      VALUES (${placeholders})
+    `;
+    
+    const result = await dbManager.executeQuery(insertQuery, values, transactionId);
+    const newRecordId = recordData[config.primaryKey as string];
+    
+    // Log governance entry
+    const governanceLogId = await logGovernanceEntry({
+      event_type: 'record_create',
+      user_id: userId,
+      user_role: 'admin',
+      resource_type: 'database_record',
+      resource_id: `${tableName}_${newRecordId}`,
+      action: 'create_record',
+      success: true,
+      details: {
+        operation: 'Record Creation',
+        table: tableName,
+        recordId: newRecordId,
+        createdData: filteredData
+      },
+      runtime_context: {
+        phase: 'OF-9.0.7',
+        environment: 'live_database',
+        transaction_id: transactionId
+      }
+    });
+    
+    // If this is a step, auto-link to governance
+    if (tableName === 'phase_steps' && governanceLogId) {
+      try {
+        await dbManager.executeQuery(
+          'INSERT INTO step_governance (stepId, governanceLogId, autoLinked) VALUES (?, ?, ?)',
+          [newRecordId, governanceLogId, 1],
+          transactionId
+        );
+      } catch (linkError) {
+        console.warn('Failed to auto-link step to governance:', linkError);
+      }
+    }
+    
+    // Commit transaction
+    await dbManager.commitTransaction(transactionId);
+    
+    res.json({
+      success: true,
+      message: 'Record created successfully',
+      recordId: newRecordId,
+      data: filteredData,
+      transactionId,
+      governanceLogId
+    });
+
+  } catch (error) {
+    console.error(`Error creating ${tableName} record:`, error);
+    if (transactionId) {
+      try {
+        await dbManager.rollbackTransaction(transactionId);
+      } catch (rollbackError) {
+        console.error('Error rolling back transaction:', rollbackError);
+      }
+    }
+    
+    res.status(500).json({ 
+      error: 'Internal server error',
+      message: `Failed to create ${tableName} record`
     });
   }
 });

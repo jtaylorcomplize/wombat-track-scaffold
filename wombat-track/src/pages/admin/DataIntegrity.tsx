@@ -34,33 +34,76 @@ export default function DataIntegrity() {
   const fetchOrphanedData = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/orphans');
-      if (response.ok) {
-        const data = await response.json();
-        setIntegrityIssues(data.issues || []);
-        
-        // Generate fix options for each orphan
-        const options: Record<string, FixOption[]> = {};
-        data.issues.forEach((issue: IntegrityIssue) => {
-          issue.orphanedRecords.forEach((orphan: OrphanedRecord) => {
-            // In production, this would fetch valid options from the referenced table
-            options[orphan.id] = [
-              { value: '', label: 'Select a valid reference...' },
-              { value: 'WT-UX14', label: 'WT-UX14 - Integrate Surface' },
-              { value: 'WT-UX9', label: 'WT-UX9 - Docs Module' },
-              { value: 'WT-UX1', label: 'WT-UX1 - WT MemSync Implementation' },
-              { value: 'DELETE', label: '🗑️ Delete this orphaned record' }
-            ];
-          });
-        });
-        setFixOptions(options);
-      } else {
-        console.error('Failed to fetch orphaned data');
-        setIntegrityIssues([]);
+      // Fetch orphaned records
+      const orphansResponse = await fetch('/api/admin/orphans');
+      if (!orphansResponse.ok) {
+        throw new Error('Failed to fetch orphaned data');
       }
+      const orphansData = await orphansResponse.json();
+      setIntegrityIssues(orphansData.issues || []);
+      
+      // Fetch fix options (all available projects and phases)
+      let fixOptionsData = { fixOptions: { projects: [], phases: [] } };
+      try {
+        const fixOptionsResponse = await fetch('/api/admin/orphans/fix-options');
+        if (fixOptionsResponse.ok) {
+          fixOptionsData = await fixOptionsResponse.json();
+        } else {
+          console.warn('Fix options endpoint not available, falling back to projects API');
+          // Fallback: fetch all projects from the live admin API
+          const projectsResponse = await fetch('/api/admin/live/projects');
+          if (projectsResponse.ok) {
+            const projectsData = await projectsResponse.json();
+            fixOptionsData.fixOptions.projects = projectsData.data.map((p: any) => ({
+              value: p.projectId,
+              label: `${p.projectId} - ${p.projectName || 'Unknown Project'}`
+            }));
+          }
+          
+          // Fallback: fetch all phases from the live admin API  
+          const phasesResponse = await fetch('/api/admin/live/phases');
+          if (phasesResponse.ok) {
+            const phasesData = await phasesResponse.json();
+            fixOptionsData.fixOptions.phases = phasesData.data.map((p: any) => ({
+              value: p.phaseid,
+              label: `${p.phaseid} - ${p.phasename || 'Unknown Phase'}`,
+              project_ref: p.project_ref
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching fix options, using empty fallback:', error);
+      }
+      
+      // Generate dropdown options for each orphan based on what it's referencing
+      const options: Record<string, FixOption[]> = {};
+      orphansData.issues.forEach((issue: IntegrityIssue) => {
+        issue.orphanedRecords.forEach((orphan: OrphanedRecord) => {
+          const baseOptions: FixOption[] = [
+            { value: '', label: 'Select a valid reference...' }
+          ];
+          
+          // Add appropriate options based on what table the orphan is referencing
+          if (orphan.missingReference === 'projects') {
+            // Orphan is missing a project reference, show all available projects
+            baseOptions.push(...fixOptionsData.fixOptions.projects);
+          } else if (orphan.missingReference === 'phases') {
+            // Orphan is missing a phase reference, show all available phases
+            baseOptions.push(...fixOptionsData.fixOptions.phases);
+          }
+          
+          // Always add delete option
+          baseOptions.push({ value: 'DELETE', label: '🗑️ Delete this orphaned record' });
+          
+          options[orphan.id] = baseOptions;
+        });
+      });
+      setFixOptions(options);
+      
     } catch (error) {
       console.error('Error fetching orphaned data:', error);
       setIntegrityIssues([]);
+      setFixOptions({});
     } finally {
       setLoading(false);
     }
@@ -81,14 +124,14 @@ export default function DataIntegrity() {
     setFixing(orphan.id);
     
     try {
-      const response = await fetch(`/api/admin/fix/${orphan.table}`, {
+      const response = await fetch(`/api/admin/orphans/fix/${orphan.table}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'X-User-Id': 'admin'
         },
         body: JSON.stringify({
-          recordId: orphan.record[orphan.id],
+          recordId: orphan.record.projectId || orphan.record.phaseid || orphan.record.stepId || orphan.record.id,
           field: orphan.field,
           value: fixValue === 'DELETE' ? null : fixValue,
           action: fixValue === 'DELETE' ? 'delete' : 'update'
@@ -146,7 +189,7 @@ export default function DataIntegrity() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 lg:p-6 space-y-6 max-w-none">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -231,7 +274,7 @@ export default function DataIntegrity() {
               </div>
             </div>
             
-            <div className="p-6">
+            <div className="p-4 lg:p-6 overflow-x-auto">
               {issue.orphanedRecords.slice(0, 5).map((orphan) => (
                 <div key={orphan.id} className="mb-6 last:mb-0 p-4 bg-gray-50 rounded-lg">
                   <div className="flex items-start justify-between">
@@ -241,21 +284,24 @@ export default function DataIntegrity() {
                         <span className="font-medium">Missing {orphan.field} reference</span>
                       </div>
                       <div className="text-sm text-gray-600 mb-3">
-                        <p>Record ID: {orphan.record[orphan.id || 'id']}</p>
+                        <p>Record ID: {orphan.record.projectId || orphan.record.phaseid || orphan.record.stepId || orphan.record.id}</p>
                         <p>Current Value: {orphan.currentValue || 'null'}</p>
                         <p>Expected Reference: {orphan.missingReference}</p>
                       </div>
                       
                       {/* Fix UI */}
-                      <div className="flex items-center space-x-3">
-                        <Wrench size={16} className="text-gray-400" />
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                        <div className="flex items-center space-x-2">
+                          <Wrench size={16} className="text-gray-400" />
+                          <span className="text-sm text-gray-600">Fix:</span>
+                        </div>
                         <select
                           value={selectedFixes[orphan.id] || ''}
                           onChange={(e) => setSelectedFixes(prev => ({
                             ...prev,
                             [orphan.id]: e.target.value
                           }))}
-                          className="border border-gray-300 rounded px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500"
+                          className="border border-gray-300 rounded px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500 w-full sm:w-auto min-w-[200px]"
                           disabled={fixing === orphan.id}
                         >
                           {fixOptions[orphan.id]?.map(option => (
@@ -267,7 +313,7 @@ export default function DataIntegrity() {
                         <button
                           onClick={() => applyFix(orphan)}
                           disabled={!selectedFixes[orphan.id] || fixing === orphan.id}
-                          className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                         >
                           {fixing === orphan.id ? 'Applying...' : 'Apply Fix'}
                         </button>
@@ -280,7 +326,7 @@ export default function DataIntegrity() {
                     <summary className="text-sm text-gray-600 cursor-pointer hover:text-gray-800">
                       View full record
                     </summary>
-                    <pre className="mt-2 p-2 bg-white rounded text-xs overflow-x-auto">
+                    <pre className="mt-2 p-2 bg-white rounded text-xs overflow-x-auto max-w-full">
                       {JSON.stringify(orphan.record, null, 2)}
                     </pre>
                   </details>

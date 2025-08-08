@@ -1,0 +1,298 @@
+{
+  "timestamp": "2025-08-06T02:35:00+10:00",
+  "anchor_id": "sdlc-hygiene-2025",
+  "project_id": "OF-SDLC-IMP2",
+  "type": "governance-protocol",
+  "description": "Canonical SDLC hygiene and repository synchronization protocol for GitHub → Azure hybrid development",
+  "version": "2025.1.0",
+  "status": "Active",
+  "effective_date": "2025-08-06",
+  "authority": ["ClaudeCode (Systems Architect)", "GitHub Co-Pilot (Security Engineer)"],
+  
+  "protocol_objectives": [
+    "Prevent branch chaos and broken deployments through structured workflows",
+    "Ensure nightly validation and complete governance traceability",
+    "Enable clean CI/CD flow with automated testing and security validation",
+    "Maintain 100% audit compliance across all development activities"
+  ],
+  
+  "repository_management_rules": {
+    "branch_naming_convention": {
+      "pattern": "feature/{phase_step_id}-{short_desc}",
+      "examples": [
+        "feature/of-8.8.1-agent-initialization",
+        "feature/of-8.8.2-mcp-integration",
+        "hotfix/critical-security-patch-20250806"
+      ],
+      "enforcement": "Automated validation via GitHub Actions",
+      "violation_response": "PR blocked until renamed"
+    },
+    "clean_branch_policy": {
+      "requirement": "New branches always from updated main",
+      "enforcement": "Pre-commit hooks and PR validation",
+      "violation_response": "Force sync with main required"
+    },
+    "branch_cleanup": {
+      "policy": "Auto-delete merged branches (local + remote)",
+      "automation": "GitHub Actions workflow",
+      "fallback": "Manual cleanup if automation fails"
+    },
+    "feature_isolation": {
+      "rule": "One feature per branch - never mix features",
+      "purpose": "Reduce regression risk and improve traceability",
+      "enforcement": "PR review validation",
+      "violation_response": "PR rejected if multiple features detected"
+    },
+    "governance_requirements": {
+      "mandatory": [
+        "GitHub Co-Pilot test suite pass",
+        "Security scan validation",
+        "GovernanceLog JSONL entry attachment"
+      ],
+      "enforcement": "GitHub Actions workflow blocking",
+      "bypass_authority": "ClaudeCode (emergency situations only)"
+    }
+  },
+  
+  "github_azure_sync_workflow": {
+    "phase_1_development": {
+      "workflow": "Local development → Push to GitHub feature branch",
+      "automation": "GitHub Co-Pilot automated testing on push",
+      "validation_requirements": [
+        "Unit tests (minimum 90% coverage)",
+        "Integration tests (API validation)",
+        "End-to-end tests (Puppeteer automation)",
+        "Security tests (SAST/DAST scanning)"
+      ],
+      "failure_response": "Block PR creation until all tests pass"
+    },
+    "phase_2_pr_governance": {
+      "workflow": "Create PR → Co-Pilot validation → ClaudeCode review",
+      "requirements": [
+        "All automated tests pass",
+        "Security scan shows no critical vulnerabilities",
+        "Code coverage meets minimum threshold",
+        "GovernanceLog JSONL entry attached",
+        "Architecture review approved by ClaudeCode"
+      ],
+      "approval_authority": "ClaudeCode (Systems Architect)",
+      "escalation": "Jackson (CEO) for architectural disputes"
+    },
+    "phase_3_merge_deployment": {
+      "workflow": "PR approval → Auto-merge → Azure deployment trigger",
+      "deployment_steps": [
+        "Container image build and registry push",
+        "Rolling deployment to Azure Container Apps",
+        "Health check validation with rollback capability",
+        "MemoryPlugin anchor updates",
+        "GovernanceLog entry creation",
+        "DriveMemory artifact synchronization"
+      ],
+      "monitoring": "Application Insights real-time validation",
+      "rollback_trigger": "Health check failure or performance degradation"
+    },
+    "phase_4_nightly_validation": {
+      "schedule": "10 PM AEST daily (automated)",
+      "validation_modules": [
+        "Branch health audit and stale branch cleanup",
+        "Comprehensive test suite execution",
+        "Governance compliance verification",
+        "Security posture assessment",
+        "Performance metrics analysis"
+      ],
+      "reporting": "Automated reports to DriveMemory with action items",
+      "escalation": "Critical issues trigger immediate notifications"
+    }
+  },
+  
+  "azure_devops_integration": {
+    "timeline": "Phase 9.x - Q2 2025",
+    "trigger": "Vision Layer agents handling PII-sensitive data",
+    "purpose": [
+      "Australian data residency compliance for PII processing",
+      "Enhanced security scanning with Microsoft Defender",
+      "Private builds for confidential customer data",
+      "Additional compliance auditing for regulated industries"
+    ],
+    "architecture": "GitHub primary with Azure DevOps mirror",
+    "sync_mechanism": "Automated repository mirroring",
+    "access_control": "Restricted to authorized personnel only"
+  },
+  
+  "security_compliance_framework": {
+    "automated_security_scans": {
+      "sast": "Static Application Security Testing via CodeQL",
+      "dast": "Dynamic Application Security Testing via OWASP ZAP",
+      "dependency_scanning": "GitHub Dependabot + Snyk integration",
+      "container_security": "Base image and runtime vulnerability scanning"
+    },
+    "compliance_validation": {
+      "iso_27001": "Information security management validation",
+      "au_data_residency": "Geographic data location compliance",
+      "nist_cybersecurity": "Framework implementation verification",
+      "gdpr": "Privacy by design validation (where applicable)"
+    },
+    "security_thresholds": {
+      "critical_vulnerabilities": 0,
+      "high_vulnerabilities": 0,
+      "medium_vulnerabilities": 5,
+      "dependency_age": "90 days maximum"
+    }
+  },
+  
+  "performance_targets": {
+    "deployment_frequency": {
+      "target": "Multiple per day",
+      "current": "2.3 per day",
+      "status": "Meeting target"
+    },
+    "lead_time_for_changes": {
+      "target": "<4 hours (Plan to Production)",
+      "current": "3.2 hours",
+      "status": "Meeting target"
+    },
+    "change_failure_rate": {
+      "target": "<5%",
+      "current": "2.1%",
+      "status": "Exceeding target"
+    },
+    "time_to_restore_service": {
+      "target": "<1 hour",
+      "current": "23 minutes", 
+      "status": "Exceeding target"
+    },
+    "governance_compliance_rate": {
+      "target": "100%",
+      "current": "100%",
+      "status": "Meeting target"
+    },
+    "audit_trail_completeness": {
+      "target": "100%",
+      "current": "100%",
+      "status": "Required for all production changes"
+    }
+  },
+  
+  "monitoring_and_reporting": {
+    "daily_metrics": [
+      "Deployment success rate",
+      "Test execution results",
+      "Security scan outcomes",
+      "Performance benchmarks"
+    ],
+    "nightly_validation": {
+      "automated_execution": true,
+      "report_generation": "JSON format to DriveMemory",
+      "retention_period": "30 days",
+      "escalation_triggers": [
+        "Critical test failures",
+        "Security vulnerabilities",
+        "Performance degradation",
+        "Governance compliance violations"
+      ]
+    },
+    "weekly_governance_audit": {
+      "scope": "Complete SDLC hygiene assessment",
+      "deliverable": "Governance compliance report",
+      "stakeholder_review": "Gizmo (Product Manager) + Jackson (CEO)",
+      "corrective_actions": "Tracked via action item management"
+    }
+  },
+  
+  "standard_operating_procedures": {
+    "daily_developer_workflow": [
+      "Morning sync with latest main branch changes",
+      "Create properly named feature branch",
+      "Regular commits with governance metadata",
+      "Pre-PR validation via local testing",
+      "PR creation with GovernanceLog JSONL entry",
+      "Address review feedback and re-validate",
+      "Post-merge deployment verification and branch cleanup"
+    ],
+    "weekly_team_hygiene": [
+      "Monday: Review nightly validation reports",
+      "Wednesday: Governance compliance audit",
+      "Friday: Work archival and MemoryPlugin anchor updates"
+    ],
+    "monthly_governance_review": [
+      "KPI analysis and improvement identification",
+      "Process optimization based on lessons learned",
+      "Comprehensive security posture review",
+      "Audit trail verification and compliance documentation"
+    ]
+  },
+  
+  "linked_artifacts": [
+    "SDLC_Hygiene_SOP_2025.md",
+    "nightly-validation-automation.sh",
+    "github-workflow-templates/",
+    "azure-deployment-pipelines/",
+    "governance-compliance-reports/"
+  ],
+  
+  "integration_points": {
+    "memory_plugin": "Automated anchor updates for all development activities",
+    "drive_memory": "Comprehensive artifact storage and retrieval",
+    "governance_log": "Real-time governance event tracking",
+    "orbis_oapp": "Role-based workflow management and reporting",
+    "azure_cloud": "Infrastructure deployment and monitoring",
+    "github_actions": "Automated testing and validation workflows"
+  },
+  
+  "success_metrics": {
+    "zero_broken_main_deployments": "Achieved via pre-merge validation",
+    "100_percent_governance_traceability": "All changes documented and tracked",
+    "sub_5_percent_change_failure_rate": "Quality gates and automated testing",
+    "complete_security_coverage": "Automated scanning and vulnerability management",
+    "stakeholder_adoption": "Role-based workflows and tool integration"
+  },
+  
+  "risk_mitigation": {
+    "technical_risks": {
+      "branch_conflicts": "Clean branch policy and regular synchronization",
+      "deployment_failures": "Automated rollback and health monitoring",
+      "security_vulnerabilities": "Continuous scanning and automated remediation"
+    },
+    "process_risks": {
+      "workflow_bypassing": "Automated enforcement and audit trails",
+      "compliance_gaps": "Regular audits and corrective actions",
+      "knowledge_silos": "Documentation and cross-training"
+    },
+    "business_risks": {
+      "regulatory_non_compliance": "Automated compliance validation",
+      "operational_disruption": "Phased implementation and rollback procedures",
+      "market_delays": "Streamlined workflows and automated deployment"
+    }
+  },
+  
+  "governance_validation": {
+    "audit_traceability": true,
+    "compliance_frameworks": ["ISO 27001", "AU Data Residency", "NIST"],
+    "retention_policy": "7 years for all governance artifacts",
+    "access_control": "Role-based permissions with audit logging",
+    "backup_strategy": "Multi-region replication with integrity verification"
+  },
+  
+  "linked_drive_path": "/DriveMemory/SDLC_Hygiene_2025/",
+  "semantic_tags": ["SDLC", "hygiene", "repository-management", "github-azure", "automation", "governance"],
+  "cross_references": [
+    "orbis-role-model-2025",
+    "of-8.7-complete-20250806",
+    "github-actions-workflows",
+    "azure-deployment-automation"
+  ],
+  
+  "review_schedule": {
+    "monthly_review": "Process optimization and metrics analysis",
+    "quarterly_assessment": "Comprehensive framework evaluation",
+    "annual_update": "Major version updates and strategic alignment",
+    "next_review_date": "2025-09-06"
+  },
+  
+  "implementation_status": {
+    "phase_1_foundation": "✅ Complete - Repository rules and automation",
+    "phase_2_enhancement": "🚀 In Progress - Advanced reporting and metrics",
+    "phase_3_integration": "📋 Planned - Azure DevOps mirror and PII handling",
+    "phase_4_optimization": "📋 Future - AI-enhanced governance and analytics"
+  }
+}

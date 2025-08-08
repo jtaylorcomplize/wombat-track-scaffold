@@ -1,0 +1,106 @@
+{
+  "anchor_id": "of-9.0.8-orchestration-anchor",
+  "anchor_name": "Phase 9.0.8 - UI Orchestration & DGL Dispatch",
+  "description": "Memory anchor for UI Orchestration UX improvements, Template Suggestion Engine, and Complize.DGL dispatch readiness",
+  "category": "phase-implementation",
+  "created_at": "2025-08-07T14:45:00.000Z",
+  "updated_at": "2025-08-07T14:45:00.000Z",
+  "status": "active",
+  "phase_id": "OF-9.0.8",
+  "executor": "claude",
+  "tags": [
+    "ui-orchestration",
+    "template-engine", 
+    "dgl-dispatch",
+    "phase-9.0.8",
+    "orchestration-hooks"
+  ],
+  "scope": {
+    "primary_objectives": [
+      "Expose orchestration status in PhaseStep admin UI",
+      "Implement AI-powered template suggestion engine",
+      "Expand documentation tabs with governance/anchor links",
+      "Finalize Complize.DGL dispatch hooks for live testing"
+    ],
+    "technical_components": [
+      "ProjectAdminEdit.tsx orchestration indicators",
+      "TemplateSuggestionEngine.tsx with AI integration",
+      "PhaseStepTabsView.tsx with expanded documentation",
+      "complizeDGLDispatcher.ts service integration"
+    ]
+  },
+  "implementation_details": {
+    "step_9.0.8.1": {
+      "title": "Workflow UX Refactor",
+      "status": "pending",
+      "target_file": "src/pages/admin/ProjectAdminEdit.tsx",
+      "requirements": [
+        "Runtime orchestration status chips (pending/running/complete/failed)",
+        "Error flags for missing memory anchors or governance logs",
+        "Linked document and anchor visibility"
+      ]
+    },
+    "step_9.0.8.4": {
+      "title": "Template Suggestion Engine",
+      "status": "pending", 
+      "target_file": "src/components/admin/TemplateSuggestionEngine.tsx",
+      "ai_integration": {
+        "prompt_template": "Based on step instruction and context, suggest template (usageType = 'Step Instruction' or 'Compliance Trigger')",
+        "api_endpoint": "Claude/OpenAI API",
+        "storage_field": "aiSuggestedTemplates"
+      }
+    },
+    "step_9.0.8.5": {
+      "title": "Docs UI Tab Expansion",
+      "status": "pending",
+      "target_file": "src/components/admin/PhaseStepTabsView.tsx", 
+      "tab_components": [
+        "Governance Logs",
+        "Memory Anchors", 
+        "Step Documents",
+        "Execution Log"
+      ]
+    },
+    "step_9.0.8.6": {
+      "title": "Complize.DGL Dispatch Hooks",
+      "status": "in_progress",
+      "target_files": [
+        "src/services/complizeDGLDispatcher.ts",
+        "DriveMemory/SubApps/Complize.DGL/dispatch/"
+      ],
+      "integration_requirements": [
+        "DGL keyword tagging",
+        "dispatch-ready flag",
+        "executeDualOrchestratorWorkflow() hook",
+        "live testing framework"
+      ]
+    }
+  },
+  "governance": {
+    "initialization_log": "logs/governance/phase-9.0.8-init.jsonl",
+    "sdlc_plan": "DriveMemory/OF-INTEGRATION/PhaseSteps/OF-9.0.8.json",
+    "completion_criteria": [
+      "UI orchestration visibility implemented",
+      "Template suggestion engine operational", 
+      "Documentation tabs expanded",
+      "DGL dispatch hooks ready for testing"
+    ]
+  },
+  "cross_references": {
+    "related_phases": ["OF-8.9.3", "OF-8.6", "DGL-1.0"],
+    "dependent_services": [
+      "sdlc-phasestep-hooks.ts",
+      "complizeIntegrationService.ts",
+      "live-admin.ts"
+    ],
+    "ui_components": [
+      "ProjectAdminEdit.tsx",
+      "AdminDashboard tab architecture"
+    ]
+  },
+  "testing_notes": {
+    "integration_testing": "Verify orchestration hooks integrate with UI components",
+    "ai_testing": "Validate template suggestion accuracy and Claude API integration",
+    "dgl_testing": "Confirm DGL dispatch triggers and live orchestration readiness"
+  }
+}

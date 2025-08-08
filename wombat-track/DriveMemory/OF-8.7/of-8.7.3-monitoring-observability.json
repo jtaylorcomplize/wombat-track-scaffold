@@ -1,0 +1,147 @@
+{
+  "anchorId": "of-8.7.3-monitoring-observability",
+  "timestamp": "2025-08-06T01:35:00+10:00",
+  "phaseId": "OF-8.7",
+  "stepId": "OF-8.7.3",
+  "title": "Monitoring & Observability",
+  "status": "Planned",
+  "objective": "Implement Application Insights & dashboards",
+  "description": "Deploy comprehensive monitoring with Application Insights, create performance dashboards, implement distributed tracing, and establish alerting for application health.",
+  "scope": {
+    "applicationInsights": {
+      "services": [
+        "Container Apps instrumentation",
+        "SQL Database monitoring", 
+        "Azure OpenAI usage tracking",
+        "Custom application metrics"
+      ],
+      "features": [
+        "Performance monitoring",
+        "Dependency tracking",
+        "Exception logging",
+        "User behavior analytics"
+      ]
+    },
+    "dashboards": {
+      "operational": [
+        "System health overview",
+        "Performance metrics",
+        "Error rates and trends",
+        "Resource utilization"
+      ],
+      "business": [
+        "User activity metrics",
+        "Feature usage analytics",
+        "Cost and efficiency KPIs",
+        "SLA compliance tracking"
+      ]
+    },
+    "distributedTracing": {
+      "components": [
+        "Request flow tracking",
+        "Service dependency mapping",
+        "Performance bottleneck identification", 
+        "Error propagation analysis"
+      ],
+      "tools": [
+        "Application Map",
+        "Transaction search",
+        "Performance investigation",
+        "Failure analysis"
+      ]
+    }
+  },
+  "deliverables": [
+    {
+      "name": "Application Insights configured",
+      "description": "Application Insights deployed for all services with telemetry collection",
+      "acceptance": "Telemetry data flowing and searchable"
+    },
+    {
+      "name": "Performance dashboards deployed",
+      "description": "Operational and business dashboards with real-time metrics",
+      "acceptance": "Dashboards accessible and updating in real-time"
+    },
+    {
+      "name": "Distributed tracing enabled",
+      "description": "End-to-end request tracing across all services",
+      "acceptance": "Request flows traceable from entry to completion"
+    },
+    {
+      "name": "Custom alerts and metrics",
+      "description": "Proactive alerting based on application and business metrics",
+      "acceptance": "Alerts trigger correctly for defined conditions"
+    }
+  ],
+  "implementation": {
+    "azureServices": [
+      "Application Insights",
+      "Azure Monitor",
+      "Log Analytics Workspace",
+      "Azure Grafana",
+      "Azure Workbooks"
+    ],
+    "metrics": [
+      {
+        "category": "Performance",
+        "metrics": ["Response time", "Throughput", "CPU usage", "Memory usage"]
+      },
+      {
+        "category": "Reliability", 
+        "metrics": ["Error rate", "Success rate", "Availability", "Dependency failures"]
+      },
+      {
+        "category": "Business",
+        "metrics": ["Active users", "Feature adoption", "API usage", "Cost per transaction"]
+      }
+    ],
+    "alerts": [
+      {
+        "name": "High error rate",
+        "condition": "Error rate > 5%",
+        "action": "Email + Teams notification"
+      },
+      {
+        "name": "Performance degradation",
+        "condition": "Response time > 2s",
+        "action": "Auto-scaling trigger"
+      },
+      {
+        "name": "Service unavailable",
+        "condition": "Availability < 99%", 
+        "action": "Incident creation"
+      }
+    ],
+    "scripts": [
+      "deploy-app-insights.sh",
+      "create-dashboards.sh",
+      "configure-alerts.sh",
+      "validate-telemetry.sh"
+    ]
+  },
+  "successCriteria": [
+    "100% service telemetry coverage",
+    "Dashboard response time < 3 seconds",
+    "Alert false positive rate < 10%",
+    "Mean Time to Detection (MTTD) < 5 minutes",
+    "Distributed trace completion rate > 95%"
+  ],
+  "risks": [
+    {
+      "description": "Telemetry collection may impact application performance",
+      "mitigation": "Implement sampling and optimize data collection", 
+      "likelihood": "Medium",
+      "impact": "Medium"
+    },
+    {
+      "description": "Alert fatigue from too many notifications",
+      "mitigation": "Implement alert prioritization and noise reduction",
+      "likelihood": "High",
+      "impact": "Medium" 
+    }
+  ],
+  "dependencies": ["OF-8.7.2"],
+  "estimatedEffort": "5 person-days",
+  "plannedStartDate": "2025-08-18",
+  "plannedEndDate": "2025-08-23"
+}

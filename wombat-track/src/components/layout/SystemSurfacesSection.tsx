@@ -9,7 +9,7 @@ interface SystemSurfacesSectionProps {
   onSurfaceChange: (surface: WorkSurface) => void;
 }
 
-type SystemSurface = 'integrate' | 'spqr-runtime' | 'admin';
+type SystemSurface = 'integrate' | 'cloud-ide' | 'multi-agent-orchestration' | 'spqr-runtime' | 'admin';
 
 const SYSTEM_SURFACES: { 
   id: SystemSurface; 
@@ -25,6 +25,22 @@ const SYSTEM_SURFACES: {
     icon: '🧬', 
     description: 'Integration health monitoring',
     color: 'text-cyan-600',
+    status: 'operational'
+  },
+  { 
+    id: 'cloud-ide', 
+    label: 'Cloud IDE', 
+    icon: '💻', 
+    description: 'Browser-based development environment with GitHub integration',
+    color: 'text-purple-600',
+    status: 'operational'
+  },
+  { 
+    id: 'multi-agent-orchestration', 
+    label: 'Multi-Agent Orchestration', 
+    icon: '🤖', 
+    description: 'Agent coordination dashboard with context-aware chat',
+    color: 'text-emerald-600',
     status: 'operational'
   },
   { 

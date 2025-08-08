@@ -1,0 +1,63 @@
+{
+  "memoryAnchor": "outstanding-strategic-artefacts-20250806",
+  "category": "Strategic Artefacts for RAG",
+  "timestamp": "2025-08-06T12:45:00+11:00",
+  "batchHandoverNumber": 3,
+  "description": "Outstanding artefacts to push for semantic RAG indexing and archival",
+  "outstandingActions": [
+    {
+      "title": "Wombat Track Strategic Docs",
+      "priority": "Medium",
+      "detail": "Push _Wombat Track v2.0.md and System Snapshot to DriveMemory and link to WT project.",
+      "estimatedEffort": "1 day",
+      "dependencies": ["Document validation", "RAG indexing pipeline", "Project linkage metadata"],
+      "targetPhase": "Strategic Documentation & RAG Integration",
+      "documents": [
+        "_Wombat Track v2.0.md",
+        "🛠️ Wombat Track – July 2025 System Snapshot.md",
+        "SDLC - PCTD Wombat Track.md"
+      ]
+    },
+    {
+      "title": "MetaPlatform / MemoryPlugin Docs",
+      "priority": "Medium",
+      "detail": "Push memoryplugin - relevant memories.md and AI Dev Strategy to DriveMemory and link for semantic recall.",
+      "estimatedEffort": "1 day",
+      "dependencies": ["Document processing", "Semantic indexing", "Cross-reference validation"],
+      "targetPhase": "MetaPlatform Documentation & RAG Integration",
+      "documents": [
+        "memoryplugin - relevant memories.md", 
+        "ai_dev_strategy_update (1).md",
+        "wt_vision_agents_artefact.md"
+      ]
+    }
+  ],
+  "riskLevel": "Low",
+  "impactIfNotCompleted": "Missing strategic context in RAG queries, incomplete knowledge base",
+  "ragBenefits": [
+    "Enhanced strategic context in AI responses",
+    "Improved semantic search across strategic documents",
+    "Better cross-project knowledge discovery",
+    "Historical strategy preservation and retrieval"
+  ],
+  "recommendedPhaseSteps": [
+    {
+      "stepId": "RAG-1",
+      "title": "Strategic Document Validation and Preprocessing",
+      "estimatedDuration": "0.5 days"
+    },
+    {
+      "stepId": "RAG-2",
+      "title": "DriveMemory Integration and Project Linkage",
+      "estimatedDuration": "0.5 days"
+    },
+    {
+      "stepId": "RAG-3",
+      "title": "Semantic RAG Indexing and Cross-Reference Validation",
+      "estimatedDuration": "1 day"
+    }
+  ],
+  "semanticIndexingPriority": "High value strategic documents for contextual AI assistance",
+  "relatedMemoryAnchors": ["wt-ai-dev-strategy-v1.2.2", "memoryplugin-relevant-memories-20250802"],
+  "driveMemoryPath": "/DriveMemory/OutstandingActions/20250806/"
+}

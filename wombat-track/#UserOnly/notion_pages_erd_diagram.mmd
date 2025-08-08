@@ -1,0 +1,149 @@
+graph TD
+    %% Root Level Pages (Level 0)
+    COMPLIZE_HOME["🏠 Complize Home<br/>Sprints, Product Roadmap, Tasks, Leave Request"]
+    JT_WIP["🔨 JT WIP<br/>Personal Vision Board, JT CPD 24-25, All Staff Tasks"]
+    ARCHIVE["📦 ***ARCHIVE<br/>Meeting Notes, To-Dos, People"]
+    ROAM_RESOURCES["🏢 Roam Internal Resources<br/>No databases"]
+    HOME["🏡 Home<br/>My tasks"]
+    GOALS_ROOT["🎯 Goals<br/>Goals database"]
+    TEAMSPACE1["👥 Teamspace Home (1)"]
+    TEAMSPACE2["👥 Teamspace Home (2)"]
+    TEAMSPACE3["👥 Teamspace Home (3)"]
+    COMPLIZE_HOMEPAGE["🌐 Complize Homepage"]
+    MANAGEMENT_DASHBOARD["📊 Management Dashboard"]
+    PERSONAL_DASHBOARD["📋 Personal Dashboard"]
+    PM_SUMMARY["📄 Summary of Project Management System"]
+    PM_SYSTEM["⚙️ Project Management System<br/>People database"]
+    KM_FRAMEWORK["📚 Knowledge Management Framework"]
+    QUIZ_ANSWERS["❓ Quiz Answers"]
+    DEPT_MONITORING["📈 Department Monitoring Framework"]
+    NOMINATION_ELEMENTS["📝 Common Nomination Elements Table"]
+    LEGAL_BLOCK["⚖️ Block - Legal"]
+    CCMS["💼 CCMS"]
+
+    %% Level 1 Pages (Direct children of root)
+    COMPLIZE_GROWTH["📈 Complize Growth [Sales & Marketing]"]
+    COMPLIZE_DEV["💻 Complize Development<br/>Tasks, Sprints, Projects"]
+    COMPLIZE_MGMT["👔 Complize Management"]
+    LEAVE_MGMT["🏖️ Leave Request Management<br/>Leave Request database"]
+    DEV_METRICS["📊 Development metrics"]
+    COMMAND_CENTRE["🎛️ Command Centre<br/>Tasks, CalendarBlocks, PriorityEmails"]
+    CANONICAL_WT["📱 Canonical Notion-WT App"]
+    DEPARTMENTS["🏢 Departments"]
+    RML_PROJECTS["📋 RML Projects<br/>Projects, Goals databases"]
+    
+    %% Brand and Marketing Pages (Level 1)
+    BRAND_MESSAGING["📢 Complize Brand Messaging Guide"]
+    BRAND_IDENTITY["🎨 Complize Brand Identity Themes & Collateral"]
+    PLG_STRATEGY["📊 Product led growth strategy"]
+    PLG_ALIGN["🔗 Align PLG with sales pipeline"]
+    FAQS["❓ FAQs (for marketing channels + website)"]
+    WHITE_PAPER["📄 Complize - White Paper"]
+    PARTNERSHIP["🤝 Complize Foundation Partner Ora Banda Mining Ltd July 2025"]
+    
+    %% JT WIP Level 1 Pages
+    TEAM_STANDUP["👥 Team Standup - Sprint Planning"]
+    TEAM_STANDUP_PREP["📋 Prepare: Team Standup - Sprint Planning"]
+    WEEKLY_STANDUP["📅 Prepare for weekly team standup"]
+    AI_GUARDRAILS["🤖 Australia AI Guardrails – Ethical Product Lifecycle Integration"]
+    AGENTIC_LLM["🧠 Agentic LLM - JT"]
+
+    %% Level 2 Pages
+    CZ_DOCUMENTATION["📚 Cz Documentation<br/>Self-referencing database"]
+    BUYER_PERSONAS["👤 Complize Buyer Personas - Ideal Customer Profile"]
+    HELEN_PERSONA["👩 Buyer Persona - Helen HR Manager"]
+    OBJECTIONS_BLOG["💬 Complize Objections List - Potential Blog ideas"]
+    HUBSPOT_ICP["🎯 HubSpot Ideal Customer Profile Tier"]
+    IT_TEAM_HOME["💻 IT Team Home"]
+    LEGAL_DEPT["⚖️ Legal<br/>Legal Resources database"]
+    MEMORY_SYNC["🧠 Memory Sync & Governance Sidequest"]
+    CALENDAR_SYNC["📅 Calendar → CalendarBlocks Sync Bridge"]
+    GMAIL_SYNC["📧 Gmail → PriorityEmails Sync Bridge"]
+    CROSS_LINKING["🔗 Cross-Linking Templates"]
+    ARCHIVED_AARON["📁 *Archived* Aaron & JT on the same page"]
+    ARCHIVED_CRWMPS["📁 *Archived* CRWMPS [Cr-oo-mps]"]
+    ARCHIVED_IT_PROJECTS["📁 *Archived* IT Project Table<br/>Archived IT Project database"]
+
+    %% Level 3 Pages
+    TRAINING_RESOURCES["🎓 Complize Training Resources<br/>Training Resources database"]
+    RML_DB_MASTER["🗄️ RML Database Master<br/>Department database"]
+    UNSTRUCTURED_DUMP["💥 Unstructured oApp Data Dump"]
+    WT_PHASE_PLANNING["📝 WT Phase 3.x Planning Document"]
+    WT_SELF_MANAGING["🛠️ WT Project Plan: WT as Self-Managing App"]
+    GOVERNANCE_FRAMEWORK["🐾 Wombat Tracks - Project Governance Framework"]
+    WT_DOCS_TASKS["✅ WT Docs Module — Outstanding Tasks & Future Enhancements"]
+
+    %% Level 4 Pages
+    WT_UNSORTED["📂 WT Unsorted Content - 26JUL1847<br/>Temporary Holding Table database"]
+
+    %% Hierarchical Relationships
+    COMPLIZE_HOME --> COMPLIZE_GROWTH
+    COMPLIZE_HOME --> COMPLIZE_DEV
+    COMPLIZE_HOME --> COMPLIZE_MGMT
+    COMPLIZE_HOME --> LEAVE_MGMT
+    COMPLIZE_HOME --> DEV_METRICS
+    COMPLIZE_HOME --> BRAND_MESSAGING
+    COMPLIZE_HOME --> BRAND_IDENTITY
+    COMPLIZE_HOME --> PLG_STRATEGY
+    COMPLIZE_HOME --> PLG_ALIGN
+    COMPLIZE_HOME --> FAQS
+    COMPLIZE_HOME --> WHITE_PAPER
+    COMPLIZE_HOME --> PARTNERSHIP
+
+    JT_WIP --> COMMAND_CENTRE
+    JT_WIP --> CANONICAL_WT
+    JT_WIP --> TEAM_STANDUP
+    JT_WIP --> TEAM_STANDUP_PREP
+    JT_WIP --> WEEKLY_STANDUP
+    JT_WIP --> AI_GUARDRAILS
+    JT_WIP --> AGENTIC_LLM
+
+    ARCHIVE --> ARCHIVED_AARON
+    ARCHIVE --> ARCHIVED_CRWMPS
+    ARCHIVE --> ARCHIVED_IT_PROJECTS
+
+    ROAM_RESOURCES --> DEPARTMENTS
+    ROAM_RESOURCES --> RML_PROJECTS
+
+    COMPLIZE_GROWTH --> CZ_DOCUMENTATION
+    COMPLIZE_GROWTH --> BUYER_PERSONAS
+    COMPLIZE_GROWTH --> HELEN_PERSONA
+    COMPLIZE_GROWTH --> OBJECTIONS_BLOG
+    COMPLIZE_GROWTH --> HUBSPOT_ICP
+
+    COMMAND_CENTRE --> CALENDAR_SYNC
+    COMMAND_CENTRE --> GMAIL_SYNC
+    COMMAND_CENTRE --> CROSS_LINKING
+
+    CANONICAL_WT --> MEMORY_SYNC
+    CANONICAL_WT --> WT_PHASE_PLANNING
+    CANONICAL_WT --> WT_SELF_MANAGING
+    CANONICAL_WT --> GOVERNANCE_FRAMEWORK
+    CANONICAL_WT --> WT_DOCS_TASKS
+
+    DEPARTMENTS --> IT_TEAM_HOME
+    DEPARTMENTS --> LEGAL_DEPT
+
+    CZ_DOCUMENTATION --> TRAINING_RESOURCES
+    IT_TEAM_HOME --> RML_DB_MASTER
+    MEMORY_SYNC --> UNSTRUCTURED_DUMP
+    UNSTRUCTURED_DUMP --> WT_UNSORTED
+
+    %% Database Feature Indicators
+    classDef hasDatabase fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef noDatabase fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef rootLevel fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    classDef archiveContent fill:#ffebee,stroke:#b71c1c,stroke-width:2px
+
+    class COMPLIZE_HOME,JT_WIP,HOME,GOALS_ROOT,PM_SYSTEM hasDatabase
+    class COMPLIZE_DEV,LEAVE_MGMT,COMMAND_CENTRE,RML_PROJECTS hasDatabase
+    class CZ_DOCUMENTATION,LEGAL_DEPT,ARCHIVED_IT_PROJECTS hasDatabase
+    class TRAINING_RESOURCES,RML_DB_MASTER,WT_UNSORTED hasDatabase
+
+    class COMPLIZE_HOME,JT_WIP,ARCHIVE,ROAM_RESOURCES,HOME,GOALS_ROOT rootLevel
+    class TEAMSPACE1,TEAMSPACE2,TEAMSPACE3,COMPLIZE_HOMEPAGE rootLevel
+    class MANAGEMENT_DASHBOARD,PERSONAL_DASHBOARD,PM_SUMMARY,PM_SYSTEM rootLevel
+    class KM_FRAMEWORK,QUIZ_ANSWERS,DEPT_MONITORING,NOMINATION_ELEMENTS rootLevel
+    class LEGAL_BLOCK,CCMS rootLevel
+
+    class ARCHIVE,ARCHIVED_AARON,ARCHIVED_CRWMPS,ARCHIVED_IT_PROJECTS archiveContent

@@ -22,10 +22,15 @@ const subAppBranding: Record<string, { color: string; bgLight: string; icon: Rea
     bgLight: '#FEE2E2',
     icon: <Box className="w-4 h-4" />
   },
-  'prog-metaplatform-001': {
+  'prog-spqr-001': {
     color: '#059669',
     bgLight: '#D1FAE5',
     icon: <Grid3x3 className="w-4 h-4" />
+  },
+  'prog-roam-001': {
+    color: '#EA580C',
+    bgLight: '#FED7AA',
+    icon: <Globe className="w-4 h-4" />
   }
 };
 

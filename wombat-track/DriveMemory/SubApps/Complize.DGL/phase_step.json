@@ -1,0 +1,91 @@
+{
+  "phase_id": "DGL-1.0",
+  "title": "Complize.DGL MVP – Document Governance Layer",
+  "description": "Initial MVP implementation of DGL Sub-App within Orbis Forge to enable document deduplication, review cycle governance, Paligo sync, and optional Actionstep template pointer system.",
+  "sdlc_stage": "planning",
+  "created": "2025-08-07T12:45:00+11:00",
+  "sub_app": "Complize.DGL",
+  "owner": "Complize",
+  "components": [
+    "DriveMemory",
+    "MemoryPlugin",
+    "GoogleDriveAPI",
+    "PaligoWebhook",
+    "ActionstepIntegration"
+  ],
+  "objectives": [
+    "Implement document deduplication engine",
+    "Establish review cycle governance framework",
+    "Create Paligo webhook integration for real-time sync",
+    "Build optional Actionstep template pointer system",
+    "Integrate with Orbis Forge platform architecture"
+  ],
+  "deliverables": {
+    "backend": {
+      "api_endpoints": [
+        "/api/complize/documents",
+        "/api/complize/review-cycles",
+        "/api/complize/paligo/webhook",
+        "/api/complize/actionstep/templates"
+      ],
+      "services": [
+        "DocumentDeduplicationService",
+        "ReviewCycleManager",
+        "PaligoSyncService",
+        "ActionstepPointerService"
+      ]
+    },
+    "frontend": {
+      "surfaces": [
+        "DocumentGovernanceSurface",
+        "ReviewCycleDashboard",
+        "IntegrationMonitor"
+      ],
+      "components": [
+        "DocumentList",
+        "ReviewCycleStatus",
+        "PaligoSyncStatus",
+        "ActionstepTemplateManager"
+      ]
+    },
+    "integration": {
+      "paligo": {
+        "webhook_receiver": true,
+        "content_sync": true,
+        "bidirectional": false
+      },
+      "actionstep": {
+        "template_management": true,
+        "pointer_system": true,
+        "optional_activation": true
+      }
+    }
+  },
+  "timeline": {
+    "planning": "2025-08-07",
+    "development_start": "2025-08-08",
+    "mvp_target": "2025-08-21",
+    "testing": "2025-08-22",
+    "deployment": "2025-08-28"
+  },
+  "governance": {
+    "review_gates": [
+      "design_review",
+      "code_review",
+      "security_review",
+      "integration_testing"
+    ],
+    "compliance_requirements": [
+      "SDLC_compliance",
+      "data_governance",
+      "audit_logging"
+    ]
+  },
+  "success_criteria": [
+    "Document deduplication reduces redundancy by 30%",
+    "Review cycle completion time improved by 25%",
+    "Paligo sync latency < 5 seconds",
+    "Zero data loss during integration",
+    "User satisfaction score > 4.0/5.0"
+  ]
+}

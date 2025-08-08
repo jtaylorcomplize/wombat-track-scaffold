@@ -172,57 +172,81 @@ router.patch('/fix/:tableName', async (req, res) => {
   const { recordId, field, value, action } = req.body;
   
   try {
-    let filePath: string;
-    let data: any[];
+    const dbManager = DatabaseManager.getInstance();
+    const db = await dbManager.getConnection('production');
     
-    // Determine file path based on table
-    switch (tableName) {
-      case 'projects':
-        filePath = path.join(process.cwd(), 'cleaned-projects-snapshot.csv');
-        break;
-      case 'phases':
-        filePath = path.join(process.cwd(), 'cleaned-phases-snapshot.csv');
-        break;
-      default:
-        return res.status(400).json({ error: 'Invalid table name' });
-    }
-    
-    // Read current data
-    data = await parseCSV(filePath);
-    
-    // Apply fix
     let fixApplied = false;
+    let oldValue: any = null;
+    
     if (action === 'delete') {
-      // Remove the record
-      const originalLength = data.length;
-      data = data.filter(record => {
-        const id = record.projectId || record.phaseid || record.id;
-        return id !== recordId;
-      });
-      fixApplied = data.length < originalLength;
+      // Delete the record
+      let deleteQuery: string;
+      let deleteParams: any[];
+      
+      switch (tableName) {
+        case 'projects':
+          deleteQuery = 'DELETE FROM projects WHERE projectId = ?';
+          deleteParams = [recordId];
+          break;
+        case 'phases':
+          deleteQuery = 'DELETE FROM phases WHERE phaseid = ?';
+          deleteParams = [recordId];
+          break;
+        case 'step_progress':
+          deleteQuery = 'DELETE FROM step_progress WHERE stepId = ?';
+          deleteParams = [recordId];
+          break;
+        default:
+          return res.status(400).json({ error: 'Invalid table name' });
+      }
+      
+      const deleteResult = await dbManager.executeQuery(deleteQuery, deleteParams);
+      fixApplied = deleteResult && deleteResult.changes > 0;
+      
     } else {
       // Update the field
-      data = data.map(record => {
-        const id = record.projectId || record.phaseid || record.id;
-        if (id === recordId) {
-          record[field] = value;
-          fixApplied = true;
-        }
-        return record;
-      });
+      let updateQuery: string;
+      let selectQuery: string;
+      let updateParams: any[];
+      let selectParams: any[];
+      
+      switch (tableName) {
+        case 'projects':
+          selectQuery = `SELECT ${field} FROM projects WHERE projectId = ?`;
+          updateQuery = `UPDATE projects SET ${field} = ?, updatedAt = CURRENT_TIMESTAMP WHERE projectId = ?`;
+          selectParams = [recordId];
+          updateParams = [value, recordId];
+          break;
+        case 'phases':
+          selectQuery = `SELECT ${field} FROM phases WHERE phaseid = ?`;
+          updateQuery = `UPDATE phases SET ${field} = ?, updatedAt = CURRENT_TIMESTAMP WHERE phaseid = ?`;
+          selectParams = [recordId];
+          updateParams = [value, recordId];
+          break;
+        case 'step_progress':
+          selectQuery = `SELECT ${field} FROM step_progress WHERE stepId = ?`;
+          updateQuery = `UPDATE step_progress SET ${field} = ?, updatedAt = CURRENT_TIMESTAMP WHERE stepId = ?`;
+          selectParams = [recordId];
+          updateParams = [value, recordId];
+          break;
+        default:
+          return res.status(400).json({ error: 'Invalid table name' });
+      }
+      
+      // Get old value first
+      const oldRecord = await dbManager.executeQuery(selectQuery, selectParams);
+      if (oldRecord && oldRecord.length > 0) {
+        oldValue = oldRecord[0][field];
+      }
+      
+      // Apply the update
+      const updateResult = await dbManager.executeQuery(updateQuery, updateParams);
+      fixApplied = updateResult && updateResult.changes > 0;
     }
     
     if (!fixApplied) {
-      return res.status(404).json({ error: 'Record not found' });
+      return res.status(404).json({ error: 'Record not found or no changes made' });
     }
-    
-    // Write updated data back
-    const csvContent = stringify(data, {
-      header: true,
-      columns: Object.keys(data[0])
-    });
-    
-    await fs.writeFile(filePath, csvContent);
     
     // Log fix to governance
     const governanceEntry = {
@@ -235,16 +259,17 @@ router.patch('/fix/:tableName', async (req, res) => {
       action: action === 'delete' ? 'delete_orphan' : 'fix_orphan',
       success: true,
       details: {
-        operation: 'Orphan Data Fix',
+        operation: 'Orphan Database Fix',
         table: tableName,
         recordId,
         field,
-        oldValue: null,
+        oldValue,
         newValue: value,
-        action
+        action,
+        method: 'live_database_update'
       },
       runtime_context: {
-        phase: 'OF-BEV-2.3',
+        phase: 'OF-9.0.7.3',
         environment: 'data_integrity'
       }
     };
@@ -253,7 +278,7 @@ router.patch('/fix/:tableName', async (req, res) => {
     await fs.appendFile(governanceLogPath, JSON.stringify(governanceEntry) + '\n');
     
     // Create MemoryPlugin anchor for major fixes
-    if (action === 'delete' || field === 'owner') {
+    if (action === 'delete' || field === 'project_ref' || field === 'phaseId') {
       const anchorPath = path.join(
         process.cwd(),
         'DriveMemory/OrbisForge/BackEndVisibility/integrity-fixes',
@@ -273,7 +298,9 @@ router.patch('/fix/:tableName', async (req, res) => {
       message: `Successfully ${action === 'delete' ? 'deleted' : 'fixed'} orphaned record`,
       recordId,
       field,
-      value
+      value,
+      oldValue,
+      method: 'database_update'
     });
 
   } catch (error) {
@@ -281,6 +308,44 @@ router.patch('/fix/:tableName', async (req, res) => {
     res.status(500).json({ 
       error: 'Internal server error',
       message: 'Failed to apply fix'
+    });
+  }
+});
+
+// Get all available projects and phases for fix options
+router.get('/fix-options', async (req, res) => {
+  try {
+    const dbManager = DatabaseManager.getInstance();
+    
+    // Get all projects
+    const projects = await dbManager.executeQuery('SELECT projectId, projectName FROM projects ORDER BY projectName');
+    
+    // Get all phases
+    const phases = await dbManager.executeQuery('SELECT phaseid, phasename, project_ref FROM phases ORDER BY phasename');
+    
+    const fixOptions = {
+      projects: projects.map((p: any) => ({
+        value: p.projectId,
+        label: `${p.projectId} - ${p.projectName}`
+      })),
+      phases: phases.map((p: any) => ({
+        value: p.phaseid,
+        label: `${p.phaseid} - ${p.phasename}`,
+        project_ref: p.project_ref
+      }))
+    };
+
+    res.json({
+      success: true,
+      fixOptions,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('Error fetching fix options:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: 'Failed to fetch fix options'
     });
   }
 });

@@ -442,4 +442,83 @@ router.post('/phases/:phaseId/commit', async (req, res) => {
   }
 });
 
+// Link project to SubApp (immediate save for Phase 9.0.7.2)
+router.patch('/projects/:projectId/link-subapp', async (req, res) => {
+  const { projectId } = req.params;
+  const { subApp_ref } = req.body;
+  const userId = req.headers['x-user-id'] as string || 'admin';
+
+  try {
+    const db = await dbManager.getConnection();
+    const transactionId = await dbManager.beginTransaction();
+
+    // Get current project for logging
+    const currentProject = await db.get('SELECT * FROM projects WHERE projectId = ?', [projectId]);
+    
+    if (!currentProject) {
+      return res.status(404).json({ success: false, error: 'Project not found' });
+    }
+
+    const oldSubApp = currentProject.subApp_ref;
+    const newSubApp = subApp_ref;
+
+    // Update the project's SubApp reference
+    await dbManager.executeQuery(
+      `UPDATE projects SET 
+         subApp_ref = ?, 
+         updatedAt = ?
+       WHERE projectId = ?`,
+      [newSubApp, new Date().toISOString(), projectId],
+      transactionId
+    );
+
+    // Create governance log entry
+    const logId = await createGovernanceLog(
+      'project_subapp_linked',
+      `SubApp assignment changed for project ${projectId}`,
+      'project',
+      projectId,
+      userId,
+      { 
+        operation: 'subapp_link',
+        oldSubApp: oldSubApp || null,
+        newSubApp: newSubApp || null,
+        immediate: true,
+        phase: 'OF-9.0.7.2'
+      }
+    );
+
+    // Create memory anchor for the change
+    await createMemoryAnchor('of-9.0.7.2-subapp-dropdown-bugfix', {
+      projectId,
+      oldSubApp,
+      newSubApp,
+      userId,
+      logId,
+      timestamp: new Date().toISOString()
+    });
+
+    await dbManager.commitTransaction(transactionId);
+
+    res.json({
+      success: true,
+      message: 'SubApp linked successfully',
+      data: { 
+        projectId, 
+        subApp_ref: newSubApp,
+        oldSubApp,
+        logId 
+      }
+    });
+
+  } catch (error) {
+    console.error('Error linking project to SubApp:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to link SubApp',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 export default router;

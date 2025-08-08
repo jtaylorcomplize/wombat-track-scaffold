@@ -1,0 +1,93 @@
+[
+  {
+    "projectId": "OF-SDLC-IMP3",
+    "phaseId": "OF-9.0",
+    "phaseName": "Cloud-Native Multi-Agent SDLC Platform",
+    "status": "In Progress", 
+    "startDate": "2025-08-06",
+    "endDate": null,
+    "RAG": "Green",
+    "notes": "Master phase for cloud-native, multi-agent SDLC platform with GitHub sync, Azure runtime, and unified governance. Backfilled from governance log.",
+    "isDraft": 0,
+    "linkedMemoryAnchor": "of-9.0-init-20250806",
+    "project_ref": "OF-SDLC-IMP2"
+  },
+  {
+    "projectId": "OF-SDLC-IMP3",
+    "phaseId": "OF-9.0.1",
+    "phaseName": "oApp Cloud IDE Integration",
+    "status": "Complete",
+    "startDate": "2025-08-06", 
+    "endDate": "2025-08-06",
+    "RAG": "Green",
+    "notes": "Cloud IDE integration with VS Code Server, GitHub workflows, and governance logging. Backfilled from governance log.",
+    "isDraft": 0,
+    "linkedMemoryAnchor": "of-9.0-init-20250806",
+    "project_ref": "OF-SDLC-IMP2"
+  },
+  {
+    "projectId": "OF-SDLC-IMP3", 
+    "phaseId": "OF-9.0.2",
+    "phaseName": "Multi-Agent Orchestration Dashboard",
+    "status": "In Progress",
+    "startDate": "2025-08-06",
+    "endDate": null,
+    "RAG": "Yellow",
+    "notes": "Multi-agent dashboard with AzOAI sidebar chat, context-aware tabs, and automatic governance logging. Backfilled from governance log.",
+    "isDraft": 0,
+    "linkedMemoryAnchor": "of-9.0-init-20250806", 
+    "project_ref": "OF-SDLC-IMP2"
+  },
+  {
+    "projectId": "OF-SDLC-IMP3",
+    "phaseId": "OF-9.0.3", 
+    "phaseName": "GitHub Sync & Merge Automation",
+    "status": "Planned",
+    "startDate": null,
+    "endDate": null,
+    "RAG": "Green",
+    "notes": "GitHub synchronization with automated PR workflows and governance integration. Planned phase from memory anchor.",
+    "isDraft": 0,
+    "linkedMemoryAnchor": "of-9.0-init-20250806",
+    "project_ref": "OF-SDLC-IMP2"
+  },
+  {
+    "projectId": "OF-SDLC-IMP3",
+    "phaseId": "OF-9.0.4",
+    "phaseName": "Azure Runtime + Docker/K8s Testing", 
+    "status": "Planned",
+    "startDate": null,
+    "endDate": null,
+    "RAG": "Green",
+    "notes": "Azure Kubernetes Service deployment with ephemeral environments and testing frameworks. Planned phase from memory anchor.",
+    "isDraft": 0,
+    "linkedMemoryAnchor": "of-9.0-init-20250806",
+    "project_ref": "OF-SDLC-IMP2"
+  },
+  {
+    "projectId": "OF-SDLC-IMP3",
+    "phaseId": "OF-9.0.5",
+    "phaseName": "Unified Governance & MemoryPlugin",
+    "status": "Planned", 
+    "startDate": null,
+    "endDate": null,
+    "RAG": "Green",
+    "notes": "Integration of governance systems with MemoryPlugin for audit traceability and compliance. Planned phase from memory anchor.",
+    "isDraft": 0,
+    "linkedMemoryAnchor": "of-9.0-init-20250806",
+    "project_ref": "OF-SDLC-IMP2"
+  },
+  {
+    "projectId": "OF-SDLC-IMP3",
+    "phaseId": "OF-9.0.6",
+    "phaseName": "Nightly QA & Closure Reporting", 
+    "status": "Planned",
+    "startDate": null,
+    "endDate": null,
+    "RAG": "Green",
+    "notes": "Automated QA validation and closure reporting system for phase finalization. Planned phase from memory anchor.",
+    "isDraft": 0,
+    "linkedMemoryAnchor": "of-9.0-init-20250806",
+    "project_ref": "OF-SDLC-IMP2"
+  }
+]

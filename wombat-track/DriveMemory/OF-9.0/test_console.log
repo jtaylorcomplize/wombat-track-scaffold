@@ -1,0 +1,37 @@
+[2025-08-06 23:03:15] OES Testing Protocol Started - Phase 9.0.5
+[2025-08-06 23:03:15] INFO: Logging to: DriveMemory/OF-9.0/test_console.log
+[2025-08-06 23:03:15] INFO: Starting OES Testing Protocol - Phase 9.0.5 (Unattended Mode)
+[2025-08-06 23:03:15] INFO: Host: http://localhost:3001
+[2025-08-06 23:03:15] INFO: Mode: Automated
+[2025-08-06 23:03:15] SECTION: 1️⃣ ENVIRONMENT PREREQUISITES
+[2025-08-06 23:03:15] INFO: Generated test JWT token
+[2025-08-06 23:03:15] INFO: Generated test API key
+[2025-08-06 23:03:15] SUCCESS: OES backend is reachable at http://localhost:3001
+[2025-08-06 23:03:15] SECTION: 2️⃣ EXECUTING TEST PLAN
+[2025-08-06 23:03:15] SECTION: T1: PING STATUS ENDPOINT
+[2025-08-06 23:03:15] SUCCESS: Status endpoint returned 200 OK
+[2025-08-06 23:03:15] SECTION: T2: INSTRUCTION SIGNATURE VALIDATION
+[2025-08-06 23:03:15] ERROR: Invalid signature not properly rejected (code: 200)
+[2025-08-06 23:03:15] SECTION: T4: FILE WRITE & DRIVEMEMORY SYNC
+[2025-08-06 23:03:16] ERROR: File write failed with 400
+[2025-08-06 23:03:16] SECTION: T5: CI/CD TRIGGER
+[2025-08-06 23:03:16] WARNING: CI/CD trigger returned 400
+[2025-08-06 23:03:16] SECTION: T7: MULTI-AGENT EXECUTION
+[2025-08-06 23:03:16] INFO: Executing Zoi instruction...
+[2025-08-06 23:03:16] INFO: Executing CC instruction...
+[2025-08-06 23:03:16] ERROR: Multi-agent execution failed (Zoi: 400, CC: 400)
+[2025-08-06 23:03:16] SECTION: T8: VAULT SECURITY VALIDATION
+[2025-08-06 23:03:16] INFO: Testing without JWT token...
+[2025-08-06 23:03:16] INFO: Testing without API key...
+[2025-08-06 23:03:16] ERROR: Security validation failed (No JWT: 400, No API: 400)
+[2025-08-06 23:03:16] SECTION: T9: GOVERNANCE TRIPLE LOGGING QA
+[2025-08-06 23:03:16] INFO: Checking DriveMemory logs...
+[2025-08-06 23:03:16] WARNING: DriveMemory governance log not found
+[2025-08-06 23:03:16] INFO: Checking MemoryPlugin...
+[2025-08-06 23:03:16] WARNING: MemoryPlugin anchor not found
+[2025-08-06 23:03:16] INFO: Checking governance.jsonl...
+[2025-08-06 23:03:16] WARNING: Main governance log not found
+[2025-08-06 23:03:16] ERROR: Governance logging incomplete (0/3 checks passed)
+[2025-08-06 23:03:16] SECTION: T10: STATUS ENDPOINT LOG CHECK
+[2025-08-06 23:03:16] SUCCESS: Status endpoint returned execution history
+[2025-08-06 23:03:16] INFO: Found 0 execution events in history

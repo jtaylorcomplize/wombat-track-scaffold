@@ -1,0 +1,266 @@
+{
+  "timestamp": "2025-08-06T02:30:00+10:00",
+  "anchor_id": "orbis-role-model-2025",
+  "type": "governance-role-map",
+  "description": "Canonical Orbis SDLC role, system, and responsibility mapping for 2025 cloud operations",
+  "schema_version": "2025.1.0",
+  "architecture": "Azure + GitHub Hybrid Cloud-Native SDLC",
+  "governance_framework": "Role-Based Orchestration with DriveMemory + MemoryPlugin Integration",
+  
+  "roles": [
+    {
+      "role": "AzureOpenAI",
+      "designation": "oApp Senior Software Developer",
+      "primary_systems": ["Azure Cloud", "oApp Backend", "Container Apps", "Azure Functions"],
+      "responsibilities": [
+        "Implements backend features and PhaseSteps according to Gizmo's specifications",
+        "Executes CI/CD pipelines in Azure with automated deployment",
+        "Manages runtime orchestration and service mesh operations",
+        "Writes governance artifacts to DriveMemory with audit traceability",
+        "Maintains Azure infrastructure as code (ARM/Bicep templates)",
+        "Monitors performance metrics and auto-scaling configurations"
+      ],
+      "governance_artifacts": [
+        "Code commits with governance metadata",
+        "Azure deployment logs and configurations",
+        "Runtime performance reports",
+        "Infrastructure monitoring data"
+      ],
+      "integration_points": {
+        "receives_from": ["Gizmo (PhaseSteps)", "ClaudeCode (Architecture directives)"],
+        "provides_to": ["GitHub Co-Pilot (Test environments)", "Orbis Forge Runtime (Deployment status)"],
+        "governs_via": "DriveMemory code snapshots + Azure DevOps integration"
+      },
+      "security_clearance": "Azure Resource Contributor + Code Deployment"
+    },
+    {
+      "role": "ClaudeCode", 
+      "designation": "Systems Architect",
+      "primary_systems": ["GitHub Repository", "GitHub Actions", "PR Review Pipeline", "Governance Automation"],
+      "responsibilities": [
+        "Defines SDLC architecture and governance standards",
+        "Reviews and approves GitHub PRs with architectural oversight",
+        "Enforces governance structure and compliance requirements",
+        "Orchestrates merge strategies and rollout procedures",
+        "Maintains CI/CD pipeline definitions and security policies",
+        "Ensures audit traceability across all development activities"
+      ],
+      "governance_artifacts": [
+        "PR approval records with architectural validation",
+        "GovernanceLog updates with compliance verification",
+        "Audit trace documentation for all merges",
+        "SDLC process documentation and standards"
+      ],
+      "integration_points": {
+        "receives_from": ["AzureOpenAI (Code submissions)", "GitHub Co-Pilot (Test results)"],
+        "provides_to": ["Gizmo (Architecture guidance)", "Jackson (Governance reports)"],
+        "governs_via": "GitHub PR pipeline + GovernanceLog automation"
+      },
+      "security_clearance": "Repository Admin + Merge Authority"
+    },
+    {
+      "role": "Gizmo",
+      "designation": "Product Manager", 
+      "primary_systems": ["oApp UI/UX", "MemoryPlugin", "DriveMemory", "Product Roadmap Management"],
+      "responsibilities": [
+        "Owns product vision, delivery strategy, and user experience",
+        "Structures Phase and Step plans with clear deliverable definitions",
+        "Maintains MemoryPlugin anchors and DriveMemory artifact organization",
+        "Aligns product roadmap with commercial objectives and market requirements",
+        "Manages stakeholder communication and product metrics",
+        "Coordinates RAG tagging and semantic organization of product knowledge"
+      ],
+      "governance_artifacts": [
+        "Phase briefs and step definitions in DriveMemory markdown",
+        "MemoryPlugin anchor updates with product milestone tracking",
+        "RAG tags and semantic classification for product features",
+        "User story mapping and acceptance criteria documentation"
+      ],
+      "integration_points": {
+        "receives_from": ["Jackson (Strategic direction)", "ClaudeCode (Technical constraints)"],
+        "provides_to": ["AzureOpenAI (Implementation requirements)", "GitHub Co-Pilot (Test scenarios)"],
+        "governs_via": "MemoryPlugin semantic anchors + oApp product interface"
+      },
+      "security_clearance": "Product Data Full Access + MemoryPlugin Write Authority"
+    },
+    {
+      "role": "Jackson",
+      "designation": "Visionary CEO",
+      "primary_systems": ["oApp Governance Interface", "Strategic Planning Dashboard", "Executive Reporting"],
+      "responsibilities": [
+        "Sets strategic direction and long-term vision for Orbis platform",
+        "Approves major phases, budget allocations, and project closures",
+        "Oversees commercial priorities and market positioning strategy",
+        "Makes final governance decisions on high-impact architectural changes",
+        "Reviews quarterly OKRs and ensures alignment with business objectives"
+      ],
+      "governance_artifacts": [
+        "Strategic phase approval records",
+        "Executive decision logs with business justification",
+        "Quarterly review reports and OKR assessments",
+        "Commercial milestone tracking and market analysis"
+      ],
+      "integration_points": {
+        "receives_from": ["Gizmo (Product strategy)", "ClaudeCode (Technical roadmap)"],
+        "provides_to": ["All roles (Strategic guidance and approval authority)"],
+        "governs_via": "oApp executive dashboard + high-level governance oversight"
+      },
+      "security_clearance": "Executive Full Access + Final Approval Authority"
+    },
+    {
+      "role": "GitHub Co-Pilot",
+      "designation": "Tester & Security Engineer",
+      "primary_systems": ["GitHub Actions", "Security Scanning Tools", "Test Automation", "Vulnerability Management"],
+      "responsibilities": [
+        "Executes comprehensive automated testing via GitHub Actions workflows",
+        "Performs continuous security scanning including SAST, DAST, and dependency analysis", 
+        "Generates detailed test reports, coverage metrics, and vulnerability assessments",
+        "Supports CI/CD validation with quality gates and deployment readiness checks",
+        "Maintains test data management and environment provisioning automation",
+        "Provides security compliance reporting for audit and governance requirements"
+      ],
+      "governance_artifacts": [
+        "Automated test execution reports with coverage metrics",
+        "Security scan results and vulnerability remediation tracking",
+        "CI/CD pipeline validation logs and quality gate reports",
+        "Compliance certification artifacts for security frameworks"
+      ],
+      "integration_points": {
+        "receives_from": ["AzureOpenAI (Code deployments)", "Gizmo (Test scenarios)"],
+        "provides_to": ["ClaudeCode (Test validation)", "All roles (Security compliance status)"],
+        "governs_via": "GitHub Actions automation + security reporting pipeline"
+      },
+      "security_clearance": "Security Scanner Full Access + Test Environment Management"
+    }
+  ],
+
+  "sdlc_stage_mapping": {
+    "plan": {
+      "owner": "Jackson",
+      "collaborator": "Gizmo",
+      "tool_system": "Orbis oApp + Gizmo PM Interface",
+      "governance_artifact": "Phase Brief → DriveMemory Markdown + Memory Anchor",
+      "deliverable_format": "Strategic planning documents with business justification",
+      "approval_workflow": "Jackson strategic review → Gizmo product planning"
+    },
+    "design": {
+      "owner": "Gizmo", 
+      "collaborator": "ClaudeCode",
+      "tool_system": "oApp UI/UX + MemoryPlugin",
+      "governance_artifact": "PhaseSteps, RAG Tags, GovernanceLog Drafts",
+      "deliverable_format": "Product specifications with technical architecture guidance",
+      "approval_workflow": "Gizmo product design → ClaudeCode architectural review"
+    },
+    "develop": {
+      "owner": "AzureOpenAI",
+      "collaborator": "ClaudeCode", 
+      "tool_system": "Azure Cloud (Container Apps, Functions, DevOps)",
+      "governance_artifact": "Code push to GitHub → Branch Audit → DriveMemory snapshot",
+      "deliverable_format": "Working software with infrastructure automation",
+      "approval_workflow": "AzureOpenAI implementation → ClaudeCode architectural validation"
+    },
+    "test_security": {
+      "owner": "GitHub Co-Pilot",
+      "collaborator": "ClaudeCode",
+      "tool_system": "GitHub Actions + Security Scanning Suite", 
+      "governance_artifact": "CI Logs, SAST/DAST, Puppeteer/MCP Test Output",
+      "deliverable_format": "Comprehensive test and security validation reports",
+      "approval_workflow": "GitHub Co-Pilot validation → ClaudeCode quality gate approval"
+    },
+    "review_merge": {
+      "owner": "ClaudeCode",
+      "collaborator": "Gizmo",
+      "tool_system": "GitHub PR Pipeline + Governance Automation",
+      "governance_artifact": "PR Approval, GovernanceLog Update, Audit Trace",
+      "deliverable_format": "Approved changes with complete audit documentation",
+      "approval_workflow": "ClaudeCode technical review → Gizmo product acceptance"
+    },
+    "deploy_operate": {
+      "owner": "AzureOpenAI",
+      "collaborator": "Orbis Forge Runtime",
+      "tool_system": "Azure Cloud + DriveMemory + Runtime Monitoring",
+      "governance_artifact": "StepProgress, Runtime Logs, QA/UAT Bundle", 
+      "deliverable_format": "Production deployment with operational monitoring",
+      "approval_workflow": "AzureOpenAI deployment → Runtime validation → Gizmo user acceptance"
+    },
+    "governance_audit": {
+      "owner": "Gizmo",
+      "collaborator": "MemoryPlugin",
+      "tool_system": "MemoryPlugin + DriveMemory + Compliance Reporting",
+      "governance_artifact": "Anchors updated → JSONL + Markdown for compliance",
+      "deliverable_format": "Complete audit trail with semantic traceability",
+      "approval_workflow": "MemoryPlugin automated compliance → Gizmo governance review → Jackson final approval"
+    }
+  },
+
+  "integration_architecture": {
+    "primary_data_flow": "Jackson (Strategy) → Gizmo (Product) → AzureOpenAI (Implementation) → GitHub Co-Pilot (Validation) → ClaudeCode (Integration) → Orbis Forge (Operation)",
+    "governance_data_flow": "All roles → DriveMemory → MemoryPlugin → GovernanceLog → Audit Trail",
+    "feedback_loops": [
+      "Orbis Forge Runtime → AzureOpenAI (Performance optimization)",
+      "GitHub Co-Pilot → Gizmo (Quality insights)",
+      "ClaudeCode → Jackson (Technical risk assessment)",
+      "MemoryPlugin → All roles (Governance compliance status)"
+    ],
+    "escalation_paths": {
+      "technical_issues": "AzureOpenAI → ClaudeCode → Gizmo → Jackson",
+      "security_incidents": "GitHub Co-Pilot → ClaudeCode → All roles (immediate notification)",
+      "product_conflicts": "Gizmo → Jackson (executive decision)",
+      "governance_violations": "MemoryPlugin → Gizmo → Jackson (compliance review)"
+    }
+  },
+
+  "compliance_and_audit": {
+    "audit_traceability": true,
+    "retention_policy": "7 years for all governance artifacts",
+    "compliance_frameworks": ["ISO 27001", "AU Data Residency", "NIST Cybersecurity Framework"],
+    "automated_compliance_checks": [
+      "Code quality gates via GitHub Co-Pilot",
+      "Security scanning integration with ClaudeCode review",
+      "Governance artifact validation via MemoryPlugin",
+      "Audit trail completeness verification"
+    ],
+    "manual_review_triggers": [
+      "Executive phase approvals (Jackson)",
+      "Architecture changes (ClaudeCode)", 
+      "Product milestone reviews (Gizmo)",
+      "Security incident responses (GitHub Co-Pilot)"
+    ]
+  },
+
+  "technology_stack": {
+    "cloud_platform": "Microsoft Azure (Australia East)",
+    "development_platform": "GitHub with Actions CI/CD",
+    "runtime_platform": "Azure Container Apps + Functions",
+    "governance_platform": "MemoryPlugin + DriveMemory",
+    "monitoring_platform": "Application Insights + Azure Monitor",
+    "security_platform": "GitHub Advanced Security + Microsoft Defender",
+    "communication_platform": "Orbis oApp with role-based interfaces"
+  },
+
+  "operational_metrics": {
+    "deployment_frequency": "Multiple per day (automated via AzureOpenAI)",
+    "lead_time_for_changes": "<4 hours (Plan → Production)",
+    "change_failure_rate": "<5% (Target maintained via GitHub Co-Pilot validation)",
+    "time_to_restore_service": "<1 hour (Automated rollback via ClaudeCode)",
+    "governance_compliance_rate": ">98% (Enforced via MemoryPlugin)",
+    "audit_trail_completeness": "100% (Required for all production changes)"
+  },
+
+  "linked_drive_path": "/DriveMemory/Orbis_Role_Model_2025/",
+  "semantic_tags": ["SDLC", "governance", "role-model", "azure-cloud", "github-actions", "2025-architecture"],
+  "cross_references": [
+    "of-8.6-cloud-complete-2025-08-06",
+    "of-8.7-complete-20250806", 
+    "orbis-enhanced-sidebar-v3",
+    "wombat-track-azure-integration"
+  ],
+  "version_history": [
+    {
+      "version": "2025.1.0",
+      "date": "2025-08-06",
+      "changes": "Initial canonical role model for Azure + GitHub hybrid architecture",
+      "approved_by": "Jackson (CEO) + ClaudeCode (Systems Architect)"
+    }
+  ]
+}

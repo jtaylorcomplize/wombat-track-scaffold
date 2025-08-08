@@ -1,0 +1,80 @@
+{
+  "memoryAnchor": "of-9.0.7.2-subapp-dropdown-bugfix",
+  "timestamp": "2025-08-06T23:50:00.000Z",
+  "phase": "OF-9.0.7.2",
+  "context": "SubApp dropdown save fix for Admin Editable Projects table",
+  "bugDescription": {
+    "issue": "SubApp selection from dropdown in Admin > Editable Tables > Projects not persisting",
+    "symptoms": [
+      "UI updates on selection but change not saved to database",
+      "Selection lost on page refresh",
+      "No visual feedback to user about save status"
+    ],
+    "rootCause": "EditableCell onChange only updated local editingCells state, required manual Save Draft action"
+  },
+  "implementation": {
+    "apiEndpoint": {
+      "path": "PATCH /api/admin/edit/projects/:projectId/link-subapp",
+      "location": "src/server/api/admin-edit.ts",
+      "payload": "{ subApp_ref: string }",
+      "features": [
+        "Immediate database update",
+        "Automatic governance logging",
+        "Memory anchor creation",
+        "Optimistic UI updates"
+      ]
+    },
+    "frontendChanges": {
+      "file": "src/components/admin/EditableProjectsTable.tsx",
+      "modifications": [
+        "Added subAppSaveStates state for tracking save status",
+        "Created saveSubAppImmediately function for immediate API calls",
+        "Modified handleCellEdit to trigger immediate save for subApp_ref",
+        "Added visual feedback UI (spinner/success/error icons)",
+        "Implemented optimistic updates and rollback on error"
+      ]
+    },
+    "uiEnhancements": {
+      "loadingState": "Spinning loader icon during save",
+      "successState": "Green checkmark for 3 seconds after successful save",
+      "errorState": "Red X for 5 seconds after failed save",
+      "tooltips": "Status information on hover"
+    }
+  },
+  "governanceIntegration": {
+    "eventType": "project_subapp_linked",
+    "loggedData": {
+      "operation": "subapp_link",
+      "oldSubApp": "previous SubApp reference or null",
+      "newSubApp": "new SubApp reference or null",
+      "immediate": true,
+      "phase": "OF-9.0.7.2"
+    },
+    "memoryAnchor": "Automatically created for each SubApp change"
+  },
+  "validation": {
+    "subAppOptions": ["MetaPlatform", "Complize", "Orbis", "Roam"],
+    "testScenarios": [
+      "Select each SubApp option and verify immediate persistence",
+      "Refresh page and confirm selection remains",
+      "Check projects table in database for updates",
+      "Verify governance logs created in Data Explorer",
+      "Test error handling with server offline",
+      "Validate optimistic UI updates work correctly"
+    ]
+  },
+  "performance": {
+    "optimisticUpdates": "UI immediately reflects changes",
+    "errorRecovery": "Rollback UI state on API failure",
+    "debouncing": "No debouncing needed as changes are intentional user actions",
+    "stateManagement": "Auto-cleanup of status indicators after timeout"
+  },
+  "status": "implementation_complete",
+  "deliverables": [
+    "API endpoint operational",
+    "Frontend immediate save functionality",
+    "Visual feedback system",
+    "Governance logging active",
+    "Memory anchor integration"
+  ]
+}

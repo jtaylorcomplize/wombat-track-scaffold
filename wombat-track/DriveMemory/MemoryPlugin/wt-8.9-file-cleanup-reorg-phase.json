@@ -1,0 +1,184 @@
+{
+  "phase_id": "WT-8.9",
+  "phase_name": "Repository Documentation Reorganization",
+  "step_id": "WT-8.9.1",
+  "step_name": "File Cleanup + Reorg",
+  "phase_type": "structural_improvement",
+  "timestamp": "2025-08-07T00:00:00Z",
+  "status": "ready_for_execution",
+  "description": "Systematic reorganization of 98 non-essential documentation files from repository root into structured directories with enhanced AI agent integration",
+  
+  "scope_definition": {
+    "files_to_move": 98,
+    "directories_to_create": 9,
+    "preservation_requirements": "Maintain git history through git mv operations",
+    "validation_criteria": "All files successfully moved, no broken internal references"
+  },
+
+  "execution_plan": {
+    "phase_1_preparation": {
+      "task": "Directory structure creation",
+      "status": "completed",
+      "deliverables": ["docs/ subdirectories", "data/ subdirectories", "index.md files"]
+    },
+    "phase_2_categorization": {
+      "task": "File categorization and mapping",
+      "status": "completed", 
+      "deliverables": ["File move mapping", "Category definitions", "Agent integration specs"]
+    },
+    "phase_3_execution": {
+      "task": "Git mv operations maintaining history",
+      "status": "pending",
+      "deliverables": ["Moved files", "Updated references", "Validation reports"]
+    },
+    "phase_4_validation": {
+      "task": "Post-move validation and testing",
+      "status": "pending",
+      "deliverables": ["Link validation", "Agent integration tests", "Documentation updates"]
+    }
+  },
+
+  "file_move_mapping": {
+    "docs/releases/": [
+      "WT-8.0.2-COMPLETION-SUMMARY.md",
+      "WT-8.0.3-COMPLETION-SUMMARY.md",
+      "WT-8.0.4-COMPLETION-SUMMARY.md",
+      "WT-8.0.5-COMPLETE.md",
+      "WT-8.0.6-PRODUCTION-MIGRATION-COMPLETE.md",
+      "WT-8.0.7-FINAL-OAPP-UNIFICATION-COMPLETE.md",
+      "WT-8.0.8-DEDUP-ORPHAN-LINKING-COMPLETE.md",
+      "WT-8.0.9-MEMORY-GOVERNANCE-PUSH-COMPLETE.md",
+      "WT-8.0.9-UNIFIED-MEMORY-CICD-ORCHESTRATION-COMPLETE.md",
+      "SPQR_COMPLETION_SUMMARY.md",
+      "SPQR_DEPLOYMENT_PHASE_COMPLETE.md",
+      "SPQR-PHASE6-KICKOFF-COMPLETE.md",
+      "OF-BEV-Phase-3-COMPLETE.md",
+      "PHASE-4.0-ADMIN-UI-EMBED-COMPLETE.md",
+      "WT-7.4-PHASE-4.0-COMPLETION.md",
+      "WT-MCPGS-1.0-FINAL-VALIDATION.md",
+      "WT-MCPGS-1.0-FINALIZATION-REPORT.md",
+      "WT-MCPGS-1.0-PHASE3-COMPLETE.md",
+      "WT-MCPGS-1.0-PHASE4-DOCKER-COMPLETE.md",
+      "WT-MCPGS-1.0-PRODUCTION-DEPLOYMENT-COMPLETE.md",
+      "WT-MCPGS-1.0-SecretsManager-ImportFix.md"
+    ],
+    "docs/implementation/": [
+      "WOMBAT_TRACK_IMPLEMENTATION_SUMMARY.md",
+      "TECHNICAL_DESIGN_PROPOSAL.md",
+      "QA-FRAMEWORK-IMPLEMENTATION-SUMMARY.md",
+      "ADMIN-UI-INTEGRATION-FINAL.md",
+      "ENHANCED-SIDEBAR-V3.1-VERIFICATION.md",
+      "OF-PRE-GH1-IMPLEMENTATION-SUMMARY.md",
+      "OF-PRE-GH1-EDITABLE-TABLES-SUMMARY.md",
+      "HIERARCHICAL_PARSE_WORKFLOW_V1.3_REPORT.md",
+      "NOTION_SEMANTIC_CORRECTIONS_SUMMARY.md"
+    ],
+    "docs/troubleshooting/": [
+      "DEBUG-RESOLUTION-SUMMARY.md",
+      "DEV-SERVER-DIAGNOSTIC-REPORT.md",
+      "API-ERROR-DIAGNOSTIC-REPORT.md",
+      "CRITICAL-HOOK-RECURSION-FIXES.md",
+      "REACT-VITE-HOOK-RECURSION-DEBUG.md",
+      "URGENT-DEBUG-FIX.md",
+      "GIZMO-NOTIFICATION-HOOK-FIXES.md",
+      "DEV-SERVER-FIX-QA-COMPLETE.md"
+    ],
+    "docs/database/": [
+      "WT-DATABASE-AUDIT-REPORT.md",
+      "WT-DATABASE-AUDIT-EXECUTIVE-SUMMARY.md",
+      "data-backfill-report.md",
+      "sync-report.md",
+      "unsorted-content-databases-report.md",
+      "TEMPORARY_HOLDING_TABLE_STATUS_REPORT.md"
+    ],
+    "docs/quality/": [
+      "LINT_STATUS_REPORT.md",
+      "GIT_HYGIENE_QA_CHECKLIST.md",
+      "lint-analysis-report.json",
+      "lint-pass-3.json",
+      "lint-pass-4.json",
+      "lint-report.json",
+      "remaining-lint-errors.json"
+    ],
+    "docs/design/": [
+      "corrected-sidebar-wireframe.md",
+      "enhanced-sidebar-wireframe.md",
+      "2025-07-29-Orbis Forge Design Framework.txt"
+    ],
+    "docs/deployment/": [
+      "UAT-TEST-PLAN.md",
+      "UAT-DEPLOYMENT-GUIDE.md",
+      "DEV-SETUP.md"
+    ],
+    "data/exports/": [
+      "Phases_canonical.csv",
+      "Projects_canonical.csv",
+      "cleaned-phases-snapshot.csv",
+      "cleaned-projects-snapshot.csv",
+      "Sub-Apps 23ee1901e36e81deba63ce1abf2ed31e_all.csv",
+      "Sub-Apps 23ee1901e36e81deba63ce1abf2ed31e_all (1).csv",
+      "WT Projects 23ce1901e36e811b946bc3e7d764c335_all.csv",
+      "WT Projects 23ce1901e36e811b946bc3e7d764c335_all (1).csv",
+      "WT Phase Database 23ce1901e36e81beb6b8e576174024e5_all.csv",
+      "WT Phase Database 23ce1901e36e81beb6b8e576174024e5_all (1).csv",
+      "WT-MCPGS-1.0-Phase3-Remediation-Tracker.csv",
+      "wt-phase-1.1a-memory-classification.csv",
+      "wt-tech-debt-register 23fe1901e36e815b890ed32337b3ca8b_all.csv",
+      "wt-schema-sync-report 23fe1901e36e819a8dc3dd45deaae36e_all.csv",
+      "notion_databases_erd.csv",
+      "notion_pages_comprehensive.csv"
+    ],
+    "data/backups/": [
+      "notion-export-1753515936005.json",
+      "notion-export-1753516410780.json", 
+      "canonical-db-model.json",
+      "oApp_Phases_Export_20250802.json",
+      "oApp_AgentLogs_20250802.json",
+      "oApp_Projects_Local_Schema_20250802.json",
+      "wt-audit-results.json",
+      "wt-8.2-closure-memoryplugin.json",
+      "watchdog-report.json",
+      "dispatcher-test-report.json",
+      "WT-MCPGS-1.0-MULTI-AGENT-TEST-REPORT.json",
+      "governance-hook-recursion-fix.json",
+      "sidebar-v3.1-activation-governance.json",
+      "sidebar_v3.1_assessment.json",
+      "sidebar_v3.1_activation_complete.json",
+      "unlinked-artefact-log.json",
+      "wt-8.0.4-safe-mode-report.json",
+      "wt-8.0.4-high-confidence-report.json",
+      "wt-8.0.4-execution-log.json"
+    ]
+  },
+
+  "validation_checklist": [
+    "All 98 files successfully moved to target directories",
+    "Git history preserved for all moved files",
+    "No broken internal documentation links",
+    "Index files created for all directories",
+    "MemoryPlugin anchors properly linked",
+    "AI agent integration points validated",
+    "Repository root cleaned of non-essential docs"
+  ],
+
+  "governance_logging": {
+    "governance_entry_required": true,
+    "memory_plugin_update": true,
+    "audit_trail_generation": true,
+    "phase_completion_validation": true
+  },
+
+  "next_phase_trigger": {
+    "condition": "All files moved and validated",
+    "next_phase": "WT-8.9.2", 
+    "next_step": "Archive Historical Reports",
+    "auto_trigger": false
+  },
+
+  "agent_integration_hooks": [
+    "Directory structure update for Memory Anchor Service",
+    "GovernanceLog entry generation upon completion",
+    "DriveMemory ingestion point updates",
+    "Claude context awareness enhancement"
+  ]
+}

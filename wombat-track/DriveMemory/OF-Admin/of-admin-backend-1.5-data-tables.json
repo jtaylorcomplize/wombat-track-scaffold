@@ -1,0 +1,10 @@
+{
+  "memoryAnchor": "of-admin-backend-1.5-data-tables",
+  "chatTitle": "OF Admin Backend 1.5 Data tables",
+  "timestampAEST": "2025-08-03T00:00",
+  "projectPhase": "OF Admin Backend",
+  "artifactType": "DataTablesQA",
+  "description": "Backend QA for data tables and canonical DB fixes",
+  "driveMemoryPath": "/DriveMemory/OF-Admin/",
+  "batchProcessed": "2025-08-06"
+}

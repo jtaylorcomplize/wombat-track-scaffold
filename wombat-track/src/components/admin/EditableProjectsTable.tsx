@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Edit3, Save, GitCommit, RefreshCw, Filter, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { Edit3, Save, GitCommit, RefreshCw, Filter, AlertTriangle, CheckCircle, Clock, Loader, X } from 'lucide-react';
 
 interface Project {
   projectId: string;
@@ -23,12 +23,21 @@ interface Project {
   tags?: string;
   category?: string;
   department?: string;
+  subApp_ref?: string;
+  editableByAdmin?: boolean;
   isDraft?: number;
   draftEditedBy?: string;
   draftEditedAt?: string;
   editStatus?: 'draft' | 'committed';
   createdAt?: string;
   updatedAt?: string;
+}
+
+interface SubApp {
+  subAppId: string;
+  subAppName: string;
+  owner?: string;
+  purpose?: string;
 }
 
 interface EditableCell {
@@ -39,18 +48,22 @@ interface EditableCell {
 
 export default function EditableProjectsTable() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [subApps, setSubApps] = useState<SubApp[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
   const [editingCells, setEditingCells] = useState<Map<string, EditableCell>>(new Map());
   const [filter, setFilter] = useState({
     status: '',
     rag: '',
+    subApp: '',
     showDraftsOnly: false
   });
   const [savingStates, setSavingStates] = useState<Map<string, 'saving' | 'committing'>>(new Map());
+  const [subAppSaveStates, setSubAppSaveStates] = useState<Map<string, 'saving' | 'success' | 'error'>>(new Map());
 
   useEffect(() => {
     fetchProjects();
+    fetchSubApps();
   }, []);
 
   const fetchProjects = async () => {
@@ -77,6 +90,108 @@ export default function EditableProjectsTable() {
     }
   };
 
+  const fetchSubApps = async () => {
+    try {
+      // First try the canonical Orbis API
+      const response = await fetch('/api/orbis/sub-apps');
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          // Transform API response to expected format
+          const transformedSubApps = result.data.map((subApp: any) => ({
+            subAppId: subApp.id,
+            subAppName: subApp.name,
+            purpose: subApp.description
+          }));
+          setSubApps(transformedSubApps);
+          return;
+        }
+      }
+      
+      // Fallback to admin API
+      const adminResponse = await fetch('/api/admin/subapps');
+      if (adminResponse.ok) {
+        const adminResult = await adminResponse.json();
+        if (adminResult.success) {
+          setSubApps(adminResult.data);
+          return;
+        }
+      }
+      
+      // Final fallback to hardcoded canonical SubApps
+      console.warn('Both APIs failed, using canonical SubApps fallback');
+      setSubApps([
+        { subAppId: 'MetaPlatform', subAppName: 'MetaPlatform', purpose: 'Universal platform integration' },
+        { subAppId: 'Complize', subAppName: 'Complize', purpose: 'Immigration compliance platform' },
+        { subAppId: 'Orbis', subAppName: 'Orbis', purpose: 'Core governance platform' },
+        { subAppId: 'Roam', subAppName: 'Roam', purpose: 'Knowledge management' }
+      ]);
+      
+    } catch (err) {
+      console.warn('Error fetching SubApps, using canonical fallback:', err);
+      // Fallback to production SubApps data  
+      setSubApps([
+        { subAppId: 'MetaPlatform', subAppName: 'MetaPlatform', purpose: 'Universal platform integration' },
+        { subAppId: 'Complize', subAppName: 'Complize', purpose: 'Immigration compliance platform' },
+        { subAppId: 'Orbis', subAppName: 'Orbis', purpose: 'Core governance platform' },
+        { subAppId: 'Roam', subAppName: 'Roam', purpose: 'Knowledge management' }
+      ]);
+    }
+  };
+
+  const saveSubAppImmediately = async (projectId: string, subApp_ref: string) => {
+    try {
+      setSubAppSaveStates(prev => new Map(prev).set(projectId, 'saving'));
+      
+      const response = await fetch(`/api/admin/edit/projects/${projectId}/link-subapp`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ subApp_ref })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save SubApp: ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        // Update the project in our local state to reflect the change
+        setProjects(prev => prev.map(p => 
+          p.projectId === projectId 
+            ? { ...p, subApp_ref: subApp_ref, updatedAt: new Date().toISOString() }
+            : p
+        ));
+        
+        setSubAppSaveStates(prev => new Map(prev).set(projectId, 'success'));
+        
+        // Clear success state after 3 seconds
+        setTimeout(() => {
+          setSubAppSaveStates(prev => {
+            const newMap = new Map(prev);
+            newMap.delete(projectId);
+            return newMap;
+          });
+        }, 3000);
+      } else {
+        throw new Error(result.error || 'Failed to save SubApp');
+      }
+    } catch (error) {
+      console.error('Error saving SubApp:', error);
+      setSubAppSaveStates(prev => new Map(prev).set(projectId, 'error'));
+      
+      // Clear error state after 5 seconds
+      setTimeout(() => {
+        setSubAppSaveStates(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(projectId);
+          return newMap;
+        });
+      }, 5000);
+    }
+  };
+
   const handleCellEdit = useCallback((projectId: string, field: string, value: unknown) => {
     const cellKey = `${projectId}-${field}`;
     setEditingCells(prev => {
@@ -84,6 +199,11 @@ export default function EditableProjectsTable() {
       newMap.set(cellKey, { projectId, field, value });
       return newMap;
     });
+
+    // Trigger immediate save for SubApp_ref changes
+    if (field === 'subApp_ref') {
+      saveSubAppImmediately(projectId, value as string);
+    }
   }, []);
 
   const saveDraft = async (projectId: string) => {
@@ -150,19 +270,50 @@ export default function EditableProjectsTable() {
     try {
       setSavingStates(prev => new Map(prev).set(projectId, 'committing'));
 
+      // Get the current project data and any pending edits to check for subApp_ref changes
+      const currentProject = projects.find(p => p.projectId === projectId);
+      const projectEdits: Record<string, unknown> = {};
+      editingCells.forEach((edit) => {
+        if (edit.projectId === projectId) {
+          projectEdits[edit.field] = edit.value;
+        }
+      });
+
+      // Check if subApp_ref is being changed
+      const oldSubApp = currentProject?.subApp_ref;
+      const newSubApp = projectEdits.subApp_ref !== undefined ? projectEdits.subApp_ref as string : oldSubApp;
+      const subAppChanged = oldSubApp !== newSubApp;
+
       const response = await fetch(`/api/admin/edit/projects/${projectId}/commit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-User-ID': 'admin'
         },
-        body: JSON.stringify({ commitMessage })
+        body: JSON.stringify({ 
+          commitMessage,
+          governanceLog: subAppChanged ? {
+            event: 'ProjectSubAppLinkUpdated',
+            projectId: projectId,
+            projectName: currentProject?.projectName || 'Unknown',
+            oldSubApp: oldSubApp || null,
+            newSubApp: newSubApp || null,
+            timestamp: new Date().toISOString(),
+            memoryAnchor: 'project-link-update-20250805'
+          } : null
+        })
       });
 
       const result = await response.json();
       if (result.success) {
         await fetchProjects();
-        alert('Project committed to canonical database!');
+        if (subAppChanged) {
+          const oldSubAppName = subApps.find(sa => sa.subAppId === oldSubApp)?.subAppName || oldSubApp || 'None';
+          const newSubAppName = subApps.find(sa => sa.subAppId === newSubApp)?.subAppName || newSubApp || 'None';
+          alert(`Project committed successfully!\nSub-App assignment changed: ${oldSubAppName} → ${newSubAppName}`);
+        } else {
+          alert('Project committed to canonical database!');
+        }
       } else {
         throw new Error(result.error || 'Failed to commit project');
       }
@@ -182,6 +333,7 @@ export default function EditableProjectsTable() {
   const filteredProjects = projects.filter(project => {
     if (filter.status && project.status !== filter.status) return false;
     if (filter.rag && project.RAG !== filter.rag) return false;
+    if (filter.subApp && project.subApp_ref !== filter.subApp) return false;
     if (filter.showDraftsOnly && project.isDraft !== 1) return false;
     return true;
   });
@@ -222,9 +374,19 @@ export default function EditableProjectsTable() {
             autoFocus
           >
             <option value="">Select...</option>
-            {options.map(option => (
-              <option key={option} value={option}>{option}</option>
-            ))}
+            {options.map(option => {
+              if (field === 'subApp_ref' && option) {
+                const subApp = subApps.find(sa => sa.subAppId === option);
+                return (
+                  <option key={option} value={option}>
+                    {subApp ? subApp.subAppName : option}
+                  </option>
+                );
+              }
+              return (
+                <option key={option} value={option}>{option}</option>
+              );
+            })}
           </select>
         );
       }
@@ -242,6 +404,13 @@ export default function EditableProjectsTable() {
       );
     }
 
+    // For display, show SubApp name instead of ID
+    let displayValue = value;
+    if (field === 'subApp_ref' && value) {
+      const subApp = subApps.find(sa => sa.subAppId === value);
+      displayValue = subApp ? subApp.subAppName : value;
+    }
+
     return (
       <div
         onClick={() => setIsEditing(true)}
@@ -250,7 +419,7 @@ export default function EditableProjectsTable() {
         }`}
         title="Click to edit"
       >
-        {value || <span className="text-gray-400">-</span>}
+        {displayValue || <span className="text-gray-400">-</span>}
       </div>
     );
   };
@@ -316,6 +485,19 @@ export default function EditableProjectsTable() {
               <option value="Red">Red</option>
             </select>
             
+            <select
+              value={filter.subApp}
+              onChange={(e) => setFilter(prev => ({ ...prev, subApp: e.target.value }))}
+              className="border rounded px-2 py-1 text-sm"
+            >
+              <option value="">All Sub-Apps</option>
+              {subApps.map(subApp => (
+                <option key={subApp.subAppId} value={subApp.subAppId}>
+                  {subApp.subAppName}
+                </option>
+              ))}
+            </select>
+            
             <label className="flex items-center space-x-1">
               <input
                 type="checkbox"
@@ -342,6 +524,7 @@ export default function EditableProjectsTable() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Project Name</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sub-App</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Owner</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">RAG</th>
@@ -364,6 +547,34 @@ export default function EditableProjectsTable() {
                         <span className="text-xs">Draft</span>
                       </div>
                     )}
+                  </div>
+                </td>
+                
+                <td className="px-4 py-2">
+                  <div className="flex items-center space-x-2">
+                    <EditableCell 
+                      project={project} 
+                      field="subApp_ref" 
+                      type="select"
+                      options={['', ...subApps.map(sa => sa.subAppId)]}
+                    />
+                    {(() => {
+                      const saveState = subAppSaveStates.get(project.projectId);
+                      if (saveState === 'saving') {
+                        return (
+                          <Loader size={14} className="text-blue-500 animate-spin" title="Saving SubApp..." />
+                        );
+                      } else if (saveState === 'success') {
+                        return (
+                          <CheckCircle size={14} className="text-green-500" title="SubApp saved successfully" />
+                        );
+                      } else if (saveState === 'error') {
+                        return (
+                          <X size={14} className="text-red-500" title="Failed to save SubApp" />
+                        );
+                      }
+                      return null;
+                    })()}
                   </div>
                 </td>
                 
