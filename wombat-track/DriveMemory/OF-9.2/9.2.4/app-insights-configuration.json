@@ -1,0 +1,92 @@
+{
+  "configurationTimestamp": "2025-08-08T21:30:00+10:00",
+  "resourceGroup": "of-8-6-cloud-rg",
+  "location": "australiaeast",
+  "appInsightsInstances": [
+    {
+      "name": "WT-Backend-Insights",
+      "applicationType": "web",
+      "kind": "web",
+      "appId": "6b7f280c-cf44-4fda-9985-215c272b3ad9",
+      "applicationId": "WT-Backend-Insights",
+      "instrumentationKey": "e772a6e3-86c9-48f6-a220-e4fff3d32f25",
+      "connectionString": "InstrumentationKey=e772a6e3-86c9-48f6-a220-e4fff3d32f25;IngestionEndpoint=https://australiaeast-1.in.applicationinsights.azure.com/;LiveEndpoint=https://australiaeast.livediagnostics.monitor.azure.com/;ApplicationId=6b7f280c-cf44-4fda-9985-215c272b3ad9",
+      "ingestionMode": "LogAnalytics",
+      "retentionInDays": 90,
+      "publicNetworkAccess": {
+        "ingestion": "Enabled",
+        "query": "Enabled"
+      },
+      "targetAppService": "wombat-track-api-prod",
+      "configuredSlots": ["production", "staging"]
+    },
+    {
+      "name": "WT-Frontend-Insights",
+      "applicationType": "web", 
+      "kind": "web",
+      "appId": "8404bd9a-2eda-40de-a2d5-11015a59d55f",
+      "applicationId": "WT-Frontend-Insights",
+      "instrumentationKey": "919391a9-ea0c-4aac-97da-804672a75c19",
+      "connectionString": "InstrumentationKey=919391a9-ea0c-4aac-97da-804672a75c19;IngestionEndpoint=https://australiaeast-1.in.applicationinsights.azure.com/;LiveEndpoint=https://australiaeast.livediagnostics.monitor.azure.com/;ApplicationId=8404bd9a-2eda-40de-a2d5-11015a59d55f",
+      "ingestionMode": "LogAnalytics",
+      "retentionInDays": 90,
+      "publicNetworkAccess": {
+        "ingestion": "Enabled",
+        "query": "Enabled"
+      },
+      "targetAppService": "wombat-track-ui-prod",
+      "configuredSlots": ["production", "staging"]
+    }
+  ],
+  "appServiceConfiguration": {
+    "backend": {
+      "appServiceName": "wombat-track-api-prod",
+      "appSettings": {
+        "APPLICATIONINSIGHTS_CONNECTION_STRING": "InstrumentationKey=e772a6e3-86c9-48f6-a220-e4fff3d32f25;IngestionEndpoint=https://australiaeast-1.in.applicationinsights.azure.com/;LiveEndpoint=https://australiaeast.livediagnostics.monitor.azure.com/;ApplicationId=6b7f280c-cf44-4fda-9985-215c272b3ad9",
+        "APPINSIGHTS_INSTRUMENTATIONKEY": "e772a6e3-86c9-48f6-a220-e4fff3d32f25"
+      },
+      "dependencyTracking": "Enabled",
+      "samplingPercentage": 100
+    },
+    "frontend": {
+      "appServiceName": "wombat-track-ui-prod",
+      "appSettings": {
+        "APPLICATIONINSIGHTS_CONNECTION_STRING": "InstrumentationKey=919391a9-ea0c-4aac-97da-804672a75c19;IngestionEndpoint=https://australiaeast-1.in.applicationinsights.azure.com/;LiveEndpoint=https://australiaeast.livediagnostics.monitor.azure.com/;ApplicationId=8404bd9a-2eda-40de-a2d5-11015a59d55f"
+      },
+      "clientSideTracking": "Enabled",
+      "pageViewTracking": "Enabled"
+    }
+  },
+  "telemetryConfiguration": {
+    "automaticCollection": {
+      "requests": true,
+      "dependencies": true,
+      "exceptions": true,
+      "performanceCounters": true,
+      "heartbeat": true
+    },
+    "customMetrics": [
+      "governance_log_ingestion_rate",
+      "mcp_server_connectivity",
+      "phase_completion_metrics",
+      "user_session_analytics"
+    ],
+    "alertingRules": {
+      "responseTime": "Alert when average response time > 2000ms",
+      "errorRate": "Alert when error rate > 5%",
+      "availability": "Alert when availability < 95%",
+      "dependencyFailures": "Alert on repeated dependency failures"
+    }
+  },
+  "logAnalyticsWorkspace": {
+    "automaticallyCreated": true,
+    "ingestionEndpoint": "https://australiaeast-1.in.applicationinsights.azure.com/",
+    "queryEndpoint": "https://australiaeast.livediagnostics.monitor.azure.com/"
+  },
+  "governanceForwardingSetup": {
+    "functionApp": "wt-governancelog-forwarder",
+    "triggerType": "HTTP",
+    "forwardingEndpoint": "/api/admin/governance_logs",
+    "transformationLogic": "Telemetry -> Governance Log JSON format"
+  }
+}

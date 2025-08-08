@@ -7,6 +7,7 @@ import {
 } from '../../api/integrationHealthAPI';
 import type { IntegrationHealth } from '../../lib/getIntegrationHealth';
 import { ClaudePromptButton } from '../common/ClaudePromptButton';
+import { AppInsightsHealthPanel } from './AppInsightsHealthPanel';
 
 // Legacy interface for backward compatibility
 interface Integration {
@@ -218,6 +219,9 @@ export const OrbisDashboard: React.FC<OrbisDashboardProps> = ({ onHealthCheck })
 
   return (
     <div data-testid="orbis-dashboard-page" className="space-y-6">
+      {/* App Insights Health Panel */}
+      <AppInsightsHealthPanel className="mb-6" />
+
       {/* Status Rollup */}
       <div data-testid="status-rollup" className="grid grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg border">
         {lastUpdated && (

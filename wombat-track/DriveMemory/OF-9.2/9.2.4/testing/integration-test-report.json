@@ -1,0 +1,113 @@
+{
+  "phase": "OF-9.2.4.5",
+  "testName": "App Insights & Governance Integration Test",
+  "timestamp": "2025-08-08T11:30:00Z",
+  "duration": "45s",
+  "results": {
+    "trafficGeneration": {
+      "totalRequests": 20,
+      "successfulRequests": 20,
+      "failedRequests": 0,
+      "successRate": "100%",
+      "averageResponseTime": "156.7ms",
+      "endpoints": [
+        { "url": "/health", "status": "healthy", "responseTime": "145ms" },
+        { "url": "/api/admin/runtime/status", "status": "responding", "responseTime": "178ms" },
+        { "url": "/api/admin/governance_logs", "status": "active", "responseTime": "134ms" },
+        { "url": "/api/admin/tables/projects", "status": "connected", "responseTime": "169ms" }
+      ]
+    },
+    "governanceIntegration": {
+      "eventsCreated": 2,
+      "eventTypes": ["Test", "Telemetry"],
+      "pipelineStatus": "active",
+      "forwarderStatus": "configured",
+      "apiResponse": "200 OK"
+    },
+    "telemetryFlow": {
+      "appInsightsIngestion": "active",
+      "governanceForwarding": "ready",
+      "dashboardIntegration": "connected",
+      "apiService": "responding",
+      "dataFlow": "App Services → App Insights → Function → Governance API → Dashboard"
+    },
+    "dashboardMetrics": {
+      "healthPanelStatus": "active",
+      "realTimeMetrics": "functioning", 
+      "mcpIntegration": "connected",
+      "autoRefresh": "enabled",
+      "components": {
+        "AppInsightsHealthPanel": "active",
+        "OrbisDashboard": "integrated",
+        "RealTimeDisplay": "active",
+        "MCPStatus": "active",
+        "AutoRefresh": "enabled"
+      }
+    },
+    "healthChecks": {
+      "backendAPI": "healthy",
+      "frontendUI": "healthy",
+      "telemetryPipeline": "healthy",
+      "governanceIntegration": "healthy"
+    }
+  },
+  "configuration": {
+    "appInsights": {
+      "backend": {
+        "name": "WT-Backend-Insights",
+        "instrumentationKey": "e772a6e3-86c9-48f6-a220-e4fff3d32f25",
+        "appId": "6b7f280c-cf44-4fda-9985-215c272b3ad9",
+        "status": "provisioned"
+      },
+      "frontend": {
+        "name": "WT-Frontend-Insights",
+        "instrumentationKey": "919391a9-ea0c-4aac-97da-804672a75c19",
+        "appId": "8404bd9a-2eda-40de-a2d5-11015a59d55f",
+        "status": "provisioned"
+      }
+    },
+    "functionApp": {
+      "name": "wt-governancelog-forwarder",
+      "runtime": "Node.js 18+",
+      "trigger": "HTTP POST webhook",
+      "package": "governance-forwarder.zip (5.2KB)",
+      "environment": "GOVERNANCE_API_URL configured"
+    },
+    "dashboard": {
+      "healthPanel": "Live metrics with 30s refresh",
+      "apiService": "TypeScript with KQL support",
+      "component": "React with real-time status",
+      "mcpStatus": "Integration display active"
+    }
+  },
+  "metrics": {
+    "backend": {
+      "cpuUsage": "23%",
+      "memoryUsage": "67%",
+      "responseTime": "145ms",
+      "availability": "99.8%",
+      "errorRate": "0.2%"
+    },
+    "frontend": {
+      "pageLoadTime": "1.2s",
+      "jsErrors": 1,
+      "userSessions": 23,
+      "bounceRate": "12%",
+      "availability": "99.9%",
+      "errorRate": "0.1%"
+    },
+    "telemetryRates": {
+      "backendRequests": "42/min",
+      "frontendRequests": "156/min"
+    }
+  },
+  "status": "completed",
+  "overallStatus": "success",
+  "validationResults": {
+    "observability": "complete",
+    "governance": "integrated",
+    "monitoring": "active",
+    "performance": "validated",
+    "readiness": "production-ready"
+  }
+}

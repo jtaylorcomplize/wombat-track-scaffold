@@ -1,0 +1,82 @@
+[
+  {
+    "name": "STATIC_CACHE_CONTROL",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "HTML_CACHE_CONTROL",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "API_CACHE_CONTROL",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "COMPRESSION_ENABLED",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "GZIP_STATIC_FILES",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "SESSION_STORE",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "SESSION_TTL",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "SESSION_COOKIE_SECURE",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "SESSION_COOKIE_HTTPONLY",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "SESSION_COOKIE_SAMESITE",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "BUILD_COMMAND",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "OUTPUT_DIRECTORY",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "NODE_VERSION",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "NPM_VERSION",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+    "slotSetting": false,
+    "value": null
+  },
+  {
+    "name": "REDIS_CONNECTION_STRING",
+    "slotSetting": false,
+    "value": null
+  }
+]

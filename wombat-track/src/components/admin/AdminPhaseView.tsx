@@ -14,6 +14,7 @@ import {
   Eye
 } from 'lucide-react';
 import { GovLogManagerModal } from '../GovLogManagerModal';
+import HealthMetricsPanel from './HealthMetricsPanel';
 
 interface GovernanceLogEntry {
   id: number;
@@ -364,6 +365,11 @@ const AdminPhaseView: React.FC = () => {
             ))}
           </select>
         </div>
+      </div>
+
+      {/* Health Metrics Panel */}
+      <div className="mb-6">
+        <HealthMetricsPanel />
       </div>
 
       {currentPhase && (

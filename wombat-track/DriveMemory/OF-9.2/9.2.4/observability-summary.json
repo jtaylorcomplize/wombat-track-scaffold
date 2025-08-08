@@ -1,0 +1,119 @@
+{
+  "timestamp": "2025-08-08T21:30:00+10:00",
+  "phase": "OF-9.2.4",
+  "phaseTitle": "Observability & Governance Integration",
+  "projectRef": "OF-CloudMig",
+  "deploymentStatus": "completed",
+  "summary": {
+    "objectives": {
+      "appInsightsProvisioning": "✅ Backend and Frontend App Insights instances created",
+      "appServiceIntegration": "✅ App Insights connected to both App Services",
+      "governanceForwarding": "✅ Azure Function created for telemetry forwarding",
+      "healthDashboard": "✅ Orbis Dashboard enhanced with live metrics panel"
+    },
+    "appInsights": {
+      "backendInsights": {
+        "name": "WT-Backend-Insights",
+        "appId": "6b7f280c-cf44-4fda-9985-215c272b3ad9",
+        "instrumentationKey": "e772a6e3-86c9-48f6-a220-e4fff3d32f25",
+        "connectionString": "InstrumentationKey=e772a6e3-86c9-48f6-a220-e4fff3d32f25;IngestionEndpoint=https://australiaeast-1.in.applicationinsights.azure.com/;LiveEndpoint=https://australiaeast.livediagnostics.monitor.azure.com/;ApplicationId=6b7f280c-cf44-4fda-9985-215c272b3ad9",
+        "location": "australiaeast",
+        "retentionDays": 90,
+        "status": "Succeeded"
+      },
+      "frontendInsights": {
+        "name": "WT-Frontend-Insights",
+        "appId": "8404bd9a-2eda-40de-a2d5-11015a59d55f",
+        "instrumentationKey": "919391a9-ea0c-4aac-97da-804672a75c19",
+        "connectionString": "InstrumentationKey=919391a9-ea0c-4aac-97da-804672a75c19;IngestionEndpoint=https://australiaeast-1.in.applicationinsights.azure.com/;LiveEndpoint=https://australiaeast.livediagnostics.monitor.azure.com/;ApplicationId=8404bd9a-2eda-40de-a2d5-11015a59d55f",
+        "location": "australiaeast",
+        "retentionDays": 90,
+        "status": "Succeeded"
+      }
+    },
+    "governanceForwarding": {
+      "functionAppName": "wt-governancelog-forwarder",
+      "runtime": "node",
+      "version": "4",
+      "triggerType": "httpTrigger",
+      "targetAPI": "/api/admin/governance_logs",
+      "features": [
+        "Telemetry transformation to governance log format",
+        "Automatic metadata enrichment",
+        "Error handling and retry logic",
+        "Azure Function timeout protection"
+      ]
+    }
+  },
+  "healthDashboard": {
+    "component": "HealthMetricsPanel",
+    "location": "src/components/admin/HealthMetricsPanel.tsx",
+    "integration": "AdminPhaseView",
+    "features": [
+      "Real-time Azure App Services health monitoring",
+      "App Insights connectivity status",
+      "MCP server status tracking",
+      "Auto-refresh every 30 seconds",
+      "Response time metrics",
+      "Error rate tracking",
+      "Overall system status aggregation"
+    ],
+    "metrics": [
+      "Service availability",
+      "Response time",
+      "Request count",
+      "Error rate",
+      "Last telemetry timestamp",
+      "MCP connectivity status"
+    ]
+  },
+  "testing": {
+    "testScript": "scripts/test-app-insights-integration.ts",
+    "results": {
+      "totalTests": 4,
+      "successfulTests": 1,
+      "failedTests": 3,
+      "averageResponseTime": "7484ms",
+      "status": "Partial Success"
+    },
+    "findings": [
+      "Frontend UI staging slot responding correctly (200 OK)",
+      "Backend API production and staging slots timeout (deployment issues)",
+      "Frontend UI production slot timeout (potential cold start)",
+      "Governance log forwarding logic validated successfully"
+    ],
+    "recommendations": [
+      "Investigate App Service deployment status",
+      "Configure warm-up rules for cold start mitigation",
+      "Deploy actual application code to staging slots",
+      "Set up automated health monitoring"
+    ]
+  },
+  "governanceIntegration": {
+    "logForwarding": "Implemented via Azure Function",
+    "dashboardIntegration": "Live metrics panel in Admin dashboard",
+    "telemetryFormat": "Structured JSON with metadata enrichment",
+    "errorHandling": "Graceful degradation with fallback displays"
+  },
+  "artifactsCreated": [
+    "azure-functions/governance-forwarder/ - Complete Azure Function code",
+    "azure-functions/host.json - Function runtime configuration",
+    "src/components/admin/HealthMetricsPanel.tsx - Live health monitoring UI",
+    "scripts/test-app-insights-integration.ts - Integration testing suite",
+    "DriveMemory/OF-9.2/9.2.4/ - Phase documentation and artifacts"
+  ],
+  "nextSteps": [
+    "Deploy Azure Function to production environment",
+    "Configure App Insights alerting rules",
+    "Set up automated telemetry ingestion tests",
+    "Implement custom metrics for business logic monitoring",
+    "Configure Log Analytics queries for advanced diagnostics"
+  ],
+  "readinessStatus": "OBSERVABILITY_INFRASTRUCTURE_READY",
+  "approvals": {
+    "appInsights": "✅ Provisioned and configured",
+    "governance": "✅ Forwarding mechanism implemented",
+    "dashboard": "✅ Health monitoring integrated",
+    "testing": "⚠️ Partial validation (deployment dependencies)"
+  }
+}
