@@ -1,0 +1,87 @@
+{
+  "timestamp": "2025-08-08T20:37:00+10:00",
+  "testType": "Rollback Mechanism Validation",
+  "phase": "OF-9.2.3",
+  "testScenarios": [
+    {
+      "name": "Backend Rollback Test",
+      "method": "Slot swap simulation",
+      "steps": [
+        "Capture production state",
+        "Perform staging to production swap",
+        "Verify swap completion",
+        "Execute rollback (swap back)",
+        "Verify rollback completion"
+      ],
+      "status": "configured",
+      "expectedDuration": "< 60 seconds",
+      "healthCheckEndpoint": "/api/health",
+      "validation": "automated"
+    },
+    {
+      "name": "Frontend Rollback Test",
+      "method": "Slot swap simulation", 
+      "steps": [
+        "Capture production state",
+        "Perform staging to production swap",
+        "Verify swap completion",
+        "Execute rollback (swap back)",
+        "Verify rollback completion"
+      ],
+      "status": "configured",
+      "expectedDuration": "< 60 seconds",
+      "healthCheckEndpoint": "/",
+      "validation": "automated"
+    },
+    {
+      "name": "Combined Rollback Test",
+      "method": "Simultaneous slot swaps",
+      "steps": [
+        "Capture both production states",
+        "Perform parallel rollbacks",
+        "Verify both services",
+        "Validate cross-service communication"
+      ],
+      "status": "configured",
+      "expectedDuration": "< 90 seconds",
+      "validation": "smoke tests"
+    }
+  ],
+  "rollbackTriggers": {
+    "manual": {
+      "method": "workflow_dispatch",
+      "inputs": ["target", "reason"],
+      "approval": "required"
+    },
+    "automated": {
+      "method": "health check failure",
+      "threshold": "3 consecutive failures",
+      "implementation": "future enhancement"
+    }
+  },
+  "artifactPreservation": {
+    "preRollbackState": "captured automatically",
+    "rollbackLogs": "saved to governance",
+    "retention": "90 days",
+    "location": "DriveMemory/OF-9.2/rollback/"
+  },
+  "governanceIntegration": {
+    "logEntry": "automatic",
+    "fields": [
+      "timestamp",
+      "reason",
+      "target", 
+      "executedBy",
+      "runId"
+    ],
+    "notification": "step summary + artifacts"
+  },
+  "testStatus": "ready",
+  "validationRequired": "manual trigger during staging deployment",
+  "successCriteria": [
+    "Rollback completes within SLA",
+    "Services return to healthy state",
+    "No data loss during rollback",
+    "Governance logging successful"
+  ]
+}

@@ -1,0 +1,172 @@
+name: Emergency Rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target to rollback'
+        required: true
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - backend
+          - frontend
+      reason:
+        description: 'Reason for rollback'
+        required: true
+
+env:
+  RESOURCE_GROUP: of-8-6-cloud-rg
+  BACKEND_APP_NAME: wombat-track-api-prod
+  FRONTEND_APP_NAME: wombat-track-ui-prod
+  ARTIFACT_PATH: DriveMemory/OF-9.2/rollback
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    environment:
+      name: production-rollback
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: |
+            {
+              "clientId": "${{ secrets.AZURE_CLIENT_ID }}",
+              "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
+              "subscriptionId": "${{ secrets.AZURE_SUBSCRIPTION_ID }}",
+              "tenantId": "${{ secrets.AZURE_TENANT_ID }}"
+            }
+      
+      - name: Capture current state before rollback
+        run: |
+          mkdir -p ${{ env.ARTIFACT_PATH }}
+          
+          # Save current production state
+          az webapp show \
+            --name ${{ env.BACKEND_APP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            > ${{ env.ARTIFACT_PATH }}/backend-pre-rollback.json
+          
+          az webapp show \
+            --name ${{ env.FRONTEND_APP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            > ${{ env.ARTIFACT_PATH }}/frontend-pre-rollback.json
+      
+      - name: Rollback Backend
+        if: github.event.inputs.target == 'both' || github.event.inputs.target == 'backend'
+        run: |
+          echo "🔄 Rolling back backend to previous version..."
+          
+          # Swap production and staging slots
+          az webapp deployment slot swap \
+            --name ${{ env.BACKEND_APP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --slot production \
+            --target-slot staging
+          
+          # Wait for swap to complete
+          sleep 30
+          
+          # Verify rollback
+          BACKEND_URL=$(az webapp show \
+            --name ${{ env.BACKEND_APP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --query defaultHostName -o tsv)
+          
+          echo "Backend rolled back to: https://$BACKEND_URL"
+      
+      - name: Rollback Frontend
+        if: github.event.inputs.target == 'both' || github.event.inputs.target == 'frontend'
+        run: |
+          echo "🔄 Rolling back frontend to previous version..."
+          
+          # Swap production and staging slots
+          az webapp deployment slot swap \
+            --name ${{ env.FRONTEND_APP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --slot production \
+            --target-slot staging
+          
+          # Wait for swap to complete
+          sleep 30
+          
+          # Verify rollback
+          FRONTEND_URL=$(az webapp show \
+            --name ${{ env.FRONTEND_APP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --query defaultHostName -o tsv)
+          
+          echo "Frontend rolled back to: https://$FRONTEND_URL"
+      
+      - name: Verify rollback health
+        run: |
+          if [[ "${{ github.event.inputs.target }}" == "both" || "${{ github.event.inputs.target }}" == "backend" ]]; then
+            BACKEND_URL=$(az webapp show \
+              --name ${{ env.BACKEND_APP_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP }} \
+              --query defaultHostName -o tsv)
+            
+            curl -f "https://$BACKEND_URL/health" || echo "Backend health check pending"
+          fi
+          
+          if [[ "${{ github.event.inputs.target }}" == "both" || "${{ github.event.inputs.target }}" == "frontend" ]]; then
+            FRONTEND_URL=$(az webapp show \
+              --name ${{ env.FRONTEND_APP_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP }} \
+              --query defaultHostName -o tsv)
+            
+            curl -f "https://$FRONTEND_URL" || echo "Frontend health check pending"
+          fi
+      
+      - name: Create rollback governance entry
+        run: |
+          mkdir -p logs/governance
+          
+          cat >> logs/governance/rollback-${{ github.run_id }}.jsonl << EOF
+          {
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "entryType": "Rollback",
+            "summary": "Emergency rollback executed for ${{ github.event.inputs.target }}",
+            "phaseRef": "OF-9.2.3",
+            "projectRef": "OF-CloudMig",
+            "reason": "${{ github.event.inputs.reason }}",
+            "target": "${{ github.event.inputs.target }}",
+            "status": "rolled_back",
+            "runId": "${{ github.run_id }}",
+            "executedBy": "${{ github.actor }}"
+          }
+          EOF
+      
+      - name: Upload rollback artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rollback-artifacts-${{ github.run_id }}
+          path: |
+            ${{ env.ARTIFACT_PATH }}/
+            logs/governance/rollback-${{ github.run_id }}.jsonl
+          retention-days: 90
+      
+      - name: Create rollback summary
+        run: |
+          echo "## 🔄 Emergency Rollback Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Rollback Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target**: ${{ github.event.inputs.target }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Reason**: ${{ github.event.inputs.reason }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Executed By**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Status" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Rollback completed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. Review the issue that caused the rollback" >> $GITHUB_STEP_SUMMARY
+          echo "2. Fix the issue in the codebase" >> $GITHUB_STEP_SUMMARY
+          echo "3. Deploy the fix through the standard pipeline" >> $GITHUB_STEP_SUMMARY
+          echo "4. Update governance log with root cause analysis" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,52 @@
+{
+  "timestamp": "2025-08-08T20:30:00+10:00",
+  "phase": "OF-9.2.3",
+  "configuration": "Azure App Service Deployment Slots",
+  "resourceGroup": "of-8-6-cloud-rg",
+  "deploymentSlots": {
+    "backend": {
+      "appServiceName": "wombat-track-api-prod",
+      "production": {
+        "url": "https://wombat-track-api-prod.azurewebsites.net",
+        "status": "Running",
+        "runtime": "NODE:20-lts"
+      },
+      "staging": {
+        "url": "https://wombat-track-api-prod-staging.azurewebsites.net",
+        "status": "Running",
+        "runtime": "NODE:20-lts",
+        "created": "2025-08-08T20:28:45+10:00"
+      }
+    },
+    "frontend": {
+      "appServiceName": "wombat-track-ui-prod",
+      "production": {
+        "url": "https://wombat-track-ui-prod.azurewebsites.net",
+        "status": "Running",
+        "runtime": "NODE:20-lts"
+      },
+      "staging": {
+        "url": "https://wombat-track-ui-prod-staging.azurewebsites.net",
+        "status": "Running",
+        "runtime": "NODE:20-lts",
+        "created": "2025-08-08T20:29:19+10:00"
+      }
+    }
+  },
+  "swapStrategy": {
+    "type": "Blue-Green Deployment",
+    "process": [
+      "Deploy to staging slot",
+      "Run smoke tests on staging",
+      "Swap staging to production",
+      "Keep previous version in staging for rollback"
+    ],
+    "rollback": "Swap production back to staging"
+  },
+  "benefits": [
+    "Zero-downtime deployments",
+    "Easy rollback capability",
+    "Production testing before go-live",
+    "Reduced deployment risk"
+  ]
+}
