@@ -54,6 +54,21 @@ export const GovLogManagerModal: React.FC<GovLogManagerModalProps> = ({
   const [integrityLoading, setIntegrityLoading] = useState(false);
   const [logIntegrityStatus, setLogIntegrityStatus] = useState<Record<string, { issueCount: number; severity: 'none' | 'info' | 'warning' | 'critical' }>>({});
   
+  // URL parameter handling for deep linking to Link Integrity tab
+  useEffect(() => {
+    if (isOpen) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tab = urlParams.get('tab');
+      if (tab === 'link-integrity') {
+        setShowLinkIntegrity(true);
+        // Auto-load integrity report when accessed via deep link
+        if (!integrityReport) {
+          loadIntegrityReport();
+        }
+      }
+    }
+  }, [isOpen, integrityReport, loadIntegrityReport]);
+  
   // Filter options
   const [availablePhases, setAvailablePhases] = useState<string[]>([]);
   const [availableSteps, setAvailableSteps] = useState<string[]>([]);
