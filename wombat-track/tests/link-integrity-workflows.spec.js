@@ -527,4 +527,4 @@ describe('Link Integrity Workflows', () => {
       }
     });
   });
-}, TEST_TIMEOUT);
+}, 60000);

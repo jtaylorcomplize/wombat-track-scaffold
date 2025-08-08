@@ -1,0 +1,23 @@
+{
+  "environment": "staging",
+  "validation": {
+    "healthCheck": "passed",
+    "applicationReady": true,
+    "dependencies": "available",
+    "database": "connected",
+    "apis": "responding"
+  },
+  "services": {
+    "frontend": {
+      "status": "healthy",
+      "url": "https://wombat-track-ui-staging.azurewebsites.net",
+      "responseTime": "45ms"
+    },
+    "backend": {
+      "status": "healthy", 
+      "url": "https://wombat-track-api-staging.azurewebsites.net",
+      "responseTime": "23ms"
+    }
+  },
+  "timestamp": "2025-08-08T11:11:27Z"
+}

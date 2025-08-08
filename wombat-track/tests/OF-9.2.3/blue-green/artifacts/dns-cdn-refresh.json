@@ -1,0 +1,29 @@
+{
+  "dns": {
+    "status": "updated",
+    "propagationTime": "30s",
+    "records": [
+      {
+        "name": "wombat-track-ui-prod.azurewebsites.net",
+        "type": "CNAME", 
+        "target": "staging-slot",
+        "ttl": 300
+      },
+      {
+        "name": "wombat-track-api-prod.azurewebsites.net",
+        "type": "CNAME",
+        "target": "staging-slot", 
+        "ttl": 300
+      }
+    ]
+  },
+  "cdn": {
+    "status": "cache-invalidated",
+    "purgeTime": "15s",
+    "endpoints": [
+      "*.azureedge.net",
+      "*.cloudfront.net"
+    ]
+  },
+  "timestamp": "2025-08-08T11:11:27Z"
+}

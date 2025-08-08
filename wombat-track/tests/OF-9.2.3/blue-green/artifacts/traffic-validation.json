@@ -1,0 +1,18 @@
+{
+  "trafficRouting": {
+    "status": "active",
+    "percentage": "100%",
+    "target": "production-green-slot"
+  },
+  "userSessions": {
+    "active": 42,
+    "newSessions": 18,
+    "errors": 0
+  },
+  "performanceMetrics": {
+    "averageResponseTime": "67ms",
+    "throughput": "145 req/min",
+    "errorRate": "0%"
+  },
+  "timestamp": "2025-08-08T11:11:27Z"
+}

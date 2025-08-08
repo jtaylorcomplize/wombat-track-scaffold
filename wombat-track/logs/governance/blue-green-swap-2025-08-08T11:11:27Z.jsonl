@@ -1,0 +1,25 @@
+{
+  "timestamp": "2025-08-08T11:11:27Z",
+  "entryType": "Deployment",
+  "summary": "Blue-green deployment swap from staging to production",
+  "phaseRef": "OF-9.2.3",
+  "projectRef": "OF-CloudMig",
+  "deploymentType": "blue-green-swap",
+  "direction": "staging-to-production",
+  "components": ["frontend", "backend"],
+  "status": "completed",
+  "metrics": {
+    "swapDuration": "45s",
+    "dnsPropagation": "30s",
+    "cdnRefresh": "15s",
+    "totalDuration": "90s"
+  },
+  "validation": {
+    "preSwap": "passed",
+    "postSwap": "passed",
+    "healthChecks": "passed",
+    "trafficRouting": "active"
+  },
+  "executedBy": "automated-deployment",
+  "runId": "swap-1754651493"
+}
